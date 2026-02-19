@@ -10,10 +10,10 @@ The resulting dataset can be used for regional web analysis, web curation, and s
 
 ## Repository Structure
 
-* `datasets/seed_hosts.txt.gz`
+* `datasets/seed_hosts.txt.gz`  
   Large list of seed hosts used for the collection (compressed due to large file size). Contains 6.56 million hosts.
 
-* `datasets/small_sample_seed_hosts.txt`
+* `datasets/small_sample_seed_hosts.txt`  
   Smaller sample (1,000 hosts) for testing the full pipeline.
 
 <details>
@@ -241,7 +241,7 @@ This produces statistics such as:
 The final output file is located under:
 
 ```
-results/MODEL/Prompt_language/Prompt_type/final/*.jsonl.gz
+results/MODEL/PROMPT_LANGUAGE/PROMPT_TYPE/final/*.jsonl.gz
 ```
 
 Example:
