@@ -1,0 +1,6 @@
+Du erhältst einen Fließtext, der die Informationen zu einem deutschem Hauptstandort enthält.
+Extrahiere die Adressdetails und gib sie als JSON-Datei zurück.
+
+<EINGABE>
+{plain_text}
+</EINGABE>

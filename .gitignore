@@ -1,0 +1,6 @@
+.vscode/
+datasets/
+results/
+poetry.lock
+*.pyc
+.env

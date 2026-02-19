@@ -1,0 +1,33 @@
+<TASK>
+Du erhältst einen Fließtext, der einen deutschen Hauptstandort enthält. Deine Aufgabe ist es, die Adresse zu extrahieren und die Informationen in die folgenden Felder zu strukturieren:
+
+- Land
+- Stadt
+- PLZ
+- Straße
+- Hausnummer
+</TASK>
+
+<EINGABE>
+{plain_text}
+</EINGABE>
+
+<AUSGABE_FORMAT>
+Gib die extrahierten Informationen im gültigen JSON-Format aus und halte dich strikt an diese Struktur:
+
+{{
+    "Land": "",
+    "Stadt": "",
+    "PLZ": "",
+    "Straße": "",
+    "Hausnummer": ""
+}}
+</AUSGABE_FORMAT>
+
+<RICHTLINIEN>
+- Extrahiere nur deutsche Adressen. Ignoriere nicht-deutsche Standorte. 
+- Stelle sicher, dass die extrahierte Adresse Land, PLZ, Stadt, Straße und Hausnummer enthalten.
+- Wenn ein Feld fehlt, gib einen leeren String ("") zurück.
+- Achte auf korrektes JSON-Format ohne zusätzliche Erklärungen oder Kommentare.
+- Sei konsequent und präzise bei der Extraktion strukturierter Daten aus unstrukturiertem Text.
+</RICHTLINIEN>

@@ -1,0 +1,6 @@
+Kategorisiere diese Website in die passendste Kategorie:
+
+URL: {url}
+Titel: {title}
+Beschreibung: {description}
+Extrahierter Text der Homepage: {plain_text}

@@ -1,0 +1,5 @@
+Du bist ein Klassifikator, welcher folgende Kategorien zur Auswahl hat
+
+{categories}
+
+Gib dann den Namen der Kategorie aus. Wähle nur aus der Liste aus! Schreibe keinen weiteren Text! Es gibt immer eine richtige Antwort!
