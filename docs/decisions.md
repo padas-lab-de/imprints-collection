@@ -1,15 +1,15 @@
 # Lead record
 
 ## In flight
-- E8-gold-strata-pilot: Opus subagent, worktree branch E8-gold-strata-pilot. Writes docs/gold_set_design.md (diversity strata, detectors, quotas, archive, protocol, eval plan, related work) and pilots detectors on 1,000 random hosts -> results/E8/pilot_features.jsonl, datasets/E8/. Assumes D14 A, D15 A until answered. On return: tests, spot-check prevalences, turn open choices into cards.
+- E8-gold-strata-pilot: Opus subagent, worktree branch E8-gold-strata-pilot. Writes docs/gold_set_design.md (diversity strata, detectors, quotas, archive, protocol, eval plan, related work) and pilots detectors on 1,000 random hosts -> results/E8/pilot_features.jsonl, datasets/E8/. Uses D14 A, D15 C. RETURNED 2026-10-23: design doc complete (proposal: 600 random core + ~700 oversample = ~1,300 items, marginal quotas, design weights); pilot 1,000 hosts done (results/E8/pilot_features.jsonl, results/E8/pilot_prevalence.md, datasets/E8/); 18 detector tests pass. Image-only (screenshot-required) 2/422 imprints (0.5%) -> quota 20 only. Strato hosts 503-blocked from the crawl VM. On review: read diff, turn doc section 7 open choices into cards, merge.
 - E7-eval-homepage-location: Sonnet subagent, worktree branch E7-eval-homepage-location. D11 homepage fetch of 1,000 gold hosts -> datasets/E7/gold_homepages.jsonl, topic eval on homepages (both innkube models), D12 geocoding location metric (street <=250 m, town level), re-scores E2 predictions. Report docs/experiments/E7-eval-homepage-location.md on branch. On return: tests, diff, spot-check, merge.
 - E6-fetch-rule-fixes: Sonnet subagent in a worktree, branch E6-fetch-rule-fixes (from lead-record). Implements E5 fixes F1-F6, F9 + stats.py/merge.py empty-address count fix, re-runs fetch on datasets/E4/random20k_seed_hosts.txt -> datasets/E6/random20k/, precision sample -> results/E6/precision_sample.jsonl, report docs/experiments/E6-fetch-rule-fixes.md on branch. On return: run tests, read diff, check precision sample, merge into lead-record.
 
 ## Cards
 | ID | Date | Question | Outcome | Landed in |
 |---|---|---|---|---|
-| D15-gold-annotation-workforce | 2026-10-23 | Who labels: model pre-label + human check, or humans from scratch? | open (recommend A) | — |
-| D14-gold-label-source | 2026-10-23 | Gold labels from the live rendered site or from fetched text? | open (recommend A) | — |
+| D15-gold-annotation-workforce | 2026-10-23 | Who labels: model pre-label + human check, or humans from scratch? | C: one human labels every item from scratch, a second independently ~20%; no model pre-labels (user) | — |
+| D14-gold-label-source | 2026-10-23 | Gold labels from the live rendered site or from fetched text? | A: label from the live rendered site; archive HTML, DOM and screenshot (user) | — |
 | D13-personal-data-release | 2026-10-23 | Open, two-tier or derived-only release of personal imprint data? | B: full open release, assume best case (user) | — |
 | A3-dpo-consultation | 2026-10-23 | Ask Uni Passau DPO about publishing imprint personal data | dropped by user | — |
 | A4-apc-funding | 2026-10-23 | Who pays the EUR 2,390 APC (DEAL agreement?) | done: covered by Uni Passau agreement | — |
@@ -29,6 +29,7 @@
 | D1-revision-driver | 2026-10-23 | Why revise now? | Journal extension with better evaluation + fresh (larger) data snapshot; no hard deadline | — |
 
 ## Lead actions
+- 2026-10-23 E8 pilot returned (see In flight). Screenshot-required judged an edge case by the user; measured at 0.5% of imprints.
 - 2026-10-23 User: new diversity-stratified gold set may replace the old one (D8 superseded); A4 done; A3 dropped; D13 B.
 - 2026-10-23 Venue research done: docs/venue_scientific_data.md (verified licence and personal-data policy quotes). Assumed: deposit on Zenodo under CC BY, code via GitHub + Zenodo DOI; model comparison goes into Technical Validation.
 - 2026-10-23 D10/D11/D12 answered; annotation guideline: Town copied as written. A2: old results gone, paper's address count cannot be recomputed.
