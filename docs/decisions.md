@@ -1,7 +1,8 @@
 # Lead record
 
 ## In flight
-- E1-eval-harness: subagent, worktree branch `e1-eval-harness`; on return verify tests + scoring on gold, merge.
+- E2-gold-baseline-innkube: `ic evaluate` on all 1,000 gold items for Qwen3.8-27B (reasoning off) and Gemma4-31B, then --retry-failed. Logs results/logs/E2-<model>.log, outputs results/<model>/german/simple/eval/. Free (innkube). When done: compare, write numbers to status page.
+- E4-fetch-yield-baseline: `ic fetch small_sample_seed_hosts.txt` on this crawl VM. Log results/logs/E4-fetch-sample.log, output datasets/imprints_batch*.jsonl.gz. When done: break down failures (no imprint found, JS-only, timeout, redirect).
 
 ## Cards
 | ID | Date | Question | Outcome | Landed in |
@@ -19,6 +20,7 @@
 | D1-revision-driver | 2026-10-23 | Why revise now? | Journal extension with better evaluation + fresh (larger) data snapshot; no hard deadline | — |
 
 ## Lead actions
+- 2026-10-23 Merged e1-eval-harness (oracle 100%; 28 tests pass after fixing duplicate dev-deps table). Added Qwen3.8-27B/Gemma4-31B to config with per-model extra_body; Qwen3.8 needs reasoning_effort=none (else 6/20 topic calls hit the 2,000-token limit). Note: scoring treats all-blank addresses as failed; must change to a valid 'no address' answer once D8 negatives exist.
 - 2026-10-23 Merged d3-minimal-fixes (17 smoke tests pass; vllm optional; python <3.13; README paths fixed; CLAUDE.md added).
 - 2026-10-23 Appended MODEL_API_ENDPOINT/MODEL_API_KEY (interpolates INNKUBE_API_KEY)/GEOCODING_API_ENDPOINT to .env; local Photon on :2322 answers.
 - 2026-10-23 Paper finding: 3,226,331 imprints -> 3,225,347 'extracted addresses' (99.97%); Address schema has only required fields, so the LLM cannot answer 'no address' -> precision unknown. Probe (gemma4-31b-it, qwen38-27b, one address-free imprint): both return all-empty fields, so no forced hallucination in the clear case; CONFIRMED src/ic/cli/stats.py:126 counts every record with an 'address' key, incl. all-empty ones -> paper's 3,225,347 'extracted address' counts responses, not addresses; recompute from old results (needs A2 path).
