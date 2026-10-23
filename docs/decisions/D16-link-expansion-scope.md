@@ -5,3 +5,6 @@ Recommend A.
 - A One round, .de/.at/.ch hosts only (est. ~0.5M fetches, seed-list yield per host); report as a separate source in Data Records. Cheap, clean provenance.
 - B One round, all TLDs, keep imprints with a DACH address. ~34% more DACH imprints than A at ~7x the fetches (est. 3.6-3.9M).
 - C Skip link expansion; growth comes from the better fetcher only (+4 pp on .de).
+
+Answer (user, 2026-10-23): "D17: We don’t need to compare site groups. Hence I go with B. Could we make it 1,000 instead of 1,100? D16: B. Do we for sure only do one round? How about finding new websites also to a depth of 3?" + "Go 1+2"
+Outcome: B: all TLDs, keep DACH-address imprints; depth up to 3 asked -> E14-link-expansion-depth pilot (user)

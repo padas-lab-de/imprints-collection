@@ -1,13 +1,15 @@
 # Lead record
 
 ## In flight
-- (none)
+- E12-gold-screening: subagent, worktree branch E12-gold-screening. Screens 10k random seed hosts with scripts/gold/e8_pilot.py stages (low rate), re-derives quotas for 1,000 items (no head-to-head comparisons; D17 B), draws the gold sample -> datasets/E12/, results/E12/. On return: verify, merge.
+- E13-snapshot-dry-run: subagent, worktree branch E13-snapshot-dry-run. Per-hosting-provider concurrency limit in fetch.py + dry run of the E9 fetcher on 100k random seeds -> datasets/E13/, results/E13/ (throughput, errors by provider, stability). On return: verify, merge.
+- E14-link-expansion-depth: subagent, worktree branch E14-link-expansion-depth. Rounds 2 and 3 of link expansion from the E10 round-1 hosts (datasets/E10/expansion/discovered_external_hosts.txt): yield per round, frontier growth, full-run estimate for depth 1-3. On return: verify, merge, card on depth if needed.
 
 ## Cards
 | ID | Date | Question | Outcome | Landed in |
 |---|---|---|---|---|
-| D17-gold-set-size | 2026-10-23 | Gold set ~1,300 items (~80 annotator h) or lean ~1,100? | open (recommend A) | — |
-| D16-link-expansion-scope | 2026-10-23 | One round with ccTLD filter, all TLDs, or none? | open (recommend A) | — |
+| D17-gold-set-size | 2026-10-23 | Gold set ~1,300 items (~80 annotator h) or lean ~1,100? | B, cut to 1,000 items; no stratum comparisons needed (user) | — |
+| D16-link-expansion-scope | 2026-10-23 | One round with ccTLD filter, all TLDs, or none? | B: all TLDs, keep DACH-address imprints; depth up to 3 under test (E14) (user) | — |
 | D15-gold-annotation-workforce | 2026-10-23 | Who labels: model pre-label + human check, or humans from scratch? | C: one human labels every item from scratch, a second independently ~20%; no model pre-labels (user) | — |
 | D14-gold-label-source | 2026-10-23 | Gold labels from the live rendered site or from fetched text? | A: label from the live rendered site; archive HTML, DOM and screenshot (user) | — |
 | D13-personal-data-release | 2026-10-23 | Open, two-tier or derived-only release of personal imprint data? | B: full open release, assume best case (user) | — |
