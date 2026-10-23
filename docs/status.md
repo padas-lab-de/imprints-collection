@@ -3,6 +3,7 @@
 Updated 2026-10-23. Decisions and in-flight work: [decisions.md](decisions.md).
 
 ## Goal
+Target: Scientific Data, Data Descriptor (D10-journal-venue).
 Journal extension of the WebSci Companion '26 demo paper (arXiv 2609.03971), which reported no evaluation numbers: (1) evaluation of address extraction, topic classification and geocoding with a model comparison and error analysis; (2) a fresh, larger snapshot via better fetch yield and link expansion.
 
 ## Results so far

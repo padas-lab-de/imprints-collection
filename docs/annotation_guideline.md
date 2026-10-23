@@ -15,7 +15,7 @@ Fields, copied as written on the page (do not correct spelling, do not expand ab
 | Field | Gold key | Notes |
 |---|---|---|
 | Country | `Country` | Write as on the page; if absent, infer from postcode/town and write `Deutschland`, `Österreich` or `Schweiz`. |
-| Town | `Town` | Without district suffix unless it is part of the postal town (e.g. `Frankfurt am Main`). |
+| Town | `Town` | As written, including district suffixes (e.g. `Grimma /OT Kaditzsch`); scoring compares locations via geocoding (D12-town-granularity-metric). |
 | Postcode | `PLZ` | Without country prefix (`D-`, `A-`, `CH-`). |
 | Street | `Street` | Street name only, e.g. `Hauptstr.` |
 | House number | `Streetnumber` | Including suffixes and ranges, e.g. `12a`, `3-5`. Empty if the page has none. |

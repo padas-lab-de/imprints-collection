@@ -1,18 +1,20 @@
 # Lead record
 
 ## In flight
+- E7-eval-homepage-location: Sonnet subagent, worktree branch E7-eval-homepage-location. D11 homepage fetch of 1,000 gold hosts -> datasets/E7/gold_homepages.jsonl, topic eval on homepages (both innkube models), D12 geocoding location metric (street <=250 m, town level), re-scores E2 predictions. Report docs/experiments/E7-eval-homepage-location.md on branch. On return: tests, diff, spot-check, merge.
+- Venue research (Scientific Data): Sonnet subagent in place, writes docs/venue_scientific_data.md only. On return: verify 2-3 sources, turn implications (personal data, data deposit, structure) into cards.
 - E6-fetch-rule-fixes: Sonnet subagent in a worktree, branch E6-fetch-rule-fixes (from lead-record). Implements E5 fixes F1-F6, F9 + stats.py/merge.py empty-address count fix, re-runs fetch on datasets/E4/random20k_seed_hosts.txt -> datasets/E6/random20k/, precision sample -> results/E6/precision_sample.jsonl, report docs/experiments/E6-fetch-rule-fixes.md on branch. On return: run tests, read diff, check precision sample, merge into lead-record.
 
 ## Cards
 | ID | Date | Question | Outcome | Landed in |
 |---|---|---|---|---|
-| D12-town-granularity-metric | 2026-10-23 | How to score town/district differences? | open | — |
-| D11-topic-eval-input | 2026-10-23 | Evaluate topics on imprint text or re-fetched homepages? | open | — |
-| D10-journal-venue | 2026-10-23 | Target journal? | open (recommend IJDL) | — |
+| D12-town-granularity-metric | 2026-10-23 | How to score town/district differences? | A: geocoding-based location match primary; guideline copies town as written | — |
+| D11-topic-eval-input | 2026-10-23 | Evaluate topics on imprint text or re-fetched homepages? | A: re-fetch homepages of the 1,000 gold hosts | — |
+| D10-journal-venue | 2026-10-23 | Target journal? | Scientific Data, Data Descriptor (example s41597-026-07945-2) | — |
 | D8-gold-set-extension | 2026-10-23 | Extend the 1,000-item gold set or re-do it? | A: keep 1,000 + ~300 hard items + 2nd annotator on 200 | — |
 | D9-geocoding-ground-truth | 2026-10-23 | What counts as ground truth for geocoding eval? | A: automatic consistency on all + manual check of 100 | — |
 | A1-env-and-models | 2026-10-23 | Create .env; tell which open models innkube/Slurm can serve | Done: .env has INNKUBE_API_KEY; innkube serves qwen38-27b, gemma4-31b-it, qwen-agentworld-35b-a3b, soofi-s-isar-preview (no Qwen3-Next any more) | — |
-| A2-original-paper-and-snapshot | 2026-10-23 | Share original paper/venue/reviews and location of the old results | Partly: paper = WebSci Companion '26 demo (arXiv 2609.03971, 5 pp., no eval numbers); this machine is the crawl VM; old results path still open | — |
+| A2-original-paper-and-snapshot | 2026-10-23 | Share original paper/venue/reviews and location of the old results | Partly: paper = WebSci Companion '26 demo (arXiv 2609.03971, 5 pp., no eval numbers); this machine is the crawl VM; old results no longer exist (paper figures cannot be recomputed; new snapshot replaces them) | — |
 | D7-gold-set-provenance | 2026-10-23 | How was the gold set made? | Human-annotated; can extend; quality not guaranteed, may be redone entirely | — |
 | D6-snapshot-growth-source | 2026-10-23 | Where does the larger snapshot come from? | Better fetch yield + link expansion | — |
 | D5-topic-eval-granularity | 2026-10-23 | How to score topics vs. 11-class gold? | Map predicted category to top-level ancestor, translate, macro-F1 | — |
@@ -22,6 +24,7 @@
 | D1-revision-driver | 2026-10-23 | Why revise now? | Journal extension with better evaluation + fresh (larger) data snapshot; no hard deadline | — |
 
 ## Lead actions
+- 2026-10-23 D10/D11/D12 answered; annotation guideline: Town copied as written. A2: old results gone, paper's address count cannot be recomputed.
 - 2026-10-23 Assumed: implement E5 static-rule fixes F1-F6, F9 under D6 (no card); F7 landing-page-as-imprint and F8 Kontakt-as-imprint left out (change what counts as an imprint). Assumed: fix stats.py/merge.py empty-address count (bug fix).
 - 2026-10-23 E5 done, verified (counts match JSONL; dasekg.de base href and terontec.de query link confirmed live).
 - 2026-10-23 E4 random 20k done (results in status.md); data in datasets/E4/.
