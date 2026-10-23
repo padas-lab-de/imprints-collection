@@ -1,7 +1,12 @@
-# D13-personal-data-release (2026-10-23) — open
+# D13-personal-data-release (2026-10-23) — decided
 Question: How do we release imprint data that contains personal data (names, addresses, phones, emails of sole traders / private site owners) in a Scientific Data descriptor?
 Context: docs/venue_scientific_data.md. SD data policy (verified 2026-10-23, nature.com/sdata/policies/data-policies): open release only if low re-identification risk and no sensitive fields; otherwise controlled access expected; "Re-sharing data from more transactional outputs, such as classified advertisements, ... is rarely supported even when such outputs are publicly available." Imprints are not mentioned; legality of re-publishing Impressum data under GDPR is unclear (no authoritative source found) -> A3-dpo-consultation.
 Recommend A.
 - A Two tiers: open Zenodo release (CC BY) with host, topic, organisation-level fields, address coarsened to postcode/town + geocode for natural persons, no person names/phones/emails and no raw imprint text; full data under controlled access (registration + data use agreement). Safe for review; reduced open reuse.
 - B Full open release, legal basis documented (public Impressum duty, § 5 DDG). Maximal reuse; real risk of editorial rejection or a demand for controlled access late in review.
 - C Open release of derived, non-personal data only (host, topic, postcode/town, coordinates), no controlled-access tier. Simplest; loses street-level addresses and imprint text for others.
+
+
+## Answer (2026-10-23)
+User, verbatim: "A3 and D13: Let's just assume the best case for us; we don't further think about any of such concerns."
+Outcome: B: full open release; no further personal-data handling.
