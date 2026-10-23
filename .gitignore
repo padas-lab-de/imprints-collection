@@ -7,3 +7,5 @@ poetry.lock
 .venv/
 venv/
 .pytest_cache/
+.claude/
+/*.pdf
