@@ -3,7 +3,7 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
-name = "Imprints Collection"
+name = "imprints-collection"
 version = "1.0.0"
 description = "Script to download and extract legal imprints and related information from websites."
 authors = [
@@ -18,12 +18,10 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.10,<3.12"
+python = ">=3.10,<3.13"
 click = "^8.1.7"
 pandas = "^2.2.3"
 python-dotenv = "^1.0.1"
-black = "^25.1.0"
-isort = "^6.0.1"
 requests = "^2.32.3"
 extruct = "^0.18.0"
 Resiliparse = "^0.15.2"
@@ -31,11 +29,25 @@ py3langid = "^0.3.0"
 python-iso639 = "^2025.2.18"
 opensearch-py = "^3.0.0"
 psycopg2-binary = "^2.9.11"
-vllm = "^0.11.0"
+vllm = {version = "^0.11.0", optional = true}
 instructor = "^1.12.0"
 json-repair = "^0.52.4"
 tldextract = "^5.3.1"
 geopandas = "^1.1.2"
+shapely = "^2.0.0"
+openai = "^1.0.0"
+pydantic = "^2.0.0"
+tqdm = "^4.66.0"
+charset-normalizer = "^3.0.0"
+transformers = ">=4.40"
+
+[tool.poetry.extras]
+local = ["vllm"]
+
+[tool.poetry.group.dev.dependencies]
+black = "^25.1.0"
+isort = "^6.0.1"
+pytest = "^8.0.0"
 
 [tool.poetry.scripts]
 ic = "ic.ic:main"

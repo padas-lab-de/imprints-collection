@@ -10,11 +10,13 @@ The resulting dataset can be used for regional web analysis, web curation, and s
 
 ## Repository Structure
 
-* `datasets/seed_hosts.txt.gz`  
+* `seed_hosts.txt.gz`  
   Large list of seed hosts used for the collection (compressed due to large file size). Contains 6.56 million hosts.
 
-* `datasets/small_sample_seed_hosts.txt`  
+* `small_sample_seed_hosts.txt`  
   Smaller sample (1,000 hosts) for testing the full pipeline.
+
+Both seed files live in the repository root. The `datasets/` folder (untracked, created on demand) is where `ic fetch` writes its output (`imprints_batch*.jsonl.gz`) and where later steps read it from.
 
 <details>
 <summary>Excerpt of <code>small_sample_seed_hosts.txt</code></summary>
@@ -75,6 +77,8 @@ poetry install
 source $(poetry env info --path)/bin/activate
 ```
 
+This installs the runtime and dev dependencies (black, isort, pytest). The `vllm` package is only needed for local inference and is an optional extra: `poetry install --extras local`.
+
 After the installation of all dependencies, you will end up in a new shell with a loaded venv. In this shell, you can run the main `ic` command. You can exit the shell at any time with `exit`.
 
 ```console
@@ -97,6 +101,8 @@ python3 -m venv venv
 source venv/bin/activate
 pip install .
 ```
+
+Run all `ic` commands from the repository root: `src/ic/config.py` reads `topics/` and `prompts/` via relative paths.
 
 ---
 
@@ -172,6 +178,17 @@ To test the pipeline with the small sample:
 ic fetch small_sample_seed_hosts.txt
 ```
 
+`ic fetch` takes the path of an uncompressed host list (one host per line) and writes `datasets/imprints_batch000000.jsonl.gz` etc. Optional positional arguments after the file are `BATCH_SIZE`, `START_BATCH`, `END_BATCH` and `NUM_WORKERS`.
+
+To use the full seed list, decompress it first (`ic fetch` and `ic clean-hosts` cannot read `.gz` files):
+
+```console
+mkdir -p datasets
+zcat seed_hosts.txt.gz > datasets/seed_hosts.txt
+ic clean-hosts datasets/seed_hosts.txt   # optional; writes datasets/seed_hosts_cleaned.txt
+ic fetch datasets/seed_hosts_cleaned.txt
+```
+
 ---
 
 ## 2. Run LLM Processing
@@ -185,7 +202,7 @@ This step performs:
 ic process-llm MODEL --topic
 ```
 
-Replace `MODEL` with the name of your model. The `src/ic/config.py` file contains a dictionary of supported models, currently this is `Qwen3-Next`. You can add new models there if needed.
+Replace `MODEL` with a key of the `MODELS` dictionary in `src/ic/config.py` (currently only `Qwen3-Next`; add new models there if needed). Optional positional arguments after `MODEL` are `LANGUAGE` (`german` (default) or `english`) and `PROMPT_TYPE` (`simple` (default) or `expert`); the same two apply to `geocode`, `merge` and `stats`. Without `--topic` only addresses are extracted. The LLM is called through an OpenAI-compatible API (`MODEL_API_ENDPOINT`/`MODEL_API_KEY` in `.env`); the tokenizer of the model is downloaded from the Hugging Face Hub for prompt truncation.
 
 LLM results are stored in a subfolder named after the model.
 This allows easy comparison of different models (e.g., ablation studies or prompt variations).
