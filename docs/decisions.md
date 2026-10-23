@@ -1,7 +1,7 @@
 # Lead record
 
 ## In flight
-- E4-fetch-yield-baseline: small sample done (1,000 alphabetical hosts `www.rod…`, ~100 s): imprint_found 437, imprint_not_found 382, host_not_found 170, no_valid_html_tree 6, filtered 5 -> 437/819 reachable = 53.4% (paper: 58.2%). Output datasets/E4/small_sample/. NOW RUNNING: random 20k sample (`shuf --random-source=<(yes 20261023)` from seed_hosts.txt.gz -> datasets/E4/random20k_seed_hosts.txt), log results/logs/E4-fetch-random20k.log, output moved to datasets/E4/random20k/ on finish. Then: break down imprint_not_found by TLD and cause.
+- E5-imprint-not-found-causes: Sonnet subagent (in place, no src changes), samples 200 reachable .de hosts without imprint from datasets/E4/random20k/, re-fetches, classifies causes. Report -> docs/experiments/E5-imprint-not-found-causes.md, per-host -> results/E5/classifications.jsonl. On return: spot-check 10 classifications, then card on fetch.py rule changes.
 
 ## Cards
 | ID | Date | Question | Outcome | Landed in |
@@ -22,6 +22,7 @@
 | D1-revision-driver | 2026-10-23 | Why revise now? | Journal extension with better evaluation + fresh (larger) data snapshot; no hard deadline | — |
 
 ## Lead actions
+- 2026-10-23 E4 random 20k done (results in status.md); data in datasets/E4/.
 - 2026-10-23 E2 done (see status.md). Created docs/status.md.
 - 2026-10-23 Merged e1-eval-harness (oracle 100%; 28 tests pass after fixing duplicate dev-deps table). Added Qwen3.8-27B/Gemma4-31B to config with per-model extra_body; Qwen3.8 needs reasoning_effort=none (else 6/20 topic calls hit the 2,000-token limit). Note: scoring treats all-blank addresses as failed; must change to a valid 'no address' answer once D8 negatives exist.
 - 2026-10-23 Merged d3-minimal-fixes (17 smoke tests pass; vllm optional; python <3.13; README paths fixed; CLAUDE.md added).

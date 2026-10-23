@@ -19,7 +19,11 @@ Source: results/<model>/german/simple/eval/metrics.json.
 - Caveat: topic is evaluated on the imprint text (gold has no homepage text), while production classifies the homepage.
 
 ### E4-fetch-yield-baseline
-- Small alphabetical sample (1,000): 437 imprints / 819 reachable = 53.4% (paper 58.2%). Random 20k sample running.
+- Small alphabetical sample (1,000): 437 imprints / 819 reachable = 53.4%; not representative.
+- Random 20k sample (seed 20261023, 29 min): reachable 16,217; imprint found 9,606 = 59.2% of reachable (paper 58.2%); host_not_found 17.9%.
+  - Imprint/reachable by TLD: .de 79.7% (7,106/8,917), .at 86.2%, .ch 78.0%, .eu 65.4%, .net 36.8%, .com 30.4%, .org 20.1%, other 13.6%.
+  - Biggest yield target: 1,811 reachable .de hosts without imprint (E5-imprint-not-found-causes running).
+- Link expansion signal: the 20k fetch discovered 19,980 unique external hosts, 5,360 (27%) not in the 6.56M seed list; of these 602 .de, 1,985 .com.
 
 ### Findings on the original pipeline
 - stats.py counts all-empty LLM addresses as extracted: the paper's 3,225,347 "extracted address" is a count of responses.
