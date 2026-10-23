@@ -1,6 +1,7 @@
 # Lead record
 
 ## In flight
+- E10-link-expansion-pilot: Sonnet subagent, worktree branch E10-link-expansion-pilot. Fetches all new external hosts discovered in the 20k runs (not in seeds) -> datasets/E10/expansion/, DACH-address share per TLD, filter comparison, full-round estimate. Report docs/experiments/E10-link-expansion-pilot.md. On return: verify counts, merge, card on full-scale expansion filter.
 - E8-gold-strata-pilot: Opus subagent, worktree branch E8-gold-strata-pilot. Writes docs/gold_set_design.md (diversity strata, detectors, quotas, archive, protocol, eval plan, related work) and pilots detectors on 1,000 random hosts -> results/E8/pilot_features.jsonl, datasets/E8/. D14 A, D15 C (told the agent); screenshot stratum is an edge case per user. On return: tests, spot-check prevalences, turn open choices into cards.
 
 ## Cards
