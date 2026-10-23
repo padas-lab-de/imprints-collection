@@ -1,7 +1,7 @@
 # Lead record
 
 ## In flight
-- E5-imprint-not-found-causes: Sonnet subagent (in place, no src changes), samples 200 reachable .de hosts without imprint from datasets/E4/random20k/, re-fetches, classifies causes. Report -> docs/experiments/E5-imprint-not-found-causes.md, per-host -> results/E5/classifications.jsonl. On return: spot-check 10 classifications, then card on fetch.py rule changes.
+- E6-fetch-rule-fixes: Sonnet subagent in a worktree, branch E6-fetch-rule-fixes (from lead-record). Implements E5 fixes F1-F6, F9 + stats.py/merge.py empty-address count fix, re-runs fetch on datasets/E4/random20k_seed_hosts.txt -> datasets/E6/random20k/, precision sample -> results/E6/precision_sample.jsonl, report docs/experiments/E6-fetch-rule-fixes.md on branch. On return: run tests, read diff, check precision sample, merge into lead-record.
 
 ## Cards
 | ID | Date | Question | Outcome | Landed in |
@@ -22,6 +22,8 @@
 | D1-revision-driver | 2026-10-23 | Why revise now? | Journal extension with better evaluation + fresh (larger) data snapshot; no hard deadline | — |
 
 ## Lead actions
+- 2026-10-23 Assumed: implement E5 static-rule fixes F1-F6, F9 under D6 (no card); F7 landing-page-as-imprint and F8 Kontakt-as-imprint left out (change what counts as an imprint). Assumed: fix stats.py/merge.py empty-address count (bug fix).
+- 2026-10-23 E5 done, verified (counts match JSONL; dasekg.de base href and terontec.de query link confirmed live).
 - 2026-10-23 E4 random 20k done (results in status.md); data in datasets/E4/.
 - 2026-10-23 E2 done (see status.md). Created docs/status.md.
 - 2026-10-23 Merged e1-eval-harness (oracle 100%; 28 tests pass after fixing duplicate dev-deps table). Added Qwen3.8-27B/Gemma4-31B to config with per-model extra_body; Qwen3.8 needs reasoning_effort=none (else 6/20 topic calls hit the 2,000-token limit). Note: scoring treats all-blank addresses as failed; must change to a valid 'no address' answer once D8 negatives exist.
