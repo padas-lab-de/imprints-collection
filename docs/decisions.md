@@ -1,7 +1,7 @@
 # Lead record
 
 ## In flight
-- E11-external-host-discovery: Sonnet subagent, worktree branch E11-external-host-discovery. Explains why the E9 fetcher finds 1.7x the external hosts of E4; report docs/experiments/E11-external-host-discovery.md; may re-fetch <=100 seeds. On return: verify, merge, revise the E10 estimate and D16 if needed.
+- (none)
 
 ## Cards
 | ID | Date | Question | Outcome | Landed in |
@@ -29,6 +29,7 @@
 | D1-revision-driver | 2026-10-23 | Why revise now? | Journal extension with better evaluation + fresh (larger) data snapshot; no hard deadline | — |
 
 ## Lead actions
+- 2026-10-23 E11 merged: E4 fetcher keyed landing links by URL path (fe4963b), losing external hosts; E9 count (34,771 unique) verified and is the right basis, E10 estimate and D16 stand.
 - 2026-10-23 E8 merged, tests pass, prevalences re-counted from results/E8/pilot_features.jsonl. Assumed per design doc §7: full seed-list frame with negatives capped; LLM operator type for stratification only; WARC kept internal, not published; image-only quota 20; gold capture from a second IP with retries.
 - 2026-10-23 E10 merged, 80 tests pass, 1,231/9,182 found verified from output.
 - 2026-10-23 E9 merged, 80 tests pass, yield 10,246/16,129 and 49/50 precision verified from files. E8 hit an API rate limit and was resumed.

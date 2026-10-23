@@ -116,7 +116,7 @@ Assumptions: (1) the 20k seeds are a uniform random sample of the 6.56M (E4 seed
 
 ## Open doubts
 
-- E4 and E9 discovered files differ by a factor of 1.7 in unique external hosts (19,980 vs 34,771) on the same seeds. `fetch.py` changed in E6/E9 (candidate ranking, retries, base href, link handling), but I did not find which change causes the extra discovery; if the earlier E4 behaviour is the correct one the new-host rate is 0.21 per seed and the totals above shrink by 65%. Worth a one-line check of the E6 diff before the full round.
+- Resolved by E11-external-host-discovery: the E4 fetcher keyed landing-page links by URL path and lost most external links; the E9 count (34,771) is correct and the totals above stand.
 - The 12.5% of DACH-ccTLD imprints without a strict address are not inspected (PO box only, no postcode, foreign-format?). A 30-sample file is written to `results/E10/dachtld_noaddr_sample.jsonl`, not yet read.
 - The scale-up of the new-host count is the dominant uncertainty; a 200k-seed pilot (10 times larger, about 2 hours of discovery fetch plus 2 hours expansion fetch) would give a second rarefaction point and settle linear versus saturating.
 - `*.wordpress.com` hosted blogs (63) were dropped as platforms; user sites on other builders were kept.
