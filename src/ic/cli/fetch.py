@@ -24,6 +24,7 @@ from ic.config import *
 from ic.utils.filter_utils import check_url
 from ic.parsing.language import identify_language
 from ic.parsing.location import process_extruct_result
+from ic.utils.imprint_utils import has_imprint_evidence, looks_like_error_page
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0",
@@ -48,8 +49,53 @@ IMPRINT_KEYWORDS = [
 MAX_IMPRINT_CANDIDATES = 5
 # Paths probed when the landing page has no imprint link
 IMPRINT_PROBE_PATHS = ["/impressum", "/impressum.html", "/imprint"]
-# A probed page only counts as imprint if its text matches this pattern
-IMPRINT_TEXT_PATTERN = re.compile(r"impressum|angaben gemäß|§\s*5\s*(tmg|ddg)", re.I)
+# Word-boundary patterns for the imprint terms. "impressum" stays a substring match
+# (e.g. "agb-impressum") except for article URLs such as "impressumspflicht".
+IMPRINT_PATTERNS = {
+    "impressum": re.compile(r"impressum(?!spflicht)"),
+    "imprint": re.compile(r"(?<![a-z])imprint(?![a-z])"),
+    "legal notice": re.compile(r"(?<![a-z])legal[\W_]*notices?(?![a-z])"),
+    "rechtliche hinweise": re.compile(r"(?<![a-z])rechtliche[\W_]*hinweise(?![a-z])"),
+    "rechtliches": re.compile(r"(?<![a-z])rechtliches(?![a-z])"),
+    "anbieterkennzeichnung": re.compile(r"anbieterkennzeichnung"),
+}
+# Other tokens allowed next to an English/German imprint term in one URL segment
+# ("en-imprint", "legal-notice-privacy"); "imprint-methods" is not an imprint link.
+URL_FILLER_TOKENS = {
+    "and", "und", "the", "privacy", "policy", "datenschutz", "disclaimer", "contact",
+    "kontakt", "terms", "html", "htm", "php", "shtml", "page", "site", "info", "us",
+    "en", "de", "fr", "it", "es", "at", "ch", "legal", "agb", "cookies", "cookie",
+}
+
+
+def url_matches_term(term: str, target: str) -> bool:
+    """
+    True if a lower-cased path + query contains the imprint term.
+
+    "impressum" is a substring match (except article URLs like "impressumspflicht");
+    the other terms must make up a URL segment together with filler tokens only, so
+    "imprint-methods" or "imprinted-pins" do not match but "imprint", "en/imprint.html"
+    and "legal-notice-privacy" do.
+    """
+    if term in ("impressum", "anbieterkennzeichnung"):
+        return bool(IMPRINT_PATTERNS[term].search(target))
+    term_tokens = re.split(r"[\W_]+", term)
+    n = len(term_tokens)
+    for segment in re.split(r"[/?&=]+", target):
+        tokens = [t for t in re.split(r"[-_.+%\s]+", segment) if t]
+        for i in range(len(tokens) - n + 1):
+            window = tokens[i : i + n]
+            if window == term_tokens or window == term_tokens[:-1] + [term_tokens[-1] + "s"]:
+                rest = tokens[:i] + tokens[i + n :]
+                if all(t in URL_FILLER_TOKENS or t.isdigit() for t in rest):
+                    return True
+    return False
+
+
+# A probed page must contain the word "impressum" or "imprint" and imprint evidence
+IMPRINT_WORD_PATTERN = re.compile(r"impressum|imprint|angaben gemäß", re.I)
+# Privacy-policy URLs are no imprint unless they also name the imprint
+PRIVACY_URL_PATTERN = re.compile(r"privacy|datenschutz", re.I)
 
 
 # Create enum for crawl status
@@ -329,6 +375,23 @@ def same_text(parse_result: Dict[str, Union[str, int]], landing_text: str) -> bo
     return parse_result.get("main_content", "").strip() == (landing_text or "").strip()
 
 
+def accept_imprint_text(
+    parse_result: Dict[str, Union[str, int]], term: str, fallback: bool
+) -> bool:
+    """
+    Check the text of a linked imprint page. Pages found via the keyword
+    "impressum" with normal extraction are accepted as before; error pages are
+    always rejected, and the weaker routes (other keywords such as "imprint" or
+    "legal notice", full-body fallback) need imprint evidence in the text.
+    """
+    text = parse_result.get("main_content", "")
+    if looks_like_error_page(text):
+        return False
+    if term == "impressum" and not fallback:
+        return True
+    return has_imprint_evidence(text)
+
+
 def find_imprint(
     base_url: str, landing_text: str, candidates: List[Tuple[str, str]]
 ) -> Optional[Dict[str, Any]]:
@@ -351,9 +414,21 @@ def find_imprint(
         # A link to the landing page itself (e.g. "#impressum") is no imprint page
         if same_page(url, base_url):
             continue
+        # A privacy policy is no imprint unless the URL also names the imprint
+        target = (urlparse(url).path + "?" + urlparse(url).query).lower()
+        if (
+            keyword != "impressum"
+            and PRIVACY_URL_PATTERN.search(target)
+            and not any(url_matches_term(t, target) for t in IMPRINT_KEYWORDS)
+        ):
+            continue
         tried = True
         sub_url, parse_result, fallback = fetch_imprint_page(url)
-        if parse_result and not same_text(parse_result, landing_text):
+        if (
+            parse_result
+            and not same_text(parse_result, landing_text)
+            and accept_imprint_text(parse_result, keyword, fallback)
+        ):
             return {
                 "url": sub_url,
                 **parse_result,
@@ -377,7 +452,7 @@ def find_imprint(
         text = parse_result.get("main_content", "")
         if same_text(parse_result, landing_text):
             continue
-        if not IMPRINT_TEXT_PATTERN.search(text):
+        if not IMPRINT_WORD_PATTERN.search(text) or not has_imprint_evidence(text):
             continue
         return {
             "url": sub_url,
@@ -530,8 +605,9 @@ def discover_links(
     Returns:
     - Tuple (keyword_links, external_hosts). keyword_links maps each keyword to an
       ordered list of (url, matched term) candidates: for "impressum" (all
-      IMPRINT_KEYWORDS) by keyword priority, own host first, then shortest URL;
-      for the other keywords by URL length.
+      IMPRINT_KEYWORDS) links whose URL matches before anchor-only matches, then
+      keyword priority, own host first, then shortest URL; for the other keywords
+      by URL length.
     """
     resolve_base = urljoin(base_url, base_href) if base_href else base_url
 
@@ -577,15 +653,20 @@ def discover_links(
         target = (parsed_url.path + "?" + parsed_url.query).lower()
 
         for keyword in KEYWORDS:
-            terms = IMPRINT_KEYWORDS if keyword == "impressum" else [keyword]
-            for priority, term in enumerate(terms):
-                if term in target or term in anchor_text:
-                    if keyword == "impressum":
-                        sort_key = (priority, host != base_host, len(abs_url))
-                    else:
-                        sort_key = (len(abs_url),)
-                    matches[keyword].append((sort_key, abs_url, term))
-                    break
+            if keyword == "impressum":
+                # Best (URL match before anchor-only match, then keyword priority)
+                best = None
+                for priority, term in enumerate(IMPRINT_KEYWORDS):
+                    pattern = IMPRINT_PATTERNS[term]
+                    url_match = url_matches_term(term, target)
+                    if url_match or pattern.search(anchor_text):
+                        key = (not url_match, priority, host != base_host, len(abs_url))
+                        if best is None or key < best[0]:
+                            best = (key, term)
+                if best:
+                    matches[keyword].append((best[0], abs_url, best[1]))
+            elif keyword in target or keyword in anchor_text:
+                matches[keyword].append(((len(abs_url),), abs_url, keyword))
 
         if host != base_host:
             external_hosts.add(host)
