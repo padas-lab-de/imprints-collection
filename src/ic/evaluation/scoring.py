@@ -3,6 +3,8 @@ import re
 import unicodedata
 from collections import Counter
 
+from ic.evaluation.geocoding import STREET_THRESHOLD_M, TOWN_THRESHOLD_KM, locate
+
 ADDRESS_FIELDS = ["country", "town", "postalcode", "streetname", "housenumber"]
 GOLD_ADDRESS_KEYS = {
     "country": "Country",
@@ -159,7 +161,12 @@ def classification_report(y_true: list[str], y_pred: list[str]) -> dict:
 
 
 def score(
-    gold: list[dict], predictions: list[dict], categories: list[dict]
+    gold: list[dict],
+    predictions: list[dict],
+    categories: list[dict],
+    geocoder=None,
+    street_m: float = STREET_THRESHOLD_M,
+    town_km: float = TOWN_THRESHOLD_KM,
 ) -> tuple[dict, list[dict]]:
     """
     Scores predictions against the gold standard.
@@ -171,6 +178,10 @@ def score(
             than once, the last record wins. Gold items without prediction count as
             failed.
         categories: Records of categories.jsonl ({"name", "parent"}).
+        geocoder: Optional object with geocode(address dict) -> dict | None (see
+            ic.evaluation.geocoding). If given, the geocoding-based location match
+            is computed (street level: distance <= street_m; town level: same
+            postcode or distance <= town_km) and is the headline address metric.
 
     Returns:
         (metrics, errors): Metrics dict and a list of per-item error records.
@@ -185,6 +196,7 @@ def score(
     address_failed = topic_failed = 0
     y_true, y_pred = [], []
     errors = []
+    loc_counts = Counter()
 
     for item in gold:
         pred = pred_by_id.get(item["id"])
@@ -216,9 +228,37 @@ def score(
                 }
         all_exact += item_exact
         all_normalized += item_norm
-        if wrong:
+
+        location = None
+        if geocoder is not None:
+            gold_address = {
+                f: item["output_loc"][GOLD_ADDRESS_KEYS[f]] for f in ADDRESS_FIELDS
+            }
+            location = locate(gold_address, address, geocoder, street_m, town_km)
+            loc_counts[location["status"]] += 1
+            if location["status"] != "gold_geocode_failed":
+                loc_counts["street"] += location["street"]
+                loc_counts["town"] += location["town"]
+                if location["status"] == "ok":
+                    fine = {"house", "street"}
+                    resolved = (
+                        location.get("gold_type") in fine
+                        and location.get("pred_type") in fine
+                    )
+                    loc_counts["both_street_resolved"] += resolved
+                    loc_counts["street_match_coarse"] += (
+                        location["street"] and not resolved
+                    )
+        location_miss = (
+            location is not None
+            and location["status"] != "gold_geocode_failed"
+            and not location["street"]
+        )
+        if wrong or location_miss:
             error["address"] = wrong
             error["address_failed"] = address is None
+            if location is not None:
+                error["location"] = location
 
         # Topic
         category = pred.get("topic") if pred else None
@@ -257,6 +297,25 @@ def score(
         },
         "topic": classification_report(y_true, y_pred),
     }
+    if geocoder is not None:
+        scored = n - loc_counts["gold_geocode_failed"]
+        metrics["address"]["location"] = {
+            "street_threshold_m": street_m,
+            "town_threshold_km": town_km,
+            "n_scored": scored,
+            "gold_geocode_failed": loc_counts["gold_geocode_failed"],
+            "pred_missing": loc_counts["pred_missing"],
+            "pred_geocode_failed": loc_counts["pred_geocode_failed"],
+            "street_level": loc_counts["street"] / scored if scored else 0.0,
+            "town_level": loc_counts["town"] / scored if scored else 0.0,
+            # street matches where Photon resolved gold or prediction only to a
+            # coarser object (town, district, ...): both then sit near a centroid
+            "street_match_with_coarse_geocode": loc_counts["street_match_coarse"],
+            "street_level_count": loc_counts["street"],
+            "town_level_count": loc_counts["town"],
+        }
+        # headline "address correct"
+        metrics["address"]["correct"] = metrics["address"]["location"]["street_level"]
     return metrics, errors
 
 
@@ -270,8 +329,23 @@ def format_table(metrics: dict) -> str:
         f"Items: {metrics['n']}   failed calls: address={failed['address']}"
         f" topic={failed['topic']}",
         "",
-        f"{'Address field':<14}{'exact':>8}{'normalized':>12}",
     ]
+    loc = a.get("location")
+    if loc:
+        lines += [
+            f"ADDRESS CORRECT (street level, <= {loc['street_threshold_m']:g} m): "
+            f"{loc['street_level']:.3f}  ({loc['street_level_count']}/{loc['n_scored']})",
+            f"Town level (same postcode or <= {loc['town_threshold_km']:g} km): "
+            f"{loc['town_level']:.3f}  ({loc['town_level_count']}/{loc['n_scored']})",
+            f"Excluded, gold not geocodable: {loc['gold_geocode_failed']}   "
+            f"prediction missing: {loc['pred_missing']}   "
+            f"prediction not geocodable: {loc['pred_geocode_failed']}",
+            f"Street matches with a coarse (non house/street) geocode: "
+            f"{loc['street_match_with_coarse_geocode']}",
+            "",
+            "Secondary, field-level string comparison:",
+        ]
+    lines.append(f"{'Address field':<14}{'exact':>8}{'normalized':>12}")
     for f in ADDRESS_FIELDS:
         lines.append(f"{f:<14}{a['exact'][f]:>8.3f}{a['normalized'][f]:>12.3f}")
     lines.append(
