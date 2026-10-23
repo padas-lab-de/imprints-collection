@@ -2,12 +2,14 @@
 
 ## In flight
 - E7-eval-homepage-location: Sonnet subagent, worktree branch E7-eval-homepage-location. D11 homepage fetch of 1,000 gold hosts -> datasets/E7/gold_homepages.jsonl, topic eval on homepages (both innkube models), D12 geocoding location metric (street <=250 m, town level), re-scores E2 predictions. Report docs/experiments/E7-eval-homepage-location.md on branch. On return: tests, diff, spot-check, merge.
-- Venue research (Scientific Data): Sonnet subagent in place, writes docs/venue_scientific_data.md only. On return: verify 2-3 sources, turn implications (personal data, data deposit, structure) into cards.
 - E6-fetch-rule-fixes: Sonnet subagent in a worktree, branch E6-fetch-rule-fixes (from lead-record). Implements E5 fixes F1-F6, F9 + stats.py/merge.py empty-address count fix, re-runs fetch on datasets/E4/random20k_seed_hosts.txt -> datasets/E6/random20k/, precision sample -> results/E6/precision_sample.jsonl, report docs/experiments/E6-fetch-rule-fixes.md on branch. On return: run tests, read diff, check precision sample, merge into lead-record.
 
 ## Cards
 | ID | Date | Question | Outcome | Landed in |
 |---|---|---|---|---|
+| D13-personal-data-release | 2026-10-23 | Open, two-tier or derived-only release of personal imprint data? | open (recommend A two-tier) | — |
+| A3-dpo-consultation | 2026-10-23 | Ask Uni Passau DPO about publishing imprint personal data | open | — |
+| A4-apc-funding | 2026-10-23 | Who pays the EUR 2,390 APC (DEAL agreement?) | open | — |
 | D12-town-granularity-metric | 2026-10-23 | How to score town/district differences? | A: geocoding-based location match primary; guideline copies town as written | — |
 | D11-topic-eval-input | 2026-10-23 | Evaluate topics on imprint text or re-fetched homepages? | A: re-fetch homepages of the 1,000 gold hosts | — |
 | D10-journal-venue | 2026-10-23 | Target journal? | Scientific Data, Data Descriptor (example s41597-026-07945-2) | — |
@@ -24,6 +26,7 @@
 | D1-revision-driver | 2026-10-23 | Why revise now? | Journal extension with better evaluation + fresh (larger) data snapshot; no hard deadline | — |
 
 ## Lead actions
+- 2026-10-23 Venue research done: docs/venue_scientific_data.md (verified licence and personal-data policy quotes). Assumed: deposit on Zenodo under CC BY, code via GitHub + Zenodo DOI; model comparison goes into Technical Validation.
 - 2026-10-23 D10/D11/D12 answered; annotation guideline: Town copied as written. A2: old results gone, paper's address count cannot be recomputed.
 - 2026-10-23 Assumed: implement E5 static-rule fixes F1-F6, F9 under D6 (no card); F7 landing-page-as-imprint and F8 Kontakt-as-imprint left out (change what counts as an imprint). Assumed: fix stats.py/merge.py empty-address count (bug fix).
 - 2026-10-23 E5 done, verified (counts match JSONL; dasekg.de base href and terontec.de query link confirmed live).
