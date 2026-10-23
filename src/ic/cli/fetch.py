@@ -10,7 +10,7 @@ import traceback
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor, TimeoutError, as_completed
 from typing import Any, Dict, List, Optional, Set, Tuple, Union
-from urllib.parse import urljoin, urlparse
+from urllib.parse import urldefrag, urljoin, urlparse
 
 import click
 import extruct
@@ -153,6 +153,9 @@ def try_fetch(
     if resp.status_code == 200 and resp.content:
         # Detect encoding with charset_normalizer
         detection = from_bytes(resp.content).best()
+        if detection is None:
+            # Binary content (PDF, image, ...), no text to decode
+            return None, None
         text = str(detection)
         return url, text.strip()
     if 300 <= resp.status_code < 400 and resp.headers.get("Location"):
@@ -311,6 +314,21 @@ def fetch_imprint_page(
     return None, None, False
 
 
+def same_page(url: str, other: str) -> bool:
+    """True if both URLs point to the same page, ignoring scheme, fragment and trailing slash."""
+    a, b = urlparse(urldefrag(url)[0]), urlparse(urldefrag(other)[0])
+    return (a.netloc.lower(), a.path.rstrip("/"), a.query) == (
+        b.netloc.lower(),
+        b.path.rstrip("/"),
+        b.query,
+    )
+
+
+def same_text(parse_result: Dict[str, Union[str, int]], landing_text: str) -> bool:
+    """True if the extracted text equals the text of the landing page."""
+    return parse_result.get("main_content", "").strip() == (landing_text or "").strip()
+
+
 def find_imprint(
     base_url: str, landing_text: str, candidates: List[Tuple[str, str]]
 ) -> Optional[Dict[str, Any]]:
@@ -328,9 +346,14 @@ def find_imprint(
       ("link" or "probe"), "found_keyword" (matched keyword or probed path),
       "candidate_rank" and "fallback_extraction", or None.
     """
+    tried = False
     for rank, (url, keyword) in enumerate(candidates[:MAX_IMPRINT_CANDIDATES]):
+        # A link to the landing page itself (e.g. "#impressum") is no imprint page
+        if same_page(url, base_url):
+            continue
+        tried = True
         sub_url, parse_result, fallback = fetch_imprint_page(url)
-        if parse_result:
+        if parse_result and not same_text(parse_result, landing_text):
             return {
                 "url": sub_url,
                 **parse_result,
@@ -340,7 +363,7 @@ def find_imprint(
                 "fallback_extraction": fallback,
             }
 
-    if candidates:
+    if tried:
         return None
 
     # No imprint link: probe common paths on the final host
@@ -352,7 +375,7 @@ def find_imprint(
         if not parse_result:
             continue
         text = parse_result.get("main_content", "")
-        if text.strip() == (landing_text or "").strip():
+        if same_text(parse_result, landing_text):
             continue
         if not IMPRINT_TEXT_PATTERN.search(text):
             continue
@@ -523,7 +546,7 @@ def discover_links(
             if not href:
                 continue
 
-            abs_url = urljoin(resolve_base, href.strip(), allow_fragments=False)
+            abs_url = urldefrag(urljoin(resolve_base, href.strip()))[0]
             parsed_url = urlparse(abs_url)
 
             # Skip if link is empty
