@@ -19,6 +19,11 @@ Source: results/<model>/german/simple/eval/metrics.json.
 - Topic: largest confusions all go into Business and Professional Services (Community 32, Arts 30, Retail 23). Health and Medicine recall ~0.5 at precision ~1.0.
 - Caveat: topic is evaluated on the imprint text (gold has no homepage text), while production classifies the homepage.
 
+### E7-eval-homepage-location (old 1,000-item gold set; report docs/experiments/E7-eval-homepage-location.md)
+- Homepages re-fetched for 890/1,000 gold hosts (84 unreachable, 23 empty, 3 filtered; 90 redirect to another host).
+- Topic, same 890 items: homepage input is ~2.5 points below imprint input (Qwen acc 0.710 vs 0.734, macro-F1 0.566 vs 0.594; Gemma 0.722 vs 0.748, 0.576 vs 0.601). Likely partly because old gold topics were labelled from imprint text and sites changed since; the new gold set (D14 A) fixes the label source.
+- Address by geocoded location (D12): street level <=250 m Qwen 0.982, Gemma 0.972; town level 0.992 / 0.986 (vs exact 0.904 / 0.885). 22/31 Qwen town errors resolve. Caveat: Photon is fuzzy, so street level is lenient (wrong house number can still match); 7 gold addresses do not geocode.
+
 ### E4-fetch-yield-baseline
 - Small alphabetical sample (1,000): 437 imprints / 819 reachable = 53.4%; not representative.
 - Random 20k sample (seed 20261023, 29 min): reachable 16,217; imprint found 9,606 = 59.2% of reachable (paper 58.2%); host_not_found 17.9%.
