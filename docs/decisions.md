@@ -2,7 +2,7 @@
 
 ## In flight
 - E2-gold-baseline-innkube: `ic evaluate` on all 1,000 gold items for Qwen3.8-27B (reasoning off) and Gemma4-31B, then --retry-failed. Logs results/logs/E2-<model>.log, outputs results/<model>/german/simple/eval/. Free (innkube). When done: compare, write numbers to status page.
-- E4-fetch-yield-baseline: `ic fetch small_sample_seed_hosts.txt` on this crawl VM. Log results/logs/E4-fetch-sample.log, output datasets/imprints_batch*.jsonl.gz. When done: break down failures (no imprint found, JS-only, timeout, redirect).
+- E4-fetch-yield-baseline: small sample done (1,000 alphabetical hosts `www.rod…`, ~100 s): imprint_found 437, imprint_not_found 382, host_not_found 170, no_valid_html_tree 6, filtered 5 -> 437/819 reachable = 53.4% (paper: 58.2%). Output datasets/E4/small_sample/. NOW RUNNING: random 20k sample (`shuf --random-source=<(yes 20261023)` from seed_hosts.txt.gz -> datasets/E4/random20k_seed_hosts.txt), log results/logs/E4-fetch-random20k.log, output moved to datasets/E4/random20k/ on finish. Then: break down imprint_not_found by TLD and cause.
 
 ## Cards
 | ID | Date | Question | Outcome | Landed in |
