@@ -1,14 +1,15 @@
 # Lead record
 
 ## In flight
-- E8-gold-strata-pilot: Opus subagent, worktree branch E8-gold-strata-pilot. Writes docs/gold_set_design.md (diversity strata, detectors, quotas, archive, protocol, eval plan, related work) and pilots detectors on 1,000 random hosts -> results/E8/pilot_features.jsonl, datasets/E8/. D14 A, D15 C (told the agent); screenshot stratum is an edge case per user. On return: tests, spot-check prevalences, turn open choices into cards.
+- (none)
 
 ## Cards
 | ID | Date | Question | Outcome | Landed in |
 |---|---|---|---|---|
+| D17-gold-set-size | 2026-10-23 | Gold set ~1,300 items (~80 annotator h) or lean ~1,100? | open (recommend A) | — |
 | D16-link-expansion-scope | 2026-10-23 | One round with ccTLD filter, all TLDs, or none? | open (recommend A) | — |
-| D15-gold-annotation-workforce | 2026-10-23 | Who labels: model pre-label + human check, or humans from scratch? | C: one human all items, second human ~20% | — |
-| D14-gold-label-source | 2026-10-23 | Gold labels from the live rendered site or from fetched text? | A: live rendered site + archive | — |
+| D15-gold-annotation-workforce | 2026-10-23 | Who labels: model pre-label + human check, or humans from scratch? | C: one human labels every item from scratch, a second independently ~20%; no model pre-labels (user) | — |
+| D14-gold-label-source | 2026-10-23 | Gold labels from the live rendered site or from fetched text? | A: label from the live rendered site; archive HTML, DOM and screenshot (user) | — |
 | D13-personal-data-release | 2026-10-23 | Open, two-tier or derived-only release of personal imprint data? | B: full open release, assume best case (user) | — |
 | A3-dpo-consultation | 2026-10-23 | Ask Uni Passau DPO about publishing imprint personal data | dropped by user | — |
 | A4-apc-funding | 2026-10-23 | Who pays the EUR 2,390 APC (DEAL agreement?) | done: covered by Uni Passau agreement | — |
@@ -28,6 +29,7 @@
 | D1-revision-driver | 2026-10-23 | Why revise now? | Journal extension with better evaluation + fresh (larger) data snapshot; no hard deadline | — |
 
 ## Lead actions
+- 2026-10-23 E8 merged, tests pass, prevalences re-counted from results/E8/pilot_features.jsonl. Assumed per design doc §7: full seed-list frame with negatives capped; LLM operator type for stratification only; WARC kept internal, not published; image-only quota 20; gold capture from a second IP with retries.
 - 2026-10-23 E10 merged, 80 tests pass, 1,231/9,182 found verified from output.
 - 2026-10-23 E9 merged, 80 tests pass, yield 10,246/16,129 and 49/50 precision verified from files. E8 hit an API rate limit and was resumed.
 - 2026-10-23 E6 merged (8e35e07), 65 tests pass, yield 10,327/16,093 verified from output.

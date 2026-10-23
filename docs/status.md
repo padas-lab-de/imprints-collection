@@ -19,6 +19,12 @@ Source: results/<model>/german/simple/eval/metrics.json.
 - Topic: largest confusions all go into Business and Professional Services (Community 32, Arts 30, Retail 23). Health and Medicine recall ~0.5 at precision ~1.0.
 - Caveat: topic is evaluated on the imprint text (gold has no homepage text), while production classifies the homepage.
 
+### E8-gold-strata-pilot (merged; design docs/gold_set_design.md, tables results/E8/pilot_prevalence.md)
+- 1,000 random seed hosts: live 69.4%, HTTP error 13.2% (inflated: Strato hosts answered 503 to the crawl VM), unreachable 8.2%, cross-domain redirect 7.7%.
+- Of live: WordPress 31.6%, site builder 10.7%, custom PHP 7.8%, static 7.8%, SPA 3.3%, Blogger 0.3%; JS required 1.2%; domain age <2010 40%, >=2023 11.5%; no imprint 39% (.de/.at/.ch 12%, other TLDs 75%).
+- Of imprints: multiple addresses 30%, obfuscation 33%, address only in an image 0.5% (2/422), PDF 0.
+- Design: ~1,300 items = 600 random core + ~700 oversampled rare strata, marginal quotas, Horvitz-Thompson weights (card D17-gold-set-size). Detectors spot-checked by hand (tech 20/20, multi-address 18/20, LLM operator type 12/13).
+
 ### E10-link-expansion-pilot (merged; report docs/experiments/E10-link-expansion-pilot.md)
 - 11,969 new hosts (not in seeds) linked from the 20k seeds: imprint found 1,231/9,182 reachable = 13.4%; 83% of them with DACH address.
 - .de/.at/.ch new hosts: 413 DACH imprints per 1,000 fetched (seeds 432); other TLDs 34 per 1,000. Full round adds roughly +2-4% (wide range). Card D16-link-expansion-scope.
