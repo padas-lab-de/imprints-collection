@@ -236,6 +236,25 @@ This produces statistics such as:
 
 ---
 
+## 6. Evaluate Against the Gold Standard
+
+The 1,000 manually annotated pages in `evaluation/gold_standard_data.jsonl` are used to measure address extraction and topic classification quality:
+
+```console
+ic evaluate MODEL [LANGUAGE] [PROMPT_TYPE] [--limit N] [--retry-failed]
+ic evaluate MODEL [LANGUAGE] [PROMPT_TYPE] --score-only
+```
+
+The first command runs the address and topic prompts over the gold items (resumable, ids already in `predictions.jsonl` are skipped) and scores them. `--score-only` only re-scores stored predictions. Output goes to `results/MODEL/LANGUAGE/PROMPT_TYPE/eval/`:
+
+* `predictions.jsonl`: predicted address, topic, raw responses and token usage
+* `metrics.json`: address accuracy per field (exact and normalized) and all-fields-correct rate; topic accuracy, macro-F1, per-class precision/recall/F1 and confusion matrix
+* `errors.jsonl`: per-item errors for error analysis
+
+Predicted topics are mapped up to their top-level category and compared at the level of the 11 gold classes. Run the tests from the repository root with `pytest`.
+
+---
+
 # Output Format
 
 The final output file is located under:

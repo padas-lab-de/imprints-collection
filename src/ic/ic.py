@@ -1,6 +1,7 @@
 import click
 
 from ic.cli.clean_hosts import clean_hosts
+from ic.cli.evaluate import evaluate
 from ic.cli.fetch import fetch
 from ic.cli.geocode import geocode
 from ic.cli.merge import merge
@@ -25,6 +26,7 @@ main.add_command(merge)
 main.add_command(clean_hosts)
 main.add_command(process_llm)
 main.add_command(geocode)
+main.add_command(evaluate)
 main.add_command(stats)
 main.add_command(upload_postgresql)
 main.add_command(upload_opensearch)
