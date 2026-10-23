@@ -51,3 +51,10 @@ pytest = "^8.0.0"
 
 [tool.poetry.scripts]
 ic = "ic.ic:main"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.0.0"
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
