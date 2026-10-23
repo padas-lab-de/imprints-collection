@@ -30,6 +30,7 @@ def call_api(
     api_key: str,
     temperature: float = 0.0,
     max_tokens: int = 2_000,
+    extra_body: dict | None = None,
 ) -> ChatCompletion | None:
     """
     Calls an LLM API with the provided prompts and returns the response content.
@@ -42,6 +43,7 @@ def call_api(
         base_url (str): The base URL for the API endpoint.
         tempretaur (float, optional): Controls the models temperatur. Defaults to 0.3.
         max_tokens (int, optional): Contains the models max. tokens. Defaults to 2000.
+        extra_body (dict, optional): Provider-specific request fields, e.g. reasoning_effort.
 
     Returns:
         str | None: The response ChatCompletion from the LLM, or None if an error occurs.
@@ -56,6 +58,7 @@ def call_api(
             model=model,
             temperature=temperature,
             max_tokens=max_tokens,
+            extra_body=extra_body or {},
             response_model=Address if prompt_type == "address" else Topic,
         )
 

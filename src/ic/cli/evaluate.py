@@ -85,7 +85,12 @@ def predict_item(item: dict, messages: dict, model: str, endpoint: str, key: str
         response = None
         if task in messages:
             response = call_api(
-                MODELS[model]["remote"], messages[task], task, endpoint, key
+                MODELS[model]["remote"],
+                messages[task],
+                task,
+                endpoint,
+                key,
+                extra_body=MODELS[model].get("extra_body"),
             )
         raw = response.choices[0].message.content if response else None
         result = parse(raw) if raw else None

@@ -50,6 +50,7 @@ async def call_api_async(
     api_key: str,
     temperature: float = 0.0,
     max_tokens: int = 2_000,
+    extra_body: dict | None = None,
 ):
     loop = asyncio.get_running_loop()
     return await loop.run_in_executor(
@@ -63,6 +64,7 @@ async def call_api_async(
         api_key,
         temperature,
         max_tokens,
+        extra_body,
     )
 
 
@@ -203,7 +205,12 @@ async def process_llm_async(model: str, language: str, prompt_type: str, topic: 
         async def process_one(message, batch_index, task_type):
             async with semaphore:
                 response = await call_api_async(
-                    MODELS[model]["remote"], message, task_type, MODEL_API_ENDPOINT, MODEL_API_KEY
+                    MODELS[model]["remote"],
+                    message,
+                    task_type,
+                    MODEL_API_ENDPOINT,
+                    MODEL_API_KEY,
+                    extra_body=MODELS[model].get("extra_body"),
                 )
                 if not response:
                     return batch_index, None
