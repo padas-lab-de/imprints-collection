@@ -1,7 +1,7 @@
 # Lead record
 
 ## In flight
-- (none)
+- E11-external-host-discovery: Sonnet subagent, worktree branch E11-external-host-discovery. Explains why the E9 fetcher finds 1.7x the external hosts of E4; report docs/experiments/E11-external-host-discovery.md; may re-fetch <=100 seeds. On return: verify, merge, revise the E10 estimate and D16 if needed.
 
 ## Cards
 | ID | Date | Question | Outcome | Landed in |
