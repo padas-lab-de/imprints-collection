@@ -1,15 +1,15 @@
 # Lead record
 
 ## In flight
-- E8-gold-strata-pilot: Opus subagent, worktree branch E8-gold-strata-pilot. Writes docs/gold_set_design.md (diversity strata, detectors, quotas, archive, protocol, eval plan, related work) and pilots detectors on 1,000 random hosts -> results/E8/pilot_features.jsonl, datasets/E8/. Assumes D14 A, D15 A until answered. On return: tests, spot-check prevalences, turn open choices into cards.
+- E8-gold-strata-pilot: Opus subagent, worktree branch E8-gold-strata-pilot. Writes docs/gold_set_design.md (diversity strata, detectors, quotas, archive, protocol, eval plan, related work) and pilots detectors on 1,000 random hosts -> results/E8/pilot_features.jsonl, datasets/E8/. D14 A, D15 C (told the agent); screenshot stratum is an edge case per user. On return: tests, spot-check prevalences, turn open choices into cards.
 - E7-eval-homepage-location: Sonnet subagent, worktree branch E7-eval-homepage-location. D11 homepage fetch of 1,000 gold hosts -> datasets/E7/gold_homepages.jsonl, topic eval on homepages (both innkube models), D12 geocoding location metric (street <=250 m, town level), re-scores E2 predictions. Report docs/experiments/E7-eval-homepage-location.md on branch. On return: tests, diff, spot-check, merge.
 - E6-fetch-rule-fixes: Sonnet subagent in a worktree, branch E6-fetch-rule-fixes (from lead-record). Implements E5 fixes F1-F6, F9 + stats.py/merge.py empty-address count fix, re-runs fetch on datasets/E4/random20k_seed_hosts.txt -> datasets/E6/random20k/, precision sample -> results/E6/precision_sample.jsonl, report docs/experiments/E6-fetch-rule-fixes.md on branch. On return: run tests, read diff, check precision sample, merge into lead-record.
 
 ## Cards
 | ID | Date | Question | Outcome | Landed in |
 |---|---|---|---|---|
-| D15-gold-annotation-workforce | 2026-10-23 | Who labels: model pre-label + human check, or humans from scratch? | open (recommend A) | — |
-| D14-gold-label-source | 2026-10-23 | Gold labels from the live rendered site or from fetched text? | open (recommend A) | — |
+| D15-gold-annotation-workforce | 2026-10-23 | Who labels: model pre-label + human check, or humans from scratch? | C: one human all items, second human ~20% | — |
+| D14-gold-label-source | 2026-10-23 | Gold labels from the live rendered site or from fetched text? | A: live rendered site + archive | — |
 | D13-personal-data-release | 2026-10-23 | Open, two-tier or derived-only release of personal imprint data? | B: full open release, assume best case (user) | — |
 | A3-dpo-consultation | 2026-10-23 | Ask Uni Passau DPO about publishing imprint personal data | dropped by user | — |
 | A4-apc-funding | 2026-10-23 | Who pays the EUR 2,390 APC (DEAL agreement?) | done: covered by Uni Passau agreement | — |
