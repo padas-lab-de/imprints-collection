@@ -9,7 +9,7 @@ import time
 import traceback
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor, TimeoutError, as_completed
-from typing import Any, Dict, Optional, Set, Tuple, Union
+from typing import Any, Dict, List, Optional, Set, Tuple, Union
 from urllib.parse import urljoin, urlparse
 
 import click
@@ -33,8 +33,23 @@ HEADERS = {
 NUM_WORKERS = 64  # 8
 TIMEOUT = 10  # 5
 MAX_REDIRECTS = 10
+RETRY_PAUSE = 1.0  # seconds before retrying a timed-out or 5xx request
 BATCH_SIZE = 100_000
 KEYWORDS = ["impressum", "kontakt", "über uns", "datenschutz", "agb"]
+# Terms that identify an imprint link, in priority order ("impressum" first)
+IMPRINT_KEYWORDS = [
+    "impressum",
+    "imprint",
+    "legal notice",
+    "rechtliche hinweise",
+    "rechtliches",
+    "anbieterkennzeichnung",
+]
+MAX_IMPRINT_CANDIDATES = 5
+# Paths probed when the landing page has no imprint link
+IMPRINT_PROBE_PATHS = ["/impressum", "/impressum.html", "/imprint"]
+# A probed page only counts as imprint if its text matches this pattern
+IMPRINT_TEXT_PATTERN = re.compile(r"impressum|angaben gemäß|§\s*5\s*(tmg|ddg)", re.I)
 
 
 # Create enum for crawl status
@@ -57,6 +72,7 @@ def requests_get_with_timeout(
     url: str,
     total_timeout: float,
     connect_read_timeout: Optional[Tuple[float, float]] = (3.0, 10.0),
+    retry: bool = False,
     **kwargs: Any,
 ) -> Optional[requests.Response]:
     """
@@ -66,6 +82,7 @@ def requests_get_with_timeout(
     - url: The URL to request.
     - total_timeout: Max total time (seconds) for the entire operation.
     - connect_read_timeout: (connect_timeout, read_timeout) tuple passed to requests.get.
+    - retry: Retry once if the request timed out.
     - kwargs: Additional arguments passed to requests.get.
 
     Returns:
@@ -80,8 +97,13 @@ def requests_get_with_timeout(
     try:
         future = executor.submit(_request)
         return future.result(timeout=total_timeout)
-    except TimeoutError:
+    except (TimeoutError, requests.exceptions.Timeout):
         logging.debug(f"Request to {url} timed out after {total_timeout} seconds")
+        if retry:
+            time.sleep(RETRY_PAUSE)
+            return requests_get_with_timeout(
+                url, total_timeout, connect_read_timeout, retry=False, **kwargs
+            )
         return None
     except Exception as e:
         logging.debug(f"Fetch failed for {url}: {e}")
@@ -91,7 +113,7 @@ def requests_get_with_timeout(
 
 
 def try_fetch(
-    url: str, num_redirects: int = MAX_REDIRECTS
+    url: str, num_redirects: int = MAX_REDIRECTS, retry: bool = False
 ) -> Tuple[Optional[str], Optional[str]]:
     """
     Try to fetch the URL with a maximum number of redirects. Returns the final URL and the HTML content if successful, otherwise None.
@@ -99,6 +121,7 @@ def try_fetch(
     Parameters:
     - url: The URL to fetch.
     - num_redirects: Maximum number of redirects to follow.
+    - retry: Retry once on timeout or HTTP 5xx.
 
     Returns:
     - Tuple containing the final URL and HTML content if successful, otherwise (None, None).
@@ -111,9 +134,20 @@ def try_fetch(
         url,
         TIMEOUT * 2,
         connect_read_timeout=(3.0, 10.0),
+        retry=retry,
         headers=HEADERS,
         allow_redirects=False,
     )
+    if resp is not None and resp.status_code >= 500 and retry:
+        logging.debug(f"Server error {resp.status_code} for {url}, retrying")
+        time.sleep(RETRY_PAUSE)
+        resp = requests_get_with_timeout(
+            url,
+            TIMEOUT * 2,
+            connect_read_timeout=(3.0, 10.0),
+            headers=HEADERS,
+            allow_redirects=False,
+        )
     if resp is None:
         return None, None
     if resp.status_code == 200 and resp.content:
@@ -124,7 +158,7 @@ def try_fetch(
     if 300 <= resp.status_code < 400 and resp.headers.get("Location"):
         logging.debug(f"Redirected {url} to {resp.headers.get('Location')}")
         abs_url = urljoin(url, resp.headers.get("Location"))
-        return try_fetch(abs_url, num_redirects - 1)
+        return try_fetch(abs_url, num_redirects - 1, retry)
     return None, None
 
 
@@ -169,7 +203,7 @@ def process_host(
     status = CrawlStatus.HOST_NOT_FOUND
     for scheme in ["https://", "http://"]:
         base_url = scheme + host
-        base_url, html = try_fetch(base_url)
+        base_url, html = try_fetch(base_url, retry=True)
         if base_url and html:
             # Skip if the new base URL is from the filter list
             if not check_url(base_url):
@@ -193,7 +227,9 @@ def process_host(
             }
             result["main"].update(parse_result)
 
-            keyword_links, external_hosts = discover_links(tree.body, base_url, host)
+            keyword_links, external_hosts = discover_links(
+                tree.body, base_url, host, base_href=get_base_href(tree)
+            )
 
             # Append external hosts to a file called discovered_external_hosts.txt
             if external_hosts:
@@ -205,9 +241,11 @@ def process_host(
                     for ext_host in external_hosts:
                         ext_file.write(ext_host + "\n")
 
-            includes_imprint = False
-            for keyword, url in keyword_links.items():
-                if url:
+            for keyword, candidates in keyword_links.items():
+                if keyword == "impressum":
+                    continue
+                # Other pages: only the shortest link, no fallback
+                for url, _ in candidates[:1]:
                     sub_url, sub_html = try_fetch(url)
                     if sub_html:
                         _, parse_result = parse_html(sub_html)
@@ -219,8 +257,14 @@ def process_host(
                             result[keyword] = {"url": sub_url}
                             result[keyword].update(parse_result)
 
-                            if keyword == "impressum":
-                                includes_imprint = True
+            imprint = find_imprint(
+                base_url,
+                result["main"].get("main_content", ""),
+                keyword_links.get("impressum", []),
+            )
+            includes_imprint = imprint is not None
+            if imprint:
+                result["impressum"] = imprint
 
             with output_lock:
                 output_file.write(json.dumps(result, ensure_ascii=False) + "\n")
@@ -241,6 +285,100 @@ def process_host(
     return status
 
 
+def fetch_imprint_page(
+    url: str,
+) -> Tuple[Optional[str], Optional[Dict[str, Union[str, int]]], bool]:
+    """
+    Fetch a candidate imprint page. If the main-content extraction is empty, the
+    page is re-extracted with main_content=False and kept if the body text is not empty.
+
+    Returns:
+    - Tuple (final url, parse result, used_fallback_extraction); parse result is None
+      if the page is unusable.
+    """
+    sub_url, sub_html = try_fetch(url, retry=True)
+    if not sub_html:
+        return None, None, False
+    _, parse_result = parse_html(sub_html)
+    if not parse_result:
+        return None, None, False
+    if int(parse_result.get("content_length", 0)) > 0:
+        return sub_url, parse_result, False
+    # Main-content extraction found nothing, try the full body text
+    _, full_result = parse_html(sub_html, main_content=False)
+    if full_result and int(full_result.get("content_length", 0)) > 0:
+        return sub_url, full_result, True
+    return None, None, False
+
+
+def find_imprint(
+    base_url: str, landing_text: str, candidates: List[Tuple[str, str]]
+) -> Optional[Dict[str, Any]]:
+    """
+    Find the imprint page of a host: try the discovered link candidates in order,
+    then probe common paths if there was no candidate at all.
+
+    Parameters:
+    - base_url: Final URL of the landing page.
+    - landing_text: Extracted text of the landing page.
+    - candidates: Ordered (url, matched keyword) imprint candidates.
+
+    Returns:
+    - Imprint record with the fields of parse_html plus "url", "found_by"
+      ("link" or "probe"), "found_keyword" (matched keyword or probed path),
+      "candidate_rank" and "fallback_extraction", or None.
+    """
+    for rank, (url, keyword) in enumerate(candidates[:MAX_IMPRINT_CANDIDATES]):
+        sub_url, parse_result, fallback = fetch_imprint_page(url)
+        if parse_result:
+            return {
+                "url": sub_url,
+                **parse_result,
+                "found_by": "link",
+                "found_keyword": keyword,
+                "candidate_rank": rank,
+                "fallback_extraction": fallback,
+            }
+
+    if candidates:
+        return None
+
+    # No imprint link: probe common paths on the final host
+    parsed = urlparse(base_url)
+    for path in IMPRINT_PROBE_PATHS:
+        sub_url, parse_result, fallback = fetch_imprint_page(
+            f"{parsed.scheme}://{parsed.netloc}{path}"
+        )
+        if not parse_result:
+            continue
+        text = parse_result.get("main_content", "")
+        if text.strip() == (landing_text or "").strip():
+            continue
+        if not IMPRINT_TEXT_PATTERN.search(text):
+            continue
+        return {
+            "url": sub_url,
+            **parse_result,
+            "found_by": "probe",
+            "found_keyword": path,
+            "candidate_rank": 0,
+            "fallback_extraction": fallback,
+        }
+    return None
+
+
+def get_base_href(tree: HTMLTree) -> Optional[str]:
+    """Return the href of the first <base> element of the document, if any."""
+    try:
+        for node in tree.document.get_elements_by_tag_name("base"):
+            href = node.getattr("href")
+            if href and href.strip():
+                return href.strip()
+    except Exception as e:
+        logging.debug(f"Error reading base href: {e}")
+    return None
+
+
 def apply_extruct_extractors(html: str) -> Dict:
     try:
         # Turn the resulting nested dictionary into a string for compatability with arrow
@@ -255,12 +393,15 @@ def apply_extruct_extractors(html: str) -> Dict:
         return {"json_ld": None, "microdata": None, "opengraph": None}
 
 
-def parse_html(html: str) -> Tuple[Optional[HTMLTree], Optional[Dict[str, Union[str, int]]]]:
+def parse_html(
+    html: str, main_content: bool = True
+) -> Tuple[Optional[HTMLTree], Optional[Dict[str, Union[str, int]]]]:
     """
     Parse the HTML content and extract the main text content.
 
     Parameters:
     - html: The HTML content to parse.
+    - main_content: Extract only the main content (True) or the whole body text (False).
 
     Returns:
     - Tuple containing the HTML tree and the extracted plain text.
@@ -270,8 +411,8 @@ def parse_html(html: str) -> Tuple[Optional[HTMLTree], Optional[Dict[str, Union[
 
         # Parse the html
         tree = HTMLTree.parse(html)
-        main_content = extract_plain_text(
-            tree, preserve_formatting=True, main_content=True
+        main_text = extract_plain_text(
+            tree, preserve_formatting=True, main_content=main_content
         )
 
         # Get content from meta tags
@@ -300,10 +441,10 @@ def parse_html(html: str) -> Tuple[Optional[HTMLTree], Optional[Dict[str, Union[
             ("author", author_node),
         ]:
             result[key] = _parse_meta_tag_content(node) if node is not None else None
-        result["main_content"] = main_content
-        result["content_length"] = len(main_content)
+        result["main_content"] = main_text
+        result["content_length"] = len(main_text)
         result["content_language"] = identify_language(
-            tree, result["description"], main_content
+            tree, result["description"], main_text
         )
 
         # Extract address from structured data (JSON-LD, etc.)
@@ -329,64 +470,107 @@ def parse_html(html: str) -> Tuple[Optional[HTMLTree], Optional[Dict[str, Union[
         return None, None
 
 
+def get_anchor_text(elem: Any) -> str:
+    """
+    Return the lower-cased label of an anchor: its own text, the alt text of
+    contained images, and its title and aria-label attributes.
+    """
+    parts = [
+        elem.text or "",
+        elem.getattr("title") or "",
+        elem.getattr("aria-label") or "",
+    ]
+    try:
+        for img in elem.get_elements_by_tag_name("img"):
+            parts.append(img.getattr("alt") or "")
+    except Exception:
+        pass
+    return " ".join(p.strip() for p in parts if p and p.strip()).lower()
+
+
 def discover_links(
-    body: HTMLTree, base_url: str, base_host: str
-) -> Tuple[Dict[str, Optional[str]], Set[str]]:
+    body: HTMLTree,
+    base_url: str,
+    base_host: str,
+    base_href: Optional[str] = None,
+) -> Tuple[Dict[str, List[Tuple[str, str]]], Set[str]]:
     """
     Discover links in the HTML body and filter them based on keywords.
 
     Parameters:
     - body: The HTML body to search for links.
     - base_url: The base URL to resolve relative links.
+    - base_host: Host of the page, used to prefer own-host imprint links.
+    - base_href: Value of the <base href> element, if any; relative links are
+      resolved against it.
 
     Returns:
-    - Dictionary mapping keywords to the shortest discovered link for that keyword.
+    - Tuple (keyword_links, external_hosts). keyword_links maps each keyword to an
+      ordered list of (url, matched term) candidates: for "impressum" (all
+      IMPRINT_KEYWORDS) by keyword priority, own host first, then shortest URL;
+      for the other keywords by URL length.
     """
-    discovered_links = {}
+    resolve_base = urljoin(base_url, base_href) if base_href else base_url
+
+    # Keep every link as (url, anchor text); the same URL may appear several times
+    discovered_links: Dict[str, str] = {}
     try:
         for elem in body.get_elements_by_tag_name("a"):
             href = elem.getattr("href")
-            anchor_text = (elem.text or "").strip().lower()
+            anchor_text = get_anchor_text(elem)
 
             # Skip if link is empty or not a valid URL
             if not href:
                 continue
 
-            abs_url = urljoin(base_url, href, allow_fragments=False)
+            abs_url = urljoin(resolve_base, href.strip(), allow_fragments=False)
             parsed_url = urlparse(abs_url)
-            host = parsed_url.netloc.lower()
 
             # Skip if link is empty
             if not parsed_url.path:
                 continue
 
-            discovered_links[parsed_url.path] = (anchor_text, abs_url, host)
+            discovered_links[abs_url] = (
+                discovered_links.get(abs_url, "") + " " + anchor_text
+            ).strip()
 
     except Exception as e:
         logging.debug(f"Error parsing {base_url}: {e}")
         return {}, set()
 
-    keyword_links = {}
+    # keyword -> list of (sort key, url, matched term)
+    matches: Dict[str, List[Tuple[Tuple, str, str]]] = defaultdict(list)
     external_hosts = set()
 
-    for link, (anchor_text, abs_url, host) in discovered_links.items():
+    for abs_url, anchor_text in discovered_links.items():
+        parsed_url = urlparse(abs_url)
+        host = parsed_url.netloc.lower().strip()
         if not host:
             continue
-
-        host = host.lower().strip()
         if not check_url(host, is_host=True):
             continue
 
+        # Match against path + query and the anchor label
+        target = (parsed_url.path + "?" + parsed_url.query).lower()
+
         for keyword in KEYWORDS:
-            if keyword in link.lower() or keyword in anchor_text.lower():
-                # Store the shortest link for each keyword
-                if keyword not in keyword_links or len(abs_url) < len(
-                    keyword_links[keyword]
-                ):
-                    keyword_links[keyword] = abs_url
+            terms = IMPRINT_KEYWORDS if keyword == "impressum" else [keyword]
+            for priority, term in enumerate(terms):
+                if term in target or term in anchor_text:
+                    if keyword == "impressum":
+                        sort_key = (priority, host != base_host, len(abs_url))
+                    else:
+                        sort_key = (len(abs_url),)
+                    matches[keyword].append((sort_key, abs_url, term))
+                    break
 
         if host != base_host:
             external_hosts.add(host)
+
+    keyword_links = {
+        keyword: [(abs_url, term) for _, abs_url, term in sorted(found)]
+        for keyword, found in matches.items()
+    }
 
     return keyword_links, external_hosts
 
