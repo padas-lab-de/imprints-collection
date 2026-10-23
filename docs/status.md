@@ -19,6 +19,10 @@ Source: results/<model>/german/simple/eval/metrics.json.
 - Topic: largest confusions all go into Business and Professional Services (Community 32, Arts 30, Retail 23). Health and Medicine recall ~0.5 at precision ~1.0.
 - Caveat: topic is evaluated on the imprint text (gold has no homepage text), while production classifies the homepage.
 
+### E10-link-expansion-pilot (merged; report docs/experiments/E10-link-expansion-pilot.md)
+- 11,969 new hosts (not in seeds) linked from the 20k seeds: imprint found 1,231/9,182 reachable = 13.4%; 83% of them with DACH address.
+- .de/.at/.ch new hosts: 413 DACH imprints per 1,000 fetched (seeds 432); other TLDs 34 per 1,000. Full round adds roughly +2-4% (wide range). Card D16-link-expansion-scope.
+
 ### E9-fetch-precision (merged; report docs/experiments/E9-fetch-precision.md) — current fetcher
 - Same 20k hosts: 10,246/16,129 = 63.5% of reachable (E4 59.2%, E6 64.2%); .de 83.6% (E4 79.7%).
 - Precision of gains vs E4: 49/50 (CI ~89-100%; E6 was 40/50 on a different sample). Recovers 37 of 43 E5 rule misses.

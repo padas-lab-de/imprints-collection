@@ -1,12 +1,12 @@
 # Lead record
 
 ## In flight
-- E10-link-expansion-pilot: Sonnet subagent, worktree branch E10-link-expansion-pilot. Fetches all new external hosts discovered in the 20k runs (not in seeds) -> datasets/E10/expansion/, DACH-address share per TLD, filter comparison, full-round estimate. Report docs/experiments/E10-link-expansion-pilot.md. On return: verify counts, merge, card on full-scale expansion filter.
 - E8-gold-strata-pilot: Opus subagent, worktree branch E8-gold-strata-pilot. Writes docs/gold_set_design.md (diversity strata, detectors, quotas, archive, protocol, eval plan, related work) and pilots detectors on 1,000 random hosts -> results/E8/pilot_features.jsonl, datasets/E8/. D14 A, D15 C (told the agent); screenshot stratum is an edge case per user. On return: tests, spot-check prevalences, turn open choices into cards.
 
 ## Cards
 | ID | Date | Question | Outcome | Landed in |
 |---|---|---|---|---|
+| D16-link-expansion-scope | 2026-10-23 | One round with ccTLD filter, all TLDs, or none? | open (recommend A) | — |
 | D15-gold-annotation-workforce | 2026-10-23 | Who labels: model pre-label + human check, or humans from scratch? | C: one human all items, second human ~20% | — |
 | D14-gold-label-source | 2026-10-23 | Gold labels from the live rendered site or from fetched text? | A: live rendered site + archive | — |
 | D13-personal-data-release | 2026-10-23 | Open, two-tier or derived-only release of personal imprint data? | B: full open release, assume best case (user) | — |
@@ -28,6 +28,7 @@
 | D1-revision-driver | 2026-10-23 | Why revise now? | Journal extension with better evaluation + fresh (larger) data snapshot; no hard deadline | — |
 
 ## Lead actions
+- 2026-10-23 E10 merged, 80 tests pass, 1,231/9,182 found verified from output.
 - 2026-10-23 E9 merged, 80 tests pass, yield 10,246/16,129 and 49/50 precision verified from files. E8 hit an API rate limit and was resumed.
 - 2026-10-23 E6 merged (8e35e07), 65 tests pass, yield 10,327/16,093 verified from output.
 - 2026-10-23 E7 merged (741c7a8), 35 tests pass, Qwen street-level 0.982 checked in metrics.json.
