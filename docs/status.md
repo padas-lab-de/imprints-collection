@@ -34,7 +34,12 @@ Source: results/<model>/german/simple/eval/metrics.json.
 ### E5-imprint-not-found-causes (200 of the 1,811 .de hosts; report docs/experiments/E5-imprint-not-found-causes.md)
 - Parked/placeholder 20.5%, JS-only/empty 17.5%, missed by fetch rules 17.0%, genuinely no imprint 11.5%, redirect/spam 7.0%, link target failed 6.0%, imprint on landing page 5.0%, /impressum exists but unlinked 4.5%, other 11%.
 - Static-rule fixes would recover 42/200 = 21% (CI 15.9-27.2%), about 380 of the 1,811: .de found rate 79.7% -> ~84.0%. Top fixes: key links by full URL (5.5%), keep pages with empty main-content extraction (5%), probe /impressum (4.5%).
-- E6-fetch-rule-fixes implements F1-F6 + F9 and re-runs the 20k (running).
+
+### E6-fetch-rule-fixes (merged 8e35e07; report docs/experiments/E6-fetch-rule-fixes.md)
+- Same 20k hosts: imprint found 10,327/16,093 = 64.2% of reachable (E4 59.2%); .de 7,469/8,888 = 84.0% (E4 79.7%).
+- 873 gained, 152 lost (56 removed old false positives: landing-page shells, PDFs decoded as "None"; 96 crawl noise). Recovers 39 of the 42 E5 rule misses.
+- Precision of gains 40/50 = 80% (CI 67-89%); 5 of 10 errors from the English keyword "imprint" (product pages). Changed URLs 17/20. E9-fetch-precision tightens ranking and evidence checks (running).
+- stats.py/merge.py now count an address only if a field is non-empty.
 
 ### Findings on the original pipeline
 - stats.py counts all-empty LLM addresses as extracted: the paper's 3,225,347 "extracted address" is a count of responses.

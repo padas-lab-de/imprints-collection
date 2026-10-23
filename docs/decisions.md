@@ -2,7 +2,7 @@
 
 ## In flight
 - E8-gold-strata-pilot: Opus subagent, worktree branch E8-gold-strata-pilot. Writes docs/gold_set_design.md (diversity strata, detectors, quotas, archive, protocol, eval plan, related work) and pilots detectors on 1,000 random hosts -> results/E8/pilot_features.jsonl, datasets/E8/. D14 A, D15 C (told the agent); screenshot stratum is an edge case per user. On return: tests, spot-check prevalences, turn open choices into cards.
-- E6-fetch-rule-fixes: Sonnet subagent in a worktree, branch E6-fetch-rule-fixes (from lead-record). Implements E5 fixes F1-F6, F9 + stats.py/merge.py empty-address count fix, re-runs fetch on datasets/E4/random20k_seed_hosts.txt -> datasets/E6/random20k/, precision sample -> results/E6/precision_sample.jsonl, report docs/experiments/E6-fetch-rule-fixes.md on branch. On return: run tests, read diff, check precision sample, merge into lead-record.
+- E9-fetch-precision: same Sonnet agent as E6, worktree branch E9-fetch-precision (from lead-record 8e35e07). Ranking + imprint-evidence checks, rerun 20k -> datasets/E9/random20k/, precision sample -> results/E9/precision_sample.jsonl. On return: tests, verify yield, compare precision with E6, merge.
 
 ## Cards
 | ID | Date | Question | Outcome | Landed in |
@@ -28,6 +28,7 @@
 | D1-revision-driver | 2026-10-23 | Why revise now? | Journal extension with better evaluation + fresh (larger) data snapshot; no hard deadline | — |
 
 ## Lead actions
+- 2026-10-23 E6 merged (8e35e07), 65 tests pass, yield 10,327/16,093 verified from output.
 - 2026-10-23 E7 merged (741c7a8), 35 tests pass, Qwen street-level 0.982 checked in metrics.json.
 - 2026-10-23 Checked: innkube gemma4-31b-it and qwen38-27b both accept image input (transcribed a synthetic address PNG correctly). Screenshot path stays an edge case per user; size decided after E8 prevalence.
 - 2026-10-23 User: new diversity-stratified gold set may replace the old one (D8 superseded); A4 done; A3 dropped; D13 B.
