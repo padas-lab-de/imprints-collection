@@ -127,7 +127,7 @@ def _page(text):
 
 
 def test_find_imprint_tries_next_candidate(monkeypatch):
-    pages = {"https://example.de/a": None, "https://example.de/b": _page("Impressum Anbieter " * 5)}
+    pages = {"https://example.de/a": None, "https://example.de/b": _page("Impressum Angaben gemäß § 5 TMG Muster GmbH")}
     monkeypatch.setattr(
         fetch, "try_fetch", lambda url, num_redirects=10, retry=False: (url, pages.get(url))
     )

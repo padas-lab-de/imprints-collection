@@ -51,7 +51,7 @@ def test_candidate_with_landing_text_is_skipped(monkeypatch):
         monkeypatch,
         {
             "https://example.de/a": landing,
-            "https://example.de/b": _page("Impressum Anbieter " * 5),
+            "https://example.de/b": _page("Impressum Angaben gemäß § 5 TMG Muster GmbH"),
         },
     )
     result = find_imprint(
