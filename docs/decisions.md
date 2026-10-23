@@ -1,12 +1,14 @@
 # Lead record
 
 ## In flight
-- E2-gold-baseline-innkube: `ic evaluate` on all 1,000 gold items for Qwen3.8-27B (reasoning off) and Gemma4-31B, then --retry-failed. Logs results/logs/E2-<model>.log, outputs results/<model>/german/simple/eval/. Free (innkube). When done: compare, write numbers to status page.
 - E4-fetch-yield-baseline: small sample done (1,000 alphabetical hosts `www.rod…`, ~100 s): imprint_found 437, imprint_not_found 382, host_not_found 170, no_valid_html_tree 6, filtered 5 -> 437/819 reachable = 53.4% (paper: 58.2%). Output datasets/E4/small_sample/. NOW RUNNING: random 20k sample (`shuf --random-source=<(yes 20261023)` from seed_hosts.txt.gz -> datasets/E4/random20k_seed_hosts.txt), log results/logs/E4-fetch-random20k.log, output moved to datasets/E4/random20k/ on finish. Then: break down imprint_not_found by TLD and cause.
 
 ## Cards
 | ID | Date | Question | Outcome | Landed in |
 |---|---|---|---|---|
+| D12-town-granularity-metric | 2026-10-23 | How to score town/district differences? | open | — |
+| D11-topic-eval-input | 2026-10-23 | Evaluate topics on imprint text or re-fetched homepages? | open | — |
+| D10-journal-venue | 2026-10-23 | Target journal? | open (recommend IJDL) | — |
 | D8-gold-set-extension | 2026-10-23 | Extend the 1,000-item gold set or re-do it? | A: keep 1,000 + ~300 hard items + 2nd annotator on 200 | — |
 | D9-geocoding-ground-truth | 2026-10-23 | What counts as ground truth for geocoding eval? | A: automatic consistency on all + manual check of 100 | — |
 | A1-env-and-models | 2026-10-23 | Create .env; tell which open models innkube/Slurm can serve | Done: .env has INNKUBE_API_KEY; innkube serves qwen38-27b, gemma4-31b-it, qwen-agentworld-35b-a3b, soofi-s-isar-preview (no Qwen3-Next any more) | — |
@@ -20,6 +22,7 @@
 | D1-revision-driver | 2026-10-23 | Why revise now? | Journal extension with better evaluation + fresh (larger) data snapshot; no hard deadline | — |
 
 ## Lead actions
+- 2026-10-23 E2 done (see status.md). Created docs/status.md.
 - 2026-10-23 Merged e1-eval-harness (oracle 100%; 28 tests pass after fixing duplicate dev-deps table). Added Qwen3.8-27B/Gemma4-31B to config with per-model extra_body; Qwen3.8 needs reasoning_effort=none (else 6/20 topic calls hit the 2,000-token limit). Note: scoring treats all-blank addresses as failed; must change to a valid 'no address' answer once D8 negatives exist.
 - 2026-10-23 Merged d3-minimal-fixes (17 smoke tests pass; vllm optional; python <3.13; README paths fixed; CLAUDE.md added).
 - 2026-10-23 Appended MODEL_API_ENDPOINT/MODEL_API_KEY (interpolates INNKUBE_API_KEY)/GEOCODING_API_ENDPOINT to .env; local Photon on :2322 answers.
