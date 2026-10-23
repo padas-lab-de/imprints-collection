@@ -9,6 +9,7 @@ from shapely.geometry import Point
 from tqdm import tqdm
 
 from ic.config import *
+from ic.utils.address_utils import has_address
 
 
 @click.command()
@@ -133,7 +134,7 @@ def merge(model: str, language: str, prompt_type: str):
                             record["topic"] = topic
 
                         address = llm_record.get("address")
-                        if address:
+                        if has_address(address):
                             record["address"] = address
 
                         coords = geocoded_record.get("coords")
