@@ -51,8 +51,14 @@ _ERROR_RE = re.compile(
 )
 
 
+_PLACEHOLDER_RE = re.compile(r"bitte geben sie (?:ihren|ihre|ihr) \w+", re.I)
+
+
 def looks_like_error_page(text: str) -> bool:
-    """True for rate-limit, bot-challenge and error pages with little text."""
+    """True for rate-limit, bot-challenge and error pages with little text, and
+    for unfilled template imprints ("Bitte geben Sie Ihren Firmennamen ein")."""
+    if _PLACEHOLDER_RE.search(text):
+        return True
     return len(text) < 2000 and bool(_ERROR_RE.search(text))
 
 

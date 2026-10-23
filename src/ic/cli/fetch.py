@@ -375,6 +375,15 @@ def same_text(parse_result: Dict[str, Union[str, int]], landing_text: str) -> bo
     return parse_result.get("main_content", "").strip() == (landing_text or "").strip()
 
 
+def is_privacy_url(url: str) -> bool:
+    """True if the last path segment is a privacy policy and does not name the imprint."""
+    path = urlparse(url).path.lower().rstrip("/")
+    segment = path.rsplit("/", 1)[-1]
+    return bool(PRIVACY_URL_PATTERN.search(segment)) and not any(
+        url_matches_term(t, segment) for t in IMPRINT_KEYWORDS
+    )
+
+
 def accept_imprint_text(
     parse_result: Dict[str, Union[str, int]], term: str, fallback: bool
 ) -> bool:
@@ -415,17 +424,13 @@ def find_imprint(
         if same_page(url, base_url):
             continue
         # A privacy policy is no imprint unless the URL also names the imprint
-        target = (urlparse(url).path + "?" + urlparse(url).query).lower()
-        if (
-            keyword != "impressum"
-            and PRIVACY_URL_PATTERN.search(target)
-            and not any(url_matches_term(t, target) for t in IMPRINT_KEYWORDS)
-        ):
+        if keyword != "impressum" and is_privacy_url(url):
             continue
         tried = True
         sub_url, parse_result, fallback = fetch_imprint_page(url)
         if (
             parse_result
+            and not (keyword != "impressum" and is_privacy_url(sub_url))
             and not same_text(parse_result, landing_text)
             and accept_imprint_text(parse_result, keyword, fallback)
         ):
@@ -659,7 +664,10 @@ def discover_links(
                 for priority, term in enumerate(IMPRINT_KEYWORDS):
                     pattern = IMPRINT_PATTERNS[term]
                     url_match = url_matches_term(term, target)
-                    if url_match or pattern.search(anchor_text):
+                    # Anchor-only matches of the English/other terms need a short
+                    # label ("Imprint"), not a product link such as "Full Color Imprint Pencil"
+                    short_label = term == "impressum" or len(anchor_text) <= 30
+                    if url_match or (short_label and pattern.search(anchor_text)):
                         key = (not url_match, priority, host != base_host, len(abs_url))
                         if best is None or key < best[0]:
                             best = (key, term)
