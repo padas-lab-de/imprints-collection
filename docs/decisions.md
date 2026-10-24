@@ -1,9 +1,9 @@
 # Lead record
 
 ## In flight
-- E12-gold-screening: agent handed back early (interim, branch E12-gold-screening 74ca06b: per-/24 limited screening driver, src/ic/gold/sampling.py, 7 tests). Pipeline PID 640188 (scripts/gold/e12_run.sh) on 10k hosts, started ~20:39 UTC; done when results/E12/logs/features.log says "pipeline done". Then: hand-check image-only screenshots -> datasets/E12/image_only_confirmed.txt; `PYTHONPATH=src python scripts/gold/e12_sample.py prevalence` and `... draw`; rewrite gold_set_design.md Summary/§2/§7 for 1,000; full tests; merge.
-- E13-snapshot-dry-run: subagent, worktree branch E13-snapshot-dry-run. Per-hosting-provider concurrency limit in fetch.py + dry run of the E9 fetcher on 100k random seeds -> datasets/E13/, results/E13/ (throughput, errors by provider, stability). On return: verify, merge.
-- E14-link-expansion-depth: subagent, worktree branch E14-link-expansion-depth. Rounds 2 and 3 of link expansion from the E10 round-1 hosts (datasets/E10/expansion/discovered_external_hosts.txt): yield per round, frontier growth, full-run estimate for depth 1-3. On return: verify, merge, card on depth if needed.
+- E12-gold-screening: resumed 2026-10-24 06:35 UTC after session limit; agent handed back early (interim, branch E12-gold-screening 74ca06b: per-/24 limited screening driver, src/ic/gold/sampling.py, 7 tests). Pipeline PID 640188 (scripts/gold/e12_run.sh) on 10k hosts, started ~20:39 UTC; done when results/E12/logs/features.log says "pipeline done". Then: hand-check image-only screenshots -> datasets/E12/image_only_confirmed.txt; `PYTHONPATH=src python scripts/gold/e12_sample.py prevalence` and `... draw`; rewrite gold_set_design.md Summary/§2/§7 for 1,000; full tests; merge.
+- E13-snapshot-dry-run: (hit session limit 2026-10-23, resumed 2026-10-24 06:35 UTC; 100k fetch done 01:28 UTC) subagent, worktree branch E13-snapshot-dry-run. Per-hosting-provider concurrency limit in fetch.py + dry run of the E9 fetcher on 100k random seeds -> datasets/E13/, results/E13/ (throughput, errors by provider, stability). On return: verify, merge.
+- E14-link-expansion-depth: (hit session limit, resumed 2026-10-24 06:35 UTC; round 2 fetched) subagent, worktree branch E14-link-expansion-depth. Rounds 2 and 3 of link expansion from the E10 round-1 hosts (datasets/E10/expansion/discovered_external_hosts.txt): yield per round, frontier growth, full-run estimate for depth 1-3. On return: verify, merge, card on depth if needed.
 
 ## Cards
 | ID | Date | Question | Outcome | Landed in |
