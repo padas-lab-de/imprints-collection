@@ -85,6 +85,7 @@
   </section>
   <section class="pane">
     <div class="tabs"><b>Label</b><span class="mute" id="saved"></span></div>
+    <div id="errbox" role="alert" style="display:none"></div>
     <div class="body"><form id="f" autocomplete="off" onsubmit="return false"></form></div>
   </section>
 </main>
@@ -144,11 +145,12 @@ function fromSaved(l) {
   for (const k of Object.keys(m)) if (l[k] !== undefined && l[k] !== null) m[k] = l[k];
   m.addresses = (l.addresses || []).map(a => Object.assign(blankAddr(), a));
   m.main_address_index = l.main_address_index === undefined ? null : l.main_address_index;
+  m.none_op = !!(m.addresses.length && l.no_address_reason === "imprint_without_address");
   return m;
 }
 const isLive = () => ["live", "redirect_other_domain"].includes(M.site_status);
 function derivedReason() {
-  if (M.addresses.length) return M.no_address_reason === "imprint_without_address" ? M.no_address_reason : "";
+  if (M.addresses.length) return M.none_op ? "imprint_without_address" : "";
   if (!M.site_status) return "";
   if (!isLive()) return "site_dead";
   if (M.imprint_present === false) return "no_imprint";
@@ -156,6 +158,7 @@ function derivedReason() {
   return "";
 }
 function normalise() {
+  if (!M.addresses.length) M.none_op = false;
   M.no_address_reason = derivedReason();
   if (!M.addresses.length) M.main_address_index = null;
   else if (M.no_address_reason === "imprint_without_address") M.main_address_index = null;
@@ -245,7 +248,7 @@ function renderForm() {
   });
   af.append(el("div", { class: "row" }, [el("button", { type: "button", onclick: () => { M.addresses.push(blankAddr()); touch(); } }, "+ add address")]));
   if (!M.addresses.length) af.append(el("div", { class: "mute" }, "No address listed. Reason (automatic): " + (M.no_address_reason || "-")));
-  else af.append(el("div", { class: "row" }, [el("label", { class: "inl" }, [el("input", { type: "checkbox", checked: M.no_address_reason === "imprint_without_address", onchange: e => { M.no_address_reason = e.target.checked ? "imprint_without_address" : ""; touch(); } }), "none of these is the operator's (imprint without address)"])]));
+  else af.append(el("div", { class: "row" }, [el("label", { class: "inl" }, [el("input", { type: "checkbox", checked: !!M.none_op, onchange: e => { M.none_op = e.target.checked; touch(); } }), "none of these is the operator's (imprint without address)"])]));
   f.append(af);
   if (isLive()) {
     f.append(el("fieldset", {}, [el("legend", {}, "4. Operator type"),
@@ -304,7 +307,7 @@ const PRECIOUS = () => !dirty || confirm("Discard unsaved changes on this item?"
 async function load(i) {
   if (i < 0 || i >= S.items.length) return;
   if (!PRECIOUS()) { $("#jump").value = String(idx); return; }
-  idx = i; dirty = false; activeSeconds = 0; $("#saved").textContent = "";
+  idx = i; dirty = false; activeSeconds = 0; showErrors([]); $("#saved").textContent = "";
   const r = await fetch("/api/item?host=" + encodeURIComponent(S.items[i].host));
   const d = await r.json(); cap = d.capture;
   M = d.label ? fromSaved(d.label) : blankModel(cap.host);
@@ -320,17 +323,26 @@ async function load(i) {
   $("#txt").parentNode.scrollTop = 0;
 }
 
+function showErrors(errs) {
+  const b = $("#errbox"); b.replaceChildren();
+  if (!errs.length) { b.style.display = "none"; return; }
+  b.style.display = "block";
+  b.style.cssText += ";background:#fde8e6;color:#8a1c14;border:1px solid #e0988f;margin:6px;padding:6px 10px;border-radius:4px";
+  b.append(el("b", {}, "Not saved. Please fix:"), el("ul", { class: "errs", style: "color:inherit;margin:2px 0 0" }, errs.map(e => el("li", {}, e))));
+}
 async function save(next) {
   normalise();
   const msg = $("#msg"); msg.className = ""; msg.replaceChildren();
+  showErrors([]);
   const label = JSON.parse(JSON.stringify(M));
   if (label.imprint_present === null && !isLive()) label.imprint_present = false;
   label.no_address_reason = M.no_address_reason || null;
   const r = await fetch("/api/label", { method: "POST", headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ label, elapsed: activeSeconds }) });
-  const d = await r.json();
+  let d;
+  try { d = await r.json(); } catch (e) { d = { ok: false, errors: ["Server did not answer (is the tool still running?)"] }; }
   if (!d.ok) {
-    msg.append(el("ul", { class: "errs" }, d.errors.map(e => el("li", {}, e))));
+    showErrors(d.errors);
     return;
   }
   dirty = false; activeSeconds = 0;
