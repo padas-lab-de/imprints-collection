@@ -8,4 +8,5 @@ Issued 2026-10-24, after E13-snapshot-dry-run (docs/experiments/E13-snapshot-dry
 - **B** 8 per network: estimated 9-10 days; Strato gets up to twice the tested rate, untested, risk of 503 blocks.
 - **C** Test 8 on one 25k batch first, then pick A or B from its block rate.
 
-Answer: (pending)
+Answer (user, 2026-10-24): "D19: C. D18: C."
+Outcome: C: test 8 per network on one 25k batch (E15-provider-cap-8-test), then A or B

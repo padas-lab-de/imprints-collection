@@ -9,4 +9,5 @@ Issued 2026-10-24, after E14-link-expansion-depth (docs/experiments/E14-link-exp
 - **C** Depth 3 across all TLDs: 11.4-19.1M fetches, 407-512k.
 Estimates extrapolate 300-400x from 10-15k-host rounds and likely overstate depth 2-3 fetches.
 
-Answer: (pending)
+Answer (user, 2026-10-24): "D19: C. D18: C."
+Outcome: C: depth 3 across all TLDs

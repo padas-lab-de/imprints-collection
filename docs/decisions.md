@@ -1,13 +1,14 @@
 # Lead record
 
 ## In flight
+- E15-provider-cap-8-test: lead-run fetch, 25k random seeds disjoint from E4/E13/E12 (scripts/E15/sample.py, seed 20261025), cap 8 per provider network (scripts/E15/run.sh), started 2026-10-24 08:28 UTC -> datasets/E15/random25k, log results/E15/logs/fetch.log ("Done" at end). On finish: compare Strato/IONOS 429/503 rate and throughput with E13 (scripts/E13/analyze.py), then pick D18 A or B and start the snapshot crawl.
 - E12-gold-screening: resumed 2026-10-24 06:35 UTC after session limit; agent handed back early (interim, branch E12-gold-screening 74ca06b: per-/24 limited screening driver, src/ic/gold/sampling.py, 7 tests). Pipeline PID 640188 (scripts/gold/e12_run.sh) on 10k hosts, started ~20:39 UTC; done when results/E12/logs/features.log says "pipeline done". Then: hand-check image-only screenshots -> datasets/E12/image_only_confirmed.txt; `PYTHONPATH=src python scripts/gold/e12_sample.py prevalence` and `... draw`; rewrite gold_set_design.md Summary/§2/§7 for 1,000; full tests; merge.
 
 ## Cards
 | ID | Date | Question | Outcome | Landed in |
 |---|---|---|---|---|
-| D19-link-expansion-depth | 2026-10-24 | Link expansion depth 1 all TLDs, plus depth 2-3 on .de/.at/.ch only, or depth 3 all TLDs? | open (recommend B) | — |
-| D18-snapshot-provider-cap | 2026-10-24 | Full seed crawl at 4 or 8 parallel requests per provider network? | open (recommend A) | — |
+| D19-link-expansion-depth | 2026-10-24 | Link expansion depth 1 all TLDs, plus depth 2-3 on .de/.at/.ch only, or depth 3 all TLDs? | C: depth 3 across all TLDs (user) | — |
+| D18-snapshot-provider-cap | 2026-10-24 | Full seed crawl at 4 or 8 parallel requests per provider network? | C: test 8 on one 25k batch first -> E15 (user) | — |
 | D17-gold-set-size | 2026-10-23 | Gold set ~1,300 items (~80 annotator h) or lean ~1,100? | B, cut to 1,000 items; no stratum comparisons needed (user) | — |
 | D16-link-expansion-scope | 2026-10-23 | One round with ccTLD filter, all TLDs, or none? | B: all TLDs, keep DACH-address imprints; depth up to 3 under test (E14) (user) | — |
 | D15-gold-annotation-workforce | 2026-10-23 | Who labels: model pre-label + human check, or humans from scratch? | C: one human labels every item from scratch, a second independently ~20%; no model pre-labels (user) | — |
