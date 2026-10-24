@@ -2,7 +2,7 @@
 
 ## In flight
 - E12-gold-screening: subagent, worktree branch E12-gold-screening. Screens 10k random seed hosts with scripts/gold/e8_pilot.py stages (low rate), re-derives quotas for 1,000 items (no head-to-head comparisons; D17 B), draws the gold sample -> datasets/E12/, results/E12/. On return: verify, merge.
-- E13-snapshot-dry-run: subagent, worktree branch E13-snapshot-dry-run. Per-hosting-provider concurrency limit in fetch.py + dry run of the E9 fetcher on 100k random seeds -> datasets/E13/, results/E13/ (throughput, errors by provider, stability). On return: verify, merge.
+- E13-snapshot-dry-run: subagent, worktree branch E13-snapshot-dry-run. Per-hosting-provider concurrency limit in fetch.py + dry run of the E9 fetcher on 100k random seeds -> datasets/E13/, results/E13/ (throughput, errors by provider, stability). On return: verify, merge. 2026-10-24 subagent returned: report docs/experiments/E13-snapshot-dry-run.md (100k: 62.5% / .de 85.0% found, Strato 24/6,433 ended 503; resume tested; 6.56M at cap 4 about 12-13 days, 33 GB; RSS grows 0.5 GB/h, so restart every ~10 batches). Card candidate: provider cap 4 vs 6-8 for the full run.
 - E14-link-expansion-depth: subagent, worktree branch E14-link-expansion-depth. Rounds 2 and 3 of link expansion from the E10 round-1 hosts (datasets/E10/expansion/discovered_external_hosts.txt): yield per round, frontier growth, full-run estimate for depth 1-3. On return: verify, merge, card on depth if needed.
 
 ## Cards

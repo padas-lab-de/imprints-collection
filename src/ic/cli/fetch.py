@@ -24,7 +24,18 @@ from ic.config import *
 from ic.utils.filter_utils import check_url
 from ic.parsing.language import identify_language
 from ic.parsing.location import process_extruct_result
+from ic.utils.fetch_state import (
+    STATUS_COLUMNS,
+    read_done_hosts,
+    salvage_batch_output,
+)
 from ic.utils.imprint_utils import has_imprint_evidence, looks_like_error_page
+from ic.utils.politeness import (
+    NOT_FOUND,
+    HostScheduler,
+    ProviderLimiter,
+    parse_retry_after,
+)
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0",
@@ -47,6 +58,13 @@ IMPRINT_KEYWORDS = [
     "anbieterkennzeichnung",
 ]
 MAX_IMPRINT_CANDIDATES = 5
+# Politeness per provider group (resolved IP /24, see ic.utils.politeness)
+PROVIDER_CONCURRENCY = 4  # hosts in flight and concurrent requests per group
+PROVIDER_DELAY = 0.25  # seconds between request starts per group
+PROVIDER_COOLDOWN = 10.0  # pause of a group after a 429/503
+RETRY_BACKOFF = 60.0  # a host with a 429/503 is fetched again after this many seconds
+MAX_RETRY_BACKOFF = 600.0  # cap for Retry-After
+THROTTLE_CODES = (429, 503)
 # Paths probed when the landing page has no imprint link
 IMPRINT_PROBE_PATHS = ["/impressum", "/impressum.html", "/imprint"]
 # Word-boundary patterns for the imprint terms. "impressum" stays a substring match
@@ -113,6 +131,44 @@ logging.basicConfig(
 )
 logging.getLogger("urllib3").setLevel(logging.ERROR)
 
+# Set by the fetch command; None means no per-provider limit (tests, scripts)
+LIMITER: Optional[ProviderLimiter] = None
+OUTPUT_DIR = DATASETS_FOLDER
+# Per-worker-thread record of the host being processed: allow_defer, number of
+# requests, 429/503 answers, last failure reason, failed landing attempts
+_ctx = threading.local()
+
+
+class RetryLater(Exception):
+    """Raised on a 429/503 when the host may be fetched again later."""
+
+    def __init__(self, status_code: int, retry_after: Optional[float] = None):
+        super().__init__(f"HTTP {status_code}")
+        self.status_code = status_code
+        self.retry_after = retry_after
+
+
+def _note_error(reason: str) -> None:
+    _ctx.last_error = reason
+
+
+def classify_error(e: BaseException) -> str:
+    """Short failure reason of a request exception."""
+    if isinstance(e, (TimeoutError, requests.exceptions.Timeout)):
+        return "timeout"
+    if isinstance(e, requests.exceptions.SSLError):
+        return "ssl"
+    if isinstance(e, requests.exceptions.ConnectionError):
+        text = str(e)
+        if "NameResolution" in text or "Name or service not known" in text or "getaddrinfo" in text:
+            return "dns"
+        if "Connection refused" in text:
+            return "refused"
+        if "timed out" in text:
+            return "timeout"
+        return "conn"
+    return "other"
+
 
 def requests_get_with_timeout(
     url: str,
@@ -145,6 +201,7 @@ def requests_get_with_timeout(
         return future.result(timeout=total_timeout)
     except (TimeoutError, requests.exceptions.Timeout):
         logging.debug(f"Request to {url} timed out after {total_timeout} seconds")
+        _note_error("timeout")
         if retry:
             time.sleep(RETRY_PAUSE)
             return requests_get_with_timeout(
@@ -153,9 +210,33 @@ def requests_get_with_timeout(
         return None
     except Exception as e:
         logging.debug(f"Fetch failed for {url}: {e}")
+        _note_error(classify_error(e))
         return None
     finally:
         executor.shutdown(wait=False, cancel_futures=True)
+
+
+def _limited_get(url: str, retry: bool, key: Optional[str]) -> Optional[requests.Response]:
+    """One GET (no redirects) inside the request slot of the provider group `key`."""
+    _ctx.requests = getattr(_ctx, "requests", 0) + 1
+    if LIMITER is None:
+        return requests_get_with_timeout(
+            url,
+            TIMEOUT * 2,
+            connect_read_timeout=(3.0, 10.0),
+            retry=retry,
+            headers=HEADERS,
+            allow_redirects=False,
+        )
+    with LIMITER.request(key):
+        return requests_get_with_timeout(
+            url,
+            TIMEOUT * 2,
+            connect_read_timeout=(3.0, 10.0),
+            retry=retry,
+            headers=HEADERS,
+            allow_redirects=False,
+        )
 
 
 def try_fetch(
@@ -174,26 +255,29 @@ def try_fetch(
     """
     if num_redirects <= 0:
         logging.debug(f"Max redirects reached for {url}")
+        _note_error("redirects")
         return None, None
 
-    resp = requests_get_with_timeout(
-        url,
-        TIMEOUT * 2,
-        connect_read_timeout=(3.0, 10.0),
-        retry=retry,
-        headers=HEADERS,
-        allow_redirects=False,
-    )
+    key = None
+    if LIMITER is not None and LIMITER.enabled:
+        key = LIMITER.key_for(urlparse(url).hostname or "")
+        if key == NOT_FOUND:
+            # The name does not resolve; requests would fail the same way
+            _note_error("dns")
+            return None, None
+
+    resp = _limited_get(url, retry, key)
+    if resp is not None and resp.status_code in THROTTLE_CODES and LIMITER is not None:
+        _ctx.throttled = getattr(_ctx, "throttled", 0) + 1
+        LIMITER.throttled(key)
+        if getattr(_ctx, "allow_defer", False):
+            raise RetryLater(
+                resp.status_code, parse_retry_after(resp.headers.get("Retry-After"))
+            )
     if resp is not None and resp.status_code >= 500 and retry:
         logging.debug(f"Server error {resp.status_code} for {url}, retrying")
         time.sleep(RETRY_PAUSE)
-        resp = requests_get_with_timeout(
-            url,
-            TIMEOUT * 2,
-            connect_read_timeout=(3.0, 10.0),
-            headers=HEADERS,
-            allow_redirects=False,
-        )
+        resp = _limited_get(url, False, key)
     if resp is None:
         return None, None
     if resp.status_code == 200 and resp.content:
@@ -201,6 +285,7 @@ def try_fetch(
         detection = from_bytes(resp.content).best()
         if detection is None:
             # Binary content (PDF, image, ...), no text to decode
+            _note_error("binary")
             return None, None
         text = str(detection)
         return url, text.strip()
@@ -208,6 +293,7 @@ def try_fetch(
         logging.debug(f"Redirected {url} to {resp.headers.get('Location')}")
         abs_url = urljoin(url, resp.headers.get("Location"))
         return try_fetch(abs_url, num_redirects - 1, retry)
+    _note_error(f"http{resp.status_code}" if resp.status_code != 200 else "empty")
     return None, None
 
 
@@ -252,7 +338,12 @@ def process_host(
     status = CrawlStatus.HOST_NOT_FOUND
     for scheme in ["https://", "http://"]:
         base_url = scheme + host
+        _ctx.last_error = "none"
         base_url, html = try_fetch(base_url, retry=True)
+        if not (base_url and html):
+            _ctx.landing_errors = getattr(_ctx, "landing_errors", []) + [
+                f"{scheme[:-3]}:{_ctx.last_error}"
+            ]
         if base_url and html:
             # Skip if the new base URL is from the filter list
             if not check_url(base_url):
@@ -283,7 +374,7 @@ def process_host(
             # Append external hosts to a file called discovered_external_hosts.txt
             if external_hosts:
                 with open(
-                    os.path.join(DATASETS_FOLDER, "discovered_external_hosts.txt"),
+                    os.path.join(OUTPUT_DIR, "discovered_external_hosts.txt"),
                     "a",
                     encoding="UTF-8",
                 ) as ext_file:
@@ -687,25 +778,243 @@ def discover_links(
     return keyword_links, external_hosts
 
 
+def read_hosts(input_file_path: str) -> List[str]:
+    """Read the host list (plain text or .gz), one host per line."""
+    opener = gzip.open if input_file_path.endswith(".gz") else open
+    with opener(input_file_path, "rt", encoding="UTF-8") as f:
+        return [line.strip() for line in f if line.strip()]
+
+
+def run_batch(
+    batch_id: int,
+    batch_hosts: List[str],
+    num_workers: int,
+    limiter: Optional[ProviderLimiter],
+    retry_backoff: float = RETRY_BACKOFF,
+    progress_interval: float = 60.0,
+) -> Dict[str, int]:
+    """
+    Fetch one batch with `num_workers` threads. Every finished host gets a line
+    in the status log; hosts already in the log are skipped (resume), and the
+    output file is cut back to the records of logged hosts before appending.
+    Returns the status counts of the hosts processed in this run.
+    """
+    output_path = os.path.join(OUTPUT_DIR, f"imprints_batch{batch_id:06d}.jsonl.gz")
+    status_path = os.path.join(OUTPUT_DIR, f"fetch_status_batch{batch_id:06d}.tsv")
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
+
+    done = read_done_hosts(status_path)
+    todo = [h for h in batch_hosts if h not in done]
+    if not todo:
+        logging.info(f"Batch {batch_id} already complete ({len(done)} hosts), skipped")
+        return {}
+    if done:
+        kept = salvage_batch_output(output_path, done)
+        logging.info(
+            f"Resuming batch {batch_id}: {len(done)} hosts done ({kept} records kept), "
+            f"{len(todo)} to go"
+        )
+        output_file = gzip.open(output_path, "at", encoding="UTF-8")
+    else:
+        if os.path.exists(output_path):
+            logging.warning(f"{output_path} has no status log, overwriting it")
+        output_file = gzip.open(output_path, "wt", encoding="UTF-8")
+    new_status_file = not os.path.exists(status_path) or not done
+    status_file = open(status_path, "w" if new_status_file else "a", encoding="UTF-8")
+    if new_status_file:
+        status_file.write("\t".join(STATUS_COLUMNS) + "\n")
+        status_file.flush()
+    output_lock = threading.Lock()
+
+    logging.info(f"Processing batch {batch_id} ({len(todo)} hosts)")
+    pbar = tqdm(total=len(todo), desc=f"Processing batch {batch_id}", mininterval=60)
+    hosts_dict = defaultdict(dict)
+    counter: Dict[str, int] = defaultdict(int)
+    max_per_group = limiter.max_concurrent if limiter is not None else 0
+    sched = HostScheduler(todo, max_per_group=max_per_group)
+    t_start = time.time()
+    finished = threading.Event()
+
+    def record(host: str, status: str, provider: Optional[str], attempt: int, t0: float) -> None:
+        detail = ";".join(getattr(_ctx, "landing_errors", []))
+        line = [
+            host,
+            status,
+            detail,
+            provider or "",
+            str(attempt + 1),
+            str(getattr(_ctx, "requests", 0)),
+            str(getattr(_ctx, "throttled", 0)),
+            f"{time.time() - t0:.1f}",
+            f"{time.time():.0f}",
+        ]
+        with output_lock:
+            status_file.write("\t".join(line) + "\n")
+            status_file.flush()
+            counter[status] += 1
+
+    def worker() -> None:
+        while True:
+            item = sched.get()
+            if item is None:
+                return
+            if not item.admitted:
+                if limiter is not None and item.key is None:
+                    item.key = limiter.key_for(item.host)
+                if not sched.admit(item):
+                    continue
+            t0 = time.time()
+            _ctx.allow_defer = limiter is not None and item.attempt == 0
+            _ctx.requests = 0
+            _ctx.throttled = 0
+            _ctx.landing_errors = []
+            hosts_dict[item.host] = {"start_time": None, "end_time": None}
+            try:
+                status = process_host(item.host, output_file, output_lock, pbar, hosts_dict)
+            except RetryLater as e:
+                delay = min(max(e.retry_after or 0.0, retry_backoff), MAX_RETRY_BACKOFF)
+                logging.debug(f"{item.host}: HTTP {e.status_code}, retry in {delay:.0f}s")
+                with output_lock:
+                    counter["deferred"] += 1
+                sched.retry_later(item, delay)
+                continue
+            except Exception as e:
+                logging.error(f"Error processing {item.host}: {e}")
+                traceback.print_exc()
+                status = "error"
+            hosts_dict.pop(item.host, None)
+            record(item.host, status, item.key, item.attempt, t0)
+            sched.finish(item)
+
+    def progress() -> None:
+        while not finished.wait(progress_interval):
+            elapsed = (time.time() - t_start) / 60
+            with output_lock:
+                counts = dict(counter)
+            n = sum(v for k, v in counts.items() if k != "deferred")
+            snap = sched.snapshot()
+            msg = (
+                f"progress batch {batch_id}: {n}/{len(todo)} hosts in {elapsed:.1f} min "
+                f"({n / max(elapsed, 1e-9):.0f}/min) {json.dumps(counts, sort_keys=True)} "
+                f"queue {json.dumps(snap)}"
+            )
+            if limiter is not None:
+                stats = limiter.stats()
+                wait = sum(w for _, _, w in stats.values())
+                reqs = sum(r for r, _, _ in stats.values())
+                top = sorted(stats.items(), key=lambda kv: -kv[1][0])[:3]
+                msg += (
+                    f" limiter requests {reqs} throttled "
+                    f"{sum(t for _, t, _ in stats.values())} wait {wait / 60:.1f} worker-min "
+                    f"top {[(k, r, t) for k, (r, t, _) in top]}"
+                )
+            logging.info(msg)
+
+    progress_thread = threading.Thread(target=progress, daemon=True)
+    progress_thread.start()
+    threads = [threading.Thread(target=worker, daemon=True) for _ in range(num_workers)]
+    for t in threads:
+        t.start()
+    for t in threads:
+        t.join()
+    finished.set()
+
+    pbar.close()
+    output_file.flush()
+    output_file.close()
+    status_file.close()
+
+    # Log statistics for the batch
+    logging.info(f"Batch {batch_id} statistics ({(time.time() - t_start) / 60:.1f} min):")
+    total = sum(v for k, v in counter.items() if k != "deferred")
+    for status, count in counter.items():
+        logging.info(f"  {status}: {count} ({count / max(total, 1):.2%})")
+    logging.info(f"  Total processed: {total}")
+    return dict(counter)
+
+
 @click.command()
 @click.argument("input_file_path", type=click.Path(exists=True, dir_okay=False))
 @click.argument("batch_size", default=BATCH_SIZE, type=int)
 @click.argument("start_batch", default=0, type=int)
 @click.argument("end_batch", default=-1, type=int)
 @click.argument("num_workers", default=NUM_WORKERS, type=int)
-def fetch(input_file_path: str, start_batch: int, end_batch: int, batch_size: int, num_workers: int) -> None:
+@click.option(
+    "--output-dir",
+    default=DATASETS_FOLDER,
+    show_default=True,
+    help="Folder for batch outputs, status logs and discovered_external_hosts.txt.",
+)
+@click.option(
+    "--provider-concurrency",
+    default=PROVIDER_CONCURRENCY,
+    show_default=True,
+    help="Max hosts in flight and concurrent requests per provider group "
+    "(resolved IP /24); 0 disables the per-provider limit.",
+)
+@click.option(
+    "--provider-delay",
+    default=PROVIDER_DELAY,
+    show_default=True,
+    help="Min seconds between request starts per provider group.",
+)
+@click.option(
+    "--provider-cooldown",
+    default=PROVIDER_COOLDOWN,
+    show_default=True,
+    help="Seconds a provider group is paused after a 429/503.",
+)
+@click.option(
+    "--retry-backoff",
+    default=RETRY_BACKOFF,
+    show_default=True,
+    help="A host answering 429/503 is fetched once more after this many seconds "
+    "(or its Retry-After, up to 600 s).",
+)
+@click.option(
+    "--progress-interval",
+    default=60.0,
+    show_default=True,
+    help="Seconds between progress log lines.",
+)
+def fetch(
+    input_file_path: str,
+    start_batch: int,
+    end_batch: int,
+    batch_size: int,
+    num_workers: int,
+    output_dir: str,
+    provider_concurrency: int,
+    provider_delay: float,
+    provider_cooldown: float,
+    retry_backoff: float,
+    progress_interval: float,
+) -> None:
     """
     Fetch all relevant pages for the hosts included in the input file and extract imprint information.
 
     Parameters:
-    - input_file_path: The path to the file containing the list of hosts to crawl.
+    - input_file_path: The path to the file containing the list of hosts to crawl (.gz allowed).
     - start_batch: The batch number to start processing from.
     - end_batch: The batch number to stop processing at (-1 for all).
     - batch_size: The number of hosts to process in each batch.
     - num_workers: The number of worker threads to use for processing.
+
+    A re-run with the same arguments resumes: finished batches are skipped and a
+    cut-off batch continues with the hosts missing from its status log.
     """
-    with open(input_file_path, "r", encoding="UTF-8") as f:
-        hosts = [line.strip() for line in f if line.strip()]
+    global LIMITER, OUTPUT_DIR
+    OUTPUT_DIR = output_dir
+    if provider_concurrency > 0:
+        LIMITER = ProviderLimiter(
+            max_concurrent=provider_concurrency,
+            min_delay=provider_delay,
+            cooldown=provider_cooldown,
+        )
+    else:
+        LIMITER = None
+
+    hosts = read_hosts(input_file_path)
 
     # Shuffle hosts for better load balancing
     random.seed(42)
@@ -713,6 +1022,11 @@ def fetch(input_file_path: str, start_batch: int, end_batch: int, batch_size: in
 
     total_batches = (len(hosts) + batch_size - 1) // batch_size
     logging.info(f"Total hosts: {len(hosts)} across {total_batches} batches")
+    logging.info(
+        f"Workers {num_workers}, per provider group: {provider_concurrency} concurrent, "
+        f"{provider_delay}s between requests, {provider_cooldown}s cooldown, "
+        f"retry 429/503 after {retry_backoff}s"
+    )
 
     for batch_id in range(start_batch, total_batches):
         if end_batch != -1 and batch_id > end_batch:
@@ -720,65 +1034,14 @@ def fetch(input_file_path: str, start_batch: int, end_batch: int, batch_size: in
 
         start = batch_id * batch_size
         end = min(start + batch_size, len(hosts))
-        batch_hosts = [host.strip() for host in hosts[start:end]]
-
-        logging.info(f"Processing batch {batch_id} ({len(batch_hosts)} hosts)")
-
-        # Initialize output file and lock for the batch
-        output_path = os.path.join(
-            DATASETS_FOLDER, f"imprints_batch{batch_id:06d}.jsonl.gz"
+        run_batch(
+            batch_id,
+            hosts[start:end],
+            num_workers,
+            LIMITER,
+            retry_backoff=retry_backoff,
+            progress_interval=progress_interval,
         )
-        os.makedirs(os.path.dirname(output_path), exist_ok=True)
-        output_file = gzip.open(output_path, "wt", encoding="UTF-8")
-        output_lock = threading.Lock()
-
-        # Initialize progress bar
-        pbar = tqdm(total=len(batch_hosts), desc=f"Processing batch {batch_id}")
-
-        # DEBUGGING
-        hosts_dict = defaultdict(dict)
-        for host in batch_hosts:
-            hosts_dict[host] = {"start_time": None, "end_time": None}
-
-        # Start executor service
-        with ThreadPoolExecutor(max_workers=num_workers) as executor:
-            # Initialize counter for processed hosts
-            counter = {}
-
-            # Wait for all tasks to complete
-            futures = {
-                executor.submit(
-                    process_host, host, output_file, output_lock, pbar, hosts_dict
-                ): host
-                for host in batch_hosts
-                if host is not None
-            }
-            for future in as_completed(futures):
-                host = futures[future]
-                try:
-                    status = future.result(timeout=60 * 60 * 2)  # 2 hours timeout
-                    counter[status] = counter.get(status, 0) + 1
-                except TimeoutError:
-                    logging.warning(f"Crawl of {host} timed out after 1 hour")
-                except Exception as e:
-                    logging.error(f"Error processing {host}: {e}")
-                    traceback.print_exc()
-
-            # Shutdown the executor
-            executor.shutdown(wait=True)
-
-        # Close the output file and progress bar
-        pbar.close()
-        output_file.flush()
-        output_file.close()
-
-        # Log statistics for the batch
-        logging.info(f"Batch {batch_id} statistics:")
-        total = sum(counter.values())
-        for status, count in counter.items():
-            logging.info(f"  {status}: {count} ({count / total:.2%})")
-        logging.info(f"  Total processed: {total}")
-        # break
 
     logging.info("Done")
 
