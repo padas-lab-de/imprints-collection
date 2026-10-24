@@ -19,6 +19,11 @@ Source: results/<model>/german/simple/eval/metrics.json.
 - Topic: largest confusions all go into Business and Professional Services (Community 32, Arts 30, Retail 23). Health and Medicine recall ~0.5 at precision ~1.0.
 - Caveat: topic is evaluated on the imprint text (gold has no homepage text), while production classifies the homepage.
 
+### E13-snapshot-dry-run (merged; report docs/experiments/E13-snapshot-dry-run.md)
+- Per-provider limit in fetch.py (group = resolved /24 or /48; 4 concurrent, 0.25 s gap, 10 s pause after 429/503, one retry), crash resume per batch; 115 tests.
+- 100k random seeds in 283 min (353 hosts/min; steady ~490/min), shared VM. Found/reachable 62.5%, .de 85.0% (E9 63.5%, 83.6%). Strato: 24 of 6,433 hosts blocked (E8: nearly all). 429/503 failures mostly Cloudflare bot challenges.
+- 6.56M seeds at the measured rate: ~310 h, ~33 GB (66 GB free). Memory grows ~0.5 GB/h, so run in ranges of ~10 batches. Card D18-snapshot-provider-cap.
+
 ### E8-gold-strata-pilot (merged; design docs/gold_set_design.md, tables results/E8/pilot_prevalence.md)
 - 1,000 random seed hosts: live 69.4%, HTTP error 13.2% (inflated: Strato hosts answered 503 to the crawl VM), unreachable 8.2%, cross-domain redirect 7.7%.
 - Of live: WordPress 31.6%, site builder 10.7%, custom PHP 7.8%, static 7.8%, SPA 3.3%, Blogger 0.3%; JS required 1.2%; domain age <2010 40%, >=2023 11.5%; no imprint 39% (.de/.at/.ch 12%, other TLDs 75%).
