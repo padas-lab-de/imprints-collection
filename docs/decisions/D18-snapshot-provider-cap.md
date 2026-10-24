@@ -10,3 +10,4 @@ Issued 2026-10-24, after E13-snapshot-dry-run (docs/experiments/E13-snapshot-dry
 
 Answer (user, 2026-10-24): "D19: C. D18: C."
 Outcome: C: test 8 per network on one 25k batch (E15-provider-cap-8-test), then A or B
+Lead pick after E15 (2026-10-24): B, 8 per network. E15 25k fresh seeds: Strato blocked 11/1,563 (0.7%) vs 0.44% at cap 4, IONOS 0.24% vs 0.53%, found 49.8% vs 50.2%, 59 vs 74 min per batch (less concurrent load than E13).
