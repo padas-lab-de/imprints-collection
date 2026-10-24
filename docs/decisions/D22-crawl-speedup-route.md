@@ -5,7 +5,7 @@ Question (user): accelerate the crawl without losing websites/imprints - fast ro
 Measured on E16 batches 0-7 (200k hosts):
 - Batch time ~57 min per 25k = 64 workers x 7.2 s mean per host; the last ~3% of hosts take ~18% of batch time (tail).
 - Provider limiter is not the brake: IONOS 217.160.0/24 ~2.7 req/s, Strato 81.169.145/24 ~2.0 req/s vs cap 4; 1.4% hosts throttled.
-- host_not_found 37.7k (18.8%): HTTP error on both schemes 6.7k, DNS 11.2k, 403 8.3k, SSL 3.9k, 429/503 3.2k, timeout 3.0k, refused/conn 0.8k. Retryable from another IP (403/429/503/timeout/conn/refused): ~7.5k = 3.8%.
+- host_not_found 37.7k (18.8%): HTTP error on both schemes 6.7k, DNS 11.2k, 403 8.3k, SSL 3.9k, 429/503 3.2k, timeout 3.0k, refused/conn 0.8k. Retryable from another IP (403/429/503/timeout/conn/refused): ~15.2k = 7.6% (403 alone 8.3k; many 403s are site policy, not IP-specific).
 - VM load ~25 on 16 cores; clamd (325%) is the Owler service's.
 
 **Recommend A.**
