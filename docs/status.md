@@ -19,6 +19,10 @@ Source: results/<model>/german/simple/eval/metrics.json.
 - Topic: largest confusions all go into Business and Professional Services (Community 32, Arts 30, Retail 23). Health and Medicine recall ~0.5 at precision ~1.0.
 - Caveat: topic is evaluated on the imprint text (gold has no homepage text), while production classifies the homepage.
 
+### E14-link-expansion-depth (merged; report docs/experiments/E14-link-expansion-depth.md)
+- DACH-address imprints per 1,000 fetched: seeds 432, round 1 85, round 2 20, round 3 8; on .de/.at/.ch hosts 603, 413, 181, 121. Frontier grows per round (0.59, 1.27, 2.07, 3.11 new hosts per fetched host). ~40% of round 2-3 imprints duplicate earlier operators.
+- Full run from 6.56M seeds: depth 1 all TLDs 3.5-3.9M fetches / 302-332k DACH imprints; + depth 2-3 on .de/.at/.ch only 3.9-4.6M / 363-439k; depth 3 all TLDs 11.4-19.1M / 407-512k. Card D19-link-expansion-depth.
+
 ### E13-snapshot-dry-run (merged; report docs/experiments/E13-snapshot-dry-run.md)
 - Per-provider limit in fetch.py (group = resolved /24 or /48; 4 concurrent, 0.25 s gap, 10 s pause after 429/503, one retry), crash resume per batch; 115 tests.
 - 100k random seeds in 283 min (353 hosts/min; steady ~490/min), shared VM. Found/reachable 62.5%, .de 85.0% (E9 63.5%, 83.6%). Strato: 24 of 6,433 hosts blocked (E8: nearly all). 429/503 failures mostly Cloudflare bot challenges.

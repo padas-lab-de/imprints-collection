@@ -2,11 +2,11 @@
 
 ## In flight
 - E12-gold-screening: resumed 2026-10-24 06:35 UTC after session limit; agent handed back early (interim, branch E12-gold-screening 74ca06b: per-/24 limited screening driver, src/ic/gold/sampling.py, 7 tests). Pipeline PID 640188 (scripts/gold/e12_run.sh) on 10k hosts, started ~20:39 UTC; done when results/E12/logs/features.log says "pipeline done". Then: hand-check image-only screenshots -> datasets/E12/image_only_confirmed.txt; `PYTHONPATH=src python scripts/gold/e12_sample.py prevalence` and `... draw`; rewrite gold_set_design.md Summary/§2/§7 for 1,000; full tests; merge.
-- E14-link-expansion-depth: (hit session limit, resumed 2026-10-24 06:35 UTC; round 2 fetched) subagent, worktree branch E14-link-expansion-depth. Rounds 2 and 3 of link expansion from the E10 round-1 hosts (datasets/E10/expansion/discovered_external_hosts.txt): yield per round, frontier growth, full-run estimate for depth 1-3. On return: verify, merge, card on depth if needed.
 
 ## Cards
 | ID | Date | Question | Outcome | Landed in |
 |---|---|---|---|---|
+| D19-link-expansion-depth | 2026-10-24 | Link expansion depth 1 all TLDs, plus depth 2-3 on .de/.at/.ch only, or depth 3 all TLDs? | open (recommend B) | — |
 | D18-snapshot-provider-cap | 2026-10-24 | Full seed crawl at 4 or 8 parallel requests per provider network? | open (recommend A) | — |
 | D17-gold-set-size | 2026-10-23 | Gold set ~1,300 items (~80 annotator h) or lean ~1,100? | B, cut to 1,000 items; no stratum comparisons needed (user) | — |
 | D16-link-expansion-scope | 2026-10-23 | One round with ccTLD filter, all TLDs, or none? | B: all TLDs, keep DACH-address imprints; depth up to 3 under test (E14) (user) | — |
@@ -31,6 +31,7 @@
 | D1-revision-driver | 2026-10-23 | Why revise now? | Journal extension with better evaluation + fresh (larger) data snapshot; no hard deadline | — |
 
 ## Lead actions
+- 2026-10-24 E14 merged; round 2/3 reachable and found counts checked against output (10,548/424, 7,965/134).
 - 2026-10-24 E13 merged, 115 tests pass, 100,000 status rows and Strato 6,433 hosts (5,233 found) checked. Assumed: full crawl runs in ranges of ~10 batches per process (memory grows ~0.5 GB/h).
 - 2026-10-23 E11 merged: E4 fetcher keyed landing links by URL path (fe4963b), losing external hosts; E9 count (34,771 unique) verified and is the right basis, E10 estimate and D16 stand.
 - 2026-10-23 E8 merged, tests pass, prevalences re-counted from results/E8/pilot_features.jsonl. Assumed per design doc §7: full seed-list frame with negatives capped; LLM operator type for stratification only; WARC kept internal, not published; image-only quota 20; gold capture from a second IP with retries.
