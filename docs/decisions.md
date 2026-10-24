@@ -2,7 +2,6 @@
 
 ## In flight
 - E16-snapshot-crawl-seeds: lead-run, full 6,560,119 seeds shuffled (scripts/E16/shuffle.py, seed 20261024) in 263 batches of 25k, cap 8 (D18 via E15), one process per 10 batches (scripts/E16/run.sh, nohup), started 2026-10-24 09:30 UTC -> datasets/E16/seeds, logs results/E16/logs/ (driver.log says "all done" at end). Resumes on re-run; ranges can move to other machines (run.sh FIRST LAST). Check progress daily.
-- E12-gold-screening: resumed 2026-10-24 06:35 UTC after session limit; agent handed back early (interim, branch E12-gold-screening 74ca06b: per-/24 limited screening driver, src/ic/gold/sampling.py, 7 tests). Pipeline PID 640188 (scripts/gold/e12_run.sh) on 10k hosts, started ~20:39 UTC; done when results/E12/logs/features.log says "pipeline done". Then: hand-check image-only screenshots -> datasets/E12/image_only_confirmed.txt; `PYTHONPATH=src python scripts/gold/e12_sample.py prevalence` and `... draw`; rewrite gold_set_design.md Summary/§2/§7 for 1,000; full tests; merge.
 
 ## Cards
 | ID | Date | Question | Outcome | Landed in |
@@ -33,6 +32,7 @@
 | D1-revision-driver | 2026-10-23 | Why revise now? | Journal extension with better evaluation + fresh (larger) data snapshot; no hard deadline | — |
 
 ## Lead actions
+- 2026-10-24: merged E12-gold-screening (5d9490f): 10,000 screened, 1,000-item gold sample drawn (core 700 + oversample 300, T=30, seed 20261025) -> datasets/E12/gold_sample.jsonl; verified tests, counts, weight sum 6,555,096. Assumed (design doc §7): full frame incl. 201 not-live core items; LLM operator type for stratification only; WARCs internal. Strato block -> capture gold sites from another IP.
 - 2026-10-24 E15 (cap 8, 25k fresh seeds) finished in 59 min; block rates at Strato/IONOS within noise of cap 4 -> D18 B, started E16 seed crawl.
 - 2026-10-24 E14 merged; round 2/3 reachable and found counts checked against output (10,548/424, 7,965/134).
 - 2026-10-24 E13 merged, 115 tests pass, 100,000 status rows and Strato 6,433 hosts (5,233 found) checked. Assumed: full crawl runs in ranges of ~10 batches per process (memory grows ~0.5 GB/h).

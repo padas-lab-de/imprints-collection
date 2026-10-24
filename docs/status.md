@@ -1,6 +1,6 @@
 # Status — German Imprints Collection, journal extension
 
-Updated 2026-10-23. Decisions and in-flight work: [decisions.md](decisions.md).
+Updated 2026-10-24. Decisions and in-flight work: [decisions.md](decisions.md).
 
 ## Goal
 Target: Scientific Data, Data Descriptor (D10-journal-venue).
@@ -18,6 +18,11 @@ Source: results/<model>/german/simple/eval/metrics.json.
 - Address errors (Qwen, 47 items): mostly town granularity (gold keeps district suffixes like "Grimma /OT Kaditzsch", model writes "Grimma"), single-letter spelling deviations, and a few wrong-address choices on multi-address imprints (ids 279, 678).
 - Topic: largest confusions all go into Business and Professional Services (Community 32, Arts 30, Retail 23). Health and Medicine recall ~0.5 at precision ~1.0.
 - Caveat: topic is evaluated on the imprint text (gold has no homepage text), while production classifies the homepage.
+
+### E12-gold-screening (merged; design docs/gold_set_design.md v0.2, tables results/E12/screening_prevalence.md, results/E12/gold_sample_quotas.md)
+- 10,000 random seed hosts screened (frame 6,557,719): live 71.4%, HTTP error 12.6%, unreachable 7.5%, cross-domain redirect 6.9%; imprint found 57.7% of live; address only in an image 15 hand-confirmed (0.36% of imprints).
+- Gold sample datasets/E12/gold_sample.jsonl: 1,000 items = 700 random core + 300 oversample, target 30 per stratum (seed 20261025); 799 live, 219 no-imprint and 201 not-live negatives (core only); Horvitz-Thompson weights 656-16,582. Short strata (all screened hosts used): Nightlife 3, Blogger 8, Landmarks 13, image-only 15.
+- Doubts: Strato /24 answered 503 for 578 hosts (gold capture must run from another IP); no-imprint share on live .de/.at/.ch 16.3% vs 12.1% in E8 (unexplained).
 
 ### E14-link-expansion-depth (merged; report docs/experiments/E14-link-expansion-depth.md)
 - DACH-address imprints per 1,000 fetched: seeds 432, round 1 85, round 2 20, round 3 8; on .de/.at/.ch hosts 603, 413, 181, 121. Frontier grows per round (0.59, 1.27, 2.07, 3.11 new hosts per fetched host). ~40% of round 2-3 imprints duplicate earlier operators.

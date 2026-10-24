@@ -1,15 +1,16 @@
 # Gold set design: a diversity-stratified gold set for German imprints
 
-Status: proposal v0.1 (2026-10-23), from experiment E8-gold-strata-pilot. Decisions it depends on: D12 (town copied as written, location scored by geocoding), D14 A (labels from the live rendered site; HTML, rendered DOM and screenshot archived), D15 C (one human labels every item from scratch; a second human independently labels about 20%; no model pre-labels). Points that need the user are under "Open choices".
+Status: v0.2 (2026-10-24). v0.1 came from E8-gold-strata-pilot; v0.2 rewrites §2 and §7 for 1,000 items after the E12 screening of 10,000 hosts and records the drawn sample. Decisions it depends on: D12 (town copied as written, location scored by geocoding), D14 A (labels from the live rendered site; HTML, rendered DOM and screenshot archived), D15 C (one human labels every item from scratch; a second human independently labels about 20%; no model pre-labels), D17 B (1,000 items, no head-to-head comparison of site groups). Points that need the user are under "Open choices".
 
 The new set replaces the old 1,000-item gold set. The old set has exactly one address per item, 999 of them in Germany, and no negatives (lead record, gold audit). So it cannot measure no-address answers, AT/CH sites, multiple addresses or how pages are produced.
 
 ## Summary
 
-- **Design**: a probability sample of hosts from the crawl frame, in two parts. (1) A random core of 600 hosts gives unbiased population figures. (2) About 700 hosts are added by oversampling rare strata from a 10,000-host screening sample and from frames defined by hostname. Every item has a known inclusion probability, so results can be weighted back to the population. Total: about 1,300 items, each labelled from scratch by one human, plus a second human on about 20% (D15 C).
-- **Strata**: age, technology, rendering need, imprint modality, operator type, TLD/country, topic, imprint location, negatives and hard cases. Each has an automatic, unit-tested detector. The pilot measured each detector's prevalence and checked its precision by hand.
-- **Pilot E8** (1,000 random hosts, seed 20261023, from `datasets/E4/random20k_seed_hosts.txt`): 69% are live, and 61% of the live hosts have an imprint the detectors reach. Among live .de/.at/.ch hosts, 12% have no imprint. Among live hosts on other TLDs, 75% have none. WordPress is 32% of live sites and site builders 11%. Sites that need JavaScript for the imprint are 1.2% of live sites. Imprints whose address exists only as an image are 2 of 422 (0.5%, CI 0.1-1.7%). PDF imprints: 0 of 694.
-- **Screenshot-required is an edge case.** The pilot shows it exists but is rare: 2 in 1,000 hosts. The design gives it a small quota (20 items, found by screening) and is otherwise not built around it. Screenshots are archived for every item anyway, because they are cheap and are what the labeller sees (D14 A).
+- **Design (D17 B)**: 1,000 hosts, a two-phase probability sample. Phase 1: a simple random sample of 10,000 hosts from the frame, screened with the detectors (E12). Phase 2: (1) a **random core** of 700 hosts, an SRS on its own, for population figures; (2) a **coverage oversample** of 300 hosts so that every diversity stratum has about 30 items where the population allows. Every item has a known inclusion probability and a Horvitz-Thompson design weight. There are no per-stratum precision targets, because the paper does not compare site groups head to head.
+- **Strata**: age, technology, rendering need, operator type, TLD (.at, .ch), imprint location, rare topics, and hard cases (imprint without an address, P.O. box, multiple addresses, obfuscation, image-only). Each has an automatic, unit-tested detector (E8).
+- **Screening E12** (10,000 hosts, seed 20261024, full seed list minus the E8 and old gold hosts): 71.4% are live, and 57.7% of the live hosts have an imprint the detectors reach. Among live .de/.at/.ch hosts, 16.3% have no imprint. WordPress is 32% of live sites and site builders 11%. 1.2% of live sites need JavaScript for the imprint. Hand-confirmed image-only addresses: 15 of 4,129 imprints (0.36%, CI 0.22-0.60%). PDF imprints: 3 of 7,137.
+- **Drawn sample**: `datasets/E12/gold_sample.jsonl`, 1,000 items (700 core + 300 oversample), with 799 live and 420 negatives from the core (219 with no imprint, 201 not live). Quotas, inclusion probabilities and achieved counts are in §2.
+- **Screenshot-required is an edge case.** It gets every confirmed case (15, cap 20) and is otherwise not built around. Screenshots are archived for every item anyway (D14 A).
 
 ## 1. Diversity dimensions and their detectors
 
@@ -39,124 +40,129 @@ Notes on the detectors:
 
 ### Frame
 
-The frame is `seed_hosts.txt.gz` (6,560,119 hosts), the same list the dataset is built from, so that gold-set results speak for the dataset. Hostname counts in the frame give exact oversampling frames for some strata: `.de` 3,428,132; `.at` 232,476; `.ch` 216,947; `*.jimdo*` 10,649; `*.wordpress.com` 8,450; `*.wixsite.com` 5,038; `*.blogspot.*` 937.
+The frame is `seed_hosts.txt.gz` (6,560,119 hosts), the same list the dataset is built from, so that gold-set results speak for the dataset. E12 excludes the 2,400 hosts of the E8 pilot and of the old gold set (www variants included), so the frame is **6,557,719** hosts. It is the full frame, not DACH-only (§7.2): non-DACH hosts are real negatives the pipeline must reject. "No imprint" negatives come only from the random core (§7.2).
 
-### Pilot prevalences (E8, 1,000 random hosts, Wilson 95% CIs)
+### Screening (E12, 10,000 random hosts)
 
-| Stratum | Base | n | % | 95% CI |
-|---|---|---|---|---|
-| live | all 1,000 | 694 | 69.4 | 66.5-72.2 |
-| http_error (mostly a Strato 503 block, see notes) | all | 132 | 13.2 | 11.2-15.4 |
-| unreachable | all | 82 | 8.2 | 6.7-10.1 |
-| redirect to another domain | all | 77 | 7.7 | 6.2-9.5 |
-| parked / default / placeholder / challenge page | all | 15 | 1.5 | 0.9-2.5 |
-| age <2010 | live 694 | 279 | 40.2 | 36.6-43.9 |
-| age 2010-2017 | live | 179 | 25.8 | 22.7-29.2 |
-| age 2018-2022 | live | 134 | 19.3 | 16.5-22.4 |
-| age >=2023 | live | 80 | 11.5 | 9.4-14.1 |
-| age: no capture | live | 22 | 3.2 | 2.1-4.8 |
-| WordPress | live | 219 | 31.6 | 28.2-35.1 |
-| site builder (Wix 24, IONOS 11, Strato 10, Squarespace 9, Jimdo 7, other 13) | live | 74 | 10.7 | 8.6-13.2 |
-| other CMS (TYPO3 21, Joomla 25, Contao 9, Drupal 6, minor 36) | live | 97 | 14.0 | 11.6-16.8 |
-| static HTML (incl. 9 desktop editor) | live | 54 | 7.8 | 6.0-10.0 |
-| custom PHP | live | 54 | 7.8 | 6.0-10.0 |
-| shop system | live | 38 | 5.5 | 4.0-7.4 |
-| SPA framework | live | 23 | 3.3 | 2.2-4.9 |
-| custom other (ASP.NET, Java) | live | 22 | 3.2 | 2.1-4.8 |
-| Blogger | live | 2 | 0.3 | 0.1-1.0 |
-| static site generator | live | 2 | 0.3 | 0.1-1.0 |
-| tech unknown | live | 109 | 15.7 | 13.2-18.6 |
-| server language PHP | live | 197 | 28.4 | 25.2-31.9 |
-| TLD .de | live | 351 | 50.6 | 46.9-54.3 |
-| TLD .at | live | 21 | 3.0 | 2.0-4.6 |
-| TLD .ch | live | 25 | 3.6 | 2.5-5.3 |
-| TLD other (.com, .org, .net, .eu, other) | live | 297 | 42.8 | 39.2-46.5 |
-| rendering: static_ok | live | 368 | 53.0 | 49.3-56.7 |
-| rendering: js_required | live | 8 | 1.2 | 0.6-2.3 |
-| rendering: js_content | live | 22 | 3.2 | 2.1-4.8 |
-| rendering: static_blocked | live | 8 | 1.2 | 0.6-2.3 |
-| imprint: separate page | live | 404 | 58.2 | 54.5-61.8 |
-| imprint: other domain | live | 9 | 1.3 | 0.7-2.4 |
-| imprint: no link, `/impressum` exists | live | 8 | 1.2 | 0.6-2.3 |
-| imprint: on the landing page | live | 1 | 0.1 | 0.0-0.8 |
-| no imprint found | live | 272 | 39.2 | 35.6-42.9 |
-| no imprint, .de/.at/.ch | live .de/.at/.ch 397 | 48 | 12.1 | 9.2-15.7 |
-| no imprint, other TLDs | live other 297 | 224 | 75.4 | 70.2-80.0 |
-| imprint without address | live | 5 | 0.7 | 0.3-1.7 |
-| imprint is a PDF | live | 0 | 0.0 | 0.0-0.6 |
-| address only in an image (verified) | live with imprint 422 | 2 | 0.5 | 0.1-1.7 |
-| multiple addresses (rules) | with imprint | 123 | 29.1 | 25.0-33.7 |
-| multiple addresses (LLM) | with imprint | 127 | 30.1 | 25.9-34.6 |
-| P.O. box anywhere on the imprint | with imprint | 7 | 1.7 | 0.8-3.4 |
-| obfuscation signal | with imprint | 141 | 33.4 | 29.1-38.0 |
-| address country AT or CH | with imprint | 49 | 11.6 | 8.9-15.0 |
-| operator: corporate (LLM) | with imprint | 158 | 37.4 | 33.0-42.2 |
-| operator: sole trader (LLM) | with imprint | 166 | 39.3 | 34.8-44.1 |
-| operator: association (LLM) | with imprint | 61 | 14.5 | 11.4-18.1 |
-| operator: public body (LLM) | with imprint | 24 | 5.7 | 3.9-8.3 |
-| operator: private person (LLM) | with imprint | 12 | 2.8 | 1.6-4.9 |
-| topic Business and Professional Services (LLM) | live | 223 | 32.1 | 28.8-35.7 |
-| topic Event / Dining / Landmarks / Nightlife (LLM) | live | 9 / 17 / 2 / 1 | 1.3 / 2.4 / 0.3 / 0.1 | — |
+Script `scripts/gold/e12_screen.py`, run by `scripts/gold/e12_run.sh` (2026-10-23 to 2026-10-24). Stages as in E8:
+- static fetch;
+- render (headless Chromium);
+- Wayback CDX (at most 1 request/s);
+- LLM text features (gemma4-31b-it on innkube, free);
+- vision, run only on image-only candidates (707 hosts).
 
-Full tables, including every technology and topic: `results/E8/pilot_prevalence.md`.
+Rate limits:
+- **at most 1 concurrent request per provider (IPv4 /24)**, with a gap between hosts of the same /24;
+- one retry of all 403/429/503 hosts (1,381) after a pause.
+
+Outputs: `results/E12/screening_features.jsonl` (one record per host) and `results/E12/screening_prevalence.md` (Wilson CIs, with Newcombe CIs for the difference from E8).
+
+| Count | n | % | 95% CI |
+|---|---|---|---|
+| screened | 10,000 | | |
+| DNS resolves | 9,430 | 94.3 | |
+| live | 7,137 | 71.4 | 70.5-72.2 |
+| http_error (Strato 503 block: 578) | 1,257 | 12.6 | 11.9-13.2 |
+| unreachable | 745 | 7.5 | 7.0-8.0 |
+| redirect to another domain | 690 | 6.9 | 6.4-7.4 |
+| parked / placeholder / challenge / default | 171 | 1.7 | |
+| live with an imprint the detectors reach | 4,117 | 57.7 of live | 56.5-58.8 |
+| + hand-confirmed image-only imprints the detectors missed | 12 | | |
+| no imprint, live .de/.at/.ch | 662 | 16.3 of 4,050 | 15.2-17.5 |
+| no imprint, live other TLDs | 2,358 | 76.4 | 74.9-77.8 |
+| JS-required imprint | 83 | 1.2 of live | 0.9-1.4 |
+| imprint on another domain | 87 | 1.2 of live | 1.0-1.5 |
+| P.O. box | 95 | 2.3 of imprints | 1.9-2.8 |
+| address only in an image (hand-confirmed) | 15 | 0.36 of 4,129 | 0.22-0.60 |
+
+The retry recovered 317 of the 1,381 blocked hosts. The Strato block did not lift (§8). Most shares agree with E8 within the CIs. Differences whose CI excludes 0 (out of about 300 comparisons, so a few are expected by chance):
+- **No imprint on live .de/.at/.ch: 16.3% vs 12.1%.**
+- **Age bins:**
+  - <2010: 42.9% vs 38.7% of all hosts.
+  - >=2023: 10.1% vs 12.3%.
+  - no Wayback capture: 1.6% vs 3.2%. The slower CDX rate gave fewer errors.
+- **Topics:**
+  - Health and Medicine: 12.1% vs 16.6% of imprints.
+  - Business and Professional Services: 36.9% vs 32.0%.
+- **Minor:** ASP.NET (2.3% vs 3.6% of live) and default pages (0.2% vs 0.8%).
+- **Vision:** `image_only_address` differs by design, because vision ran on candidates only.
 
 ### Design: random core + priority-stratified oversample, with design weights
 
-Joint quotas (age × technology × operator × country × ...) would need thousands of cells, far more than a gold set of about 1,300 can fill. So quotas are **marginal**: every value of every primary dimension gets a minimum count. Joint cells are reported only descriptively.
+Code: `src/ic/gold/sampling.py` (tests in `tests/test_gold_sampling.py`), driver `scripts/gold/e12_sample.py draw` (seed 20261025).
 
-1. **Random core**: 600 hosts by simple random sampling from the frame. Expected composition (pilot shares): about 415 live, about 255 with an imprint. This part alone gives population figures. For example, end-to-end address accuracy near 80% on the 255 hosts with an imprint has a CI of about ±5 pp.
-2. **Screening sample**: 10,000 further random hosts (for example the rest of `datasets/E4/random20k_seed_hosts.txt`). All detectors run on them: static fetch, render, Wayback, and the LLM on the text. Vision runs only on imprint screenshots. All of this is free on innkube. 10,000 is the size needed to find the rarest quota strata. Image-only addresses run at about 0.2% of all hosts, which gives about 20 in 10,000; JS-required imprints at about 0.8%, which gives about 80.
-3. **Oversample**: each screened host gets one *priority stratum*, the rarest stratum it belongs to, in a fixed order (image-only > imprint without address > operator P.O. box > JS-required > other-domain imprint > private person > public body > SPA > Blogger > desktop editor/static > ... > common). From each priority stratum h, n_h hosts are drawn at random. The n_h are chosen so that every marginal minimum below is met, counting core items too. Strata defined by hostname (`.at`, `.ch`, `*.blogspot.*`, `*.jimdo*`, `*.wixsite.com`) are drawn from the full frame instead, as separate frames.
-4. **Weights**: an item drawn from priority stratum h of the screening sample has inclusion probability π = (10,000 / 6,560,119) × n_h / |S_h|, where S_h is that stratum's share of the screening sample. A core item has π = 600 / 6,560,119. An item from a hostname frame F has π = n_F / |F|. An item that could have been drawn in several ways gets π = 1 − ∏(1 − π_k) over all of them. Weighted (Horvitz-Thompson / Hájek) estimates give population figures. Unweighted figures per stratum are reported next to them, using the *true* stratum from the label (detector errors only change weights, not the analysis cell). As a check, the weighted sample marginals should match the core sample's marginals (raking would force this, but is not needed for unbiasedness).
+1. **Memberships.** Each screened host belongs to a set of coverage strata (list below). A host that is not live belongs only to `neg:site_not_live`. A live host without a detected imprint belongs only to `neg:no_imprint`, unless it is a hand-confirmed image-only imprint. Coverage strata:
+   - age bin;
+   - technology family: WordPress, custom PHP, site builder, SPA, shop, static HTML, other CMS, custom other, Blogger; plus "PHP anywhere";
+   - JS-required;
+   - LLM operator type, used for stratification only and never shown to labellers;
+   - `.at`, `.ch`;
+   - imprint on another domain;
+   - imprint without a text address, or image-only (hand-confirmed);
+   - P.O. box;
+   - multiple addresses (rules, or LLM >= 2);
+   - obfuscation;
+   - rare topics (Event, Dining and Drinking, Landmarks and Outdoors, Nightlife Spot).
+2. **Priority stratum.** Each host's priority stratum is its rarest coverage stratum, with image-only always first. Negatives keep their negative stratum.
+3. **Core.** The core is the first n0 hosts of a seeded permutation of the 10,000, so it is an SRS of the frame.
+4. **Oversample.** Rarest stratum first, hosts are drawn at random from the not-yet-selected hosts whose priority stratum is h. Drawing stops when stratum h's marginal count in the sample (core and extras, counting every membership) reaches the target T, or when the pool is empty. Image-only is capped at 20. Negatives are never oversampled.
+5. **Choice of n0 and T.** Take the largest T in 20-30 for which some n0 in 600-700 gives n0 + oversample <= 1,000. Then take the largest such n0. Leftover budget goes to further passes at T+1, T+2, ... (rarest first). Result: **T = 30, n0 = 700**, 233 extras in the first pass and 67 in later passes up to 37.
+6. **Weights.** Within priority stratum h, the m_h selected hosts are a uniform random subset of the M_h screened hosts. So, conditional on the realized stratum sizes, the inclusion probability is **pi = (10,000 / 6,557,719) x m_h / M_h**, and the design weight is 1/pi (Horvitz-Thompson; Hajek for ratios). Each item stores `pi_phase2`, `inclusion_probability` and `design_weight`. Weights range from 656 (pi2 = 1) to 16,582. They add up to 6,555,096. The missing 2,623 belong to 4 screened hosts whose priority strata got no item (M_h <= 2, m_h = 0); their share is negligible. Report results per stratum by the label's *true* stratum, unweighted, next to the weighted population figures.
 
-### Minimum n per stratum and CI widths
+### Quota table (final, E12 draw)
 
-Half-width of a Wilson 95% CI for a per-stratum accuracy:
+"Screened" counts every membership among the 10,000 hosts. "Target" is the common T, or the cap. "In sample" is the marginal count among the 1,000 items. "m_h / M_h" counts hosts whose *priority* stratum is h. pi phase 2 = m_h / M_h.
 
-| n | p = 0.5 | p = 0.8 |
-|---|---|---|
-| 30 | ±16.8 pp | ±13.9 pp |
-| 50 | ±13.4 pp | ±10.9 pp |
-| 100 | ±9.6 pp | ±7.8 pp |
-| 200 | ±6.9 pp | ±5.5 pp |
+| Stratum | Screened (of 10,000) | % (of screened w/ imprint; negatives: of all) | Expected in core | Target | In sample | of which core | Priority-stratum items (m_h / M_h) | pi phase 2 |
+|---|---|---|---|---|---|---|---|---|
+| modality:image_only | 15 | 0.4 | 1.1 | 20 | 15 | 2 | 15 / 15 | 1.0000 |
+| topic:Nightlife Spot | 3 | 0.1 | 0.2 | 30 | 3 | 0 | 3 / 3 | 1.0000 |
+| tech:blogger | 8 | 0.2 | 0.6 | 30 | 8 | 0 | 8 / 8 | 1.0000 |
+| topic:Landmarks and Outdoors | 13 | 0.3 | 0.9 | 30 | 13 | 2 | 13 / 13 | 1.0000 |
+| hard:imprint_without_address | 42 | 1.0 | 2.9 | 30 | 37 | 4 | 37 / 42 | 0.8810 |
+| topic:Event | 52 | 1.3 | 3.6 | 30 | 37 | 4 | 37 / 52 | 0.7115 |
+| tech:custom_other | 63 | 1.5 | 4.4 | 30 | 37 | 2 | 36 / 62 | 0.5806 |
+| op:private_person | 74 | 1.8 | 5.2 | 30 | 37 | 8 | 27 / 63 | 0.4286 |
+| render:js_required | 81 | 2.0 | 5.7 | 30 | 37 | 10 | 29 / 71 | 0.4085 |
+| loc:other_domain | 87 | 2.1 | 6.1 | 30 | 37 | 7 | 28 / 69 | 0.4058 |
+| hard:po_box | 95 | 2.3 | 6.7 | 30 | 37 | 7 | 35 / 87 | 0.4023 |
+| topic:Dining and Drinking | 144 | 3.5 | 10.1 | 30 | 37 | 12 | 34 / 137 | 0.2482 |
+| tech:spa | 168 | 4.1 | 11.8 | 30 | 37 | 14 | 16 / 125 | 0.1280 |
+| tld:ch | 201 | 4.9 | 14.1 | 30 | 37 | 15 | 23 / 169 | 0.1361 |
+| tech:static_html | 218 | 5.3 | 15.3 | 30 | 38 | 12 | 19 / 181 | 0.1050 |
+| tech:shop | 224 | 5.4 | 15.7 | 30 | 36 | 14 | 28 / 198 | 0.1414 |
+| op:public_body | 227 | 5.5 | 15.9 | 30 | 39 | 12 | 14 / 163 | 0.0859 |
+| tld:at | 262 | 6.3 | 18.3 | 30 | 41 | 21 | 16 / 189 | 0.0847 |
+| tech:custom_php | 325 | 7.9 | 22.8 | 30 | 47 | 19 | 12 / 216 | 0.0556 |
+| age:>=2023 | 529 | 12.8 | 37.0 | 30 | 85 | 37 | 27 / 296 | 0.0912 |
+| tech:site_builder | 537 | 13.0 | 37.6 | 30 | 57 | 37 | 20 / 345 | 0.0580 |
+| op:association | 573 | 13.9 | 40.1 | 30 | 90 | 40 | 19 / 295 | 0.0644 |
+| tech:cms_other | 757 | 18.3 | 53.0 | 30 | 91 | 56 | 31 / 359 | 0.0864 |
+| age:2018-2022 | 958 | 23.2 | 67.1 | 30 | 129 | 65 | 15 / 294 | 0.0510 |
+| tech:php_any | 983 | 23.8 | 68.8 | 30 | 115 | 57 | 7 / 177 | 0.0395 |
+| age:2010-2017 | 1304 | 31.6 | 91.3 | 30 | 188 | 95 | 15 / 253 | 0.0593 |
+| age:<2010 | 1321 | 32.0 | 92.5 | 30 | 171 | 81 | 16 / 243 | 0.0658 |
+| hard:multi_address | 1428 | 34.6 | 100.0 | 30 | 181 | 91 | 0 / 2 | 0.0000 |
+| hard:obfuscation | 1441 | 34.9 | 100.9 | 30 | 186 | 102 | 0 / 1 | 0.0000 |
+| tech:wordpress | 1529 | 37.0 | 107.0 | 30 | 175 | 100 | 0 / 0 | 0.0000 |
+| op:sole_trader | 1608 | 38.9 | 112.6 | 30 | 174 | 108 | 0 / 0 | 0.0000 |
+| op:corporate | 1622 | 39.3 | 113.5 | 30 | 228 | 112 | 0 / 1 | 0.0000 |
+| neg:no_imprint | 3008 | 30.1 | 210.6 | core only | 219 | 219 | 219 / 3008 | 0.0728 |
+| neg:site_not_live | 2863 | 28.6 | 200.4 | core only | 201 | 201 | 201 / 2863 | 0.0702 |
 
-Rule: **100** for strata the paper compares head-to-head (age bins, main technology families, DE/AT/CH), **50** for secondary strata, **30** for rare hard cases, and **20** for the image-only edge case. With 20 the CI is ±20 pp: enough to show whether a text pipeline fails on these items (it must, by definition) and whether a vision fallback recovers them, but not enough for fine comparisons.
+Items per priority stratum: neg:no_imprint 219, neg:site_not_live 201, topic:Event 37, hard:imprint_without_address 37, tech:custom_other 36, hard:po_box 35, topic:Dining and Drinking 34, tech:cms_other 31, render:js_required 29, tech:shop 28, loc:other_domain 28, age:>=2023 27, op:private_person 27, tld:ch 23, tech:site_builder 20, op:association 19, tech:static_html 19, tech:spa 16, age:<2010 16, tld:at 16, age:2010-2017 15, modality:image_only 15, age:2018-2022 15, op:public_body 14, topic:Landmarks and Outdoors 13, tech:custom_php 12, tech:blogger 8, tech:php_any 7, topic:Nightlife Spot 3.
 
-### Quota table (proposal)
+Shortfalls (the whole screened pool is used, pi2 = 1):
+- Nightlife Spot: 3 items.
+- Blogger: 8 items.
+- Landmarks and Outdoors: 13 items.
+- Image-only: 15 items (cap 20).
 
-| Stratum | Pilot prevalence | Expected in core (600) | Minimum in set | Top-up | Found via |
-|---|---|---|---|---|---|
-| age >=2023 | 11.5% of live | 48 | 100 | +52 | screening |
-| age 2018-2022 | 19.3% of live | 80 | 100 | +20 | screening |
-| age 2010-2017, <2010 | 26%, 40% | 107, 167 | 100 | 0 | core |
-| WordPress | 31.6% | 131 | 100 | 0 | core |
-| site builder | 10.7% | 44 | 100 | +56 | `*.jimdo*`, `*.wixsite.com` frames + screening |
-| other CMS (TYPO3, Joomla, Contao, ...) | 14.0% | 58 | 100 | +42 | screening |
-| static HTML / desktop editor | 7.8% | 32 | 100 | +68 | screening |
-| custom PHP | 7.8% | 32 | 50 | +18 | screening |
-| shop system | 5.5% | 23 | 50 | +27 | screening |
-| SPA framework | 3.3% | 14 | 50 | +36 | screening |
-| Blogger | 0.3% | 1 | 50 | +49 | `*.blogspot.*` frame (937 hosts) |
-| `.at` | 3.0% of live | 13 | 100 | +87 | `.at` frame |
-| `.ch` | 3.6% of live | 15 | 100 | +85 | `.ch` frame |
-| operator association | 14.5% of imprints | 37 | 60 | +23 | screening |
-| operator public body | 5.7% | 15 | 60 | +45 | screening |
-| operator private person | 2.8% | 7 | 50 | +43 | screening |
-| JS-required imprint | 1.2% of live | 5 | 50 | +45 | screening |
-| imprint on another domain | 1.3% of live | 5 | 30 | +25 | screening |
-| imprint without address | 0.7% of live | 3 | 30 | +27 | screening |
-| operator address is a P.O. box | ~0.5% of imprints (2/7 of the P.O. box hits) | 1 | 30 | +29 | screening + hand check |
-| address only in an image | 0.5% of imprints | 1 | 20 | +19 | screening (rule + vision) + hand check |
-| imprint is a PDF | 0 / 694 | 0 | none | 0 | label if met |
-| topic Event, Dining and Drinking, Landmarks and Outdoors, Nightlife Spot | 0.1-2.4% each | 1-10 | 30 each | about +100 | screening (LLM topic) |
-| negatives: no imprint | 39% of live | about 160 | (enough) | 0 | core |
-| multiple addresses | 29% of imprints | about 75 | (enough) | 0 | core |
+Every other stratum reached at least 36. Common strata exceed T through the core alone.
 
-The top-ups add up to about 1,000 nominal. Since one item fills several quotas at once (an `.at` site is also some age, technology and operator type), drawing greedily from the screening and hostname frames should need about **700** items. **Total: about 1,300** (600 core + about 700 oversample).
+Labelling effort (D15 C): about 3 minutes per item. That gives about 50 h for annotator A, 10 h for annotator B on 20%, plus about 5 h of calibration.
 
-Labelling effort (D15 C): about 3 minutes per item (all addresses with roles, operator type, topic, from the frozen screenshot). That is about 65 h for annotator A, 13 h for annotator B on 20%, plus about 5 h of calibration. If that is too much, drop the topic minimums and the static/custom-PHP 100s to 50 (total about 1,100).
-
-Screenshot-required: the pilot found it exists (2 of 1,000 hosts: an imprint whose whole address block is one PNG, and a site whose German address is an image next to a Thai address in text). It gets the small quota of 20 above and nothing more. The archive takes screenshots of every item anyway (D14 A), so the vision-pipeline comparison in section 5 runs on all items, not only on these 20.
+Screenshot-required: 15 hand-confirmed cases, all in the sample. The rule: the address is visible on the screenshot, sits in an `<img>`, and is missing from the extracted text. The list and the reasons for rejecting the other 18 vision flags are in `datasets/E12/image_only_confirmed.txt`. 12 of the 15 were missed by the imprint detector entirely: with no address text, the page did not look like an imprint. They enter as image-only, not as "no imprint".
 
 ## 3. Per-item archive
 
@@ -274,14 +280,14 @@ What makes this gold set stand out:
 
 ## 7. Open choices (need the user)
 
-These are design choices the pilot cannot settle. Each has a recommendation.
+Settled by D17 B (1,000 items, no head-to-head comparisons) and applied in E12. The defaults below were taken as assumed choices. Each can still be overruled.
 
-1. **Total size.** About 1,300 items (600 core + about 700 oversample), about 80 annotator hours in total. A leaner variant is about 1,100 items (topic minimums dropped, static/custom-PHP minimums at 50). *Recommendation:* 1,300. It is the smallest set that gives ±10 pp per primary stratum and still has a random core large enough for population figures.
-2. **Frame: everything vs. German-language/DACH only.** 75% of live hosts on non-DACH TLDs have no imprint the detectors reach (mostly foreign sites in the seed list), against 12% on .de/.at/.ch. *Recommendation:* keep the full frame (the dataset is built from it, and these hosts are real negatives the pipeline must reject), but cap the "no imprint" negatives in the oversample at what the core brings (about 160).
-3. **Operator-type detector for stratification.** Rules were right on 6/13 decidable spot-checks, the LLM (gemma4-31b-it on innkube, free) on 12/13. *Recommendation:* use the LLM for stratification only. It never reaches the labellers (D15 C).
-4. **WARC capture.** Static HTML, rendered DOM, screenshots and HAR-like metadata are archived for every item (D14 A). A full WARC (e.g. via `warcio` around the static fetch) adds re-playability but also third-party content of uncertain licence. *Recommendation:* capture WARC for internal reproducibility, but do not publish it. Publish HTML, DOM text and screenshots where licensing allows, with URLs and timestamps otherwise.
-5. **Image-only (screenshot-required) quota.** The pilot measured 2 of 422 imprints (0.5%, CI 0.1-1.7). *Recommendation:* a small quota of 20, found by screening, so the paper can show the failure mode and the vision fallback. Option: 0, reporting only the natural occurrences in the core (about 1).
-6. **Capture infrastructure.** Strato-hosted sites (about 8% of the sample) answered 503 to the crawl VM during the pilot, Wix 429 and Jimdo 403 to the static client. *Recommendation:* run the gold capture from a different IP (e.g. a FAITH Slurm node) at low per-host-provider concurrency, and re-try blocked hosts before they count as negatives.
+1. **Total size.** 1,000 items: 700 random core + 300 coverage oversample, about 30 per stratum where the population allows (§2). *Applied.*
+2. **Frame: everything vs. German-language/DACH only.** Full seed-list frame. "No imprint" negatives come only from the core (219 items), and non-live hosts likewise (201 items). *Applied (assumed).* Option: drop the 201 non-live core items and replace them with live core items. This would save labelling time, but the core would then no longer be an SRS of the frame (it would become an SRS of live hosts).
+3. **Operator-type detector for stratification.** The LLM (gemma4-31b-it on innkube), for stratification only. Never shown to labellers (D15 C). *Applied (assumed).*
+4. **WARC capture.** Capture WARC for internal reproducibility, but do not publish it. *Assumed.*
+5. **Image-only quota.** Cap 20; screening found 15, and all are in the sample. *Applied.*
+6. **Capture infrastructure.** The E12 screening still ran from the crawl VM, with at most 1 request per /24 and one retry. Strato kept answering 503 (578 hosts, 5.8% of the screening sample, 39 items of the `neg:site_not_live` core). *Recommendation:* capture the 1,000 gold items from a different IP (e.g. a FAITH Slurm node), and re-try blocked hosts there before they count as negatives.
 
 ## 8. Open doubts
 
@@ -291,3 +297,9 @@ These are design choices the pilot cannot settle. Each has a recommendation.
 - **Detectors are heuristic.** Spot-checks are 20 per detector (fewer for rare ones). Precision estimates have wide CIs. Recall was not measured, except indirectly against E4 for imprint discovery.
 - **Topic and operator type** from the LLM were checked only by the spot-check above (topic not at all here; E7 covers topic models on the old set).
 - **Imprint discovery misses.** `none` was wrong for 1 of 12 checked (a Shopify imprint under `/policies/legal-notice`), so the "no imprint" stratum contains some positives. The labellers decide from the live site, so labels are not affected.
+- **E12: Strato block persists.** 578 of 642 Strato-hosted hosts (/24 81.169.145.0) answered 503 even at 1 concurrent request and after the retry. They are in `neg:site_not_live`. Live and imprint shares stay biased low by about 5 pp, and Strato-hosted site builders are undercounted.
+- **E12: inclusion probabilities are conditional** on the realized screening stratum sizes and on detector outputs. A detector error changes only an item's weight, not its labelled stratum.
+- **E12: the image-only search is bounded by the vision candidate rule** (707 candidates). Image-only cases outside that rule are missed. Iframe-embedded imprints (4 seen) and pages whose rendered text is missing from the extraction (3 seen) are hard cases with no stratum of their own.
+- **E12: some flagged differences vs E8 are likely chance.** There were about 300 comparisons at 95%. The higher no-imprint share on .de/.at/.ch (16.3% vs 12.1%) is the one that matters for the design and is unexplained (E8's E4 merge only adds fields, it does not change the detector). It changes only the core's expected negatives.
+- **E12: T and n0 were chosen from the screening data** (largest T, then largest n0, that fit 1,000). This is a deterministic rule fixed before the draw, so weights stay valid.
+
