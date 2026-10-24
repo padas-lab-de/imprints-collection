@@ -155,11 +155,11 @@ def stage_draw(args):
     (RES / "gold_sample_info.json").write_text(json.dumps(info, indent=1))
     # quota table
     screened = marginal_counts([{"strata": memberships(r, img)} for r in recs])
-    n_imp = sum(1 for r in recs if has_imprint(r))
+    n_imp = sum(1 for r in recs if has_imprint(r) or (is_live(r) and r["host"] in img))
     marg = marginal_counts(items)
     core_marg = marginal_counts([it for it in items if it["core"]])
     prio_cnt = Counter(it["priority_stratum"] for it in items)
-    rows = ["| Stratum | Screened (of 10,000) | % of screened w/ imprint | Expected in core | Target | In sample | of which core | Priority-stratum items (m_h / M_h) | pi phase 2 |",
+    rows = ["| Stratum | Screened (of 10,000) | % (of screened w/ imprint; negatives: of all) | Expected in core | Target | In sample | of which core | Priority-stratum items (m_h / M_h) | pi phase 2 |",
             "|---|---|---|---|---|---|---|---|---|"]
     keys = info["order"] + sorted(k for k in info["M"] if k not in info["order"])
     for s in keys:
@@ -167,8 +167,9 @@ def stage_draw(args):
         m = info["m"].get(s, 0)
         tgt = "core only" if s.startswith("neg:") or s.startswith("other:") else str(min(info["target"], CAPS.get(s, 10**9)))
         n_scr = screened.get(s, 0)
+        base = len(recs) if s.startswith(("neg:", "other:")) else n_imp
         rows.append(
-            f"| {s} | {n_scr} | {100*n_scr/max(1,n_imp):.1f} | {n_scr*info['n_core']/len(recs):.1f} | {tgt} | {marg.get(s,0)} | {core_marg.get(s,0)} "
+            f"| {s} | {n_scr} | {100*n_scr/max(1,base):.1f} | {n_scr*info['n_core']/len(recs):.1f} | {tgt} | {marg.get(s,0)} | {core_marg.get(s,0)} "
             f"| {m} / {M} | {m/M if M else 0:.4f} |"
         )
     txt = [

@@ -57,6 +57,8 @@ def test_memberships_negatives_and_coverage():
     assert "hard:imprint_without_address" in ms
     ms = memberships(rec("b", n_addresses=0, model_n_addresses=0), image_only_confirmed={"b"})
     assert IMAGE_ONLY in ms and "hard:imprint_without_address" not in ms
+    ms = memberships(rec("e", imprint_location="none", n_addresses=0, model_n_addresses=0), image_only_confirmed={"e"})
+    assert IMAGE_ONLY in ms and NEG_NO_IMPRINT not in ms
     assert "tech:blogger" in memberships(rec("c", tech="blogger", tech_family="blog_platform"))
     assert "hard:multi_address" in memberships(rec("d", model_n_addresses=2))
 

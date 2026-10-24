@@ -92,10 +92,14 @@ def has_text_address(rec: dict) -> bool:
 def memberships(rec: dict, image_only_confirmed: Iterable[str] = ()) -> List[str]:
     """Coverage strata a screened host belongs to. Only hosts with a reached
     imprint are members of coverage strata (the oversample adds no negatives);
-    negatives get one of the two negative strata."""
+    negatives get one of the two negative strata. Hand-confirmed image-only
+    hosts are coverage members even if the detectors found no imprint."""
+    img = set(image_only_confirmed)
     if not is_live(rec):
         return [NEG_DEAD]
-    if not has_imprint(rec):
+    # A hand-confirmed image-only imprint counts as an imprint even when the
+    # text detectors did not recognise the page (no address text to match).
+    if not has_imprint(rec) and rec["host"] not in img:
         return [NEG_NO_IMPRINT]
     out = []
     age = rec.get("age_bin")
@@ -118,7 +122,7 @@ def memberships(rec: dict, image_only_confirmed: Iterable[str] = ()) -> List[str
         out.append("tld:" + rec["tld"])
     if rec.get("imprint_location") == "other_domain":
         out.append("loc:other_domain")
-    if rec["host"] in set(image_only_confirmed):
+    if rec["host"] in img:
         out.append(IMAGE_ONLY)
     elif not has_text_address(rec):
         out.append("hard:imprint_without_address")
