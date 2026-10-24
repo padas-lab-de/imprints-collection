@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Imprint labelling</title>
+<style>
+  :root { --bg:#f6f6f4; --panel:#fff; --ink:#1d1d1b; --mute:#6b6b66; --line:#d9d9d3; --acc:#1f5fbf; --ok:#1d7a3a; --bad:#b3261e; --warn:#8a5a00; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#161616; --panel:#202020; --ink:#e8e8e4; --mute:#9a9a94; --line:#3a3a36; --acc:#7aa7ff; --ok:#5fcf86; --bad:#ff8a80; --warn:#e0b050; }
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body { background: var(--bg); color: var(--ink); font: 14px/1.4 system-ui, sans-serif; display: flex; flex-direction: column; }
+  header { display: flex; gap: 10px; align-items: center; padding: 6px 12px; background: var(--panel); border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+  header .host { font-weight: 600; font-size: 16px; }
+  header .grow { flex: 1; }
+  .bar { width: 160px; height: 8px; background: var(--line); border-radius: 4px; overflow: hidden; display: inline-block; vertical-align: middle; }
+  .bar i { display: block; height: 100%; background: var(--ok); }
+  main { flex: 1; min-height: 0; display: grid; grid-template-columns: 1.1fr 1fr 1fr; gap: 8px; padding: 8px; }
+  .pane { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; display: flex; flex-direction: column; min-height: 0; }
+  .pane > .tabs { display: flex; gap: 4px; padding: 6px; border-bottom: 1px solid var(--line); align-items: center; }
+  .pane > .body { flex: 1; overflow: auto; min-height: 0; padding: 8px; }
+  button, select, input, textarea { font: inherit; color: inherit; background: var(--bg); border: 1px solid var(--line); border-radius: 4px; padding: 3px 6px; }
+  button { cursor: pointer; }
+  button.on { background: var(--acc); color: #fff; border-color: var(--acc); }
+  button.primary { background: var(--acc); color: #fff; border-color: var(--acc); font-weight: 600; padding: 6px 14px; }
+  button:disabled { opacity: .5; cursor: default; }
+  #shot img { width: 100%; display: block; cursor: zoom-in; }
+  #shot img.full { width: auto; max-width: none; cursor: zoom-out; }
+  #txt { white-space: pre-wrap; word-break: break-word; font: 12.5px/1.45 ui-monospace, Menlo, Consolas, monospace; margin: 0; user-select: text; }
+  .empty { color: var(--mute); font-style: italic; padding: 12px; }
+  .banner { background: #fff4d6; color: #5a3d00; border: 1px solid #e3c36a; padding: 6px 10px; border-radius: 4px; margin: 0 0 8px; }
+  @media (prefers-color-scheme: dark) { .banner { background: #3a2f10; color: #f0d68a; border-color: #6a5520; } }
+  form { display: flex; flex-direction: column; gap: 10px; }
+  fieldset { border: 1px solid var(--line); border-radius: 6px; padding: 6px 10px 8px; margin: 0; }
+  legend { font-weight: 600; padding: 0 4px; }
+  label.inl { display: inline-flex; gap: 4px; align-items: center; margin-right: 10px; }
+  .row { display: flex; gap: 6px; align-items: center; margin: 3px 0; flex-wrap: wrap; }
+  .row > span.k { width: 62px; color: var(--mute); }
+  .row input[type=text] { flex: 1; min-width: 0; }
+  .sel { padding: 1px 6px; }
+  .addr { border: 1px solid var(--line); border-radius: 6px; padding: 6px; margin: 6px 0; }
+  .addr.main { border-color: var(--acc); }
+  .addr h4 { margin: 0 0 4px; display: flex; gap: 8px; align-items: center; }
+  .errs { color: var(--bad); margin: 0; padding-left: 18px; }
+  .warns { color: var(--warn); margin: 0; padding-left: 18px; }
+  .ok { color: var(--ok); }
+  .mute { color: var(--mute); }
+  textarea { width: 100%; }
+  @media (max-width: 1100px) { main { grid-template-columns: 1fr; overflow: auto; } .pane { min-height: 60vh; } }
+</style>
+</head>
+<body>
+<header>
+  <span class="host" id="host">...</span>
+  <span class="mute" id="pos"></span>
+  <span class="mute" id="phase"></span>
+  <a id="live" href="#" target="_blank" rel="noopener noreferrer" title="Fallback only. Say why in the comment.">open live site</a>
+  <span class="grow"></span>
+  <span class="bar"><i id="barfill" style="width:0"></i></span>
+  <span id="prog" class="mute"></span>
+  <button id="prev" type="button">&#9664; Prev</button>
+  <select id="jump" aria-label="Jump to item"></select>
+  <button id="next" type="button">Next &#9654;</button>
+  <button id="nextun" type="button">Next unlabelled</button>
+  <span class="mute">L: <b id="who"></b></span>
+</header>
+<main>
+  <section class="pane" id="shot">
+    <div class="tabs"><b>Screenshot</b>
+      <button type="button" data-img="landing" class="on">landing</button>
+      <button type="button" data-img="imprint">imprint</button>
+      <span class="mute">click image = zoom</span>
+    </div>
+    <div class="body" id="shotbody"></div>
+  </section>
+  <section class="pane" id="textpane">
+    <div class="tabs"><b>DOM text</b>
+      <button type="button" data-txt="landing" class="on">landing</button>
+      <button type="button" data-txt="imprint">imprint</button>
+      <span class="mute">select text, then press &#9664; at a field</span>
+    </div>
+    <div class="body"><div id="banner"></div><pre id="txt"></pre></div>
+  </section>
+  <section class="pane">
+    <div class="tabs"><b>Label</b><span class="mute" id="saved"></span></div>
+    <div class="body"><form id="f" autocomplete="off" onsubmit="return false"></form></div>
+  </section>
+</main>
+<script>
+"use strict";
+const $ = (s, r = document) => r.querySelector(s);
+function el(tag, attrs = {}, kids = []) {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k === "class") e.className = v;
+    else if (k.startsWith("on")) e.addEventListener(k.slice(2), v);
+    else if (v === true) e.setAttribute(k, "");
+    else if (v !== false && v != null) e.setAttribute(k, v);
+  }
+  for (const c of [].concat(kids)) e.append(c.nodeType ? c : document.createTextNode(c));
+  return e;
+}
+let S = null;          // state: {labeller, items, enums}
+let idx = -1;          // index in S.items
+let cap = null;        // capture of current item
+let M = null;          // model of the current form
+let dirty = false;
+let shotTab = "landing", txtTab = "landing";
+let lastSel = "";
+let activeSeconds = 0;
+
+// ---- text selection (copy, not type) ------------------------------------
+document.addEventListener("selectionchange", () => {
+  const sel = window.getSelection();
+  if (!sel || sel.isCollapsed) return;
+  const n = sel.anchorNode;
+  if (n && $("#txt").contains(n)) lastSel = sel.toString();
+});
+function selText(multiline) {
+  let t = lastSel.replace(/ /g, " ");
+  return multiline ? t.split("\n").map(s => s.trim()).filter(Boolean).join("\n")
+                   : t.replace(/\s+/g, " ").trim();
+}
+// keep the selection alive when a button is pressed
+document.addEventListener("mousedown", e => { if (e.target.closest(".pick")) e.preventDefault(); });
+
+// ---- timer: counts only while the tab is visible and focused -------------
+setInterval(() => { if (!document.hidden && document.hasFocus() && idx >= 0) activeSeconds++; }, 1000);
+
+// ---- model --------------------------------------------------------------
+function blankModel(host) {
+  return { host, site_status: "", imprint_present: null, imprint_url: "", imprint_location: "",
+           addresses: [], main_address_index: null, no_address_reason: "", operator_type: "",
+           topic: "", topic_ambiguous: false, flags: [], comment: "" };
+}
+function blankAddr() {
+  return { role: "operator", street: "", number: "", postcode: "", town: "", country: "",
+           po_box: false, modality: "text", evidence: "" };
+}
+function fromSaved(l) {
+  const m = blankModel(l.host);
+  for (const k of Object.keys(m)) if (l[k] !== undefined && l[k] !== null) m[k] = l[k];
+  m.addresses = (l.addresses || []).map(a => Object.assign(blankAddr(), a));
+  m.main_address_index = l.main_address_index === undefined ? null : l.main_address_index;
+  return m;
+}
+const isLive = () => ["live", "redirect_other_domain"].includes(M.site_status);
+function derivedReason() {
+  if (M.addresses.length) return M.no_address_reason === "imprint_without_address" ? M.no_address_reason : "";
+  if (!M.site_status) return "";
+  if (!isLive()) return "site_dead";
+  if (M.imprint_present === false) return "no_imprint";
+  if (M.imprint_present === true) return "imprint_without_address";
+  return "";
+}
+function normalise() {
+  M.no_address_reason = derivedReason();
+  if (!M.addresses.length) M.main_address_index = null;
+  else if (M.no_address_reason === "imprint_without_address") M.main_address_index = null;
+  else if (M.main_address_index === null || M.main_address_index >= M.addresses.length) {
+    const i = M.addresses.findIndex(a => ["operator", "operator_other_site", "representative", "editor"].includes(a.role));
+    M.main_address_index = i >= 0 ? i : 0;
+  }
+  if (M.addresses.some(a => a.po_box) && !M.flags.includes("po_box")) M.flags.push("po_box");
+  if (M.addresses.filter(a => !a.po_box && ["operator", "operator_other_site", "representative", "editor"].includes(a.role)).length >= 2 && !M.flags.includes("multi_address")) M.flags.push("multi_address");
+  if (!isLive()) { M.imprint_present = M.site_status ? false : null; M.imprint_location = M.site_status ? "none" : ""; }
+}
+function touch() { dirty = true; normalise(); renderForm(); }
+
+// ---- form ---------------------------------------------------------------
+function radios(name, values, cur, onchange, labels = {}) {
+  return values.map(v => el("label", { class: "inl" }, [
+    el("input", { type: "radio", name, value: v, checked: String(cur) === String(v), onchange: () => onchange(v) }),
+    labels[v] || v]));
+}
+function selectOf(values, cur, onchange, blank = true) {
+  const s = el("select", { onchange: e => onchange(e.target.value) },
+    (blank ? [el("option", { value: "" }, "-")] : []).concat(values.map(v => el("option", { value: v, selected: v === cur }, v))));
+  return s;
+}
+function pickBtn(fn, title = "copy selection from the text pane") {
+  return el("button", { type: "button", class: "pick sel", title, onclick: fn }, "◂");
+}
+function textField(label, obj, key, multiline = false) {
+  const inp = multiline
+    ? el("textarea", { rows: 2, oninput: e => { obj[key] = e.target.value; dirty = true; } }, obj[key] || "")
+    : el("input", { type: "text", value: obj[key] || "", oninput: e => { obj[key] = e.target.value; dirty = true; } });
+  const pick = pickBtn(() => {
+    const t = selText(multiline); if (!t) return;
+    obj[key] = t; dirty = true; normalise(); renderForm();
+  });
+  return el("div", { class: "row" }, [el("span", { class: "k" }, label), inp, pick]);
+}
+function splitSelection(a) {
+  const raw = selText(true); if (!raw) return;
+  const one = raw.replace(/\n/g, ", ");
+  a.evidence = raw;
+  const pm = one.match(/\b(?:(?:D|A|CH|DE|AT)\s*-\s*)?(\d{4,5})\s+([^,\n]+?)(?:,|$)/);
+  if (pm) {
+    a.postcode = pm[1]; a.town = pm[2].trim();
+    const before = one.slice(0, pm.index).replace(/[,\s]+$/, "");
+    const parts = before.split(",").map(s => s.trim()).filter(Boolean);
+    const last = parts[parts.length - 1] || "";
+    const sm = last.match(/^(.*?\D)\s*(\d+[\w–\-\/ ]*)$/);
+    if (sm) { a.street = sm[1].trim(); a.number = sm[2].trim(); } else if (last) a.street = last;
+    const after = one.slice(pm.index + pm[0].length).trim();
+    if (after && /^[A-Za-zÄÖÜäöüß ]+$/.test(after)) a.country = after;
+  }
+  if (/postfach|p\.?\s?o\.?\s?box|case postale/i.test(one)) a.po_box = true;
+  touch();
+}
+function renderForm() {
+  const f = $("#f"); const scroll = f.parentNode.scrollTop; f.replaceChildren();
+  const E = S.enums;
+  f.append(el("fieldset", {}, [el("legend", {}, "1. Site status"),
+    el("div", {}, radios("site_status", E.site_status, M.site_status, v => { M.site_status = v; touch(); }))]));
+  if (isLive()) {
+    f.append(el("fieldset", {}, [el("legend", {}, "2. Imprint"),
+      el("div", { class: "row" }, [el("span", { class: "k" }, "present"),
+        ...radios("imprint_present", [true, false], M.imprint_present, v => { M.imprint_present = v === "true" || v === true; if (!M.imprint_present) { M.imprint_location = "none"; M.imprint_url = ""; } else if (M.imprint_location === "none") M.imprint_location = ""; touch(); }, { true: "yes", false: "no" })]),
+      ...(M.imprint_present ? [
+        textField("URL", M, "imprint_url"),
+        el("div", { class: "row" }, [el("span", { class: "k" }, "where"), selectOf(E.imprint_location.filter(x => x !== "none"), M.imprint_location, v => { M.imprint_location = v; touch(); })])] : [])]));
+  }
+  // addresses
+  const af = el("fieldset", {}, [el("legend", {}, "3. Addresses on the imprint")]);
+  M.addresses.forEach((a, i) => {
+    const isMain = M.main_address_index === i && M.no_address_reason !== "imprint_without_address";
+    const card = el("div", { class: "addr" + (isMain ? " main" : "") }, [
+      el("h4", {}, [`Address ${i + 1}`,
+        el("label", { class: "inl" }, [el("input", { type: "radio", name: "main", checked: isMain, onchange: () => { M.main_address_index = i; dirty = true; renderForm(); } }), "main"]),
+        el("span", { class: "grow", style: "flex:1" }),
+        el("button", { type: "button", onclick: () => { M.addresses.splice(i, 1); touch(); } }, "remove")]),
+      el("div", { class: "row" }, [el("span", { class: "k" }, "role"), selectOf(E.roles, a.role, v => { a.role = v; touch(); }, false),
+        el("span", { class: "k" }, "modality"), selectOf(E.modality, a.modality, v => { a.modality = v; touch(); }, false)]),
+      el("div", { class: "row" }, [el("button", { type: "button", class: "pick", title: "split the selected text into the fields below (check the result)", onclick: () => splitSelection(a) }, "◂ split selection into fields")]),
+      textField("street", a, "street"), textField("number", a, "number"), textField("postcode", a, "postcode"),
+      textField("town", a, "town"), textField("country", a, "country"),
+      el("div", { class: "row" }, [el("label", { class: "inl" }, [el("input", { type: "checkbox", checked: a.po_box, onchange: e => { a.po_box = e.target.checked; touch(); } }), "P.O. box (Postfach)"])]),
+      textField("evidence", a, "evidence", true),
+    ]);
+    af.append(card);
+  });
+  af.append(el("div", { class: "row" }, [el("button", { type: "button", onclick: () => { M.addresses.push(blankAddr()); touch(); } }, "+ add address")]));
+  if (!M.addresses.length) af.append(el("div", { class: "mute" }, "No address listed. Reason (automatic): " + (M.no_address_reason || "-")));
+  else af.append(el("div", { class: "row" }, [el("label", { class: "inl" }, [el("input", { type: "checkbox", checked: M.no_address_reason === "imprint_without_address", onchange: e => { M.no_address_reason = e.target.checked ? "imprint_without_address" : ""; touch(); } }), "none of these is the operator's (imprint without address)"])]));
+  f.append(af);
+  if (isLive()) {
+    f.append(el("fieldset", {}, [el("legend", {}, "4. Operator type"),
+      el("div", {}, radios("operator_type", E.operator_type, M.operator_type, v => { M.operator_type = v; dirty = true; }))]));
+    f.append(el("fieldset", {}, [el("legend", {}, "5. Topic (whole site)"),
+      el("div", { class: "row" }, [selectOf(E.topics, M.topic, v => { M.topic = v; dirty = true; }),
+        el("label", { class: "inl" }, [el("input", { type: "checkbox", checked: M.topic_ambiguous, onchange: e => { M.topic_ambiguous = e.target.checked; dirty = true; } }), "ambiguous"])])]));
+  }
+  f.append(el("fieldset", {}, [el("legend", {}, "Flags and comment"),
+    el("div", {}, E.flags.map(fl => el("label", { class: "inl" }, [el("input", { type: "checkbox", checked: M.flags.includes(fl), onchange: e => { M.flags = M.flags.filter(x => x !== fl); if (e.target.checked) M.flags.push(fl); dirty = true; } }), fl]))),
+    el("textarea", { rows: 3, placeholder: "comment (required if you used the live site or the capture is broken)", oninput: e => { M.comment = e.target.value; dirty = true; } }, M.comment || "")]));
+  f.append(el("div", { class: "row" }, [
+    el("button", { type: "button", class: "primary", onclick: () => save(true) }, "Save & next (Ctrl+Enter)"),
+    el("button", { type: "button", onclick: () => save(false) }, "Save"),
+    el("span", { id: "msg" })]));
+  f.parentNode.scrollTop = scroll;
+}
+
+// ---- panes ----------------------------------------------------------------
+function renderShot() {
+  const b = $("#shotbody"); b.replaceChildren();
+  const name = cap && cap.images[shotTab];
+  if (!name) { b.append(el("div", { class: "empty" }, `no ${shotTab} screenshot in the capture`)); return; }
+  const img = el("img", { src: `/img/${encodeURIComponent(cap.host)}/${name}`, alt: shotTab + " screenshot", onclick: () => img.classList.toggle("full") });
+  b.append(img);
+}
+function renderText() {
+  const t = cap && cap.texts[txtTab];
+  $("#txt").textContent = t === undefined ? "" : t;
+  if (t === undefined) $("#txt").textContent = `(no ${txtTab} text in the capture)`;
+  document.querySelectorAll("[data-txt]").forEach(b => b.classList.toggle("on", b.dataset.txt === txtTab));
+  document.querySelectorAll("[data-img]").forEach(b => b.classList.toggle("on", b.dataset.img === shotTab));
+}
+document.querySelectorAll("[data-img]").forEach(b => b.onclick = () => { shotTab = b.dataset.img; renderShot(); renderText(); });
+document.querySelectorAll("[data-txt]").forEach(b => b.onclick = () => { txtTab = b.dataset.txt; renderText(); $("#txt").parentNode.scrollTop = 0; });
+
+function renderHeader() {
+  const it = S.items[idx];
+  $("#host").textContent = it.host;
+  $("#pos").textContent = `#${idx + 1} of ${S.items.length}`;
+  $("#phase").textContent = it.phase === "calibration" ? "[calibration round]" : "";
+  $("#live").href = "https://" + it.host + "/";
+  $("#jump").value = String(idx);
+  const done = S.items.filter(x => x.done).length;
+  $("#prog").textContent = `${done} / ${S.items.length} labelled`;
+  $("#barfill").style.width = (100 * done / S.items.length) + "%";
+  $("#who").textContent = S.labeller;
+  location.hash = String(it.order);
+}
+function fillJump() {
+  const j = $("#jump"); j.replaceChildren();
+  S.items.forEach((it, i) => j.append(el("option", { value: i }, `${it.done ? "✓" : "·"} ${i + 1} ${it.host}`)));
+}
+const PRECIOUS = () => !dirty || confirm("Discard unsaved changes on this item?");
+
+async function load(i) {
+  if (i < 0 || i >= S.items.length) return;
+  if (!PRECIOUS()) { $("#jump").value = String(idx); return; }
+  idx = i; dirty = false; activeSeconds = 0; $("#saved").textContent = "";
+  const r = await fetch("/api/item?host=" + encodeURIComponent(S.items[i].host));
+  const d = await r.json(); cap = d.capture;
+  M = d.label ? fromSaved(d.label) : blankModel(cap.host);
+  if (d.label) $("#saved").textContent = "saved " + d.label.saved_at + " (" + d.label.seconds_spent + " s)";
+  const b = $("#banner"); b.replaceChildren();
+  if (!cap.exists) b.append(el("div", { class: "banner" }, "No capture for this host. Open the live site, label from it, tick used_live_site and capture_problem, and say so in the comment."));
+  else if (!Object.keys(cap.texts).length && !Object.values(cap.images).some(Boolean)) b.append(el("div", { class: "banner" }, "The capture is empty (site probably unreachable at capture time). Check the live site and say so in the comment."));
+  if (cap.exists && !cap.capture_id) b.append(el("div", { class: "banner" }, "meta.json has no timestamp; capture_id will be empty."));
+  shotTab = cap.images.landing ? "landing" : (cap.images.imprint ? "imprint" : "landing");
+  txtTab = (cap.texts.landing !== undefined || cap.texts.imprint === undefined) ? "landing" : "imprint";
+  lastSel = ""; window.getSelection().removeAllRanges();
+  renderShot(); renderText(); renderHeader(); normalise(); renderForm();
+  $("#txt").parentNode.scrollTop = 0;
+}
+
+async function save(next) {
+  normalise();
+  const msg = $("#msg"); msg.className = ""; msg.replaceChildren();
+  const label = JSON.parse(JSON.stringify(M));
+  if (label.imprint_present === null && !isLive()) label.imprint_present = false;
+  label.no_address_reason = M.no_address_reason || null;
+  const r = await fetch("/api/label", { method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ label, elapsed: activeSeconds }) });
+  const d = await r.json();
+  if (!d.ok) {
+    msg.append(el("ul", { class: "errs" }, d.errors.map(e => el("li", {}, e))));
+    return;
+  }
+  dirty = false; activeSeconds = 0;
+  S.items[idx].done = true;
+  fillJump(); renderHeader();
+  $("#saved").textContent = "saved " + d.saved.saved_at + " (" + d.saved.seconds_spent + " s)";
+  if (d.warnings.length) {
+    msg.append(el("ul", { class: "warns" }, d.warnings.map(w => el("li", {}, w))));
+    if (next && !confirm("Saved. Warnings:\n" + d.warnings.join("\n") + "\n\nGo to next item anyway?")) return;
+  } else msg.append(el("span", { class: "ok" }, "saved"));
+  if (next) goNextUnlabelled(idx + 1, true);
+}
+function goNextUnlabelled(from, wrap) {
+  for (let k = 0; k < S.items.length; k++) {
+    const i = (from + k) % S.items.length;
+    if (!wrap && i < from) break;
+    if (!S.items[i].done) return load(i);
+  }
+  alert("All items are labelled.");
+}
+
+$("#prev").onclick = () => load(idx - 1);
+$("#next").onclick = () => load(idx + 1);
+$("#nextun").onclick = () => goNextUnlabelled(idx + 1, true);
+$("#jump").onchange = e => load(parseInt(e.target.value, 10));
+$("#live").addEventListener("click", () => { if (M && !M.flags.includes("used_live_site")) { M.flags.push("used_live_site"); dirty = true; renderForm(); } });
+document.addEventListener("keydown", e => { if ((e.ctrlKey || e.metaKey) && e.key === "Enter") { e.preventDefault(); save(true); } });
+window.addEventListener("beforeunload", e => { if (dirty) { e.preventDefault(); e.returnValue = ""; } });
+
+(async function init() {
+  S = await (await fetch("/api/state")).json();
+  if (!S.items.length) { document.body.append(el("p", { class: "empty" }, "No items assigned to " + S.labeller)); return; }
+  fillJump();
+  const want = parseInt(location.hash.slice(1), 10);
+  let i = S.items.findIndex(x => x.order === want);
+  if (i < 0) i = S.items.findIndex(x => !x.done);
+  await load(i < 0 ? 0 : i);
+})();
+</script>
+</body>
+</html>
