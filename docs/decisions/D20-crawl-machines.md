@@ -8,4 +8,5 @@ Issued 2026-10-24. User asked whether fetching can be distributed over several m
 - **B** FAITH Slurm compute nodes: not documented whether nodes have outbound internet or may crawl; needs confirmation from FAITH admins first.
 - **C** This VM only: seed crawl about 7-13 days, depth-3 expansion 11-19M fetches after it; needs about 80 GB against 66 GB free.
 
-Answer: (pending)
+Answer (user, 2026-10-24): "D20 A. Go 1+2. We are three people for labelling. One person can do twice the effort than the other two."
+Follow-up: A5-crawl-vm-access (hostnames + SSH from this VM).
