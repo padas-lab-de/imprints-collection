@@ -102,7 +102,7 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--gold", default=str(ROOT / "datasets/gold"))
     a = ap.parse_args()
-    gold = Path(a.gold)
+    gold = Path(a.gold).resolve()  # the scratch symlinks need an absolute target
     picks = pick_hosts(gold)
     print("hosts:", picks)
     need = {"plain", "noimp", "dead", "multi"}

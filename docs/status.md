@@ -19,7 +19,11 @@ Source: results/<model>/german/simple/eval/metrics.json.
 - Topic: largest confusions all go into Business and Professional Services (Community 32, Arts 30, Retail 23). Health and Medicine recall ~0.5 at precision ~1.0.
 - Caveat: topic is evaluated on the imprint text (gold has no homepage text), while production classifies the homepage.
 
-### E12-gold-screening (merged; design docs/gold_set_design.md v0.2, tables results/E12/screening_prevalence.md, results/E12/gold_sample_quotas.md)
+### E18-gold-labelling-tool (merged; docs/annotation_guideline.md v0.2, docs/annotation_howto.md)
+- Local labelling tool `PYTHONPATH=src python -m ic.gold.annotate --labeller L1|L2|L3` (screenshot, DOM text, form; select-and-split for addresses; no model or stratum info shown). Browser check scripts/gold/e18_browser_check.py: 22/22.
+- Assignment datasets/gold/assignment.jsonl: L1 650, L2 325, L3 325 labels (50 calibration by all three; 950 single primary; 200 second labels on a different person). Guideline judgement calls: card D21-guideline-open-points.
+
+ (merged; design docs/gold_set_design.md v0.2, tables results/E12/screening_prevalence.md, results/E12/gold_sample_quotas.md)
 - 10,000 random seed hosts screened (frame 6,557,719): live 71.4%, HTTP error 12.6%, unreachable 7.5%, cross-domain redirect 6.9%; imprint found 57.7% of live; address only in an image 15 hand-confirmed (0.36% of imprints).
 - Gold sample datasets/E12/gold_sample.jsonl: 1,000 items = 700 random core + 300 oversample, target 30 per stratum (seed 20261025); 799 live, 219 no-imprint and 201 not-live negatives (core only); Horvitz-Thompson weights 656-16,582. Short strata (all screened hosts used): Nightlife 3, Blogger 8, Landmarks 13, image-only 15.
 - Doubts: Strato /24 answered 503 for 578 hosts (gold capture must run from another IP); no-imprint share on live .de/.at/.ch 16.3% vs 12.1% in E8 (unexplained).

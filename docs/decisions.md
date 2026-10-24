@@ -2,7 +2,6 @@
 
 ## In flight
 - E17-gold-capture: subagent, worktree branch E17-gold-capture. Freezes the 1,000 gold items (design doc §3: static + rendered HTML, innerText, full-page screenshot, PDF, meta.json; no WARC) -> datasets/gold/<host>/; Strato /24 hosts deferred to another VM (A5) -> datasets/gold/deferred_strato.txt. On return: verify counts, spot-check 5 captures, merge.
-- E18-gold-labelling-tool: merged baa795e (guideline v0.2, tool src/ic/gold/annotate, assignment datasets/gold/assignment.jsonl). Fix round running on branch E18-gold-labelling-tool: lead browser test found (1) first address not set as main and "imprint without address" pre-ticked, main radio not clickable; (2) rejected save shows no message. On return: rerun scripts/gold/e18_browser_check.py, merge.
 - E16-snapshot-crawl-seeds: lead-run, full 6,560,119 seeds shuffled (scripts/E16/shuffle.py, seed 20261024) in 263 batches of 25k, cap 8 (D18 via E15), one process per 10 batches (scripts/E16/run.sh, nohup), started 2026-10-24 09:30 UTC -> datasets/E16/seeds, logs results/E16/logs/ (driver.log says "all done" at end). Resumes on re-run; ranges can move to other machines (run.sh FIRST LAST). Check progress daily.
 
 ## Cards
@@ -36,6 +35,7 @@
 | D1-revision-driver | 2026-10-23 | Why revise now? | Journal extension with better evaluation + fresh (larger) data snapshot; no hard deadline | — |
 
 ## Lead actions
+- 2026-10-24: merged E18 fix round (3ba4641): first address main by default, rejected save shows message; scripts/gold/e18_browser_check.py 22/22 PASS three runs (lead fixed relative --gold path). Labelling tool ready once D21 answered.
 - 2026-10-24: merged E18 (91f44b9 -> baa795e; 155 tests). Assignment checked: L1 520 primary + 80 second + 50 calibration = 650, L2/L3 215+60+50 = 325; 950 items one primary, 50 calibration labelled by all three (consensus = gold); 200 second labels on other labeller. Calibration counted within the 2:1:1 loads.
 - 2026-10-24: Assumed for D15 with three labellers: each item has one primary labeller, load split 2:1:1 across the 1,200 labels (1,000 primary + 200 second; about 600/300/300), second labels spread over all three pairs; calibration 50 items labelled by all three. No WARC in E17 (design doc says optional).
 - 2026-10-24: merged E12-gold-screening (5d9490f): 10,000 screened, 1,000-item gold sample drawn (core 700 + oversample 300, T=30, seed 20261025) -> datasets/E12/gold_sample.jsonl; verified tests, counts, weight sum 6,555,096. Assumed (design doc §7): full frame incl. 201 not-live core items; LLM operator type for stratification only; WARCs internal. Strato block -> capture gold sites from another IP.
