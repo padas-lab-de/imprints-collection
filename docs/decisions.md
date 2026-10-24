@@ -1,12 +1,12 @@
 # Lead record
 
 ## In flight
-- E17-gold-capture: subagent, worktree branch E17-gold-capture. Freezes the 1,000 gold items (design doc §3: static + rendered HTML, innerText, full-page screenshot, PDF, meta.json; no WARC) -> datasets/gold/<host>/; Strato /24 hosts deferred to another VM (A5) -> datasets/gold/deferred_strato.txt. On return: verify counts, spot-check 5 captures, merge.
 - E16-snapshot-crawl-seeds: lead-run, full 6,560,119 seeds shuffled (scripts/E16/shuffle.py, seed 20261024) in 263 batches of 25k, cap 8 (D18 via E15), one process per 10 batches (scripts/E16/run.sh, nohup), started 2026-10-24 09:30 UTC -> datasets/E16/seeds, logs results/E16/logs/ (driver.log says "all done" at end). Resumes on re-run; ranges can move to other machines (run.sh FIRST LAST). Check progress daily.
 
 ## Cards
 | ID | Date | Question | Outcome | Landed in |
 |---|---|---|---|---|
+| D22-crawl-speedup-route | 2026-10-24 | Speed up the crawl: parallel VMs + polite limits + recovery pass from a 2nd IP, or a faster first round with looser limits + slow second round? | open (recommend A) | — |
 | D21-guideline-open-points | 2026-10-24 | Accept the labelling guideline's seven judgement calls as drafted? | open (recommend A) | — |
 | A5-crawl-vm-access | 2026-10-24 | Hostnames + SSH access for the extra crawl-subnet VMs | open | — |
 | D20-crawl-machines | 2026-10-24 | Spread the crawl over more machines: more crawl-subnet VMs, FAITH nodes, or this VM only? | A: more crawl-subnet VMs (user) | — |
@@ -35,6 +35,8 @@
 | D1-revision-driver | 2026-10-23 | Why revise now? | Journal extension with better evaluation + fresh (larger) data snapshot; no hard deadline | — |
 
 ## Lead actions
+- 2026-10-24: Merged E17-gold-capture (153fce2), 166 tests pass; recounted meta.json: 620 landing+imprint, 283 landing only, 49 failed, 48 Strato deferred. Known gaps: 8 pages with a persisting cookie banner, 10 click-found imprints may lack imprint text in the PNG (check DOM), 49 failed not retried (--retry-failed).
+- 2026-10-24: Crawl-speed check on E16 batches 0-7: limiter is not the brake (IONOS ~2.7, Strato ~2.0 req/s vs cap 4; 1.4% hosts throttled); 64 workers x 7.2 s/host mean; ~18% of batch time is the tail; host_not_found 18.8% of hosts, of which retryable (403/429/503/timeout/conn/refused) ~7.5k = 3.8% of all hosts. clamd CPU is the Owler service's, not ours; left alone.
 - 2026-10-24: merged E18 fix round (3ba4641): first address main by default, rejected save shows message; scripts/gold/e18_browser_check.py 22/22 PASS three runs (lead fixed relative --gold path). Labelling tool ready once D21 answered.
 - 2026-10-24: merged E18 (91f44b9 -> baa795e; 155 tests). Assignment checked: L1 520 primary + 80 second + 50 calibration = 650, L2/L3 215+60+50 = 325; 950 items one primary, 50 calibration labelled by all three (consensus = gold); 200 second labels on other labeller. Calibration counted within the 2:1:1 loads.
 - 2026-10-24: Assumed for D15 with three labellers: each item has one primary labeller, load split 2:1:1 across the 1,200 labels (1,000 primary + 200 second; about 600/300/300), second labels spread over all three pairs; calibration 50 items labelled by all three. No WARC in E17 (design doc says optional).
