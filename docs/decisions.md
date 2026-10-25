@@ -1,7 +1,7 @@
 # Lead record
 
 ## In flight
-- E20-fetch-memory-leak: subagent (worktree), find and fix the ~2.5 GB/batch RSS growth in ic fetch. On return: verify RSS over 2+ batches, tests, merge, then raise STEP in scripts/E16/run.sh for new ranges.
+- E20 follow-up: fix is merged; E16 range 25-27 is the first to run it (22-24 still runs old code). Check that process's RSS per batch (ps -o rss); if flat over 2+ batches, restart the driver at a range boundary with STEP=10 (run.sh reads STEP once).
 - E16-snapshot-crawl-seeds: lead-run, full 6,560,119 seeds shuffled (scripts/E16/shuffle.py, seed 20261024) in 263 batches of 25k, cap 8 (D18 via E15), one process per 3 batches (scripts/E16/run.sh, STEP=3, nohup; restarted 2026-10-25 04:22 UTC from batch 19 after RSS 25.5 GB + swap full), started 2026-10-24 09:30 UTC -> datasets/E16/seeds, logs results/E16/logs/ (driver.log says "all done" at end). Resumes on re-run; ranges can move to other machines (run.sh FIRST LAST). Check progress daily.
 
 ## Cards
@@ -36,6 +36,7 @@
 | D1-revision-driver | 2026-10-23 | Why revise now? | Journal extension with better evaluation + fresh (larger) data snapshot; no hard deadline | — |
 
 ## Lead actions
+- 2026-10-25: Merged E20-fetch-memory-leak (186 tests pass). Cause: requests_get_with_timeout abandoned its request thread on timeout, and endless bodies (streams) kept downloading into memory across batches; fix reads with stream=True and stops at the next 10 KiB chunk. Test set 3x1,000 hosts: RSS 637->1901 MB before vs 644->1061 MB after, traced flat 50 MB. Not fixed: tqdm overcount (cosmetic).
 - 2026-10-25: Merged E19-crawl-recovery-pass tooling (scripts/E19/); lead recount matches: 41,516 retryable of 525,000 hosts (batches 0-20, 7.9%: 403 21.3k, timeout 8.7k, 429/503 8.4k, conn 3.1k) + 48 Strato gold -> datasets/E19/recovery_all.txt. Many 403/429 on Cloudflare (bot challenge, may not recover from a new IP): pilot ~1,000 hosts first. Run waits on A5.
 - 2026-10-25: E16 memory leak ~2.5 GB per batch in one fetch process (25.5 GB RSS at batch 19, swap full, OOM risk to the Owler service). Stopped and restarted from 19 with 3 batches per process; resume kept 9,455 done hosts of batch 19. Root cause not fixed yet.
 - 2026-10-24: Merged E17-gold-capture (153fce2), 166 tests pass; recounted meta.json: 620 landing+imprint, 283 landing only, 49 failed, 48 Strato deferred. Known gaps: 8 pages with a persisting cookie banner, 10 click-found imprints may lack imprint text in the PNG (check DOM), 49 failed not retried (--retry-failed).
