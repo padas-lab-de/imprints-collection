@@ -12,4 +12,4 @@ Measured on E16 batches 0-7 (200k hosts):
 - **A** Speed from parallelism, keep polite limits: move batch ranges to the A5 VMs (each own IP + CPU), plus E19-crawl-recovery-pass: after the main pass, retry the retryable failures (and the 48 Strato gold hosts) from a second IP at low rate. Completeness up, no extra block risk.
 - **B** Fast first round with looser limits (cap 16, min_delay 0.1 s), then the same slow recovery round. Little gain (limiter is not the brake), higher risk: Strato/IONOS block the whole IP or file abuse reports, and blocked hosts then all fall to the slow round.
 
-Answer: (open)
+Answer (2026-10-25): "D22 A. Fix the leak"

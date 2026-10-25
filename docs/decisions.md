@@ -1,12 +1,14 @@
 # Lead record
 
 ## In flight
+- E20-fetch-memory-leak: subagent (worktree), find and fix the ~2.5 GB/batch RSS growth in ic fetch. On return: verify RSS over 2+ batches, tests, merge, then raise STEP in scripts/E16/run.sh for new ranges.
+- E19-crawl-recovery-pass: subagent (worktree), script to collect retryable failures (403/429/503/timeout/conn/refused) from E16 status TSVs + deferred Strato gold hosts and rerun them slowly from a 2nd IP; runs once A5 VMs exist. On return: verify list counts against TSVs, tests, merge.
 - E16-snapshot-crawl-seeds: lead-run, full 6,560,119 seeds shuffled (scripts/E16/shuffle.py, seed 20261024) in 263 batches of 25k, cap 8 (D18 via E15), one process per 3 batches (scripts/E16/run.sh, STEP=3, nohup; restarted 2026-10-25 04:22 UTC from batch 19 after RSS 25.5 GB + swap full), started 2026-10-24 09:30 UTC -> datasets/E16/seeds, logs results/E16/logs/ (driver.log says "all done" at end). Resumes on re-run; ranges can move to other machines (run.sh FIRST LAST). Check progress daily.
 
 ## Cards
 | ID | Date | Question | Outcome | Landed in |
 |---|---|---|---|---|
-| D22-crawl-speedup-route | 2026-10-24 | Speed up the crawl: parallel VMs + polite limits + recovery pass from a 2nd IP, or a faster first round with looser limits + slow second round? | open (recommend A) | — |
+| D22-crawl-speedup-route | 2026-10-24 | Speed up the crawl: parallel VMs + polite limits + recovery pass from a 2nd IP, or a faster first round with looser limits + slow second round? | A: polite limits, more VMs, recovery pass from 2nd IP (user) | — |
 | D21-guideline-open-points | 2026-10-24 | Accept the labelling guideline's seven judgement calls as drafted? | open (recommend A) | — |
 | A5-crawl-vm-access | 2026-10-24 | Hostnames + SSH access for the extra crawl-subnet VMs | open | — |
 | D20-crawl-machines | 2026-10-24 | Spread the crawl over more machines: more crawl-subnet VMs, FAITH nodes, or this VM only? | A: more crawl-subnet VMs (user) | — |
