@@ -65,6 +65,7 @@ PROVIDER_COOLDOWN = 10.0  # pause of a group after a 429/503
 RETRY_BACKOFF = 60.0  # a host with a 429/503 is fetched again after this many seconds
 MAX_RETRY_BACKOFF = 600.0  # cap for Retry-After
 THROTTLE_CODES = (429, 503)
+BODY_CHUNK_SIZE = 10 * 1024  # bytes per read of a response body (as requests' .content)
 # Paths probed when the landing page has no imprint link
 IMPRINT_PROBE_PATHS = ["/impressum", "/impressum.html", "/imprint"]
 # Word-boundary patterns for the imprint terms. "impressum" stays a substring match
@@ -139,6 +140,10 @@ OUTPUT_DIR = DATASETS_FOLDER
 _ctx = threading.local()
 
 
+class RequestAbandoned(Exception):
+    """Raised in a request thread whose caller stopped waiting for the response."""
+
+
 class RetryLater(Exception):
     """Raised on a 429/503 when the host may be fetched again later."""
 
@@ -192,8 +197,25 @@ def requests_get_with_timeout(
     - None if timeout or error occurs.
     """
 
+    # Set when this call gave up waiting; the request thread then stops reading the
+    # body. Without it, a body that never ends (internet radio stream, endless
+    # chunked response) kept the orphaned thread downloading into memory forever.
+    abandoned = threading.Event()
+
     def _request():
-        return requests.get(url, timeout=connect_read_timeout, **kwargs)
+        resp = requests.get(url, timeout=connect_read_timeout, stream=True, **kwargs)
+        try:
+            # Same as resp.content (requests reads 10 KiB chunks) but stoppable
+            chunks = []
+            for chunk in resp.iter_content(BODY_CHUNK_SIZE):
+                if abandoned.is_set():
+                    raise RequestAbandoned(url)
+                chunks.append(chunk)
+            resp._content = b"".join(chunks)
+            resp._content_consumed = True
+        finally:
+            resp.close()
+        return resp
 
     executor = ThreadPoolExecutor(max_workers=1)
     try:
@@ -213,6 +235,7 @@ def requests_get_with_timeout(
         _note_error(classify_error(e))
         return None
     finally:
+        abandoned.set()
         executor.shutdown(wait=False, cancel_futures=True)
 
 
