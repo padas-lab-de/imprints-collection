@@ -11,4 +11,5 @@ Mitigations already built (E21-gold-prefill, commit 4f71ad3): suggestions come f
 - **B** All labels pre-filled. Fastest; no unassisted reference, so the paper cannot show that the gold labels are not anchored on a model.
 - **C** No pre-fill (keep D15). Slowest; the cleanest gold set.
 
-**Answer:** (open)
+**Answer:** "D24 B" (2026-10-26): suggestions on all 1,000 items. `ic`-gold CLI default `--prefill all`.
+Consequence: second-labeller and calibration agreement includes anchoring on the shared suggestion; report it as agreement with suggestions shown.

@@ -18,8 +18,8 @@ def main(argv=None) -> None:
     ap.add_argument(
         "--prefill",
         choices=("primary", "all", "none"),
-        default="primary",
-        help="show suggestions from <data-dir>/prefill.jsonl for these items (D24; default: primary labels only)",
+        default="all",
+        help="show suggestions from <data-dir>/prefill.jsonl for these items (D24 B: default all)",
     )
     a = ap.parse_args(argv)
     roles = {"primary": ("primary",), "all": ("primary", "second", "calibration"), "none": ()}[a.prefill]

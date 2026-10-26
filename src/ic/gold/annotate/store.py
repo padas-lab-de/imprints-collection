@@ -11,8 +11,8 @@ Layout (docs/gold_set_design.md section 3), below ``data_dir`` (default ``datase
     prefill.jsonl               suggested labels (scripts/gold/e21_prefill.py), optional
 
 A labeller only ever reads its own labels file. Suggestions are shown only for the
-roles in ``prefill_roles`` (D24: primary labels; second and calibration labels stay
-from scratch, so agreement on them measures anchoring on the suggestion).
+roles in ``prefill_roles``. The CLI shows them on all items (D24 B); agreement between
+labellers therefore includes anchoring on the shared suggestion.
 """
 
 from __future__ import annotations
