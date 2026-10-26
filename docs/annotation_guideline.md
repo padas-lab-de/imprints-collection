@@ -1,6 +1,6 @@
-# Annotation guideline v0.2: imprints, addresses, operator type and topic
+# Annotation guideline: imprints, addresses, operator type and topic
 
-Status: v0.2 (2026-10-24), for E18 (1,000-item gold set, three labellers L1, L2, L3). It replaces v0.1 (old gold set). Decisions behind it: D14 A (label the live site, from the frozen capture), D15 C (label from scratch; no model output), D12 (town as written; location scored by geocoding), D11 (topic from the homepage). Examples are public company or municipality imprints from the E8/E12 pilot captures (`datasets/E8/render/<host>/`, `datasets/E12/render/<host>/`).
+Status: 2026-10-24, for E18 (1,000-item gold set, three labellers L1, L2, L3). Decisions behind it: D14 A (label the live site, from the frozen capture), D24 B (a model suggestion is shown on every item), D12 (town as written; location scored by geocoding), D11 (topic from the homepage). Examples are public company or municipality imprints from the E8/E12 pilot captures (`datasets/E8/render/<host>/`, `datasets/E12/render/<host>/`).
 
 ## 1. What one item is
 
@@ -8,8 +8,18 @@ One host (for example `heroes-burgers.de`). You see its **frozen capture**: full
 
 - Use the capture first. Open the live site (link in the tool header) only to settle something the capture lacks: no capture, empty capture, imprint not captured, an address behind a click. Then tick `used_live_site` and write why in `comment`.
 - The capture may be wrong (consent banner covers the page, cut-off screenshot, wrong page). Tick `capture_problem`, say what, and label from the live site.
-- You see no model output, no detector result and no stratum. Do not guess how an item was sampled.
+- You see a model suggestion (section 1.1), but no detector result and no stratum. Do not guess how an item was sampled.
 - One pass per item, typically a few minutes. If it takes more than about ten, label your best reading, add a `comment`, and move on.
+
+### 1.1 Working with suggestions
+
+Every item opens with a model suggestion. A banner and the pill "pre-filled" mark it. Suggested values are violet. Orange fields are "not found verbatim in the captured text: check it".
+
+- The suggestion is a draft. Check every field against the capture and accept, correct or delete it.
+- Delete spurious address rows: duplicates; banks, BaFin, chambers, ombudsman, Google; town-only rows taken from a "Sitz" or register-court line (3.1).
+- Known weak spots: a town-only main address, template placeholder text, a house number left in the street field, an extra country.
+- An empty suggestion does not mean there is no address. Look at the imprint yourself.
+- Never accept a value you have not seen in the capture.
 
 ## 2. Site status and imprint
 
@@ -82,7 +92,7 @@ Example (multi-address, CH). `blogs.letemps.ch`: the imprint of Le Temps lists a
 
 ### 3.3 Copying the fields
 
-Select the text in the DOM text pane and press the arrow button next to a field (copy, do not type). Keep spelling, case and abbreviations as written. Do not correct or expand anything.
+The suggestion pre-fills the fields; your job is to correct them. Compare each field with the DOM text. To fix one, select the text in the DOM text pane and press the arrow button next to the field (copy, do not type). Address cards have buttons for main, show evidence (it is highlighted in the DOM text) and remove. Keep spelling, case and abbreviations as written. Do not correct or expand anything.
 
 | Field | Rule |
 |---|---|
@@ -206,4 +216,4 @@ Personal data: copy addresses exactly as the imprint gives them, including the h
 
 ## 9. Calibration and agreement
 
-The first 50 items in your list are the same for all three labellers. Label them without talking. Then we compare, discuss every difference and change this guideline (v0.3) before the main round. Later, about 200 items are labelled twice independently; do not discuss them. The tool shows no other labeller's labels.
+The first 50 items in your list are the same for all three labellers. Label them without talking. Then we compare, discuss every difference and update this guideline after calibration, before the main round. Later, about 200 items are labelled twice independently; do not discuss them. The tool shows no other labeller's labels. Both labellers see the same model suggestion, so the two labels are independent of each other but not of the suggestion.
