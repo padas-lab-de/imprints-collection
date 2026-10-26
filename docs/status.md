@@ -19,6 +19,13 @@ Source: results/<model>/german/simple/eval/metrics.json.
 - Topic: largest confusions all go into Business and Professional Services (Community 32, Arts 30, Retail 23). Health and Medicine recall ~0.5 at precision ~1.0.
 - Caveat: topic is evaluated on the imprint text (gold has no homepage text), while production classifies the homepage.
 
+### E21-gold-prefill (suggestions for the labelling tool; spot-check results/E21/spotcheck.md)
+Model suggestions for the gold labels from qwen-agentworld-35b-a3b on innkube (prompt e21-v1), 1,000 hosts (982 lines in datasets/gold/prefill.jsonl).
+- Spot-check, 40 random live hosts: main address (or correct absence) right 34/40, operator type 38/40, topic 36/40, site status 39/40.
+- Filter e21-v1+filter1 (duplicates, town-only rows, third parties) reduced address rows from 1,254 to 950.
+- Shown on all items (D24-gold-prefill-scope, answer B); agreement on second and calibration labels is agreement with suggestions shown.
+- Next: measure time per item.
+
 ### E20-fetch-memory-leak (merged)
 Orphaned request threads kept downloading endless bodies; fixed. Test: RSS 1,901 -> 1,061 MB after 3x1,000 hosts. Production check pending.
 
