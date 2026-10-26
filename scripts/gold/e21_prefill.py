@@ -29,7 +29,7 @@ from urllib.parse import urlparse
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "src"))
 from ic.gold.annotate import schema  # noqa: E402
 
-PROMPT_VERSION = "e21-v1"
+PROMPT_VERSION = "e21-v1+filter1"
 LANDING_CHARS = 8_000
 IMPRINT_CHARS = 16_000
 
@@ -136,6 +136,41 @@ def verbatim(b: dict, texts: str) -> list[str]:
         ["evidence"] if not b["evidence"] else [])
 
 
+THIRD_PARTY = ("bank", "sparkasse", "volksbank", "bafin", "bundesanstalt", "ihk", "industrie- und handelskammer",
+               "handwerkskammer", "schlichtungsstelle", "ombudsmann", "amtsgericht", "google")
+
+
+def filter_addresses(addrs: list[dict], mi, counts: dict | None = None) -> tuple[list[dict], int | None]:
+    """Drop junk rows (no postcode unless po_box or a street with a house number, exact duplicates, non-operator-role rows whose evidence names a third party).
+    Return the kept rows and the remapped main index (fallback: first kept row with a main role)."""
+    counts = counts if counts is not None else {}
+    kept, seen, new_mi = [], {}, None
+    for i, b in enumerate(addrs):
+        key = tuple(_n(b[k]) for k in ("street", "number", "postcode", "town"))
+        if not b["postcode"] and not b["po_box"] and not (b["street"] and (b["number"] or re.search(r"\d", b["street"]))):
+            rule = "no_postcode"
+        elif key in seen:
+            rule = "duplicate"
+            if i == mi:  # the main row's twin stays; it takes over the main role
+                new_mi = seen[key]
+                if kept[new_mi]["role"] not in schema.MAIN_ROLES and b["role"] in schema.MAIN_ROLES:
+                    kept[new_mi]["role"] = b["role"]
+        elif b["role"] not in schema.MAIN_ROLES and any(t in b["evidence"].lower() for t in THIRD_PARTY):
+            rule = "third_party"
+        else:
+            rule = None
+        if rule:
+            counts[rule] = counts.get(rule, 0) + 1
+            continue
+        seen[key] = len(kept)
+        if i == mi:
+            new_mi = len(kept)
+        kept.append(b)
+    if mi is not None and new_mi is None:
+        new_mi = next((j for j, b in enumerate(kept) if b["role"] in schema.MAIN_ROLES), None)
+    return kept, new_mi
+
+
 def clean_model(ans: dict, texts: str) -> dict:
     """Keep only schema-valid values; drop addresses with nothing usable."""
     out: dict = {}
@@ -155,9 +190,11 @@ def clean_model(ans: dict, texts: str) -> dict:
         if b["street"] or b["postcode"] or b["town"]:
             b["check"] = verbatim(b, texts)
             addrs.append(b)
-    out["addresses"] = addrs
     mi = ans.get("main_address")
-    if isinstance(mi, int) and not isinstance(mi, bool) and 0 <= mi < len(addrs) and addrs[mi]["role"] in schema.MAIN_ROLES:
+    if not (isinstance(mi, int) and not isinstance(mi, bool) and 0 <= mi < len(addrs) and addrs[mi]["role"] in schema.MAIN_ROLES):
+        mi = None
+    out["addresses"], mi = filter_addresses(addrs, mi)
+    if mi is not None:
         out["main_address_index"] = mi
     if ans.get("operator_type") in schema.OPERATOR_TYPE:
         out["operator_type"] = ans["operator_type"]
@@ -201,6 +238,43 @@ def one(env: dict, model: str, d: Path) -> dict:
     return rec
 
 
+def refilter(path: Path) -> None:
+    """Apply filter_addresses to an existing prefill file in place (atomic), without calling the model."""
+    counts: dict = {}
+    before = [0, 0]  # hosts with an address, rows
+    after = [0, 0]
+    changed, vanished = [], []
+    lines = []
+    for l in path.open(encoding="utf-8"):
+        if not l.strip():
+            continue
+        rec = json.loads(l)
+        lab = rec["label"]
+        old = lab.get("addresses") or []
+        before[0] += bool(old)
+        before[1] += len(old)
+        if old:
+            omi = lab.get("main_address_index")
+            kept, mi = filter_addresses(old, omi, counts)
+            lab["addresses"] = kept
+            if mi is None:
+                lab.pop("main_address_index", None)
+            else:
+                lab["main_address_index"] = mi
+            if omi is not None and (mi is None or kept[mi] != old[omi]):
+                (vanished if mi is None else changed).append(rec["host"])
+        after[0] += bool(lab.get("addresses"))
+        after[1] += len(lab.get("addresses") or [])
+        rec["source"]["prompt"] = PROMPT_VERSION
+        lines.append(json.dumps(rec, ensure_ascii=False))
+    tmp = path.with_suffix(".jsonl.tmp")
+    tmp.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    tmp.replace(path)
+    print(json.dumps({"hosts_with_address": [before[0], after[0]], "rows": [before[1], after[1]], "dropped": counts,
+                      "main_changed": len(changed), "main_vanished": len(vanished),
+                      "changed_hosts": changed, "vanished_hosts": vanished}, ensure_ascii=False))
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--data-dir", default="datasets/gold")
@@ -208,7 +282,11 @@ def main() -> None:
     ap.add_argument("--workers", type=int, default=8)
     ap.add_argument("--limit", type=int, default=0)
     ap.add_argument("--env", default=".env")
+    ap.add_argument("--refilter", action="store_true", help="re-apply the address filters to prefill.jsonl, no model calls")
     a = ap.parse_args()
+    if a.refilter:
+        refilter(Path(a.data_dir) / "prefill.jsonl")
+        return
     env = load_env(Path(a.env))
     data = Path(a.data_dir)
     out = data / "prefill.jsonl"
