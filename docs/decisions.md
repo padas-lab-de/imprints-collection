@@ -18,7 +18,9 @@ Only on aspe (untracked): datasets/E16/seeds (batches 0-156), datasets/gold (952
   - aspe: A9 done 17:28 UTC: driver 52-156 stopped; child 55-57 (pid 4079498) finishes, then waiter pid 160995 starts `run.sh 58 106` (driver.log "handover: driver 58-106"). Python: worktree venv agent-a9795ebab2b1874a2.
   - apfel: `run.sh 157 262` (pid 56441) since 2026-10-26 10:09 UTC (PY=.venv); range 163-165 running at 16:24. Throttled hosts per batch equal on both VMs (aspe 52-55 2.4-3.4%, apfel 159-162 3.3-3.7%): E19 beside E16 on apfel does not hurt.
   - lorbeer (own IP 132.231.12.38, outside the crawl /24): batches 107-156 from the clone /home/dinzinger/GitHub/imprints-collection (PY=.venv), set up 2026-10-26 by an agent; shared VM (gold labelling, another user's jobs), watch free RAM. aspe's driver still says LAST=156: A9-aspe-driver-last-106 must land before aspe reaches 107.
-  - mispel (132.231.12.31, same /24 as lorbeer): A8 done; agent sets up the clone at /home/dinzinger/GitHub/imprints-collection and starts `run.sh 214 262`. Then the lead lowers apfel's driver to LAST=213 the A9 way (user cleared the plan).
+  - lorbeer verified: `run.sh 107 156` pid 347423 since 17:25 UTC, ~70 min/batch, 8 GB RAM available (clone at 636d938, 188 tests).
+  - mispel (132.231.12.31, same /24 as lorbeer): `run.sh 214 262` pid 1128613 since 17:33 UTC, ~85 min/batch, 24 GB available. Tree is a `git archive` of b0160a2, not a git repo (mispel cannot reach GitHub or aspe; relay via lorbeer); venv via `~/.local/bin/virtualenv` (no python3-venv); 188 tests.
+  - apfel's driver still says LAST=262: A10-apfel-driver-last-213 must land before apfel reaches 214.
   - D23: akazie/aralie/abelie wait for the user's extra local storage. Re-split when one joins: lower a driver's LAST by killing its run.sh (the child finishes its range) and restarting with the new LAST; never edit run.sh while a driver runs.
   - Check: `tail results/E16/logs/driver.log`, `ls datasets/E16/seeds | grep -c status_batch` per VM. Done when every driver logs "all done"; then collect fetch_status_batch*.tsv + records from all VMs into one place.
 - E20 production check: scripts/E16/rss_log.sh logs RSS every 10 min to results/E16/logs/rss.log on aspe and apfel. Not flat: within a range RSS climbs ~1.8 -> 5.4 GB over 3 batches (~0.6 GB/h; aspe 52-54, apfel 157-162), reset at each restart, so STEP stays 3.
@@ -27,6 +29,7 @@ Only on aspe (untracked): datasets/E16/seeds (batches 0-156), datasets/gold (952
 ## Cards
 | ID | Date | Question | Outcome | Landed in |
 |---|---|---|---|---|
+| A10-apfel-driver-last-213 | 2026-10-26 | Lower apfel's E16 driver to LAST=213 (mispel has 214-262); auto mode denied the lead | open, by 2026-10-28 12:00 UTC | — |
 | A9-aspe-driver-last-106 | 2026-10-26 | Lower aspe's E16 driver to LAST=106 (lorbeer has 107-156); auto mode denied the lead | "A9 go" (user); lead did it 17:28 UTC | aspe driver.log |
 | A8-mispel-ssh-key | 2026-10-26 | Add lorbeer's public key to mispel's authorized_keys | done (user) | — |
 | D24-gold-prefill-scope | 2026-10-26 | Which gold labels start from a model suggestion (reverses D15's no pre-labels)? | B: suggestions on all 1,000 items | `--prefill all` default |
