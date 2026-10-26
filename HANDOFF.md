@@ -11,7 +11,7 @@ All E-branches are merged into lead-record.
 - datasets/E16/seeds (5.9 GB, growing), datasets/E16/seed_hosts_shuffled.txt (6,560,119 hosts, the batch definition: all VMs must use this same file)
 - datasets/gold (2.1 GB: 952 captures, assignment.jsonl; labels/ not started), datasets/E12 (7.1 GB), datasets/E19 (recovery lists, built from batches 0-20)
 - .env (INNKUBE_API_KEY), photon geocoder (java, ~/opt/photon, running)
-- Venvs inside worktrees, do not remove: `.claude/worktrees/agent-a9795ebab2b1874a2/.venv` (E16 runs with it), `.claude/worktrees/agent-ac37363e2dedffa7e/.venv-render` + `.render-libs` (Playwright, gold capture). The other 13 worktrees are merged and can be cleaned up.
+- Venvs inside worktrees, do not remove: `.claude/worktrees/agent-a9795ebab2b1874a2/.venv` (E16 runs with it), `.claude/worktrees/agent-ac37363e2dedffa7e/.venv-render` + `.render-libs` (Playwright, gold capture). Other worktrees were removed 2026-10-26 (E20 memory logs kept in results/E20/scratch_e20); agent-adeb32947ffb0eb31 (E12, merged, clean) is locked by another claude process (pid 74924) and was left.
 
 ## E16 at handoff
 - 50 of 263 batches done (0-48 + part of 49); range 49-51 running since 09:03 UTC, ~58 min per batch, 3 batches per process (scripts/E16/run.sh, STEP=3). Measured ETA on `aspe` alone: ~8.5 days; over 5 VMs ~2 days.
