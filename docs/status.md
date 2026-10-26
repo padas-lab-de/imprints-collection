@@ -20,7 +20,7 @@ Source: results/<model>/german/simple/eval/metrics.json.
 - Caveat: topic is evaluated on the imprint text (gold has no homepage text), while production classifies the homepage.
 
 ### E21-gold-prefill (suggestions for the labelling tool; spot-check results/E21/spotcheck.md)
-Model suggestions for the gold labels from qwen-agentworld-35b-a3b on innkube (prompt e21-v1), 1,000 hosts (982 lines in datasets/gold/prefill.jsonl).
+Model suggestions for the gold labels from qwen-agentworld-35b-a3b on innkube (prompt e21-v1), 1,000 hosts.
 - Spot-check, 40 random live hosts: main address (or correct absence) right 34/40, operator type 38/40, topic 36/40, site status 39/40.
 - Filter e21-v1+filter1 (duplicates, town-only rows, third parties) reduced address rows from 1,254 to 950.
 - Shown on all items (D24-gold-prefill-scope, answer B); agreement on second and calibration labels is agreement with suggestions shown.
