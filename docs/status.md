@@ -38,7 +38,7 @@ Pilot, 1,000 random retryable hosts re-fetched from apfel (second IP, same /24 a
 - Round 1: 55,887 non-403 retryable hosts from E16 batches 0-49 (throttle 29.5k, timeout 19.4k, conn 7.4k of 1.25M crawled; 403 50.6k skipped).
 
 ### E17-gold-capture (merged; captures in datasets/gold/<host>/, summary results/E17/capture_summary.md)
-952 items captured: 620 landing+imprint, 283 landing only, 49 failed (37 no DNS); 48 Strato hosts deferred to a second IP: 5 captured cleanly from apfel on 2026-10-26 (Strato 503 for the rest), retry of 43 from akazie running. 8 pages keep a cookie banner after reject; 12 screenshots cut at 20,000 px (flagged). 2.22 GB.
+952 items captured: 620 landing+imprint, 283 landing only, 49 failed (37 no DNS); 48 Strato hosts deferred to a second IP: 26 captured cleanly on 2026-10-26 (5 from apfel, which Strato throttled with 503; 21 from akazie, no 503); 22 left (10 connection refused, 11 landing only, 1 static fetch error) for one more retry from akazie. 8 pages keep a cookie banner after reject; 12 screenshots cut at 20,000 px (flagged). 2.22 GB.
 
 ### E18-gold-labelling-tool (merged; docs/annotation_guideline.md v0.2, docs/annotation_howto.md)
 - Local labelling tool `PYTHONPATH=src python -m ic.gold.annotate --labeller L1|L2|L3` (screenshot, DOM text, form; select-and-split for addresses; no model or stratum info shown). Browser check scripts/gold/e18_browser_check.py: 22/22.
