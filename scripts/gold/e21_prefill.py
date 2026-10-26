@@ -103,8 +103,8 @@ def ask(env: dict, model: str, user: str) -> dict:
         try:
             with urllib.request.urlopen(req, timeout=180) as r:
                 txt = json.load(r)["choices"][0]["message"]["content"] or ""
-            m = re.search(r"\{.*\}", txt, re.S)
-            return json.loads(m.group(0) if m else txt)
+            # first object only (the model sometimes repeats it), raw tabs/newlines in strings allowed
+            return json.JSONDecoder(strict=False).raw_decode(txt[max(txt.find("{"), 0):])[0]
         except (urllib.error.URLError, TimeoutError, json.JSONDecodeError, KeyError):
             if attempt == 3:
                 raise
