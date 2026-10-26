@@ -10,7 +10,7 @@ Queued: Strato gold capture from a non-aspe IP (`bash scripts/gold/e17_run.sh --
   - Re-split when abelie joins (D23, A6): lower a driver's LAST by killing its run.sh (the child finishes its range) and restarting with the new LAST; never edit run.sh while a driver runs.
   - Check: `tail results/E16/logs/driver.log`, `ls datasets/E16/seeds | grep -c status_batch` per VM. Done when every driver logs "all done"; then collect fetch_status_batch*.tsv + records from all VMs into one place.
 - E20 production check: scripts/E16/rss_log.sh logs RSS every 10 min to results/E16/logs/rss.log on aspe and apfel. aspe 49-51: 4.29 GB at 64 min. If flat over 2+ batches within a range, raise STEP to 10 for new drivers.
-- E19-crawl-recovery-pass pilot: apfel, 1,000 hosts drawn from recovery_all.txt (41,564; python random.seed(20261026).sample) -> datasets/E19/pilot, logs results/E19/logs/{driver_pilot,fetch_recovery}.log, started 10:11 UTC. When done: scripts/E19/merge_report.py, recovery rate by failure type; Strato hosts tell whether apfel's IP (same /24 as aspe) is blocked too.
+- E19-crawl-recovery-pass round 1: apfel, `run.sh datasets/E19/round1/round1_no403.txt` (55,887 hosts = retryable non-403 causes from complete E16 batches 0-49 via collect.py --out-dir datasets/E19/round1 on aspe, minus the 1,000 pilot hosts, plus 48 Strato gold; sha256 f3ff5258...) since 2026-10-26 10:42 UTC -> datasets/E19/round1, log results/E19/logs/driver_round1.log + fetch_recovery.log. Pilot pace 1,000 hosts / 29 min. When done: copy fetch_status_batch*.tsv to aspe, `merge_report.py --recovery-dir datasets/E19/round1 --list .../recovery_input.txt`; batches 50+ get a round 2 after E16.
 
 ## Cards
 | ID | Date | Question | Outcome | Landed in |
@@ -47,6 +47,7 @@ Queued: Strato gold capture from a non-aspe IP (`bash scripts/gold/e17_run.sh --
 | D1-revision-driver | 2026-10-23 | Why revise now? | Journal extension with better evaluation + fresh (larger) data snapshot; no hard deadline | — |
 
 ## Lead actions
+- 2026-10-26: E19 pilot done (1,000 hosts from apfel, report results/E19/pilot_report.tsv on aspe, recounted from the TSV): 148 imprint found + 53 reachable without imprint = 20.1% recovered; throttle 54.1%, timeout 10.3%, conn 8.8%, 403 0.6% (3/525). Strato /24 hosts in the sample: 11 of 23 reachable from apfel. Assumed: recovery rounds skip 403 (0.6% yield, half the list); round 1 started.
 - 2026-10-26: Took over on lorbeer from HANDOFF.md (deleted). apfel: cloned lead-record, venv, 186 tests pass, seed file copied (sha256 equal), E16 157-262 started; aspe re-planned to 52-156. Fixed scripts/E19/run.sh: end batch "-1" was parsed by click as an option (run exited at once); now computes the last batch. Added scripts/E16/rss_log.sh. E19 pilot started on apfel.
 - 2026-10-26: Session ends on aspe; HANDOFF.md written for the new lead VM (code fetch over ssh, data locations, E16 split plan 52-262 over 5 VMs). E16 at 50/263 batches.
 - 2026-10-25: Merged E20-fetch-memory-leak (186 tests pass). Cause: requests_get_with_timeout abandoned its request thread on timeout, and endless bodies (streams) kept downloading into memory across batches; fix reads with stream=True and stops at the next 10 KiB chunk. Test set 3x1,000 hosts: RSS 637->1901 MB before vs 644->1061 MB after, traced flat 50 MB. Not fixed: tqdm overcount (cosmetic).

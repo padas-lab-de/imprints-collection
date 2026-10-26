@@ -22,8 +22,20 @@ Source: results/<model>/german/simple/eval/metrics.json.
 ### E20-fetch-memory-leak (merged)
 Orphaned request threads kept downloading endless bodies; fixed. Test: RSS 1,901 -> 1,061 MB after 3x1,000 hosts. Production check pending.
 
-### E19-crawl-recovery-pass (tooling merged, run pending on a 2nd IP)
+### E19-crawl-recovery-pass (pilot done; round 1 running on apfel)
 41,516 of 525,000 hosts (7.9%) retryable: 403 21.3k, timeout 8.7k, 429/503 8.4k, conn 3.1k; many on Cloudflare.
+Pilot, 1,000 random retryable hosts re-fetched from apfel (second IP, same /24 as aspe; 2 per provider, 2 s gap; results/E19/pilot_report.tsv on aspe):
+
+| First-pass cause | Hosts | Imprint found | Reachable, no imprint | Still failing | Recovered |
+|---|---|---|---|---|---|
+| 429/503 throttle | 222 | 120 | 21 | 81 | 54.1% |
+| 403 | 525 | 3 | 3 | 519 | 0.6% |
+| timeout | 185 | 19 | 23 | 143 | 10.3% |
+| conn/refused | 68 | 6 | 6 | 56 | 8.8% |
+| total | 1,000 | 148 | 53 | 799 | 14.8% (imprint found) |
+
+- 403 is site/CDN policy, not the IP: recovery rounds skip it. Strato hosts: 11 of 23 reachable from apfel, so the second IP is not blocked wholesale.
+- Round 1: 55,887 non-403 retryable hosts from E16 batches 0-49 (throttle 29.5k, timeout 19.4k, conn 7.4k of 1.25M crawled; 403 50.6k skipped).
 
 ### E17-gold-capture (merged; captures in datasets/gold/<host>/, summary results/E17/capture_summary.md)
 952 items captured: 620 landing+imprint, 283 landing only, 49 failed (37 no DNS); 48 Strato hosts deferred to a second IP (A5). 8 pages keep a cookie banner after reject; 12 screenshots cut at 20,000 px (flagged). 2.22 GB.
