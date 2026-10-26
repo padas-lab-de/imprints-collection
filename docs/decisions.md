@@ -9,7 +9,7 @@
 |---|---|---|---|---|
 | D22-crawl-speedup-route | 2026-10-24 | Speed up the crawl: parallel VMs + polite limits + recovery pass from a 2nd IP, or a faster first round with looser limits + slow second round? | A: polite limits, more VMs, recovery pass from 2nd IP (user) | — |
 | D21-guideline-open-points | 2026-10-24 | Accept the labelling guideline's seven judgement calls as drafted? | open (recommend A) | — |
-| A5-crawl-vm-access | 2026-10-24 | Hostnames + SSH access for the extra crawl-subnet VMs | open | — |
+| A5-crawl-vm-access | 2026-10-24 | Hostnames + SSH access for the extra crawl-subnet VMs | 2026-10-26: user moves the lead to a VM with SSH to aspe + 4 crawl VMs; check IPs there (HANDOFF.md) | — |
 | D20-crawl-machines | 2026-10-24 | Spread the crawl over more machines: more crawl-subnet VMs, FAITH nodes, or this VM only? | A: more crawl-subnet VMs (user) | — |
 | D19-link-expansion-depth | 2026-10-24 | Link expansion depth 1 all TLDs, plus depth 2-3 on .de/.at/.ch only, or depth 3 all TLDs? | C: depth 3 across all TLDs (user) | — |
 | D18-snapshot-provider-cap | 2026-10-24 | Full seed crawl at 4 or 8 parallel requests per provider network? | C -> E15 run, then lead picked 8 (B): Strato block 0.7% vs 0.44%, IONOS 0.24% vs 0.53%, found rate equal, 59 vs 74 min per 25k | — |
@@ -36,6 +36,7 @@
 | D1-revision-driver | 2026-10-23 | Why revise now? | Journal extension with better evaluation + fresh (larger) data snapshot; no hard deadline | — |
 
 ## Lead actions
+- 2026-10-26: Session ends on aspe; HANDOFF.md written for the new lead VM (code fetch over ssh, data locations, E16 split plan 52-262 over 5 VMs). E16 at 50/263 batches.
 - 2026-10-25: Merged E20-fetch-memory-leak (186 tests pass). Cause: requests_get_with_timeout abandoned its request thread on timeout, and endless bodies (streams) kept downloading into memory across batches; fix reads with stream=True and stops at the next 10 KiB chunk. Test set 3x1,000 hosts: RSS 637->1901 MB before vs 644->1061 MB after, traced flat 50 MB. Not fixed: tqdm overcount (cosmetic).
 - 2026-10-25: Merged E19-crawl-recovery-pass tooling (scripts/E19/); lead recount matches: 41,516 retryable of 525,000 hosts (batches 0-20, 7.9%: 403 21.3k, timeout 8.7k, 429/503 8.4k, conn 3.1k) + 48 Strato gold -> datasets/E19/recovery_all.txt. Many 403/429 on Cloudflare (bot challenge, may not recover from a new IP): pilot ~1,000 hosts first. Run waits on A5.
 - 2026-10-25: E16 memory leak ~2.5 GB per batch in one fetch process (25.5 GB RSS at batch 19, swap full, OOM risk to the Owler service). Stopped and restarted from 19 with 3 batches per process; resume kept 9,455 done hosts of batch 19. Root cause not fixed yet.

@@ -1,6 +1,6 @@
 # Status — German Imprints Collection, journal extension
 
-Updated 2026-10-24. Decisions and in-flight work: [decisions.md](decisions.md).
+Updated 2026-10-26. Decisions and in-flight work: [decisions.md](decisions.md).
 
 ## Goal
 Target: Scientific Data, Data Descriptor (D10-journal-venue).
@@ -18,6 +18,12 @@ Source: results/<model>/german/simple/eval/metrics.json.
 - Address errors (Qwen, 47 items): mostly town granularity (gold keeps district suffixes like "Grimma /OT Kaditzsch", model writes "Grimma"), single-letter spelling deviations, and a few wrong-address choices on multi-address imprints (ids 279, 678).
 - Topic: largest confusions all go into Business and Professional Services (Community 32, Arts 30, Retail 23). Health and Medicine recall ~0.5 at precision ~1.0.
 - Caveat: topic is evaluated on the imprint text (gold has no homepage text), while production classifies the homepage.
+
+### E20-fetch-memory-leak (merged)
+Orphaned request threads kept downloading endless bodies; fixed. Test: RSS 1,901 -> 1,061 MB after 3x1,000 hosts. Production check pending.
+
+### E19-crawl-recovery-pass (tooling merged, run pending on a 2nd IP)
+41,516 of 525,000 hosts (7.9%) retryable: 403 21.3k, timeout 8.7k, 429/503 8.4k, conn 3.1k; many on Cloudflare.
 
 ### E17-gold-capture (merged; captures in datasets/gold/<host>/, summary results/E17/capture_summary.md)
 952 items captured: 620 landing+imprint, 283 landing only, 49 failed (37 no DNS); 48 Strato hosts deferred to a second IP (A5). 8 pages keep a cookie banner after reject; 12 screenshots cut at 20,000 px (flagged). 2.22 GB.
