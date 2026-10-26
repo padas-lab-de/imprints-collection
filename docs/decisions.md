@@ -15,10 +15,10 @@ Two module leads share this record; each owns its In-flight block, cards and exp
 Lead VM: lorbeer (crawls E16 107-156 since 2026-10-26, D23). Crawl VMs: plain `ssh <vm>` (A7 done); repo at ~/GitHub/imprints-collection on aspe, apfel, abelie (abelie: symlink to /tank/docker/dinzinger, ready but idle per D23; akazie: clone for the Strato capture).
 Only on aspe (untracked): datasets/E16/seeds (batches 0-156), datasets/gold (952 captures, assignment.jsonl), datasets/E12, datasets/E19, .env, photon geocoder (~/opt/photon), venvs in worktrees agent-a9795ebab2b1874a2 (E16) and agent-ac37363e2dedffa7e (.venv-render + .render-libs for gold capture); do not remove.
 - E16-snapshot-crawl-seeds: 263 batches of 25k from datasets/E16/seed_hosts_shuffled.txt (sha256 d89354b8..., same file on every VM), cap 8, scripts/E16/run.sh STEP=3. 62 batches complete at 2026-10-26 16:24 UTC (aspe 0-55, apfel 157-162); ~1 h per batch per VM.
-  - aspe: `run.sh 52 156` (pid 3496284) since the 12:05 UTC handover; range 55-57 running at 16:24. Python: worktree venv agent-a9795ebab2b1874a2.
+  - aspe: A9 done 17:28 UTC: driver 52-156 stopped; child 55-57 (pid 4079498) finishes, then waiter pid 160995 starts `run.sh 58 106` (driver.log "handover: driver 58-106"). Python: worktree venv agent-a9795ebab2b1874a2.
   - apfel: `run.sh 157 262` (pid 56441) since 2026-10-26 10:09 UTC (PY=.venv); range 163-165 running at 16:24. Throttled hosts per batch equal on both VMs (aspe 52-55 2.4-3.4%, apfel 159-162 3.3-3.7%): E19 beside E16 on apfel does not hurt.
   - lorbeer (own IP 132.231.12.38, outside the crawl /24): batches 107-156 from the clone /home/dinzinger/GitHub/imprints-collection (PY=.venv), set up 2026-10-26 by an agent; shared VM (gold labelling, another user's jobs), watch free RAM. aspe's driver still says LAST=156: A9-aspe-driver-last-106 must land before aspe reaches 107.
-  - mispel: cleared by the user 2026-10-26, planned 214-262 (apfel then 166-213); waits on A8-mispel-ssh-key.
+  - mispel (132.231.12.31, same /24 as lorbeer): A8 done; agent sets up the clone at /home/dinzinger/GitHub/imprints-collection and starts `run.sh 214 262`. Then the lead lowers apfel's driver to LAST=213 the A9 way (user cleared the plan).
   - D23: akazie/aralie/abelie wait for the user's extra local storage. Re-split when one joins: lower a driver's LAST by killing its run.sh (the child finishes its range) and restarting with the new LAST; never edit run.sh while a driver runs.
   - Check: `tail results/E16/logs/driver.log`, `ls datasets/E16/seeds | grep -c status_batch` per VM. Done when every driver logs "all done"; then collect fetch_status_batch*.tsv + records from all VMs into one place.
 - E20 production check: scripts/E16/rss_log.sh logs RSS every 10 min to results/E16/logs/rss.log on aspe and apfel. Not flat: within a range RSS climbs ~1.8 -> 5.4 GB over 3 batches (~0.6 GB/h; aspe 52-54, apfel 157-162), reset at each restart, so STEP stays 3.
@@ -27,8 +27,8 @@ Only on aspe (untracked): datasets/E16/seeds (batches 0-156), datasets/gold (952
 ## Cards
 | ID | Date | Question | Outcome | Landed in |
 |---|---|---|---|---|
-| A9-aspe-driver-last-106 | 2026-10-26 | Lower aspe's E16 driver to LAST=106 (lorbeer has 107-156); auto mode denied the lead | open, by 2026-10-28 12:00 UTC | — |
-| A8-mispel-ssh-key | 2026-10-26 | Add lorbeer's public key to mispel's authorized_keys | open | — |
+| A9-aspe-driver-last-106 | 2026-10-26 | Lower aspe's E16 driver to LAST=106 (lorbeer has 107-156); auto mode denied the lead | "A9 go" (user); lead did it 17:28 UTC | aspe driver.log |
+| A8-mispel-ssh-key | 2026-10-26 | Add lorbeer's public key to mispel's authorized_keys | done (user) | — |
 | D24-gold-prefill-scope | 2026-10-26 | Which gold labels start from a model suggestion (reverses D15's no pre-labels)? | B: suggestions on all 1,000 items | `--prefill all` default |
 | D23-shared-vm-crawl | 2026-10-26 | Which of akazie/aralie/abelie (shared with another user's jobs) run E16? | E16 on apfel + aspe only for now; user sorts out the other three (user). 2026-10-26 later: lorbeer and mispel cleared too; the three wait for extra local storage (user) | — |
 | A7-ssh-dir-owner-lorbeer | 2026-10-26 | chown ~/.ssh on lorbeer (root-owned; ssh cannot save host keys) | done; known_hosts filled, push works | — |
@@ -63,7 +63,7 @@ Only on aspe (untracked): datasets/E16/seeds (batches 0-156), datasets/gold (952
 
 ## Lead actions
 - 2026-10-26: User: the collector pulls all VM outputs back to lorbeer, later. LLM extraction of the snapshot only after a gold-set model comparison picks one model for addresses and topics (crosses modules: the comparison needs the gold labels).
-- 2026-10-26: Started E22-link-frontier-round1 (agent, read-only on E16 output; datasets/E22 on aspe).
+- 2026-10-26: E22-link-frontier-round1 merged (scripts/E22/frontier.py; 189 tests pass; isort/black not installed on the VMs, so not run). 745,075 new hosts from 1.62M fetched (0.459/host); frontier count and sha256 rechecked on aspe. Results in status.md.
 - 2026-10-26: Data-collection lead took over on lorbeer; checked E16/E19/E20 on aspe and apfel (numbers in In flight).
 - 2026-10-26: E21-gold-prefill: tool redesign + suggestions (4f71ad3); prefill.jsonl for 1,000 hosts on lorbeer (2 malformed answers left, rule part only). Spot-check 34/40 main address right (results/E21/spotcheck.md). Post-filter e21-v1+filter1 (no model calls; backup prefill.v1.jsonl): rows 1254→950 (duplicate 210, no_postcode 55, third_party 39 non-main roles only); main address gone on 11 hosts (town-only rows). D24 B: `--prefill all` default.
 - 2026-10-26: Gold captures copied aspe -> lorbeer datasets/gold (2.3 GB, 993 dirs, 7,288 files, same count as aspe); labelling runs on lorbeer from now on (tool checked: GET / 200, no labels written). aspe copy kept as backup; labels/ lives on lorbeer only.

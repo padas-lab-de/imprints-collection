@@ -26,6 +26,13 @@ Model suggestions for the gold labels from qwen-agentworld-35b-a3b on innkube (p
 - Shown on all items (D24-gold-prefill-scope, answer B); agreement on second and calibration labels is agreement with suggestions shown.
 - Next: measure time per item.
 
+### E22-link-frontier-round1 (partial; scripts/E22/frontier.py, outputs on aspe datasets/E22/)
+Round-1 frontier from E16 discovered hosts, snapshot 2026-10-26 17:23 UTC (batches 0-57 aspe, 157-164 apfel; 1,624,945 seed hosts fetched); E14 rules (clean-hosts filter, drop seeds incl. www variant, E10 platform filter, www collapse).
+- 745,075 new hosts = 0.459 per fetched host (E14 on 20k: 0.59); 52.6% of unique discovered hosts are seeds. Lead recount of the file matches.
+- By TLD: .com 32.9%, .de 9.3%, .org 6.8%, .net 4.1%, .ch 2.1%, .at 1.4%, .eu 1.1%, other 42.3%; .de/.at/.ch 12.8% (E14 13.6%).
+- Projection to all 6.56M seeds: 2.74M (Heaps fit) to 3.01M (linear) depth-1 fetches, below E14's 3.5-3.9M; the drop is saturation (the fit gives ~0.63 at 20k). One fit from 10 checkpoints, extrapolated ~4x.
+- No overlap with the E19 recovery lists (those are seeds).
+
 ### E20-fetch-memory-leak (merged)
 Orphaned request threads kept downloading endless bodies; fixed. Test: RSS 1,901 -> 1,061 MB after 3x1,000 hosts. Production check pending.
 
