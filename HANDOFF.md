@@ -2,10 +2,10 @@
 
 Read CLAUDE.md, docs/status.md, docs/decisions.md first; this file only covers the move. Delete it once taken over.
 
-## Get the code (nothing is pushed)
-Branch `lead-record` (tip: this commit) exists only on `aspe`. From the new VM:
+## Get the code
+Branch `lead-record` is pushed to origin (github.com:padas-lab-de/imprints-collection, 2026-10-26): `git fetch origin && git checkout lead-record`. Alternative without GitHub:
 `git remote add aspe ssh://aspe/home/dinzinger/GitHub/imprints-collection && git fetch aspe && git checkout -b lead-record aspe/lead-record`
-(or ask the user to approve a push to origin). All E-branches are merged into lead-record.
+All E-branches are merged into lead-record.
 
 ## What stays on `aspe` (untracked, not in git)
 - datasets/E16/seeds (5.9 GB, growing), datasets/E16/seed_hosts_shuffled.txt (6,560,119 hosts, the batch definition: all VMs must use this same file)
