@@ -9,4 +9,4 @@ Key to add (lorbeer ~/.ssh/id_ed25519.pub):
 
 Unblocks: mispel takes E16 batches 214-262 from apfel's range (then needs the apfel driver lowered to 213, like A9).
 
-**Answer:** open.
+**Answer:** done by the user 2026-10-26.

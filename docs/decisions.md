@@ -20,7 +20,7 @@ Only on aspe (untracked): datasets/E16/seeds (batches 0-156), datasets/gold (952
   - lorbeer (own IP 132.231.12.38, outside the crawl /24): batches 107-156 from the clone /home/dinzinger/GitHub/imprints-collection (PY=.venv), set up 2026-10-26 by an agent; shared VM (gold labelling, another user's jobs), watch free RAM. aspe's driver still says LAST=156: A9-aspe-driver-last-106 must land before aspe reaches 107.
   - lorbeer verified: `run.sh 107 156` pid 347423 since 17:25 UTC, ~70 min/batch, 8 GB RAM available (clone at 636d938, 188 tests).
   - mispel (132.231.12.31, same /24 as lorbeer): `run.sh 214 262` pid 1128613 since 17:33 UTC, ~85 min/batch, 24 GB available. Tree is a `git archive` of b0160a2, not a git repo (mispel cannot reach GitHub or aspe; relay via lorbeer); venv via `~/.local/bin/virtualenv` (no python3-venv); 188 tests.
-  - apfel's driver still says LAST=262: A10-apfel-driver-last-213 must land before apfel reaches 214.
+  - apfel: A10 done 20:08 UTC: driver 157-262 stopped; child 166-168 (pid 1087416) finishes, then waiter pid 1226237 starts `run.sh 169 213` with PY=.venv (driver.log "handover: driver 169-213"). E19 untouched.
   - D23: akazie/aralie/abelie wait for the user's extra local storage. Re-split when one joins: lower a driver's LAST by killing its run.sh (the child finishes its range) and restarting with the new LAST; never edit run.sh while a driver runs.
   - Check: `tail results/E16/logs/driver.log`, `ls datasets/E16/seeds | grep -c status_batch` per VM. Done when every driver logs "all done"; then collect fetch_status_batch*.tsv + records from all VMs into one place.
 - E20 production check: scripts/E16/rss_log.sh logs RSS every 10 min to results/E16/logs/rss.log on aspe and apfel. Not flat: within a range RSS climbs ~1.8 -> 5.4 GB over 3 batches (~0.6 GB/h; aspe 52-54, apfel 157-162), reset at each restart, so STEP stays 3.
@@ -29,7 +29,7 @@ Only on aspe (untracked): datasets/E16/seeds (batches 0-156), datasets/gold (952
 ## Cards
 | ID | Date | Question | Outcome | Landed in |
 |---|---|---|---|---|
-| A10-apfel-driver-last-213 | 2026-10-26 | Lower apfel's E16 driver to LAST=213 (mispel has 214-262); auto mode denied the lead | open, by 2026-10-28 12:00 UTC | — |
+| A10-apfel-driver-last-213 | 2026-10-26 | Lower apfel's E16 driver to LAST=213 (mispel has 214-262); auto mode denied the lead | "A10 go" (user); lead did it 20:08 UTC | apfel driver.log |
 | A9-aspe-driver-last-106 | 2026-10-26 | Lower aspe's E16 driver to LAST=106 (lorbeer has 107-156); auto mode denied the lead | "A9 go" (user); lead did it 17:28 UTC | aspe driver.log |
 | A8-mispel-ssh-key | 2026-10-26 | Add lorbeer's public key to mispel's authorized_keys | done (user) | — |
 | D24-gold-prefill-scope | 2026-10-26 | Which gold labels start from a model suggestion (reverses D15's no pre-labels)? | B: suggestions on all 1,000 items | `--prefill all` default |

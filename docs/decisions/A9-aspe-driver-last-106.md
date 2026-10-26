@@ -13,4 +13,4 @@ nohup bash -c "while kill -0 $C 2>/dev/null; do sleep 60; done; exec bash script
 ```
 `<next>` = first batch after the child's range (child range is in `pgrep -af fetch`; e.g. child 58-60 -> 61).
 
-**Answer:** open.
+**Answer:** "A9 go" (user, 2026-10-26); done by the lead 17:28 UTC (driver 58-106 after child 55-57).
