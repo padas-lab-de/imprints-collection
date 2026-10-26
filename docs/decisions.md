@@ -1,15 +1,26 @@
 # Lead record
 
 ## In flight
-- E20 follow-up: fix is merged; E16 range 25-27 is the first to run it (22-24 still runs old code). Check that process's RSS per batch (ps -o rss); if flat over 2+ batches, restart the driver at a range boundary with STEP=10 (run.sh reads STEP once).
-- E16-snapshot-crawl-seeds: lead-run, full 6,560,119 seeds shuffled (scripts/E16/shuffle.py, seed 20261024) in 263 batches of 25k, cap 8 (D18 via E15), one process per 3 batches (scripts/E16/run.sh, STEP=3, nohup; restarted 2026-10-25 04:22 UTC from batch 19 after RSS 25.5 GB + swap full), started 2026-10-24 09:30 UTC -> datasets/E16/seeds, logs results/E16/logs/ (driver.log says "all done" at end). Resumes on re-run; ranges can move to other machines (run.sh FIRST LAST). Check progress daily.
+Lead VM: lorbeer (no crawling here). Crawl VMs over ssh: `ssh -o UserKnownHostsFile=~/.config/ic-ssh/known_hosts <vm>` (A7); repo on each at ~/GitHub/imprints-collection.
+Only on aspe (untracked): datasets/E16/seeds (batches 0-156), datasets/gold (952 captures, assignment.jsonl), datasets/E12, datasets/E19, .env, photon geocoder (~/opt/photon), venvs in worktrees agent-a9795ebab2b1874a2 (E16) and agent-ac37363e2dedffa7e (.venv-render + .render-libs for gold capture); do not remove.
+Queued: Strato gold capture from a non-aspe IP (`bash scripts/gold/e17_run.sh --hosts deferred_strato.txt --no-strato-filter`, needs the render venv on that VM).
+- E16-snapshot-crawl-seeds: 263 batches of 25k from datasets/E16/seed_hosts_shuffled.txt (sha256 d89354b8..., same file on every VM), cap 8, scripts/E16/run.sh STEP=3. 50 batches done by 2026-10-26 09:03 UTC (0-48 + part of 49).
+  - aspe: range 49-51 child (pid 3353443) finishing; a waiter then starts `run.sh 52 156` (driver.log line "handover"). Python: worktree venv agent-a9795ebab2b1874a2.
+  - apfel: `run.sh 157 262` since 2026-10-26 10:09 UTC (PY=.venv). Watch throttled counts in its first batch.
+  - Re-split when abelie joins (D23, A6): lower a driver's LAST by killing its run.sh (the child finishes its range) and restarting with the new LAST; never edit run.sh while a driver runs.
+  - Check: `tail results/E16/logs/driver.log`, `ls datasets/E16/seeds | grep -c status_batch` per VM. Done when every driver logs "all done"; then collect fetch_status_batch*.tsv + records from all VMs into one place.
+- E20 production check: scripts/E16/rss_log.sh logs RSS every 10 min to results/E16/logs/rss.log on aspe and apfel. aspe 49-51: 4.29 GB at 64 min. If flat over 2+ batches within a range, raise STEP to 10 for new drivers.
+- E19-crawl-recovery-pass pilot: apfel, 1,000 hosts drawn from recovery_all.txt (41,564; python random.seed(20261026).sample) -> datasets/E19/pilot, logs results/E19/logs/{driver_pilot,fetch_recovery}.log, started 10:11 UTC. When done: scripts/E19/merge_report.py, recovery rate by failure type; Strato hosts tell whether apfel's IP (same /24 as aspe) is blocked too.
 
 ## Cards
 | ID | Date | Question | Outcome | Landed in |
 |---|---|---|---|---|
+| D23-shared-vm-crawl | 2026-10-26 | Which of akazie/aralie/abelie (shared with another user's jobs) run E16? | open (recommend A: abelie only) | — |
+| A7-ssh-dir-owner-lorbeer | 2026-10-26 | chown ~/.ssh on lorbeer (root-owned; ssh cannot save host keys) | open | — |
+| A6-tank-dirs-crawl-vms | 2026-10-26 | sudo-create /tank/dinzinger on abelie (root disk 95% full) | open | — |
 | D22-crawl-speedup-route | 2026-10-24 | Speed up the crawl: parallel VMs + polite limits + recovery pass from a 2nd IP, or a faster first round with looser limits + slow second round? | A: polite limits, more VMs, recovery pass from 2nd IP (user) | — |
 | D21-guideline-open-points | 2026-10-24 | Accept the labelling guideline's seven judgement calls as drafted? | open (recommend A) | — |
-| A5-crawl-vm-access | 2026-10-24 | Hostnames + SSH access for the extra crawl-subnet VMs | 2026-10-26: user moves the lead to a VM with SSH to aspe + 4 crawl VMs; check IPs there (HANDOFF.md) | — |
+| A5-crawl-vm-access | 2026-10-24 | Hostnames + SSH access for the extra crawl-subnet VMs | done 2026-10-26: 5 VMs, own IPs 193.175.2.84-90 (one /24); limits -> D23, A6 | — |
 | D20-crawl-machines | 2026-10-24 | Spread the crawl over more machines: more crawl-subnet VMs, FAITH nodes, or this VM only? | A: more crawl-subnet VMs (user) | — |
 | D19-link-expansion-depth | 2026-10-24 | Link expansion depth 1 all TLDs, plus depth 2-3 on .de/.at/.ch only, or depth 3 all TLDs? | C: depth 3 across all TLDs (user) | — |
 | D18-snapshot-provider-cap | 2026-10-24 | Full seed crawl at 4 or 8 parallel requests per provider network? | C -> E15 run, then lead picked 8 (B): Strato block 0.7% vs 0.44%, IONOS 0.24% vs 0.53%, found rate equal, 59 vs 74 min per 25k | — |
@@ -36,6 +47,7 @@
 | D1-revision-driver | 2026-10-23 | Why revise now? | Journal extension with better evaluation + fresh (larger) data snapshot; no hard deadline | — |
 
 ## Lead actions
+- 2026-10-26: Took over on lorbeer from HANDOFF.md (deleted). apfel: cloned lead-record, venv, 186 tests pass, seed file copied (sha256 equal), E16 157-262 started; aspe re-planned to 52-156. Fixed scripts/E19/run.sh: end batch "-1" was parsed by click as an option (run exited at once); now computes the last batch. Added scripts/E16/rss_log.sh. E19 pilot started on apfel.
 - 2026-10-26: Session ends on aspe; HANDOFF.md written for the new lead VM (code fetch over ssh, data locations, E16 split plan 52-262 over 5 VMs). E16 at 50/263 batches.
 - 2026-10-25: Merged E20-fetch-memory-leak (186 tests pass). Cause: requests_get_with_timeout abandoned its request thread on timeout, and endless bodies (streams) kept downloading into memory across batches; fix reads with stream=True and stops at the next 10 KiB chunk. Test set 3x1,000 hosts: RSS 637->1901 MB before vs 644->1061 MB after, traced flat 50 MB. Not fixed: tqdm overcount (cosmetic).
 - 2026-10-25: Merged E19-crawl-recovery-pass tooling (scripts/E19/); lead recount matches: 41,516 retryable of 525,000 hosts (batches 0-20, 7.9%: 403 21.3k, timeout 8.7k, 429/503 8.4k, conn 3.1k) + 48 Strato gold -> datasets/E19/recovery_all.txt. Many 403/429 on Cloudflare (bot challenge, may not recover from a new IP): pilot ~1,000 hosts first. Run waits on A5.

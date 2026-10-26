@@ -19,9 +19,10 @@ LIST=${1:-$DATA/datasets/E19/recovery_all.txt}
 mkdir -p "$OUT" "$DATA/results/E19/logs" || exit 1
 [ -s "$OUT/recovery_input.txt" ] || cp "$LIST" "$OUT/recovery_input.txt" || exit 1
 cd "$ROOT" || exit 1   # ic reads topics/ and prompts/ relative to the repo root
-echo "$(date -u +%FT%TZ) recovery start: $(wc -l < "$OUT/recovery_input.txt") hosts, workers $WORKERS, provider conc $PCONC delay ${PDELAY}s"
+N=$(wc -l < "$OUT/recovery_input.txt"); LASTB=$(( (N + BATCH - 1) / BATCH - 1 ))   # click reads a literal -1 as an option
+echo "$(date -u +%FT%TZ) recovery start: $N hosts, workers $WORKERS, provider conc $PCONC delay ${PDELAY}s"
 PYTHONPATH="$ROOT/src" "$PY" -c "from ic.ic import main; main()" fetch \
-  "$OUT/recovery_input.txt" "$BATCH" 0 -1 "$WORKERS" \
+  "$OUT/recovery_input.txt" "$BATCH" 0 "$LASTB" "$WORKERS" \
   --provider-concurrency "$PCONC" --provider-delay "$PDELAY" \
   --provider-cooldown "$PCOOL" --retry-backoff "$BACKOFF" \
   --output-dir "$OUT" >> "$DATA/results/E19/logs/fetch_recovery.log" 2>&1
