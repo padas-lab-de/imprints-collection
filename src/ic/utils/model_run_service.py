@@ -19,7 +19,7 @@ class Address(BaseModel):
 
 
 class Topic(BaseModel):
-    thema: Literal[*TOPICS]  # type: ignore
+    thema: Literal[tuple(TOPICS)]  # type: ignore  # Literal[*TOPICS] needs Python 3.11
 
 
 def call_api(

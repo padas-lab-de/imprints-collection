@@ -11,4 +11,4 @@ Checked 2026-10-26 10:00 UTC (public IPs: akazie .84, aralie .85, abelie .86, ap
 - **A** Add abelie only (after A6); akazie and aralie stay out. E16 on 3 VMs.
 - **B** All five, with a guard that waits before each range while MemAvailable < 6 GB. More parallelism, risk to the other user's jobs on akazie/aralie.
 - **C** Ask the other user first; decide akazie/aralie on their answer.
-Answer: (pending)
+Answer (2026-10-26): "Regarding D23, let's go with apfel and aspe first and I see what I can do about the other three."
