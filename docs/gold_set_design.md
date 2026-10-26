@@ -1,6 +1,6 @@
 # Gold set design: a diversity-stratified gold set for German imprints
 
-Status: v0.2 (2026-10-24). v0.1 came from E8-gold-strata-pilot; v0.2 rewrites §2 and §7 for 1,000 items after the E12 screening of 10,000 hosts and records the drawn sample. Decisions it depends on: D12 (town copied as written, location scored by geocoding), D14 A (labels from the live rendered site; HTML, rendered DOM and screenshot archived), D15 C (one human labels every item from scratch; a second human independently labels about 20%; no model pre-labels), D17 B (1,000 items, no head-to-head comparison of site groups). Points that need the user are under "Open choices".
+Status: v0.2 (2026-10-24). v0.1 came from E8-gold-strata-pilot; v0.2 rewrites §2 and §7 for 1,000 items after the E12 screening of 10,000 hosts and records the drawn sample. Decisions it depends on: D12 (town copied as written, location scored by geocoding), D14 A (labels from the live rendered site; HTML, rendered DOM and screenshot archived), D15 C (one human labels every item from scratch; a second human independently labels about 20%; no model pre-labels; superseded by D24 B: every item starts from a model suggestion), D17 B (1,000 items, no head-to-head comparison of site groups). Points that need the user are under "Open choices".
 
 The new set replaces the old 1,000-item gold set. The old set has exactly one address per item, 999 of them in Germany, and no negatives (lead record, gold audit). So it cannot measure no-address answers, AT/CH sites, multiple addresses or how pages are produced.
 
@@ -187,7 +187,7 @@ Rules:
 
 The pilot already stores static HTML, rendered DOM, rendered text and full-page JPEG screenshots for 1,000 hosts under `datasets/E8/{static,render}/<host>/` (no WARC).
 
-## 4. Label schema, protocol and guideline v0.2
+## 4. Label schema, protocol and guideline
 
 ### Label schema (one JSON line per item)
 
@@ -226,11 +226,11 @@ Changes from v0.1: all addresses on the imprint are listed with a role, not only
 2. Annotator A labels every item from scratch, with no model output in view (no pre-labels; the stratum detectors are hidden too, so that they do not prime the label).
 3. Annotator B independently labels a random 20% of items, drawn stratified by the sampling strata so that every stratum has at least 10 double-labelled items.
 4. Agreement on the double-labelled items: per-field exact match for street, number, postcode, town (as written); location agreement by geocoding (D12; within 250 m on street level, same municipality on town level); Cohen's kappa for topic, operator type, imprint_present, no_address. Report per stratum where n >= 30.
-5. Adjudication: A and B resolve all disagreements on double-labelled items; a third person decides if they cannot agree. Systematic disagreements lead to guideline v0.3 and a re-check of the affected field on A's single-labelled items (by A, with a filter, not a full relabel).
+5. Adjudication: A and B resolve all disagreements on double-labelled items; a third person decides if they cannot agree. Systematic disagreements lead to a guideline update and a re-check of the affected field on A's single-labelled items (by A, with a filter, not a full relabel).
 6. Calibration round first: both label the same 50 items (not part of the 20%), discuss, fix the guideline, then start.
 7. Tool: a small local web form that shows the screenshot and DOM text side by side, with verbatim-span selection for address fields (copy, never type). Log time per item.
 
-### Outline of guideline v0.2
+### Outline of the guideline
 
 1. What one item is: a host, its frozen capture (screenshot + DOM text), and the live site only as a fallback.
 2. Site status and imprint presence (decision tree: is it a website? is there an imprint? where is it?).

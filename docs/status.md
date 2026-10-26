@@ -47,7 +47,7 @@ Pilot, 1,000 random retryable hosts re-fetched from apfel (second IP, same /24 a
 ### E17-gold-capture (merged; captures in datasets/gold/<host>/, summary results/E17/capture_summary.md)
 952 items captured: 620 landing+imprint, 283 landing only, 49 failed (37 no DNS); 48 Strato hosts deferred to a second IP: captured 2026-10-26 from apfel and akazie: 26 landing+imprint, 12 landing only, 10 failed (Strato throttles each IP after a few dozen requests). All 1,000 gold hosts now attempted: 941 captured (646 landing+imprint, 295 landing only), 59 failed. 8 pages keep a cookie banner after reject; 12 screenshots cut at 20,000 px (flagged). 2.22 GB.
 
-### E18-gold-labelling-tool (merged; docs/annotation_guideline.md v0.2, docs/annotation_howto.md)
+### E18-gold-labelling-tool (merged; docs/annotation_guideline.md, docs/annotation_howto.md)
 - Local labelling tool `PYTHONPATH=src python -m ic.gold.annotate --labeller L1|L2|L3` (screenshot, DOM text, form; select-and-split for addresses; no model or stratum info shown). Browser check scripts/gold/e18_browser_check.py: 22/22.
 - Assignment datasets/gold/assignment.jsonl: L1 650, L2 325, L3 325 labels (50 calibration by all three; 950 single primary; 200 second labels on a different person). Guideline judgement calls: card D21-guideline-open-points.
 
