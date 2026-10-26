@@ -1,6 +1,17 @@
 # Lead record
 
+## Modules (since 2026-10-26)
+Two module leads share this record; each owns its In-flight block, cards and experiments.
+- **Gold set** (labelling and capture of the gold dataset; E8, E12, E17, E18, E21, D14-D17, D21, D24): lead session on lorbeer.
+- **Data collection** (crawl for the new dataset version; E16, E19, E20, D23, crawl VMs): its own lead session.
+- IDs stay one sequence per kind for the project: `git pull` before issuing a card or experiment, take the next free number, commit and push the record at once.
+- Touch only your module's lines; anything that crosses modules (VM use, shared data on aspe/lorbeer, spend ledger) goes to Cards or a note in both In-flight blocks.
+
 ## In flight
+### Gold set
+- Labelling not started: waits on D21, names for L1-L3, access route, calibration date. Tool + prefill on lorbeer (datasets/gold, prefill.jsonl e21-v1+filter1). Proposed: time-per-item summary; check the 11 hosts whose main address the filter removed.
+
+### Data collection (owned by the data-collection lead)
 Lead VM: lorbeer (no crawling here). Crawl VMs: plain `ssh <vm>` (A7 done); repo at ~/GitHub/imprints-collection on aspe, apfel, abelie (abelie: symlink to /tank/docker/dinzinger, ready but idle per D23; akazie: clone for the Strato capture).
 Only on aspe (untracked): datasets/E16/seeds (batches 0-156), datasets/gold (952 captures, assignment.jsonl), datasets/E12, datasets/E19, .env, photon geocoder (~/opt/photon), venvs in worktrees agent-a9795ebab2b1874a2 (E16) and agent-ac37363e2dedffa7e (.venv-render + .render-libs for gold capture); do not remove.
 - E16-snapshot-crawl-seeds: 263 batches of 25k from datasets/E16/seed_hosts_shuffled.txt (sha256 d89354b8..., same file on every VM), cap 8, scripts/E16/run.sh STEP=3. 50 batches done by 2026-10-26 09:03 UTC (0-48 + part of 49).
