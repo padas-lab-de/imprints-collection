@@ -3,7 +3,7 @@
 ## In flight
 Lead VM: lorbeer (no crawling here). Crawl VMs over ssh: `ssh -o UserKnownHostsFile=~/.config/ic-ssh/known_hosts <vm>` (A7); repo on each at ~/GitHub/imprints-collection.
 Only on aspe (untracked): datasets/E16/seeds (batches 0-156), datasets/gold (952 captures, assignment.jsonl), datasets/E12, datasets/E19, .env, photon geocoder (~/opt/photon), venvs in worktrees agent-a9795ebab2b1874a2 (E16) and agent-ac37363e2dedffa7e (.venv-render + .render-libs for gold capture); do not remove.
-- E17 Strato gold capture: subagent (started 2026-10-26 ~10:50 UTC) builds .venv-render on apfel and runs `scripts/gold/e17_run.sh --hosts deferred_strato.txt --no-strato-filter` there; copies new captures to aspe datasets/gold/ without overwriting. On return: recount meta files, update E17 in status.md.
+- E17 Strato gold capture: apfel pass (2026-10-26 10:45-11:05 UTC, .venv-render + .render-libs on apfel) gave 5 clean captures of 48 (copied to aspe datasets/gold, now 957 dirs); Strato answered 503 to most, likely throttling apfel because its E16/E19 crawls hit Strato too. Leftovers on apfel: datasets/gold, datasets/gold_pass1_503. Retry of the other 43 from akazie (no crawl there), 1 worker, by subagent since ~11:20 UTC; clean captures only go to aspe.
 - E16-snapshot-crawl-seeds: 263 batches of 25k from datasets/E16/seed_hosts_shuffled.txt (sha256 d89354b8..., same file on every VM), cap 8, scripts/E16/run.sh STEP=3. 50 batches done by 2026-10-26 09:03 UTC (0-48 + part of 49).
   - aspe: range 49-51 child (pid 3353443) finishing; a waiter then starts `run.sh 52 156` (driver.log line "handover"). Python: worktree venv agent-a9795ebab2b1874a2.
   - apfel: `run.sh 157 262` since 2026-10-26 10:09 UTC (PY=.venv). Watch throttled counts in its first batch.
