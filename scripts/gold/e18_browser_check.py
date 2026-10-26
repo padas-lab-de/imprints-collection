@@ -2,7 +2,7 @@
 """End-to-end browser check of the labelling tool (headless Chromium via Playwright).
 
 Builds a scratch data dir (symlinks to a few real captures under datasets/gold plus
-a scratch assignment), starts the tool on it, clicks through four items and asserts
+a scratch assignment), starts the tool on it, clicks through five items (the last one pre-filled) and asserts
 the saved JSON lines. Never writes into datasets/gold/labels.
 
 Run from the repo root with a Python that has playwright and a headless Chromium:
@@ -56,6 +56,8 @@ def pick_hosts(gold: Path):
             continue
         if imp.is_file() and imp.stat().st_size > 200:
             n = len(POSTCODE.findall(imp.read_text(errors="replace")))
+            if n == 1 and "plain" in out and "pf" not in out:
+                out["pf"] = h
             if n == 1 and "plain" not in out:
                 out["plain"] = h
             if n >= 2 and "multi" not in out:
@@ -105,12 +107,19 @@ def main() -> int:
     gold = Path(a.gold).resolve()  # the scratch symlinks need an absolute target
     picks = pick_hosts(gold)
     print("hosts:", picks)
-    need = {"plain", "noimp", "dead", "multi"}
+    need = {"plain", "noimp", "dead", "multi", "pf"}
     if need - set(picks):
         print("missing real hosts for:", need - set(picks))
         return 2
     tmp = Path(tempfile.mkdtemp(prefix="e18check_"))
-    order = ["plain", "noimp", "dead", "multi"]
+    order = ["plain", "noimp", "dead", "multi", "pf"]
+    # a suggestion only for the last item (the others are labelled from scratch)
+    pf = next((l for l in open(gold / "prefill.jsonl") if json.loads(l)["host"] == picks["pf"]), None) if (gold / "prefill.jsonl").exists() else None
+    if pf is None:
+        pf = json.dumps({"host": picks["pf"], "source": {"model": "check", "prompt": "e18"}, "label": {
+            "site_status": "live", "imprint_present": True, "imprint_url": f"https://{picks['pf']}/impressum",
+            "imprint_location": "separate_page", "operator_type": "corporate", "topic": "Retail", "addresses": []}}) + "\n"
+    (tmp / "prefill.jsonl").write_text(pf)
     with open(tmp / "assignment.jsonl", "w") as f:
         for i, k in enumerate(order, 1):
             f.write(json.dumps({"item": i, "host": picks[k], "labeller": "L1", "role": "primary", "order": i}) + "\n")
@@ -141,6 +150,12 @@ def main() -> int:
             pg.goto(base, wait_until="networkidle")
             pg.wait_for_selector("#f fieldset")
 
+            def chip(v, scope="#f"):
+                return pg.locator(f"{scope} .chip[data-v='{v}']").first
+
+            def on(loc):
+                return "on" in (loc.get_attribute("class") or "").split()
+
             def save(next_=False):
                 pg.get_by_role("button", name="Save & next (Ctrl+Enter)" if next_ else "Save", exact=True).click()
                 pg.wait_for_timeout(600)
@@ -148,42 +163,48 @@ def main() -> int:
             # ---- item 1: plain imprint, one address via selection + split -----------
             h = picks["plain"]
             ok(pg.inner_text("#host") == h, "starts at first unlabelled item " + h)
-            pg.get_by_label("live", exact=True).check()
-            pg.get_by_label("yes", exact=True).check()
+            chip("live").click()
+            chip("true").click()
+            # one page switch drives both panes
+            pg.locator("#shot button[data-page=landing]").click()
+            ok(on(pg.locator("#textpane button[data-page=landing]")), "screenshot 'landing' also switches the text pane")
             pg.locator("#textpane button", has_text="imprint").click()
+            ok(on(pg.locator("#shot button[data-page=imprint]")), "text 'imprint' also switches the screenshot pane")
             pg.get_by_role("button", name="+ add address").click()
             sel = select_postcode_block(pg)
             ok(sel is not None, "selected an address block: " + repr(sel))
             pg.locator("button.pick", has_text="split").first.click()
-            ok(pg.locator("input[name=main]").first.is_checked(), "first address is main by default")
-            ok(not pg.get_by_label("none of these", exact=False).is_checked(), "'none of these' unchecked")
-            pc = pg.locator(".addr .row:has(span.k:text-is('postcode')) input").input_value()
+            ok(on(pg.locator(".addr .main-btn").first), "first address is main by default")
+            ok(not on(pg.locator("#f .chip", has_text="none of these")), "'none of these' off")
+            ok(pg.locator("#txt mark").count() > 0, "address evidence highlighted in the text")
+            pc = pg.locator(".addr input[data-k=postcode]").input_value()
             ok(re.fullmatch(r"\d{5}", pc) is not None, "postcode filled by split: " + pc)
-            pg.get_by_label("corporate", exact=True).check()
-            pg.locator("#f select").last.select_option("Business and Professional Services")
+            chip("corporate").click()
+            chip("Business and Professional Services").click()
             # rejected save: URL / where empty -> visible message
             save()
             ok(pg.locator("#errbox").is_visible() and "Not saved" in pg.inner_text("#errbox"), "rejected save shows a message")
             ok(not labels.exists(), "nothing written on rejected save")
-            pg.locator("#f input[type=text]").first.fill(f"https://{h}/impressum")
-            pg.locator("#f fieldset:has(legend:has-text('2. Imprint')) select").select_option("separate_page")
-            pg.locator("input[name=main]").first.check()
+            pg.locator("#f input[data-k=imprint_url]").fill(f"https://{h}/impressum")
+            chip("separate_page").click()
+            pg.locator(".addr .main-btn").first.click()
             save()
             ok(not pg.locator("#errbox").is_visible(), "message cleared after good save")
             rec = last_label(labels, h)
             ok(rec is not None and rec["main_address_index"] == 0 and rec["no_address_reason"] is None, "label saved with main address")
             ok(rec and rec["addresses"][0]["postcode"] == pc and rec["addresses"][0]["evidence"], "address fields + evidence saved")
             ok(rec and rec["operator_type"] == "corporate" and rec["annotator"] == "L1" and rec["capture_id"], "operator, annotator, capture_id saved")
+            ok(rec and rec["prefilled_from"] is None, "labelled from scratch: prefilled_from is null")
             pg.get_by_role("button", name="Next", exact=False).first.click()
 
             # ---- item 2: live site without imprint (negative) -----------------------
             h = picks["noimp"]
             pg.wait_for_function("document.querySelector('#host').textContent === '%s'" % h)
-            pg.get_by_label("live", exact=True).check()
-            pg.get_by_label("no", exact=True).check()
+            chip("live").click()
+            chip("false").click()
             ok("no_imprint" in pg.inner_text("#f"), "form shows automatic reason no_imprint")
-            pg.get_by_label("unclear", exact=True).check()
-            pg.locator("#f select").last.select_option("Retail")
+            chip("unclear").click()
+            chip("Retail").click()
             save()
             rec = last_label(labels, h)
             ok(rec and rec["no_address_reason"] == "no_imprint" and rec["addresses"] == [] and rec["imprint_location"] == "none", "negative saved: " + str(rec and rec["no_address_reason"]))
@@ -192,7 +213,7 @@ def main() -> int:
             # ---- item 3: not live ---------------------------------------------------
             h = picks["dead"]
             pg.wait_for_function("document.querySelector('#host').textContent === '%s'" % h)
-            pg.get_by_label("unreachable", exact=True).check()
+            chip("unreachable").click()
             ok(pg.locator("fieldset", has_text="Operator type").count() == 0, "operator/topic hidden for dead site")
             save()
             rec = last_label(labels, h)
@@ -202,8 +223,8 @@ def main() -> int:
             # ---- item 4: multi-address ---------------------------------------------
             h = picks["multi"]
             pg.wait_for_function("document.querySelector('#host').textContent === '%s'" % h)
-            pg.get_by_label("live", exact=True).check()
-            pg.get_by_label("yes", exact=True).check()
+            chip("live").click()
+            chip("true").click()
             pg.locator("#textpane button", has_text="imprint").click()
             for i in range(2):
                 pg.get_by_role("button", name="+ add address").click()
@@ -218,23 +239,34 @@ def main() -> int:
                     )
                 pg.locator("button.pick", has_text="split").nth(i).click()
             ok(pg.locator(".addr").count() == 2, "two address cards")
-            pg.locator("input[name=main]").nth(1).check()
-            ok(pg.locator("input[name=main]").nth(1).is_checked(), "main radio can be moved to address 2")
-            pg.locator("input[name=main]").nth(0).check()
-            ok(pg.get_by_label("multi_address", exact=True).is_checked(), "multi_address flag auto-ticked for two operator addresses")
-            pg.locator("#f input[type=text]").first.fill(f"https://{h}/impressum")
-            pg.locator("#f fieldset:has(legend:has-text('2. Imprint')) select").select_option("separate_page")
-            pg.get_by_label("corporate", exact=True).check()
-            pg.locator("#f select").last.select_option("Business and Professional Services")
+            pg.locator(".addr .main-btn").nth(1).click()
+            ok(on(pg.locator(".addr .main-btn").nth(1)), "main can be moved to address 2")
+            pg.locator(".addr .main-btn").nth(0).click()
+            ok(on(pg.locator("#f .chip", has_text="multi address")), "multi_address flag auto-ticked for two operator addresses")
+            pg.locator("#f input[data-k=imprint_url]").fill(f"https://{h}/impressum")
+            chip("separate_page").click()
+            chip("corporate").click()
+            chip("Business and Professional Services").click()
             save()
             rec = last_label(labels, h)
             ok(rec and len(rec["addresses"]) == 2 and rec["main_address_index"] == 0 and "multi_address" in rec["flags"], "multi-address label saved with flag")
+            pg.get_by_role("button", name="Next", exact=False).first.click()
+
+            # ---- item 5: pre-filled suggestion, accepted as is ---------------------
+            h = picks["pf"]
+            pg.wait_for_function("document.querySelector('#host').textContent === '%s'" % h)
+            ok(pg.locator("#pfbanner .banner").is_visible(), "pre-fill banner shown")
+            ok(pg.locator("#f .chip.on.sugg").count() >= 2, "suggested choices marked")
+            ok(on(pg.locator("#shot button[data-page=imprint]")) == on(pg.locator("#textpane button[data-page=imprint]")), "both panes on the same page")
+            save(True)
+            rec = last_label(labels, h)
+            ok(rec and rec["prefilled_from"] and rec["site_status"] == json.loads(pf)["label"].get("site_status"), "accepted suggestion saved with prefilled_from: " + str(rec and rec["prefilled_from"]))
             ok(not [d for d in dialogs if "Discard" in d], "no unexpected discard dialog")
             errs = [e for e in errs if "status of 400" not in e]  # the deliberately rejected save
             ok(not errs, "no JS errors: " + str(errs))
             # reload resumes after the last labelled item and keeps labels
             n_done = len({json.loads(l)["host"] for l in labels.read_text().splitlines()})
-            ok(n_done == 4, f"{n_done} items labelled")
+            ok(n_done == 5, f"{n_done} items labelled")
             b.close()
     finally:
         srv.terminate()

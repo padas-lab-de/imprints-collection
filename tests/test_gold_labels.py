@@ -192,6 +192,36 @@ def test_torn_last_line_ignored(tmp_path):
     assert "example.de" in st.load_labels()
 
 
+
+def write_prefill(st, *hosts):
+    with open(st.data_dir / "prefill.jsonl", "w") as f:
+        for h in hosts:
+            rec = {"host": h, "source": {"model": "m", "prompt": "p1"}, "label": {"site_status": "live", "addresses": [addr()]}}
+            f.write(json.dumps(rec) + "\n")
+
+
+def test_prefill_only_for_allowed_roles(tmp_path):
+    st = make_store(tmp_path)
+    write_prefill(st, "example.de", "missing.de")
+    st = Store(st.data_dir, "L1")  # default: primary items only (D24)
+    assert st.prefill("example.de")["source"] == "m/p1"
+    assert st.prefill("missing.de") is None  # calibration item: from scratch
+    assert st.prefill("other.de") is None  # not this labeller's item
+    assert [x["prefill"] for x in st.listing()] == [False, True]
+    assert Store(st.data_dir, "L1", prefill_roles=()).prefill("example.de") is None
+    assert Store(st.data_dir, "L1", prefill_roles=("primary", "calibration")).prefill("missing.de")
+
+
+def test_prefilled_from_recorded_by_server(tmp_path):
+    st = make_store(tmp_path)
+    rec, errs, _ = st.save_label(good(prefilled_from=True), 1)
+    assert errs == [] and rec["prefilled_from"] is None  # no suggestion exists: the client cannot claim one
+    write_prefill(st, "example.de")
+    st = Store(st.data_dir, "L1")
+    assert st.save_label(good(prefilled_from=True), 1)[0]["prefilled_from"] == "m/p1"
+    assert st.save_label(good(), 1)[0]["prefilled_from"] is None
+
+
 # ---- http -------------------------------------------------------------------
 @pytest.fixture
 def running(tmp_path):
@@ -223,7 +253,7 @@ def test_http_flow(running):
     assert "stratum" not in json.dumps(state)
     item = json.loads(http(base + "/api/item?host=example.de")[1])
     assert item["capture"]["texts"]["imprint"].startswith("Impressum")
-    assert "meta" not in item["capture"] and item["label"] is None
+    assert "meta" not in item["capture"] and item["label"] is None and item["prefill"] is None
     assert http(base + "/api/item?host=other.de")[0] == 404  # not assigned to L1
     assert http(base + "/img/example.de/landing.png")[0] == 200
     assert http(base + "/img/example.de/imprint.png")[0] == 404

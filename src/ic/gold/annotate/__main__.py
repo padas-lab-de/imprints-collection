@@ -15,8 +15,15 @@ def main(argv=None) -> None:
     ap.add_argument("--bind", default="127.0.0.1", help="interface (default: local only)")
     ap.add_argument("--data-dir", default="datasets/gold", help="captures, assignment, labels")
     ap.add_argument("--assignment", default=None, help="default: <data-dir>/assignment.jsonl")
+    ap.add_argument(
+        "--prefill",
+        choices=("primary", "all", "none"),
+        default="primary",
+        help="show suggestions from <data-dir>/prefill.jsonl for these items (D24; default: primary labels only)",
+    )
     a = ap.parse_args(argv)
-    serve(Store(a.data_dir, a.labeller, a.assignment), a.bind, a.port)
+    roles = {"primary": ("primary",), "all": ("primary", "second", "calibration"), "none": ()}[a.prefill]
+    serve(Store(a.data_dir, a.labeller, a.assignment, prefill_roles=roles), a.bind, a.port)
 
 
 if __name__ == "__main__":

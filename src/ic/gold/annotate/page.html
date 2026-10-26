@@ -5,88 +5,153 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Imprint labelling</title>
 <style>
-  :root { --bg:#f6f6f4; --panel:#fff; --ink:#1d1d1b; --mute:#6b6b66; --line:#d9d9d3; --acc:#1f5fbf; --ok:#1d7a3a; --bad:#b3261e; --warn:#8a5a00; }
+  :root {
+    --bg:#eef0f3; --panel:#ffffff; --panel2:#f7f8fa; --ink:#1b1f24; --mute:#69707a; --line:#d8dce2;
+    --acc:#2457c5; --acc-soft:#e3ebfb; --ok:#17803d; --bad:#b3261e; --warn:#a15c00;
+    --sugg:#7a45d6; --sugg-soft:#f1eafd; --chk:#d97706; --chk-soft:#fff3e0; --mark:#fff1a8; --mark-main:#ffd65c;
+    --shadow: 0 1px 2px rgba(16,24,40,.06), 0 1px 3px rgba(16,24,40,.08);
+  }
   @media (prefers-color-scheme: dark) {
-    :root { --bg:#161616; --panel:#202020; --ink:#e8e8e4; --mute:#9a9a94; --line:#3a3a36; --acc:#7aa7ff; --ok:#5fcf86; --bad:#ff8a80; --warn:#e0b050; }
+    :root {
+      --bg:#121417; --panel:#1b1e23; --panel2:#22262c; --ink:#e7e9ec; --mute:#9aa1ab; --line:#343a42;
+      --acc:#7ea6ff; --acc-soft:#1f2a44; --ok:#5fd08a; --bad:#ff8a80; --warn:#f0b357;
+      --sugg:#b794ff; --sugg-soft:#2a2240; --chk:#f5a524; --chk-soft:#3a2a10; --mark:#5c5220; --mark-main:#806a12;
+      --shadow: none;
+    }
   }
   * { box-sizing: border-box; }
   html, body { height: 100%; margin: 0; }
-  body { background: var(--bg); color: var(--ink); font: 14px/1.4 system-ui, sans-serif; display: flex; flex-direction: column; }
-  header { display: flex; gap: 10px; align-items: center; padding: 6px 12px; background: var(--panel); border-bottom: 1px solid var(--line); flex-wrap: wrap; }
-  header .host { font-weight: 600; font-size: 16px; }
+  body { background: var(--bg); color: var(--ink); font: 14px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; display: flex; flex-direction: column; }
+  button, select, input, textarea { font: inherit; color: inherit; }
+
+  /* header */
+  header { display: flex; gap: 10px; align-items: center; padding: 8px 14px; background: var(--panel); border-bottom: 1px solid var(--line); flex-wrap: wrap; box-shadow: var(--shadow); }
+  header .host { font-weight: 700; font-size: 17px; letter-spacing: .2px; }
   header .grow { flex: 1; }
-  .bar { width: 160px; height: 8px; background: var(--line); border-radius: 4px; overflow: hidden; display: inline-block; vertical-align: middle; }
-  .bar i { display: block; height: 100%; background: var(--ok); }
-  main { flex: 1; min-height: 0; display: grid; grid-template-columns: 1.1fr 1fr 1fr; gap: 8px; padding: 8px; }
-  .pane { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; display: flex; flex-direction: column; min-height: 0; }
-  .pane > .tabs { display: flex; gap: 4px; padding: 6px; border-bottom: 1px solid var(--line); align-items: center; }
-  .pane > .body { flex: 1; overflow: auto; min-height: 0; padding: 8px; }
-  button, select, input, textarea { font: inherit; color: inherit; background: var(--bg); border: 1px solid var(--line); border-radius: 4px; padding: 3px 6px; }
-  button { cursor: pointer; }
-  button.on { background: var(--acc); color: #fff; border-color: var(--acc); }
-  button.primary { background: var(--acc); color: #fff; border-color: var(--acc); font-weight: 600; padding: 6px 14px; }
-  button:disabled { opacity: .5; cursor: default; }
-  #shot img { width: 100%; display: block; cursor: zoom-in; }
+  .pill { font-size: 12px; padding: 2px 8px; border-radius: 999px; background: var(--panel2); border: 1px solid var(--line); color: var(--mute); }
+  .pill.cal { background: var(--chk-soft); color: var(--warn); border-color: var(--chk); }
+  .pill.pf { background: var(--sugg-soft); color: var(--sugg); border-color: var(--sugg); }
+  .bar { width: 180px; height: 8px; background: var(--line); border-radius: 4px; overflow: hidden; display: inline-block; vertical-align: middle; }
+  .bar i { display: block; height: 100%; background: var(--ok); transition: width .3s; }
+  .btn { min-height: 34px; padding: 5px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel2); cursor: pointer; }
+  .btn:hover { border-color: var(--acc); }
+  header select { min-height: 34px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel2); padding: 4px 8px; max-width: 260px; }
+  header a { color: var(--acc); }
+
+  /* panes */
+  main { flex: 1; min-height: 0; display: grid; grid-template-columns: 1.15fr 1fr 1.1fr; gap: 10px; padding: 10px; }
+  .pane { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; display: flex; flex-direction: column; min-height: 0; box-shadow: var(--shadow); overflow: hidden; }
+  .pane > .tabs { display: flex; gap: 8px; padding: 8px 10px; border-bottom: 1px solid var(--line); align-items: center; background: var(--panel2); }
+  .pane > .tabs b { font-size: 13px; text-transform: uppercase; letter-spacing: .6px; color: var(--mute); margin-right: 4px; }
+  .pane > .body { flex: 1; overflow: auto; min-height: 0; padding: 10px; }
+  .seg { display: inline-flex; border: 1px solid var(--line); border-radius: 9px; overflow: hidden; }
+  .seg button { min-height: 36px; min-width: 92px; padding: 6px 14px; border: 0; background: var(--panel); cursor: pointer; font-weight: 600; }
+  .seg button + button { border-left: 1px solid var(--line); }
+  .seg button.on { background: var(--acc); color: #fff; }
+  .seg button:disabled { color: var(--mute); cursor: default; font-weight: 400; }
+  .hint { font-size: 12px; color: var(--mute); }
+  #shot img { width: 100%; display: block; cursor: zoom-in; border-radius: 4px; }
   #shot img.full { width: auto; max-width: none; cursor: zoom-out; }
-  #txt { white-space: pre-wrap; word-break: break-word; font: 12.5px/1.45 ui-monospace, Menlo, Consolas, monospace; margin: 0; user-select: text; }
+  #txt { white-space: pre-wrap; word-break: break-word; font: 12.5px/1.5 ui-monospace, Menlo, Consolas, monospace; margin: 0; user-select: text; }
+  #txt mark { background: var(--mark); color: inherit; border-radius: 2px; box-shadow: 0 0 0 2px var(--mark); }
+  #txt mark.main { background: var(--mark-main); box-shadow: 0 0 0 2px var(--mark-main); }
+  #txt mark.flash { outline: 2px solid var(--acc); }
   .empty { color: var(--mute); font-style: italic; padding: 12px; }
-  .banner { background: #fff4d6; color: #5a3d00; border: 1px solid #e3c36a; padding: 6px 10px; border-radius: 4px; margin: 0 0 8px; }
-  @media (prefers-color-scheme: dark) { .banner { background: #3a2f10; color: #f0d68a; border-color: #6a5520; } }
-  form { display: flex; flex-direction: column; gap: 10px; }
-  fieldset { border: 1px solid var(--line); border-radius: 6px; padding: 6px 10px 8px; margin: 0; }
-  legend { font-weight: 600; padding: 0 4px; }
-  label.inl { display: inline-flex; gap: 4px; align-items: center; margin-right: 10px; }
-  .row { display: flex; gap: 6px; align-items: center; margin: 3px 0; flex-wrap: wrap; }
-  .row > span.k { width: 62px; color: var(--mute); }
-  .row input[type=text] { flex: 1; min-width: 0; }
-  .sel { padding: 1px 6px; }
-  .addr { border: 1px solid var(--line); border-radius: 6px; padding: 6px; margin: 6px 0; }
-  .addr.main { border-color: var(--acc); }
-  .addr h4 { margin: 0 0 4px; display: flex; gap: 8px; align-items: center; }
-  .errs { color: var(--bad); margin: 0; padding-left: 18px; }
-  .warns { color: var(--warn); margin: 0; padding-left: 18px; }
-  .ok { color: var(--ok); }
+  .banner { background: var(--chk-soft); color: var(--warn); border: 1px solid var(--chk); padding: 8px 12px; border-radius: 8px; margin: 0 0 10px; }
+  .banner.pf { background: var(--sugg-soft); color: var(--ink); border-color: var(--sugg); }
+  .banner.pf b { color: var(--sugg); }
+
+  /* form */
+  form { display: flex; flex-direction: column; gap: 12px; }
+  fieldset { border: 1px solid var(--line); border-radius: 10px; padding: 8px 12px 12px; margin: 0; background: var(--panel); }
+  legend { font-weight: 700; padding: 0 6px; font-size: 14px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chips.g2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .chips.g3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .chip { min-height: 40px; padding: 7px 14px; border: 1.5px solid var(--line); border-radius: 9px; background: var(--panel2); cursor: pointer; text-align: left; line-height: 1.2; transition: background .1s, border-color .1s; }
+  .chip:hover { border-color: var(--acc); background: var(--acc-soft); }
+  .chip.on { background: var(--acc); border-color: var(--acc); color: #fff; font-weight: 600; }
+  .chip.on.sugg { background: var(--sugg); border-color: var(--sugg); }
+  .chip.sm { min-height: 34px; padding: 5px 11px; }
+  .sub { margin-top: 10px; }
+  .sub > .k { display: block; font-size: 12px; color: var(--mute); margin: 0 0 4px; text-transform: uppercase; letter-spacing: .5px; }
+  .field { display: flex; gap: 6px; align-items: stretch; margin: 6px 0; }
+  .field > .k { width: 66px; flex: none; color: var(--mute); align-self: center; font-size: 13px; }
+  .field input, .field textarea { flex: 1; min-width: 0; min-height: 36px; border: 1.5px solid var(--line); border-radius: 8px; background: var(--panel); padding: 6px 9px; }
+  .field input:focus, .field textarea:focus { outline: none; border-color: var(--acc); }
+  .field textarea { font: 12.5px/1.4 ui-monospace, Menlo, Consolas, monospace; resize: vertical; }
+  .two { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 0 10px; }
+  .two.rev { grid-template-columns: minmax(0, 1.6fr) minmax(0, 2fr); }
+  .two .field > .k { width: auto; min-width: 30px; }
+  .two .field:first-child > .k { width: 66px; }
+  fieldset, .addr { min-width: 0; }
+  .field .sugg { border-color: var(--sugg); background: var(--sugg-soft); }
+  .field .chk { border-color: var(--chk); background: var(--chk-soft); }
+  .pick { flex: none; width: 38px; min-height: 36px; border: 1.5px solid var(--line); border-radius: 8px; background: var(--panel2); cursor: pointer; font-size: 15px; }
+  .pick:hover { border-color: var(--acc); background: var(--acc-soft); }
+  .pick.wide { width: 100%; font-size: 14px; }
+  .addr { border: 1.5px solid var(--line); border-radius: 10px; padding: 8px 10px; margin: 8px 0; }
+  .addr.main { border-color: var(--acc); box-shadow: 0 0 0 1px var(--acc) inset; }
+  .addr.hascheck { border-color: var(--chk); }
+  .addr h4 { margin: 0 0 6px; display: flex; gap: 8px; align-items: center; font-size: 14px; }
+  .addr h4 .grow { flex: 1; }
+  .checknote { font-size: 12.5px; color: var(--warn); margin: 2px 0 6px; }
+  .addbtn { width: 100%; min-height: 42px; border: 1.5px dashed var(--line); border-radius: 10px; background: transparent; cursor: pointer; font-weight: 600; color: var(--acc); }
+  .addbtn:hover { border-color: var(--acc); background: var(--acc-soft); }
+  textarea.comment { width: 100%; min-height: 60px; border: 1.5px solid var(--line); border-radius: 8px; background: var(--panel); padding: 6px 9px; margin-top: 8px; }
   .mute { color: var(--mute); }
-  textarea { width: 100%; }
-  @media (max-width: 1100px) { main { grid-template-columns: 1fr; overflow: auto; } .pane { min-height: 60vh; } }
+  .ok { color: var(--ok); font-weight: 600; }
+  .errs { margin: 2px 0 0; padding-left: 18px; }
+  .warns { color: var(--warn); margin: 0; padding-left: 18px; }
+  #errbox { background: #fde8e6; color: #8a1c14; border: 1px solid #e0988f; margin: 8px 10px 0; padding: 8px 12px; border-radius: 8px; }
+  .foot { border-top: 1px solid var(--line); padding: 10px; background: var(--panel2); display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .primary { flex: 1; min-height: 50px; border: 0; border-radius: 10px; background: var(--ok); color: #fff; font-weight: 700; font-size: 16px; cursor: pointer; }
+  .primary:hover { filter: brightness(1.08); }
+  #msg { flex-basis: 100%; }
+  #msg:empty { display: none; }
+  @media (max-width: 1100px) { main { grid-template-columns: 1fr; overflow: auto; } .pane { min-height: 70vh; } }
 </style>
 </head>
 <body>
 <header>
   <span class="host" id="host">...</span>
-  <span class="mute" id="pos"></span>
-  <span class="mute" id="phase"></span>
+  <span class="pill" id="pos"></span>
+  <span class="pill cal" id="phase" hidden>calibration round</span>
+  <span class="pill pf" id="pfpill" hidden>pre-filled</span>
   <a id="live" href="#" target="_blank" rel="noopener noreferrer" title="Fallback only. Say why in the comment.">open live site</a>
   <span class="grow"></span>
   <span class="bar"><i id="barfill" style="width:0"></i></span>
   <span id="prog" class="mute"></span>
-  <button id="prev" type="button">&#9664; Prev</button>
+  <button id="prev" class="btn" type="button">&#9664; Prev</button>
   <select id="jump" aria-label="Jump to item"></select>
-  <button id="next" type="button">Next &#9654;</button>
-  <button id="nextun" type="button">Next unlabelled</button>
-  <span class="mute">L: <b id="who"></b></span>
+  <button id="next" class="btn" type="button">Next &#9654;</button>
+  <button id="nextun" class="btn" type="button">Next unlabelled</button>
+  <span class="mute">Labeller <b id="who"></b></span>
 </header>
 <main>
   <section class="pane" id="shot">
     <div class="tabs"><b>Screenshot</b>
-      <button type="button" data-img="landing" class="on">landing</button>
-      <button type="button" data-img="imprint">imprint</button>
-      <span class="mute">click image = zoom</span>
+      <span class="seg"><button type="button" data-page="landing">landing</button><button type="button" data-page="imprint">imprint</button></span>
+      <span class="hint">click image to zoom</span>
     </div>
     <div class="body" id="shotbody"></div>
   </section>
   <section class="pane" id="textpane">
     <div class="tabs"><b>DOM text</b>
-      <button type="button" data-txt="landing" class="on">landing</button>
-      <button type="button" data-txt="imprint">imprint</button>
-      <span class="mute">select text, then press &#9664; at a field</span>
+      <span class="seg"><button type="button" data-page="landing">landing</button><button type="button" data-page="imprint">imprint</button></span>
+      <span class="hint">keys L / I switch both panes</span>
     </div>
-    <div class="body"><div id="banner"></div><pre id="txt"></pre></div>
+    <div class="body" id="txtbody"><div id="banner"></div><pre id="txt"></pre></div>
   </section>
-  <section class="pane">
-    <div class="tabs"><b>Label</b><span class="mute" id="saved"></span></div>
+  <section class="pane" id="labelpane">
+    <div class="tabs"><b>Label</b><span class="hint" id="saved"></span></div>
     <div id="errbox" role="alert" style="display:none"></div>
-    <div class="body"><form id="f" autocomplete="off" onsubmit="return false"></form></div>
+    <div class="body" id="formbody"><div id="pfbanner"></div><form id="f" autocomplete="off" onsubmit="return false"></form></div>
+    <div class="foot">
+      <button type="button" class="primary" id="savenext">Save &amp; next (Ctrl+Enter)</button>
+      <button type="button" class="btn" id="saveonly">Save</button>
+      <div id="msg"></div>
+    </div>
   </section>
 </main>
 <script>
@@ -103,12 +168,25 @@ function el(tag, attrs = {}, kids = []) {
   for (const c of [].concat(kids)) e.append(c.nodeType ? c : document.createTextNode(c));
   return e;
 }
+const MAIN_ROLES = ["operator", "operator_other_site", "representative", "editor"];
+const NICE = { live: "live", unreachable: "unreachable", http_error: "HTTP error", parked: "parked",
+  redirect_other_domain: "redirects elsewhere", not_a_website: "not a website",
+  separate_page: "separate page", landing_page: "on landing page", modal: "modal / popup", other_domain: "other domain", pdf: "PDF",
+  operator: "operator", operator_other_site: "operator, other site", representative: "representative", editor: "editor",
+  agency: "agency", host: "host", other: "other", text: "text", image: "image", js_only: "JS only",
+  corporate: "corporate", association: "association", public_body: "public body", sole_trader: "sole trader",
+  private_person: "private person", unclear: "unclear", multi_address: "multi address", po_box: "P.O. box",
+  obfuscated: "obfuscated", non_dach: "non-DACH", capture_problem: "capture problem", used_live_site: "used live site" };
+const nice = v => NICE[v] || v;
+
 let S = null;          // state: {labeller, items, enums}
 let idx = -1;          // index in S.items
 let cap = null;        // capture of current item
 let M = null;          // model of the current form
+let PF = new Set();    // top-level keys still holding the unchanged suggestion
+let pfSource = null;   // "model/prompt" when the form started from a suggestion
 let dirty = false;
-let shotTab = "landing", txtTab = "landing";
+let page = "landing";  // one page shown in both panes
 let lastSel = "";
 let activeSeconds = 0;
 
@@ -120,7 +198,7 @@ document.addEventListener("selectionchange", () => {
   if (n && $("#txt").contains(n)) lastSel = sel.toString();
 });
 function selText(multiline) {
-  let t = lastSel.replace(/ /g, " ");
+  let t = lastSel.replace(/ /g, " ");
   return multiline ? t.split("\n").map(s => s.trim()).filter(Boolean).join("\n")
                    : t.replace(/\s+/g, " ").trim();
 }
@@ -134,18 +212,37 @@ setInterval(() => { if (!document.hidden && document.hasFocus() && idx >= 0) act
 function blankModel(host) {
   return { host, site_status: "", imprint_present: null, imprint_url: "", imprint_location: "",
            addresses: [], main_address_index: null, no_address_reason: "", operator_type: "",
-           topic: "", topic_ambiguous: false, flags: [], comment: "" };
+           topic: "", topic_ambiguous: false, flags: [], comment: "", prefilled_from: false };
 }
 function blankAddr() {
   return { role: "operator", street: "", number: "", postcode: "", town: "", country: "",
-           po_box: false, modality: "text", evidence: "" };
+           po_box: false, modality: "text", evidence: "", _sugg: new Set(), _check: [] };
 }
 function fromSaved(l) {
   const m = blankModel(l.host);
   for (const k of Object.keys(m)) if (l[k] !== undefined && l[k] !== null) m[k] = l[k];
-  m.addresses = (l.addresses || []).map(a => Object.assign(blankAddr(), a));
+  m.prefilled_from = !!l.prefilled_from;
+  m.addresses = (l.addresses || []).map(a => Object.assign(blankAddr(), a, { _sugg: new Set(), _check: [] }));
   m.main_address_index = l.main_address_index === undefined ? null : l.main_address_index;
   m.none_op = !!(m.addresses.length && l.no_address_reason === "imprint_without_address");
+  return m;
+}
+function fromPrefill(p) {
+  const m = blankModel(cap.host), l = p.label || {};
+  PF = new Set();
+  for (const k of ["site_status", "imprint_present", "imprint_url", "imprint_location", "operator_type", "topic"])
+    if (l[k] !== undefined && l[k] !== null && l[k] !== "") { m[k] = l[k]; PF.add(k); }
+  m.addresses = (l.addresses || []).map(a => {
+    const b = Object.assign(blankAddr(), a);
+    b._check = (a.check || []).filter(k => k !== "country");
+    if ((a.check || []).includes("country")) b.country = "";  // country only when written
+    b._sugg = new Set(["role", "street", "number", "postcode", "town", "country", "po_box", "evidence"].filter(k => a[k]));
+    delete b.check;
+    return b;
+  });
+  if (Number.isInteger(l.main_address_index)) { m.main_address_index = l.main_address_index; PF.add("main"); }
+  if (m.addresses.length) PF.add("addresses");
+  m.prefilled_from = true;
   return m;
 }
 const isLive = () => ["live", "redirect_other_domain"].includes(M.site_status);
@@ -163,38 +260,39 @@ function normalise() {
   if (!M.addresses.length) M.main_address_index = null;
   else if (M.no_address_reason === "imprint_without_address") M.main_address_index = null;
   else if (M.main_address_index === null || M.main_address_index >= M.addresses.length) {
-    const i = M.addresses.findIndex(a => ["operator", "operator_other_site", "representative", "editor"].includes(a.role));
+    const i = M.addresses.findIndex(a => MAIN_ROLES.includes(a.role));
     M.main_address_index = i >= 0 ? i : 0;
   }
   if (M.addresses.some(a => a.po_box) && !M.flags.includes("po_box")) M.flags.push("po_box");
-  if (M.addresses.filter(a => !a.po_box && ["operator", "operator_other_site", "representative", "editor"].includes(a.role)).length >= 2 && !M.flags.includes("multi_address")) M.flags.push("multi_address");
+  if (M.addresses.filter(a => !a.po_box && MAIN_ROLES.includes(a.role)).length >= 2 && !M.flags.includes("multi_address")) M.flags.push("multi_address");
   if (!isLive()) { M.imprint_present = M.site_status ? false : null; M.imprint_location = M.site_status ? "none" : ""; }
 }
-function touch() { dirty = true; normalise(); renderForm(); }
+function touch() { dirty = true; normalise(); renderForm(); renderText(); }
 
-// ---- form ---------------------------------------------------------------
-function radios(name, values, cur, onchange, labels = {}) {
-  return values.map(v => el("label", { class: "inl" }, [
-    el("input", { type: "radio", name, value: v, checked: String(cur) === String(v), onchange: () => onchange(v) }),
-    labels[v] || v]));
+// ---- form widgets -------------------------------------------------------
+// one choice from a list, as large buttons; `sugg` marks an unchanged suggestion
+function chips(values, cur, onpick, opts = {}) {
+  return el("div", { class: "chips " + (opts.grid || "") },
+    values.map(v => el("button", {
+      type: "button", "data-v": String(v),
+      class: "chip" + (opts.sm ? " sm" : "") + (String(cur) === String(v) ? " on" + (opts.sugg ? " sugg" : "") : ""),
+      onclick: () => onpick(v) }, opts.labels ? opts.labels[v] : nice(v))));
 }
-function selectOf(values, cur, onchange, blank = true) {
-  const s = el("select", { onchange: e => onchange(e.target.value) },
-    (blank ? [el("option", { value: "" }, "-")] : []).concat(values.map(v => el("option", { value: v, selected: v === cur }, v))));
-  return s;
+function toggle(text, on, onflip, extra = "") {
+  return el("button", { type: "button", class: "chip sm" + (on ? " on" : "") + extra, "aria-pressed": on ? "true" : "false", onclick: () => onflip(!on) }, (on ? "✓ " : "") + text);
 }
-function pickBtn(fn, title = "copy selection from the text pane") {
-  return el("button", { type: "button", class: "pick sel", title, onclick: fn }, "◂");
-}
-function textField(label, obj, key, multiline = false) {
-  const inp = multiline
-    ? el("textarea", { rows: 2, oninput: e => { obj[key] = e.target.value; dirty = true; } }, obj[key] || "")
-    : el("input", { type: "text", value: obj[key] || "", oninput: e => { obj[key] = e.target.value; dirty = true; } });
-  const pick = pickBtn(() => {
-    const t = selText(multiline); if (!t) return;
-    obj[key] = t; dirty = true; normalise(); renderForm();
-  });
-  return el("div", { class: "row" }, [el("span", { class: "k" }, label), inp, pick]);
+function textField(label, obj, key, opts = {}) {
+  const cls = () => (opts.sugg && opts.sugg.has(key) ? "sugg" : "") + (opts.check && opts.check.includes(key) ? " chk" : "");
+  const onin = e => { obj[key] = e.target.value; dirty = true; if (opts.sugg) opts.sugg.delete(key); if (opts.pfKey) PF.delete(opts.pfKey); e.target.className = cls(); if (opts.retext) renderText(); };
+  const inp = opts.multiline
+    ? el("textarea", { rows: 3, "data-k": key, class: cls(), oninput: onin }, obj[key] || "")
+    : el("input", { type: "text", "data-k": key, class: cls(), value: obj[key] || "", oninput: onin });
+  if (opts.check && opts.check.includes(key)) inp.title = "not found verbatim in the captured text: check it";
+  const pick = el("button", { type: "button", class: "pick", title: "copy the selection from the text pane", onclick: () => {
+    const t = selText(opts.multiline); if (!t) return;
+    obj[key] = t; if (opts.sugg) opts.sugg.delete(key); if (opts.pfKey) PF.delete(opts.pfKey); touch();
+  } }, "◂");
+  return el("div", { class: "field" }, [el("span", { class: "k" }, label), inp, pick]);
 }
 function splitSelection(a) {
   const raw = selText(true); if (!raw) return;
@@ -212,84 +310,133 @@ function splitSelection(a) {
     if (after && /^[A-Za-zÄÖÜäöüß ]+$/.test(after)) a.country = after;
   }
   if (/postfach|p\.?\s?o\.?\s?box|case postale/i.test(one)) a.po_box = true;
+  a._sugg.clear(); a._check = [];
   touch();
 }
+function set(key, v, then) { M[key] = v; PF.delete(key); if (then) then(); touch(); }
+
+// ---- form ---------------------------------------------------------------
 function renderForm() {
-  const f = $("#f"); const scroll = f.parentNode.scrollTop; f.replaceChildren();
+  const f = $("#f"); const body = $("#formbody"); const scroll = body.scrollTop; f.replaceChildren();
   const E = S.enums;
   f.append(el("fieldset", {}, [el("legend", {}, "1. Site status"),
-    el("div", {}, radios("site_status", E.site_status, M.site_status, v => { M.site_status = v; touch(); }))]));
+    chips(E.site_status, M.site_status, v => set("site_status", v), { grid: "g3", sugg: PF.has("site_status") })]));
   if (isLive()) {
-    f.append(el("fieldset", {}, [el("legend", {}, "2. Imprint"),
-      el("div", { class: "row" }, [el("span", { class: "k" }, "present"),
-        ...radios("imprint_present", [true, false], M.imprint_present, v => { M.imprint_present = v === "true" || v === true; if (!M.imprint_present) { M.imprint_location = "none"; M.imprint_url = ""; } else if (M.imprint_location === "none") M.imprint_location = ""; touch(); }, { true: "yes", false: "no" })]),
-      ...(M.imprint_present ? [
-        textField("URL", M, "imprint_url"),
-        el("div", { class: "row" }, [el("span", { class: "k" }, "where"), selectOf(E.imprint_location.filter(x => x !== "none"), M.imprint_location, v => { M.imprint_location = v; touch(); })])] : [])]));
+    const imp = el("fieldset", {}, [el("legend", {}, "2. Imprint"),
+      chips([true, false], M.imprint_present, v => set("imprint_present", v, () => {
+        if (!v) { M.imprint_location = "none"; M.imprint_url = ""; } else if (M.imprint_location === "none") M.imprint_location = "";
+      }), { labels: { true: "imprint present", false: "no imprint" }, grid: "g2", sugg: PF.has("imprint_present") })]);
+    if (M.imprint_present) {
+      imp.append(el("div", { class: "sub" }, [el("span", { class: "k" }, "where"),
+        chips(E.imprint_location.filter(x => x !== "none"), M.imprint_location, v => set("imprint_location", v), { grid: "g3", sugg: PF.has("imprint_location") })]));
+      imp.append(textField("URL", M, "imprint_url", { sugg: PF, pfKey: "imprint_url" }));
+    }
+    f.append(imp);
   }
   // addresses
   const af = el("fieldset", {}, [el("legend", {}, "3. Addresses on the imprint")]);
   M.addresses.forEach((a, i) => {
     const isMain = M.main_address_index === i && M.no_address_reason !== "imprint_without_address";
-    const card = el("div", { class: "addr" + (isMain ? " main" : "") }, [
+    const o = { sugg: a._sugg, check: a._check, retext: false };
+    const card = el("div", { class: "addr" + (isMain ? " main" : "") + (a._check.length ? " hascheck" : "") }, [
       el("h4", {}, [`Address ${i + 1}`,
-        el("label", { class: "inl" }, [el("input", { type: "radio", name: "main", checked: isMain, onchange: () => { M.main_address_index = i; dirty = true; renderForm(); } }), "main"]),
-        el("span", { class: "grow", style: "flex:1" }),
-        el("button", { type: "button", onclick: () => { M.addresses.splice(i, 1); touch(); } }, "remove")]),
-      el("div", { class: "row" }, [el("span", { class: "k" }, "role"), selectOf(E.roles, a.role, v => { a.role = v; touch(); }, false),
-        el("span", { class: "k" }, "modality"), selectOf(E.modality, a.modality, v => { a.modality = v; touch(); }, false)]),
-      el("div", { class: "row" }, [el("button", { type: "button", class: "pick", title: "split the selected text into the fields below (check the result)", onclick: () => splitSelection(a) }, "◂ split selection into fields")]),
-      textField("street", a, "street"), textField("number", a, "number"), textField("postcode", a, "postcode"),
-      textField("town", a, "town"), textField("country", a, "country"),
-      el("div", { class: "row" }, [el("label", { class: "inl" }, [el("input", { type: "checkbox", checked: a.po_box, onchange: e => { a.po_box = e.target.checked; touch(); } }), "P.O. box (Postfach)"])]),
-      textField("evidence", a, "evidence", true),
+        el("button", { type: "button", class: "chip sm main-btn" + (isMain ? " on" + (PF.has("main") ? " sugg" : "") : ""), onclick: () => { M.main_address_index = i; PF.delete("main"); dirty = true; renderForm(); renderText(); } }, isMain ? "★ main" : "☆ make main"),
+        el("span", { class: "grow" }),
+        el("button", { type: "button", class: "chip sm", title: "show the evidence in the text pane", onclick: () => showEvidence(i) }, "⌖ show"),
+        el("button", { type: "button", class: "chip sm", onclick: () => { M.addresses.splice(i, 1); PF.delete("main"); touch(); } }, "✕ remove")]),
+      ...(a._check.length ? [el("div", { class: "checknote" }, "Not found verbatim in the text: " + a._check.join(", ") + ". Check these fields.")] : []),
+      chips(E.roles, a.role, v => { a.role = v; a._sugg.delete("role"); touch(); }, { sm: true, sugg: a._sugg.has("role") }),
+      el("div", { class: "field" }, [el("button", { type: "button", class: "pick wide", title: "split the selected text into the fields below (check the result)", onclick: () => splitSelection(a) }, "◂ split selection into fields")]),
+      el("div", { class: "two" }, [textField("street", a, "street", o), textField("no.", a, "number", o)]),
+      el("div", { class: "two rev" }, [textField("postcode", a, "postcode", o), textField("town", a, "town", o)]),
+      textField("country", a, "country", o),
+      textField("evidence", a, "evidence", Object.assign({ multiline: true }, o, { retext: true })),
+      el("div", { class: "sub" }, [el("span", { class: "k" }, "modality"),
+        el("div", { class: "chips" }, [chips(E.modality, a.modality, v => { a.modality = v; touch(); }, { sm: true }),
+          toggle("P.O. box (Postfach)", a.po_box, v => { a.po_box = v; a._sugg.delete("po_box"); touch(); }, a.po_box && a._sugg.has("po_box") ? " sugg" : "")])]),
     ]);
     af.append(card);
   });
-  af.append(el("div", { class: "row" }, [el("button", { type: "button", onclick: () => { M.addresses.push(blankAddr()); touch(); } }, "+ add address")]));
-  if (!M.addresses.length) af.append(el("div", { class: "mute" }, "No address listed. Reason (automatic): " + (M.no_address_reason || "-")));
-  else af.append(el("div", { class: "row" }, [el("label", { class: "inl" }, [el("input", { type: "checkbox", checked: !!M.none_op, onchange: e => { M.none_op = e.target.checked; touch(); } }), "none of these is the operator's (imprint without address)"])]));
+  af.append(el("button", { type: "button", class: "addbtn", onclick: () => { M.addresses.push(blankAddr()); touch(); } }, "+ add address"));
+  if (!M.addresses.length) af.append(el("div", { class: "mute", style: "margin-top:6px" }, "No address listed. Reason (automatic): " + (M.no_address_reason || "-")));
+  else af.append(el("div", { class: "sub" }, [toggle("none of these is the operator's (imprint without address)", !!M.none_op, v => { M.none_op = v; touch(); })]));
   f.append(af);
   if (isLive()) {
     f.append(el("fieldset", {}, [el("legend", {}, "4. Operator type"),
-      el("div", {}, radios("operator_type", E.operator_type, M.operator_type, v => { M.operator_type = v; dirty = true; }))]));
+      chips(E.operator_type, M.operator_type, v => set("operator_type", v), { grid: "g3", sugg: PF.has("operator_type") })]));
     f.append(el("fieldset", {}, [el("legend", {}, "5. Topic (whole site)"),
-      el("div", { class: "row" }, [selectOf(E.topics, M.topic, v => { M.topic = v; dirty = true; }),
-        el("label", { class: "inl" }, [el("input", { type: "checkbox", checked: M.topic_ambiguous, onchange: e => { M.topic_ambiguous = e.target.checked; dirty = true; } }), "ambiguous"])])]));
+      chips(E.topics, M.topic, v => set("topic", v), { grid: "g2", sugg: PF.has("topic") }),
+      el("div", { class: "sub" }, [toggle("topic is ambiguous", M.topic_ambiguous, v => { M.topic_ambiguous = v; dirty = true; renderForm(); })])]));
   }
   f.append(el("fieldset", {}, [el("legend", {}, "Flags and comment"),
-    el("div", {}, E.flags.map(fl => el("label", { class: "inl" }, [el("input", { type: "checkbox", checked: M.flags.includes(fl), onchange: e => { M.flags = M.flags.filter(x => x !== fl); if (e.target.checked) M.flags.push(fl); dirty = true; } }), fl]))),
-    el("textarea", { rows: 3, placeholder: "comment (required if you used the live site or the capture is broken)", oninput: e => { M.comment = e.target.value; dirty = true; } }, M.comment || "")]));
-  f.append(el("div", { class: "row" }, [
-    el("button", { type: "button", class: "primary", onclick: () => save(true) }, "Save & next (Ctrl+Enter)"),
-    el("button", { type: "button", onclick: () => save(false) }, "Save"),
-    el("span", { id: "msg" })]));
-  f.parentNode.scrollTop = scroll;
+    el("div", { class: "chips" }, E.flags.map(fl => toggle(nice(fl), M.flags.includes(fl), v => {
+      M.flags = M.flags.filter(x => x !== fl); if (v) M.flags.push(fl); dirty = true; renderForm(); }))),
+    el("textarea", { class: "comment", rows: 3, placeholder: "comment (required if you used the live site or the capture is broken)", oninput: e => { M.comment = e.target.value; dirty = true; } }, M.comment || "")]));
+  body.scrollTop = scroll;
 }
 
-// ---- panes ----------------------------------------------------------------
+// ---- panes: one page (landing / imprint) for screenshot and text ----------
+function setPage(p) {
+  page = p;
+  document.querySelectorAll("[data-page]").forEach(b => b.classList.toggle("on", b.dataset.page === page));
+  renderShot(); renderText(); $("#txtbody").scrollTop = 0; $("#shotbody").scrollTop = 0;
+}
+document.querySelectorAll("[data-page]").forEach(b => b.onclick = () => setPage(b.dataset.page));
 function renderShot() {
   const b = $("#shotbody"); b.replaceChildren();
-  const name = cap && cap.images[shotTab];
-  if (!name) { b.append(el("div", { class: "empty" }, `no ${shotTab} screenshot in the capture`)); return; }
-  const img = el("img", { src: `/img/${encodeURIComponent(cap.host)}/${name}`, alt: shotTab + " screenshot", onclick: () => img.classList.toggle("full") });
+  const name = cap && cap.images[page];
+  if (!name) { b.append(el("div", { class: "empty" }, `no ${page} screenshot in the capture`)); return; }
+  const img = el("img", { src: `/img/${encodeURIComponent(cap.host)}/${name}`, alt: page + " screenshot", onclick: () => img.classList.toggle("full") });
   b.append(img);
 }
-function renderText() {
-  const t = cap && cap.texts[txtTab];
-  $("#txt").textContent = t === undefined ? "" : t;
-  if (t === undefined) $("#txt").textContent = `(no ${txtTab} text in the capture)`;
-  document.querySelectorAll("[data-txt]").forEach(b => b.classList.toggle("on", b.dataset.txt === txtTab));
-  document.querySelectorAll("[data-img]").forEach(b => b.classList.toggle("on", b.dataset.img === shotTab));
+// where each address's evidence lines occur in a text: [[start, end, address index], ...]
+function evidenceRanges(text) {
+  const R = [];
+  M.addresses.forEach((a, i) => {
+    let from = 0;
+    for (const line of (a.evidence || "").split("\n").map(s => s.trim()).filter(s => s.length >= 3)) {
+      const re = new RegExp(line.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/\s+/g, "\\s+"), "gi");
+      re.lastIndex = from;
+      let m = re.exec(text);
+      if (!m && from) { re.lastIndex = 0; m = re.exec(text); }
+      if (m) { R.push([m.index, m.index + m[0].length, i]); from = m.index + m[0].length; }
+    }
+  });
+  return R.sort((x, y) => x[0] - y[0]);
 }
-document.querySelectorAll("[data-img]").forEach(b => b.onclick = () => { shotTab = b.dataset.img; renderShot(); renderText(); });
-document.querySelectorAll("[data-txt]").forEach(b => b.onclick = () => { txtTab = b.dataset.txt; renderText(); $("#txt").parentNode.scrollTop = 0; });
+function renderText() {
+  const pre = $("#txt"); pre.replaceChildren();
+  const t = cap && cap.texts[page];
+  if (t === undefined) { pre.textContent = `(no ${page} text in the capture)`; return; }
+  let pos = 0;
+  for (const [s, e, i] of evidenceRanges(t)) {
+    if (s < pos) continue;
+    pre.append(t.slice(pos, s), el("mark", { "data-a": String(i), class: i === M.main_address_index ? "main" : "" }, t.slice(s, e)));
+    pos = e;
+  }
+  pre.append(t.slice(pos));
+}
+function evidencePage(i) {
+  for (const p of ["imprint", "landing"]) {
+    const t = cap.texts[p];
+    if (t !== undefined && evidenceRanges(t).some(r => i === undefined || r[2] === i)) return p;
+  }
+  return null;
+}
+function showEvidence(i) {
+  const p = evidencePage(i);
+  if (!p) { alert("This address's evidence is not in the captured text."); return; }
+  if (p !== page) setPage(p);
+  const m = $(`#txt mark[data-a="${i}"]`);
+  if (m) { m.scrollIntoView({ block: "center" }); m.classList.add("flash"); setTimeout(() => m.classList.remove("flash"), 1200); }
+}
 
 function renderHeader() {
   const it = S.items[idx];
   $("#host").textContent = it.host;
   $("#pos").textContent = `#${idx + 1} of ${S.items.length}`;
-  $("#phase").textContent = it.phase === "calibration" ? "[calibration round]" : "";
+  $("#phase").hidden = it.phase !== "calibration";
+  $("#pfpill").hidden = !pfSource;
   $("#live").href = "https://" + it.host + "/";
   $("#jump").value = String(idx);
   const done = S.items.filter(x => x.done).length;
@@ -307,44 +454,49 @@ const PRECIOUS = () => !dirty || confirm("Discard unsaved changes on this item?"
 async function load(i) {
   if (i < 0 || i >= S.items.length) return;
   if (!PRECIOUS()) { $("#jump").value = String(idx); return; }
-  idx = i; dirty = false; activeSeconds = 0; showErrors([]); $("#saved").textContent = "";
+  idx = i; dirty = false; activeSeconds = 0; showErrors([]); $("#saved").textContent = ""; $("#msg").replaceChildren();
   const r = await fetch("/api/item?host=" + encodeURIComponent(S.items[i].host));
   const d = await r.json(); cap = d.capture;
-  M = d.label ? fromSaved(d.label) : blankModel(cap.host);
+  PF = new Set(); pfSource = null;
+  if (d.label) M = fromSaved(d.label);
+  else if (d.prefill) { M = fromPrefill(d.prefill); pfSource = d.prefill.source; }
+  else M = blankModel(cap.host);
   if (d.label) $("#saved").textContent = "saved " + d.label.saved_at + " (" + d.label.seconds_spent + " s)";
   const b = $("#banner"); b.replaceChildren();
-  if (!cap.exists) b.append(el("div", { class: "banner" }, "No capture for this host. Open the live site, label from it, tick used_live_site and capture_problem, and say so in the comment."));
+  if (!cap.exists) b.append(el("div", { class: "banner" }, "No capture for this host. Open the live site, label from it, tick used live site and capture problem, and say so in the comment."));
   else if (!Object.keys(cap.texts).length && !Object.values(cap.images).some(Boolean)) b.append(el("div", { class: "banner" }, "The capture is empty (site probably unreachable at capture time). Check the live site and say so in the comment."));
   if (cap.exists && !cap.capture_id) b.append(el("div", { class: "banner" }, "meta.json has no timestamp; capture_id will be empty."));
-  shotTab = cap.images.landing ? "landing" : (cap.images.imprint ? "imprint" : "landing");
-  txtTab = (cap.texts.landing !== undefined || cap.texts.imprint === undefined) ? "landing" : "imprint";
+  const pb = $("#pfbanner"); pb.replaceChildren();
+  if (pfSource) pb.append(el("div", { class: "banner pf" }, [el("b", {}, "Pre-filled suggestion "), `(${pfSource}). `,
+    "Violet = suggested, not yet confirmed; orange = not found verbatim in the text. Check against the text, fix what is wrong, then Save & next."]));
+  for (const p of ["landing", "imprint"]) document.querySelectorAll(`[data-page="${p}"]`).forEach(x => x.disabled = cap.texts[p] === undefined && !cap.images[p]);
   lastSel = ""; window.getSelection().removeAllRanges();
-  renderShot(); renderText(); renderHeader(); normalise(); renderForm();
-  $("#txt").parentNode.scrollTop = 0;
+  normalise(); renderHeader(); renderForm();
+  // start on the page that holds the main address, else the imprint, else the landing page
+  const ev = M.addresses.length ? (evidencePage(M.main_address_index === null ? undefined : M.main_address_index) || evidencePage()) : null;
+  setPage(ev || (cap.texts.imprint !== undefined || cap.images.imprint ? "imprint" : "landing"));
+  if (ev) { const m = $(`#txt mark.main`) || $("#txt mark"); if (m) m.scrollIntoView({ block: "center" }); }
+  $("#formbody").scrollTop = 0;
 }
 
 function showErrors(errs) {
   const b = $("#errbox"); b.replaceChildren();
   if (!errs.length) { b.style.display = "none"; return; }
   b.style.display = "block";
-  b.style.cssText += ";background:#fde8e6;color:#8a1c14;border:1px solid #e0988f;margin:6px;padding:6px 10px;border-radius:4px";
-  b.append(el("b", {}, "Not saved. Please fix:"), el("ul", { class: "errs", style: "color:inherit;margin:2px 0 0" }, errs.map(e => el("li", {}, e))));
+  b.append(el("b", {}, "Not saved. Please fix:"), el("ul", { class: "errs" }, errs.map(e => el("li", {}, e))));
 }
 async function save(next) {
   normalise();
-  const msg = $("#msg"); msg.className = ""; msg.replaceChildren();
+  const msg = $("#msg"); msg.replaceChildren();
   showErrors([]);
-  const label = JSON.parse(JSON.stringify(M));
+  const label = JSON.parse(JSON.stringify(M, (k, v) => (k === "_sugg" || k === "_check") ? undefined : v));
   if (label.imprint_present === null && !isLive()) label.imprint_present = false;
   label.no_address_reason = M.no_address_reason || null;
   const r = await fetch("/api/label", { method: "POST", headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ label, elapsed: activeSeconds }) });
   let d;
   try { d = await r.json(); } catch (e) { d = { ok: false, errors: ["Server did not answer (is the tool still running?)"] }; }
-  if (!d.ok) {
-    showErrors(d.errors);
-    return;
-  }
+  if (!d.ok) { showErrors(d.errors); return; }
   dirty = false; activeSeconds = 0;
   S.items[idx].done = true;
   fillJump(); renderHeader();
@@ -364,12 +516,19 @@ function goNextUnlabelled(from, wrap) {
   alert("All items are labelled.");
 }
 
+$("#savenext").onclick = () => save(true);
+$("#saveonly").onclick = () => save(false);
 $("#prev").onclick = () => load(idx - 1);
 $("#next").onclick = () => load(idx + 1);
 $("#nextun").onclick = () => goNextUnlabelled(idx + 1, true);
 $("#jump").onchange = e => load(parseInt(e.target.value, 10));
 $("#live").addEventListener("click", () => { if (M && !M.flags.includes("used_live_site")) { M.flags.push("used_live_site"); dirty = true; renderForm(); } });
-document.addEventListener("keydown", e => { if ((e.ctrlKey || e.metaKey) && e.key === "Enter") { e.preventDefault(); save(true); } });
+document.addEventListener("keydown", e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === "Enter") { e.preventDefault(); save(true); return; }
+  if (e.ctrlKey || e.metaKey || e.altKey || e.target.closest("input, textarea, select")) return;
+  const p = { l: "landing", i: "imprint" }[e.key.toLowerCase()];
+  if (p && !document.querySelector(`[data-page="${p}"]`).disabled) setPage(p);
+});
 window.addEventListener("beforeunload", e => { if (dirty) { e.preventDefault(); e.returnValue = ""; } });
 
 (async function init() {

@@ -63,7 +63,8 @@ def make_handler(store: Store):
                     return self._json({"error": "unknown host"}, 404)
                 cap = store.capture(host)
                 cap.pop("meta", None)  # nothing from meta.json is shown
-                self._json({"capture": cap, "label": store.load_labels().get(host)})
+                self._json({"capture": cap, "label": store.load_labels().get(host),
+                            "prefill": store.prefill(host)})
             elif u.path.startswith("/img/"):
                 parts = unquote(u.path[5:]).split("/")
                 p = store.image_path(parts[0], parts[1]) if len(parts) == 2 else None

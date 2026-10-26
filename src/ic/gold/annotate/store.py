@@ -8,8 +8,11 @@ Layout (docs/gold_set_design.md section 3), below ``data_dir`` (default ``datase
     <host>/imprint.png|.jpg, imprint.txt
     <host>/meta.json            provenance (capture timestamp, final URLs, ...)
     labels/<labeller>.jsonl     one JSON line per save; the last line per host wins
+    prefill.jsonl               suggested labels (scripts/gold/e21_prefill.py), optional
 
-A labeller only ever reads its own labels file.
+A labeller only ever reads its own labels file. Suggestions are shown only for the
+roles in ``prefill_roles`` (D24: primary labels; second and calibration labels stay
+from scratch, so agreement on them measures anchoring on the suggestion).
 """
 
 from __future__ import annotations
@@ -41,14 +44,22 @@ def now_utc() -> str:
 
 
 class Store:
-    def __init__(self, data_dir: str | Path, labeller: str, assignment: str | Path | None = None):
+    def __init__(
+        self,
+        data_dir: str | Path,
+        labeller: str,
+        assignment: str | Path | None = None,
+        prefill_roles: tuple[str, ...] = ("primary",),
+    ):
         self.data_dir = Path(data_dir)
+        self.prefill_roles = tuple(prefill_roles)
         self.labeller = labeller
         self.assignment_path = Path(assignment) if assignment else self.data_dir / "assignment.jsonl"
         self.labels_path = self.data_dir / "labels" / f"{labeller}.jsonl"
         self._lock = threading.Lock()
         self.items = self._load_assignment()
         self._by_host = {it["host"]: it for it in self.items}
+        self._prefill = self._load_prefill()
 
     # ---- assignment -------------------------------------------------
     def _load_assignment(self) -> list[dict]:
@@ -69,6 +80,26 @@ class Store:
             if not _HOST_RE.match(r["host"]):
                 raise ValueError(f"unsafe host name in assignment: {r['host']!r}")
         return rows
+
+    def _load_prefill(self) -> dict[str, dict]:
+        p = self.data_dir / "prefill.jsonl"
+        out: dict[str, dict] = {}
+        if p.exists():
+            with open(p, encoding="utf-8") as f:
+                for line in f:
+                    if line.strip():
+                        r = json.loads(line)
+                        out[r["host"]] = r
+        return out
+
+    def prefill(self, host: str) -> dict | None:
+        """Suggested label for this labeller's item, or None (role not pre-filled, no suggestion)."""
+        it = self._by_host.get(host)
+        r = self._prefill.get(host)
+        if not it or not r or it.get("role") not in self.prefill_roles:
+            return None
+        src = r.get("source") or {}
+        return {"label": r.get("label") or {}, "source": f"{src.get('model', '?')}/{src.get('prompt', '?')}"}
 
     def has_host(self, host: str) -> bool:
         return host in self._by_host
@@ -105,8 +136,11 @@ class Store:
         with self._lock:
             prev = self.load_labels().get(host)
             prior = float(prev.get("seconds_spent", 0)) if prev else 0.0
-            rec = {k: v for k, v in label.items() if k not in ("seconds_spent", "capture_id")}
+            rec = {k: v for k, v in label.items() if k not in ("seconds_spent", "capture_id", "prefilled_from")}
             rec["item"] = self._by_host[host].get("item")
+            pf = self.prefill(host)
+            # which suggestion the labeller saw (None = labelled from scratch)
+            rec["prefilled_from"] = pf["source"] if pf and label.get("prefilled_from") else None
             rec["capture_id"] = cap["capture_id"]
             rec["seconds_spent"] = int(round(prior + max(0.0, min(float(elapsed or 0), 3600.0))))
             rec["saved_at"] = now_utc()
@@ -174,6 +208,7 @@ class Store:
                 "host": it["host"],
                 "order": it["order"],
                 "phase": "calibration" if it.get("role") == "calibration" else "main",
+                "prefill": self.prefill(it["host"]) is not None,
                 "done": it["host"] in labels,
             }
             for it in self.items
