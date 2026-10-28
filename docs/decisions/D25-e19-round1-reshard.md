@@ -16,4 +16,4 @@ Context (measured 2026-10-28 ~06:50 UTC on apfel):
 
 Prepared for B (2026-10-28): scripts/E19/reshard.py, dry run on apfel gives 32,997 remaining hosts in 4 shards of ~8.2k.
 
-**Answer:** (open)
+**Answer:** "D25 B" (user, 2026-10-28). Includes approval to stop E19 pid 133338/133348 on apfel.
