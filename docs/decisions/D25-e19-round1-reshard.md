@@ -14,4 +14,6 @@ Context (measured 2026-10-28 ~06:50 UTC on apfel):
 - Top waits: Cloudflare 172.66.3 and 162.159.143, and Shopify 23.227.38.
 - Provider networks of all round-1 hosts (from E16 first-pass rows on aspe): 23.227.38 6,755; 162.159.143 3,522; 172.66.3 3,467; 81.169.145 2,278; 37.27.55 1,553.
 
+Prepared for B (2026-10-28): scripts/E19/reshard.py, dry run on apfel gives 32,997 remaining hosts in 4 shards of ~8.2k.
+
 **Answer:** (open)

@@ -65,6 +65,7 @@ Only on aspe (untracked): datasets/E16/seeds (batches 0-156), datasets/gold (952
 
 ## Lead actions
 - 2026-10-26: User: the collector pulls all VM outputs back to lorbeer, later. LLM extraction of the snapshot only after a gold-set model comparison picks one model for addresses and topics (crosses modules: the comparison needs the gold labels).
+- 2026-10-28: D25 option B prepared: scripts/E19/reshard.py + merge_report.py takes repeated --recovery-dir (branch e19-reshard-d25, cherry-picked; 193 tests). Dry run on apfel (read-only, /tmp/e19dry): total 55,887, done 22,890, remaining 32,997, shards 8,083/8,325/8,314/8,275. Use: stop pid 133338 first, run reshard, one empty OUT dir per VM, merge with round1 dir listed first.
 - 2026-10-26: E22-link-frontier-round1 merged (scripts/E22/frontier.py; 189 tests pass; isort/black not installed on the VMs, so not run). 745,075 new hosts from 1.62M fetched (0.459/host); frontier count and sha256 rechecked on aspe. Results in status.md.
 - 2026-10-26: Data-collection lead took over on lorbeer; checked E16/E19/E20 on aspe and apfel (numbers in In flight).
 - 2026-10-26: E21-gold-prefill: tool redesign + suggestions (4f71ad3); prefill.jsonl for 1,000 hosts on lorbeer (2 malformed answers left, rule part only). Spot-check 34/40 main address right (results/E21/spotcheck.md). Post-filter e21-v1+filter1 (no model calls; backup prefill.v1.jsonl): rows 1254→950 (duplicate 210, no_postcode 55, third_party 39 non-main roles only); main address gone on 11 hosts (town-only rows). D24 B: `--prefill all` default.
