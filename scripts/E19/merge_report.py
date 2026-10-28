@@ -73,7 +73,12 @@ def format_table(table):
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--e16-dir", default=str(ROOT / "datasets/E16/seeds"))
-    ap.add_argument("--recovery-dir", default=str(ROOT / "datasets/E19/recovery"))
+    ap.add_argument(
+        "--recovery-dir",
+        action="append",
+        help="recovery output dir; repeat to merge several (e.g. one per VM + the round-1 dir; "
+        "the last row of a host wins, later dirs after earlier). Default datasets/E19/recovery",
+    )
     ap.add_argument("--list", help="recovery host list; its hosts without a recovery row count as not_retried")
     ap.add_argument("--include-throttled", action="store_true", help="classify as collect.py --include-throttled")
     ap.add_argument("--out", help="write the table to this TSV")
@@ -81,7 +86,10 @@ def main(argv=None):
     listed = None
     if a.list:
         listed = [l.strip() for l in open(a.list) if l.strip()]
-    table = report(load_dir(a.e16_dir), load_dir(a.recovery_dir), listed, a.include_throttled)
+    rec_rows = []
+    for d in a.recovery_dir or [str(ROOT / "datasets/E19/recovery")]:
+        rec_rows.extend(load_dir(d))
+    table = report(load_dir(a.e16_dir), rec_rows, listed, a.include_throttled)
     text = format_table(table)
     print(text)
     if a.out:
