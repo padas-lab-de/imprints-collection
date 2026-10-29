@@ -28,6 +28,7 @@ Only on aspe (untracked): datasets/E16/seeds (batches 0-156), datasets/gold (952
 ## Cards
 | ID | Date | Question | Outcome | Landed in |
 |---|---|---|---|---|
+| D26-depth2-tld-order | 2026-10-29 | E22 depth 2: all TLDs unordered, all TLDs with DACH first, or DACH only? | open (recommend B) | — |
 | D25-e19-round1-reshard | 2026-10-28 | Finish E19 round 1: keep apfel alone, reshard the rest over 4 VMs after E16, or drop slow networks? | B ("D25 B", user) | apfel shard now; other VMs after their E16 |
 | A10-apfel-driver-last-213 | 2026-10-26 | Lower apfel's E16 driver to LAST=213 (mispel has 214-262); auto mode denied the lead | "A10 go" (user); lead did it 20:08 UTC | apfel driver.log |
 | A9-aspe-driver-last-106 | 2026-10-26 | Lower aspe's E16 driver to LAST=106 (lorbeer has 107-156); auto mode denied the lead | "A9 go" (user); lead did it 17:28 UTC | aspe driver.log |
@@ -65,6 +66,7 @@ Only on aspe (untracked): datasets/E16/seeds (batches 0-156), datasets/gold (952
 | D1-revision-driver | 2026-10-23 | Why revise now? | Journal extension with better evaluation + fresh (larger) data snapshot; no hard deadline | — |
 
 ## Lead actions
+- 2026-10-29: "E22 TLD yield go" (user): scripts/E22/tld_yield.py over the first 352k depth-1 hosts; DACH TLDs 12.5% of hosts give 73% of German Impressum pages (status.md). Issued D26-depth2-tld-order.
 - 2026-10-29: E16 done on aspe (00:21 UTC) and apfel (2026-10-28 18:54); E19 shard 1 started on aspe 00:22 UTC. "E22 go" (user): scripts/E22/run.sh (34c52e2); agents set up akazie/aralie/abelie and build frontier A.
 - 2026-10-28: D25 B carried out: stopped E19 round 1 on apfel (22,909 done), resharded the remaining 32,978 hosts, shard 0 started on apfel, waiters for shards 1-3 on aspe/lorbeer/mispel (sha256 checked on every VM).
 - 2026-10-26: User: the collector pulls all VM outputs back to lorbeer, later. LLM extraction of the snapshot only after a gold-set model comparison picks one model for addresses and topics (crosses modules: the comparison needs the gold labels).
