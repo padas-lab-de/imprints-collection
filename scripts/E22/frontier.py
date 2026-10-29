@@ -5,9 +5,12 @@ exact and www.-variant, platform filter, www/non-www collapse); seeds = the full
 Streams the discovered files; fetched hosts are counted from the fetch_status_batch*.tsv files.
 
 Usage: python frontier.py --seeds SEEDS.txt --input-dir DIR [DIR...] --out-dir OUT
+       [--known LIST...] [--name round1_frontier_partial] [--priority-tlds de,at,ch,eu,info,shop]
        [--overlap LIST...] [--total-hosts 6560119]
 Each input dir holds discovered_external_hosts.txt and fetch_status_batch*.tsv.
-Writes OUT/round1_frontier_partial.txt (+ .sha256) and OUT/frontier_stats.json.
+--known: further lists of already-crawled hosts, dropped like seeds (depth 2+: earlier frontiers).
+Writes OUT/<name>.txt and, split by TLD (D26-depth2-tld-order B: crawl priority first),
+OUT/<name>_priority.txt and OUT/<name>_rest.txt, each with a .sha256; and OUT/frontier_stats.json.
 """
 import argparse
 import hashlib
@@ -22,6 +25,24 @@ _E10 = (Path(__file__).resolve().parent.parent / "E10/candidates.py").read_text(
 exec(_E10[_E10.index("PLATFORMS = {") : _E10.index("def tld(h):")])  # PLATFORMS, platform()
 
 TLD_GROUPS = ("de", "at", "ch", "com", "eu", "org", "net")
+
+
+DEFAULT_PRIORITY_TLDS = "de,at,ch,eu,info,shop"  # E22 TLD yield: >10% German Impressum per host
+
+
+def write_list(path, hosts):
+    """Write sorted hosts and a sha256 file next to them; return the digest."""
+    data = "".join(h + "\n" for h in sorted(hosts)).encode()
+    path.write_bytes(data)
+    digest = hashlib.sha256(data).hexdigest()
+    path.with_name(path.name + ".sha256").write_text(f"{digest}  {path.name}\n")
+    return digest
+
+
+def split_priority(hosts, tlds):
+    """(hosts whose last label is in tlds, the rest)."""
+    pri = {h for h in hosts if h.rsplit(".", 1)[-1] in tlds}
+    return pri, set(hosts) - pri
 
 
 def variants(h):
@@ -122,15 +143,22 @@ def main():
     ap.add_argument("--seeds", required=True)
     ap.add_argument("--input-dir", nargs="+", required=True)
     ap.add_argument("--out-dir", required=True)
+    ap.add_argument("--known", nargs="*", default=[])
+    ap.add_argument("--name", default="round1_frontier_partial")
+    ap.add_argument("--priority-tlds", default=DEFAULT_PRIORITY_TLDS)
     ap.add_argument("--overlap", nargs="*", default=[])
     ap.add_argument("--total-hosts", type=int, default=6_560_119)
     a = ap.parse_args()
     out = Path(a.out_dir)
     out.mkdir(parents=True, exist_ok=True)
     seeds = set(read_hosts(a.seeds))
+    n_seed_list = len(seeds)
+    for k in a.known:
+        seeds.update(read_hosts(k))
     fetched, per_file = count_fetched(a.input_dir)
     final, st, curves = build(seeds, a.input_dir)
-    st["seed_list_hosts"] = len(seeds)
+    st["seed_list_hosts"] = n_seed_list
+    st["known_hosts"] = len(seeds) - n_seed_list
     st["fetched_hosts"] = len(fetched)
     st["fetched_per_file"] = per_file
     st["new_per_fetched_host"] = len(final) / max(1, len(fetched))
@@ -145,12 +173,16 @@ def main():
         st["projection_total_hosts"] = a.total_hosts
         st["projection_linear"] = round(len(final) / n * a.total_hosts)
         st["projection_heaps"] = round(len(final) * (a.total_hosts / n) ** b)
-    path = out / "round1_frontier_partial.txt"
-    data = "".join(h + "\n" for h in sorted(final)).encode()
-    path.write_bytes(data)
-    digest = hashlib.sha256(data).hexdigest()
-    (out / "round1_frontier_partial.txt.sha256").write_text(f"{digest}  {path.name}\n")
-    st["sha256"] = digest
+    st["sha256"] = write_list(out / f"{a.name}.txt", final)
+    tlds = set(a.priority_tlds.split(","))
+    pri, rest = split_priority(final, tlds)
+    st["priority_split"] = {
+        "tlds": sorted(tlds),
+        "priority": len(pri),
+        "rest": len(rest),
+        "sha256_priority": write_list(out / f"{a.name}_priority.txt", pri),
+        "sha256_rest": write_list(out / f"{a.name}_rest.txt", rest),
+    }
     for ov in a.overlap:
         ovs = set(read_hosts(ov))
         st.setdefault("overlap", {})[ov] = {

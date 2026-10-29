@@ -22,4 +22,4 @@ Depth 2 (D19 C: depth 3 across all TLDs): crawl all TLDs unordered, all TLDs wit
 **Recommend B:** keeps D19's coverage and makes any later stop cheap.
 
 ## Answer
-(open)
+"D26 B" (user, 2026-10-29). Implemented: frontier.py --known/--name/--priority-tlds writes <name>_priority.txt and <name>_rest.txt.
