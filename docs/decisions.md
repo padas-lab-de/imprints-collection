@@ -12,6 +12,7 @@ Two module leads share this record; each owns its In-flight block, cards and exp
 - Labelling not started: waits on D21, names for L1-L3, access route, calibration date. Tool + prefill on lorbeer (datasets/gold, prefill.jsonl e21-v1+filter1). Proposed: time-per-item summary; check the 11 hosts whose main address the filter removed.
 
 ### Data collection (owned by the data-collection lead)
+- 2026-10-31 ~07:00 UTC ("Go ahead with the next steps", user): two agents started. (1) E19: round-1 merged report (results/E19/round1_report.*), then round-2 list from E16 batches 50-262 (collect.py, minus round-1 hosts) in 2 shards on akazie + aralie (2nd IP, D22 A), OUT datasets/E19/round2_s<k>; code changes on branch e19-round2. (2) E22: frontier B (lorbeer 151-156 + mispel 258-262, known A) depth-1 on apfel -> datasets/E22/depth1B; depth-2 frontier on abelie (known seeds+A+B, D26 B) -> crawl of round2_frontier_priority only -> datasets/E22/depth2P; rest list waits for a brief; code on branch e22-frontier-b-depth2. If the lead is gone: check with the crawl-status skill.
 Lead VM: lorbeer (crawls E16 107-156 since 2026-10-26, D23). Crawl VMs: plain `ssh <vm>` (A7 done); repo at ~/GitHub/imprints-collection on aspe, apfel, abelie (abelie: symlink to /tank/docker/dinzinger, ready but idle per D23; akazie: clone for the Strato capture).
 Only on aspe (untracked): datasets/E16/seeds (batches 0-156), datasets/gold (952 captures, assignment.jsonl), datasets/E12, datasets/E19, .env, photon geocoder (~/opt/photon), venvs in worktrees agent-a9795ebab2b1874a2 (E16) and agent-ac37363e2dedffa7e (.venv-render + .render-libs for gold capture); do not remove.
 - E16-snapshot-crawl-seeds: 263 batches of 25k from datasets/E16/seed_hosts_shuffled.txt (sha256 d89354b8...), cap 8, scripts/E16/run.sh STEP=3. ALL DONE 2026-10-29 10:02 UTC: status files aspe 107 (0-106, 00:21), apfel 57 (157-213, 10-28 18:54), lorbeer 50 (107-156, 10:02), mispel 49 (214-262, 08:17) = 263. Next: collect all fetch_status_batch*.tsv + records into one place, count against E14; frontier B (frontier.py --known frontier A) from lorbeer 151-156 + mispel 258-262.
@@ -64,6 +65,7 @@ Only on aspe (untracked): datasets/E16/seeds (batches 0-156), datasets/gold (952
 | D1-revision-driver | 2026-10-23 | Why revise now? | Journal extension with better evaluation + fresh (larger) data snapshot; no hard deadline | — |
 
 ## Lead actions
+- 2026-10-31: "Go ahead with the next steps" (user): started E19 merge + round 2 and E22 frontier B + depth-2 priority (agents; see In flight).
 - 2026-10-30: project skill `.claude/skills/crawl-status/` (read-only status of all crawl VMs from vms.tsv); .gitignore now tracks `.claude/skills/`.
 - 2026-10-29: "E22 rebalance go" (user): abelie stops after batches 47-49; 50-52 to lorbeer, 53-56 to mispel (STEP 1). Expected end of depth 1 ~00:30 UTC 10-30 (aralie last).
 - 2026-10-29: D26 B carried out: frontier.py takes --known (earlier frontiers), --name, --priority-tlds and writes <name>_priority/_rest lists (195 tests on aspe). Depth-2 probe on aspe depth1A (status.md).
