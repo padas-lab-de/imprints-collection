@@ -14,12 +14,31 @@ PAGE = "<html><body><p>Impressum Müller GmbH</p></body></html>".encode("UTF-8")
 
 class _Handler(BaseHTTPRequestHandler):
     sent = {}  # path -> bytes of body sent so far
+    hits = {}  # path -> number of requests
 
     def log_message(self, *args):
         pass
 
     def do_GET(self):
-        if self.path == "/page":
+        _Handler.hits[self.path] = _Handler.hits.get(self.path, 0) + 1
+        if self.path == "/big":
+            # Declares 1 MiB but sends no body: a client that checks the header does not wait for it
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html")
+            self.send_header("Content-Length", str(2**20))
+            self.end_headers()
+        elif self.path == "/bigchunked":
+            # No Content-Length: 1 MiB sent in chunks, counted while reading
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html")
+            self.send_header("Connection", "close")
+            self.end_headers()
+            try:
+                for _ in range(16):
+                    self.wfile.write(b"x" * 65536)
+            except (BrokenPipeError, ConnectionResetError):
+                return
+        elif self.path == "/page":
             body = PAGE
             self.send_response(200)
             self.send_header("Content-Type", "text/html; charset=utf-8")
@@ -54,6 +73,7 @@ class _Handler(BaseHTTPRequestHandler):
 @pytest.fixture
 def server():
     _Handler.sent = {}
+    _Handler.hits = {}
     srv = ThreadingHTTPServer(("127.0.0.1", 0), _Handler)
     srv.daemon_threads = True
     t = threading.Thread(target=srv.serve_forever, daemon=True)
@@ -90,3 +110,20 @@ def test_abandoned_endless_body_stops_downloading(server):
     time.sleep(0.5)
     # Server stops being read: at most what fits in the socket buffers is sent on
     assert _Handler.sent.get("/stream", 0) - sent < 8 * 2**20
+
+
+def test_body_above_cap_is_dropped_without_retry(server, monkeypatch, caplog):
+    monkeypatch.setattr(fetch, "MAX_BODY_BYTES", 100 * 1024)
+    for path in ("/big", "/bigchunked"):
+        fetch._ctx.last_error = "none"
+        caplog.clear()
+        resp = fetch.requests_get_with_timeout(
+            server + path, 5, retry=True, allow_redirects=False
+        )
+        assert resp is None
+        assert fetch._ctx.last_error == "too_large"
+        assert len([r for r in caplog.records if r.levelname == "WARNING"]) == 1
+        assert path in caplog.text
+    assert _Handler.hits["/big"] == 1  # no second attempt
+    resp = fetch.requests_get_with_timeout(server + "/page", 5, allow_redirects=False)
+    assert resp is not None and resp.content == PAGE

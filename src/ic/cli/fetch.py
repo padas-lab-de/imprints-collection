@@ -66,6 +66,7 @@ RETRY_BACKOFF = 60.0  # a host with a 429/503 is fetched again after this many s
 MAX_RETRY_BACKOFF = 600.0  # cap for Retry-After
 THROTTLE_CODES = (429, 503)
 BODY_CHUNK_SIZE = 10 * 1024  # bytes per read of a response body (as requests' .content)
+MAX_BODY_BYTES = 10 * 1024 * 1024  # a larger response body (decoded) is dropped, not kept in memory
 # Paths probed when the landing page has no imprint link
 IMPRINT_PROBE_PATHS = ["/impressum", "/impressum.html", "/imprint"]
 # Word-boundary patterns for the imprint terms. "impressum" stays a substring match
@@ -144,6 +145,15 @@ class RequestAbandoned(Exception):
     """Raised in a request thread whose caller stopped waiting for the response."""
 
 
+class BodyTooLarge(Exception):
+    """Raised in a request thread when a response body exceeds MAX_BODY_BYTES."""
+
+    def __init__(self, url: str, size: int):
+        super().__init__(f"{url}: body above {MAX_BODY_BYTES} bytes")
+        self.url = url
+        self.size = size
+
+
 class RetryLater(Exception):
     """Raised on a 429/503 when the host may be fetched again later."""
 
@@ -194,7 +204,7 @@ def requests_get_with_timeout(
 
     Returns:
     - requests.Response if successful within timeout.
-    - None if timeout or error occurs.
+    - None if timeout or error occurs, or if the body is above MAX_BODY_BYTES.
     """
 
     # Set when this call gave up waiting; the request thread then stops reading the
@@ -205,11 +215,19 @@ def requests_get_with_timeout(
     def _request():
         resp = requests.get(url, timeout=connect_read_timeout, stream=True, **kwargs)
         try:
+            # Declared size above the cap: do not read the body at all
+            declared = resp.headers.get("Content-Length", "")
+            if declared.isdigit() and int(declared) > MAX_BODY_BYTES:
+                raise BodyTooLarge(url, 0)
             # Same as resp.content (requests reads 10 KiB chunks) but stoppable
             chunks = []
+            size = 0
             for chunk in resp.iter_content(BODY_CHUNK_SIZE):
                 if abandoned.is_set():
                     raise RequestAbandoned(url)
+                size += len(chunk)
+                if size > MAX_BODY_BYTES:
+                    raise BodyTooLarge(url, size)
                 chunks.append(chunk)
             resp._content = b"".join(chunks)
             resp._content_consumed = True
@@ -229,6 +247,11 @@ def requests_get_with_timeout(
             return requests_get_with_timeout(
                 url, total_timeout, connect_read_timeout, retry=False, **kwargs
             )
+        return None
+    except BodyTooLarge as e:
+        # Not retried: a second attempt would read the same oversized body
+        logging.warning(f"Body too large for {url}: dropped after {e.size} bytes read")
+        _note_error("too_large")
         return None
     except Exception as e:
         logging.debug(f"Fetch failed for {url}: {e}")
