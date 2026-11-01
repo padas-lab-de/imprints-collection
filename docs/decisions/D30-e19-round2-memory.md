@@ -16,4 +16,6 @@ Issued 2026-11-01 16:35 UTC by the data-collection lead. Blocks: E19 round 2b on
 - **C** As A, but first find the hosts that make the fetch grow (sample the RSS per host on a copy of mispel's shard) before the cap goes in.
 
 ## Answer
-(open)
+"D30 A." (user, 2026-11-01)
+
+Done 17:04 UTC: mispel fetch stopped 16:52; cap in 321db96; round2c running on abelie and apfel, 34,391 hosts each (details in docs/decisions.md In flight).

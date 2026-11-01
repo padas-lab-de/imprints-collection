@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
 # Run check_vm.sh on every VM in vms.tsv (in parallel; locally for this host), then print totals per crawl dir.
 # Usage: bash run_all.sh [OUT_DIR]   (raw per-VM output is kept in OUT_DIR, default a mktemp dir)
+# A VM may have several rows (one per repo checkout); output goes to OUT_DIR/<vm>-<repo>.tsv
 S=$(cd "$(dirname "$0")" && pwd)
 O=${1:-$(mktemp -d)}; mkdir -p "$O"
 me=$(hostname)
 while read -r vm repo; do
   [ -z "$vm" ] || [ "${vm#\#}" != "$vm" ] && continue
-  if [ "$vm" = "$me" ]; then bash "$S/check_vm.sh" "$repo" > "$O/$vm.tsv" 2>&1 &
-  else timeout 240 ssh -o BatchMode=yes -o ConnectTimeout=15 "$vm" "bash -s $repo" < "$S/check_vm.sh" > "$O/$vm.tsv" 2>&1 &
+  if [ "$vm" = "$me" ]; then bash "$S/check_vm.sh" "$repo" > "$O/$vm-${repo##*/}.tsv" 2>&1 &
+  else timeout 240 ssh -o BatchMode=yes -o ConnectTimeout=15 "$vm" "bash -s $repo" < "$S/check_vm.sh" > "$O/$vm-${repo##*/}.tsv" 2>&1 &
   fi
 done < "$S/vms.tsv"
 wait
