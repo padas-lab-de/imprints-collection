@@ -31,6 +31,7 @@ Only on aspe (untracked): datasets/E16/seeds (batches 0-156), datasets/gold (952
 ## Cards
 | ID | Date | Question | Outcome | Landed in |
 |---|---|---|---|---|
+| D29-depth2-rest-scope | 2026-11-01 | After E22 depth-2 priority: next priority frontier (depth 3 + B depth 2), depth-2 rest com/net/org, or full 1.7M rest? | open (recommend A) | — |
 | D27-e19-403-retry | 2026-10-31 | Retry the 220k+ E16 403 hosts from a second IP: pilot 2,000, leave out, or all now? | A ("D27 A", user 2026-11-01): pilot 2,000 403 hosts | — |
 | D28-e19-round2-more-ips | 2026-10-31 | Spread E19 round 2 (2 VMs, ~0.5 host/s each) over 5 VMs, each only on hosts it did not crawl in E16? | A ("D28 A", user 2026-11-01): reshard rest over 5 VMs | — |
 | D26-depth2-tld-order | 2026-10-29 | E22 depth 2: all TLDs unordered, all TLDs with DACH first, or DACH only? | B ("D26 B", user): all TLDs, priority list (de,at,ch,eu,info,shop) first | scripts/E22/frontier.py --priority-tlds |
