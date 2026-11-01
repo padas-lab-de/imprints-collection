@@ -11,4 +11,4 @@ Round 2 (227,711 hosts, E16 batches 50-262) started 2026-10-31 07:00 UTC on akaz
 - **B** Keep the 2 shards; add VMs only for later rounds.
 
 ## Answer
-(open)
+"D28 A" (user, 2026-11-01). Lead note 2026-11-01: akazie shard 0 was already dead since 2026-10-31 07:54 UTC (fetch "Killed", likely OOM on the shared VM, 1,342 hosts done; run.sh logged a false "exit 0", fixed with RESTARTS loop).

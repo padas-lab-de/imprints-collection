@@ -6,7 +6,8 @@
 # Variables (all optional): ROOT repo checkout, DATA dir holding datasets/ and results/ (default ROOT),
 #   PY python with ic installed, OUT output dir, WORKERS (16; E16 uses 64), PCONC (2; E16 8),
 #   PDELAY (2.0 s between requests per provider /24; default 0.25), PCOOL (60 s pause after 429/503),
-#   BACKOFF (300 s before the single re-fetch of a 429/503 host), BATCH (25000 hosts per batch).
+#   BACKOFF (300 s before the single re-fetch of a 429/503 host), BATCH (25000 hosts per batch),
+#   RESTARTS (0; restarts after a non-zero exit such as an OOM kill).
 # Frozen input: the list is copied to $OUT/recovery_input.txt on the first run and reused afterwards, because
 # ic fetch shuffles the list and resumes by position in it; a changed list would shift the batches.
 ROOT=${ROOT:-$(cd "$(dirname "$0")/../.." && pwd)}
@@ -21,9 +22,15 @@ mkdir -p "$OUT" "$DATA/results/E19/logs" || exit 1
 cd "$ROOT" || exit 1   # ic reads topics/ and prompts/ relative to the repo root
 N=$(wc -l < "$OUT/recovery_input.txt"); LASTB=$(( (N + BATCH - 1) / BATCH - 1 ))   # click reads a literal -1 as an option
 echo "$(date -u +%FT%TZ) recovery start: $N hosts, workers $WORKERS, provider conc $PCONC delay ${PDELAY}s"
-PYTHONPATH="$ROOT/src" "$PY" -c "from ic.ic import main; main()" fetch \
-  "$OUT/recovery_input.txt" "$BATCH" 0 "$LASTB" "$WORKERS" \
-  --provider-concurrency "$PCONC" --provider-delay "$PDELAY" \
-  --provider-cooldown "$PCOOL" --retry-backoff "$BACKOFF" \
-  --output-dir "$OUT" >> "$DATA/results/E19/logs/fetch_recovery.log" 2>&1
-echo "$(date -u +%FT%TZ) recovery exit $?"
+# RESTARTS (0): re-run after a non-zero exit (e.g. OOM kill on a shared VM); the fetch resumes by host
+for try in $(seq 0 "${RESTARTS:-0}"); do
+  PYTHONPATH="$ROOT/src" "$PY" -c "from ic.ic import main; main()" fetch \
+    "$OUT/recovery_input.txt" "$BATCH" 0 "$LASTB" "$WORKERS" \
+    --provider-concurrency "$PCONC" --provider-delay "$PDELAY" \
+    --provider-cooldown "$PCOOL" --retry-backoff "$BACKOFF" \
+    --output-dir "$OUT" >> "$DATA/results/E19/logs/fetch_recovery.log" 2>&1
+  rc=$?
+  echo "$(date -u +%FT%TZ) recovery exit $rc (try $try)"
+  [ "$rc" -eq 0 ] && break
+  sleep 60
+done
