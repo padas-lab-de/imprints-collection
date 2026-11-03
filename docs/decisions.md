@@ -47,7 +47,7 @@ Only on aspe (untracked): datasets/E16/seeds (batches 0-156), datasets/gold (952
 ## Cards
 | ID | Date | Question | Outcome | Landed in |
 |---|---|---|---|---|
-| D34-release-www-dedup | 2026-11-03 | Release and paper count www.x = x as one site; report only the current count, no comparison to the original | decided by user: dedup www | docs/decisions/D34-release-www-dedup.md |
+| D34-release-www-dedup | 2026-11-03 | Release and paper count www.x = x as one site; report only the current count, no comparison to the original | decided by user: dedup www; keep redirect target, else non-www | docs/decisions/D34-release-www-dedup.md |
 | D33-common-crawl-seeds | 2026-11-03 | Add Common Crawl URL index as seed source (622k new DACH German-language hosts in one crawl): pilot 20k now, after depth2R, or not? | A, pilot on mispel + all TLDs + more crawls + FineWeb-2 (user 2026-11-03) | E23, E24, E25 |
 | D32-e19-shopify-throttle | 2026-11-03 | Shopify answers 429 to every request: 72 h quiet, then 100-host re-pilot at 1 req/min (else drop)? | A | In flight (quiet until 2026-11-06 11:02 UTC) |
 | D31-e19-shopify-tail | 2026-11-03 | Round 2 stalled on Shopify 429 tail: stop, split off Shopify (~36k) for a tuned slow pass, rest over 7 VMs? | A | In flight (round2d + Shopify pilot) |
