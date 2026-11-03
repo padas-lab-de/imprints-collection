@@ -7,7 +7,9 @@
 #   PY python with ic installed, OUT output dir, WORKERS (16; E16 uses 64), PCONC (2; E16 8),
 #   PDELAY (2.0 s between requests per provider /24; default 0.25), PCOOL (60 s pause after 429/503),
 #   BACKOFF (300 s before the single re-fetch of a 429/503 host), BATCH (25000 hosts per batch),
-#   RESTARTS (0; restarts after a non-zero exit such as an OOM kill).
+#   RESTARTS (0; restarts after a non-zero exit such as an OOM kill),
+#   SKIPGROUPS (space-separated provider group keys that get no request, e.g. "v4:23.227.38";
+#   hosts are logged as skipped_provider and count as done on resume).
 # Frozen input: the list is copied to $OUT/recovery_input.txt on the first run and reused afterwards, because
 # ic fetch shuffles the list and resumes by position in it; a changed list would shift the batches.
 ROOT=${ROOT:-$(cd "$(dirname "$0")/../.." && pwd)}
@@ -16,6 +18,7 @@ PY=${PY:-python3}
 OUT=${OUT:-$DATA/datasets/E19/recovery}
 WORKERS=${WORKERS:-16}; PCONC=${PCONC:-2}; PDELAY=${PDELAY:-2.0}
 PCOOL=${PCOOL:-60}; BACKOFF=${BACKOFF:-300}; BATCH=${BATCH:-25000}
+SKIP=(); for g in ${SKIPGROUPS:-}; do SKIP+=(--skip-provider-group "$g"); done
 LIST=${1:-$DATA/datasets/E19/recovery_all.txt}
 mkdir -p "$OUT" "$DATA/results/E19/logs" || exit 1
 [ -s "$OUT/recovery_input.txt" ] || cp "$LIST" "$OUT/recovery_input.txt" || exit 1
@@ -27,7 +30,7 @@ for try in $(seq 0 "${RESTARTS:-0}"); do
   PYTHONPATH="$ROOT/src" "$PY" -c "from ic.ic import main; main()" fetch \
     "$OUT/recovery_input.txt" "$BATCH" 0 "$LASTB" "$WORKERS" \
     --provider-concurrency "$PCONC" --provider-delay "$PDELAY" \
-    --provider-cooldown "$PCOOL" --retry-backoff "$BACKOFF" \
+    --provider-cooldown "$PCOOL" --retry-backoff "$BACKOFF" "${SKIP[@]}" \
     --output-dir "$OUT" >> "$DATA/results/E19/logs/fetch_recovery.log" 2>&1
   rc=$?
   echo "$(date -u +%FT%TZ) recovery exit $rc (try $try)"

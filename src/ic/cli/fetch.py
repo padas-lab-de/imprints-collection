@@ -125,6 +125,7 @@ class CrawlStatus:
     NO_VALID_HTML_TREE = "no_valid_html_tree"
     HOST_NOT_FOUND = "host_not_found"
     FILTERED = "filtered"
+    SKIPPED_PROVIDER = "skipped_provider"
 
 
 # Setup logging
@@ -136,6 +137,8 @@ logging.getLogger("urllib3").setLevel(logging.ERROR)
 # Set by the fetch command; None means no per-provider limit (tests, scripts)
 LIMITER: Optional[ProviderLimiter] = None
 OUTPUT_DIR = DATASETS_FOLDER
+# Provider group keys that get no request at all (--skip-provider-group)
+SKIP_GROUPS: frozenset = frozenset()
 # Per-worker-thread record of the host being processed: allow_defer, number of
 # requests, 429/503 answers, last failure reason, failed landing attempts
 _ctx = threading.local()
@@ -310,6 +313,10 @@ def try_fetch(
         if key == NOT_FOUND:
             # The name does not resolve; requests would fail the same way
             _note_error("dns")
+            return None, None
+        if key in SKIP_GROUPS:
+            # Also catches impressum links, the http fallback and redirects into the group
+            _note_error("skipped_provider")
             return None, None
 
     resp = _limited_get(url, retry, key)
@@ -907,6 +914,17 @@ def run_batch(
             if not item.admitted:
                 if limiter is not None and item.key is None:
                     item.key = limiter.key_for(item.host)
+                if item.key in SKIP_GROUPS:
+                    # No slot, no request: the host is extracted later from the status files
+                    _ctx.requests = 0
+                    _ctx.throttled = 0
+                    _ctx.landing_errors = [item.key]
+                    pbar.update(1)
+                    record(
+                        item.host, CrawlStatus.SKIPPED_PROVIDER, item.key, item.attempt, time.time()
+                    )
+                    sched.finish(item)
+                    continue
                 if not sched.admit(item):
                     continue
             t0 = time.time()
@@ -1011,6 +1029,14 @@ def run_batch(
     help="Seconds a provider group is paused after a 429/503.",
 )
 @click.option(
+    "--skip-provider-group",
+    "skip_provider_groups",
+    multiple=True,
+    help="Provider group key (e.g. v4:23.227.38) that gets no request at all; its hosts "
+    "are logged as skipped_provider and count as done on resume. Repeatable; "
+    "needs --provider-concurrency > 0.",
+)
+@click.option(
     "--retry-backoff",
     default=RETRY_BACKOFF,
     show_default=True,
@@ -1033,6 +1059,7 @@ def fetch(
     provider_concurrency: int,
     provider_delay: float,
     provider_cooldown: float,
+    skip_provider_groups: Tuple[str, ...],
     retry_backoff: float,
     progress_interval: float,
 ) -> None:
@@ -1049,8 +1076,11 @@ def fetch(
     A re-run with the same arguments resumes: finished batches are skipped and a
     cut-off batch continues with the hosts missing from its status log.
     """
-    global LIMITER, OUTPUT_DIR
+    global LIMITER, OUTPUT_DIR, SKIP_GROUPS
     OUTPUT_DIR = output_dir
+    if skip_provider_groups and provider_concurrency <= 0:
+        raise click.UsageError("--skip-provider-group needs --provider-concurrency > 0")
+    SKIP_GROUPS = frozenset(skip_provider_groups)
     if provider_concurrency > 0:
         LIMITER = ProviderLimiter(
             max_concurrent=provider_concurrency,
@@ -1073,6 +1103,8 @@ def fetch(
         f"{provider_delay}s between requests, {provider_cooldown}s cooldown, "
         f"retry 429/503 after {retry_backoff}s"
     )
+    if SKIP_GROUPS:
+        logging.info(f"No requests to provider groups {sorted(SKIP_GROUPS)}")
 
     for batch_id in range(start_batch, total_batches):
         if end_batch != -1 and batch_id > end_batch:

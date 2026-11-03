@@ -5,9 +5,12 @@
 # Usage: run.sh LIST OUT FIRST LAST   (batches inclusive; every VM must hold the identical LIST, check sha256,
 #                                      because ic fetch shuffles the list and cuts batches by position)
 # Variables (optional): ROOT repo checkout (default: this script's repo), PY python with ic deps
-#   (default $ROOT/.venv/bin/python), STEP batches per process (3; 1 on VMs with little free RAM).
+#   (default $ROOT/.venv/bin/python), STEP batches per process (3; 1 on VMs with little free RAM),
+#   SKIPGROUPS space-separated provider group keys that get no request (e.g. "v4:23.227.38"; hosts
+#   are logged as skipped_provider and count as done on resume).
 ROOT=${ROOT:-$(cd "$(dirname "$0")/../.." && pwd)}
 PY=${PY:-$ROOT/.venv/bin/python}
+SKIP=(); for g in ${SKIPGROUPS:-}; do SKIP+=(--skip-provider-group "$g"); done
 LIST=$1; OUT=$2; FIRST=$3; LAST=$4; STEP=${STEP:-3}
 [ -s "$LIST" ] && [ -n "$OUT" ] && [ -n "$FIRST" ] && [ -n "$LAST" ] || { echo "usage: run.sh LIST OUT FIRST LAST"; exit 1; }
 LOGS=$ROOT/results/E22/logs
@@ -18,7 +21,7 @@ for ((s = FIRST; s <= LAST; s += STEP)); do
   echo "$(date -u +%FT%TZ) range $s-$e start"
   PYTHONPATH="$ROOT/src" "$PY" -c "from ic.ic import main; main()" fetch \
     "$LIST" 25000 "$s" "$e" \
-    --provider-concurrency 8 --output-dir "$OUT" \
+    --provider-concurrency 8 --output-dir "$OUT" "${SKIP[@]}" \
     >> "$LOGS/fetch_$s-$e.log" 2>&1
   echo "$(date -u +%FT%TZ) range $s-$e exit $?"
 done
