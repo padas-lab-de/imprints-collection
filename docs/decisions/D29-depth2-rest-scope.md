@@ -14,4 +14,4 @@ Depth 2 of frontier B (depth1B discoveries) and depth 3 of the priority path (de
 - **C** Crawl the full depth-2 rest list (1.7M hosts; estimate 17-26k pages).
 
 ## Answer
-(open)
+"D29 C." (user, 2026-11-03), after asking "Is B a superset of A?" (answer: no, disjoint by TLD and source).
