@@ -1,6 +1,10 @@
 import importlib.util
 from pathlib import Path
 
+import pytest
+
+pytest.importorskip("duckdb")
+
 spec = importlib.util.spec_from_file_location(
     "cc_candidates", Path(__file__).resolve().parent.parent / "scripts/E23/cc_candidates.py"
 )
