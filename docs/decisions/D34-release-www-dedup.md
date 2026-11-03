@@ -11,3 +11,4 @@ User 2026-11-03: "regarding the www twins, I want to be honest about the number.
 ## Consequence
 - Release and paper: www-collapsed count is the headline; no comparison with the original dataset.
 - Variant per twin pair: the final host after redirect if known, else the non-www form. User 2026-11-03: "I like your plan that the host, the site that redirects to, is chosen if we know it, and otherwise the non-www form."
+- Source of the redirect target: the host of `main.url` in the fetch result records (the landing URL after try_fetch follows redirects, src/ic/cli/fetch.py:395/419); the status TSVs do not store it.
