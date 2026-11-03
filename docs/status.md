@@ -38,6 +38,11 @@ Liveness and imprint yield untested -> E27-hf-source-pilots.
 ### E25-cc-seed-pilot (done 2026-11-03; D33; lists tmp/E25/, mispel d29 tree datasets/E25/pilot)
 Candidate list from Common Crawl CC-MAIN-2026-43, .de/.at/.ch hosts with a German page: 2,691,932 -> not known (seeds + E22 frontiers, www-collapsed), passed clean-hosts + E10 platform filters, www-collapsed within the list: 618,841 (de 437,194, ch 112,434, at 69,213; cc43_dach_new.txt sha256 a607305a...). Pilot 20,000 random (seed 25, stratified by TLD), mispel 16:30-17:39 UTC, Shopify skipped: imprint_found 9,918 = 49.6% of all hosts (53.3% of reachable); de 57.1%, at 44.0%, ch 24.0%. host_not_found 5.7%. Lead-verified (sha256 + status counts). Yield > 10% -> full crawl E26-cc-dach-full-crawl (598,841 rest hosts) running since 17:43 UTC on mispel/abelie/apfel/aspe; 50% imprint_found in the first 33.7k rows.
 
+### E33-more-dump-pilots
+- Four new pools minus all known/crawled hosts: Q3 CC host index 2024-46..2025-13 DACH 453,428; Q4 HPLT v2 IA-only DACH 516,971; Q1 FineWeb-2 DACH last seen before 2023 1,475,809; Q2 FineWeb-2 non-DACH 1,730,374.
+- Pilots (5,000 each): Q3 20.7%, Q4 20.9%, Q1 18.1% imprint_found (pass D33); Q2 8.1% (fails; net 12.7%, eu 11.3%, com 9.4%). Q1/Q4 host_not_found ~64%.
+- Full crawl of Q4+Q3+Q1: 2,429,968 hosts (tmp/E33/e33_rest.txt), waits for D36-fetch-recall-patch. Details tmp/E33/summary.md.
+
 ### E34-new-seed-outlink-pilot
 - Frontier of hosts linked from E25-E30 pages (snapshot 21:21 UTC), minus all known/crawled: 49,142 (tmp/E34/frontier_new_seeds.txt, sha256 cf9361b7...); ~0.11 new hosts per fetched host; com 34%, de 15%, ch 8%, at 2%.
 - Pilot 5,000: imprint_found 555 = 11.1% (14.6% of reachable); DACH 406/1,239 = 32.8%, other TLDs 149/3,761 = 4.0%; host_not_found 24%. Passes D33; full crawl of 44,142 running on mispel since 22:10 UTC (datasets/E34/full). D16 address filter at merge.
