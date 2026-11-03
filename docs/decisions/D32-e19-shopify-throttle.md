@@ -17,4 +17,4 @@ Issued 2026-11-03 by the data-collection lead. Blocks: the Shopify part of D31-e
 - **C** Let the pilot run as it is (~1 request/min, all 429 so far) and decide on its numbers in 24 h.
 
 ## Answer
-(open)
+"D32 A." (user, 2026-11-03). Pilot stopped 2026-11-03 11:02 UTC; quiet period ends 2026-11-06 11:02 UTC.
