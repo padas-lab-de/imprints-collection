@@ -26,6 +26,15 @@ Model suggestions for the gold labels from qwen-agentworld-35b-a3b on innkube (p
 - Shown on all items (D24-gold-prefill-scope, answer B); agreement on second and calibration labels is agreement with suggestions shown.
 - Next: measure time per item.
 
+### E24-fineweb2-seed-hosts (done 2026-11-03; outputs tmp/E24/, SHA256SUMS there; lead-verified: sha256 OK, 0 of 2,000 sampled hosts per list are known)
+Not-known hosts per source (www-collapsed, vs seeds + E22 frontiers = 10,128,961 hosts):
+- FineWeb-2 deu_Latn (ODC-By; 182 shards, url+dump columns read = 21.7 GB): 8,445,933 distinct hosts; 5,447,458 not known (DACH 3,007,940; other TLDs 2,439,518, com 1.38M). Dumps up to 2024 only; DACH not known and last seen 2023+: 441,568.
+- CC host index CC-MAIN-2025-18 (commoncrawl/host-index-testing-v2, fetch_200 > 0, de/at/ch): 840,561 not known; 462,368 also not in cc43.
+- HPLT v2 deu_Latn (CC0; 2.8% shard sample): 2,275,164 hosts, 1,124,688 not known (DACH 625,019); Internet-Archive-only 405k (DACH 250k): the only non-CC source.
+- FineWeb-2 dialect configs (gsw, nds, ltz, bar, ...): 29,436 not known (DACH 7,366).
+- Gated or no URLs: CulturaX, OSCAR (gated), German Commons (no URL column), FineWeb2-HQ (subset of FineWeb-2).
+Liveness and imprint yield untested -> E27-hf-source-pilots.
+
 ### E25-cc-seed-pilot (done 2026-11-03; D33; lists tmp/E25/, mispel d29 tree datasets/E25/pilot)
 Candidate list from Common Crawl CC-MAIN-2026-43, .de/.at/.ch hosts with a German page: 2,691,932 -> not known (seeds + E22 frontiers, www-collapsed), passed clean-hosts + E10 platform filters, www-collapsed within the list: 618,841 (de 437,194, ch 112,434, at 69,213; cc43_dach_new.txt sha256 a607305a...). Pilot 20,000 random (seed 25, stratified by TLD), mispel 16:30-17:39 UTC, Shopify skipped: imprint_found 9,918 = 49.6% of all hosts (53.3% of reachable); de 57.1%, at 44.0%, ch 24.0%. host_not_found 5.7%. Lead-verified (sha256 + status counts). Yield > 10% -> full crawl E26-cc-dach-full-crawl (598,841 rest hosts) running since 17:43 UTC on mispel/abelie/apfel/aspe; 50% imprint_found in the first 33.7k rows.
 
