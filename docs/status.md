@@ -27,6 +27,7 @@ Model suggestions for the gold labels from qwen-agentworld-35b-a3b on innkube (p
 - Next: measure time per item.
 
 ### E16-snapshot-crawl-seeds (done 2026-10-29; imprint count vs the original dataset)
+Dedup count 2026-11-03 15:59 UTC (scripts/E22/dedup_count.py; exact host): E16 3,256,728 + E19 r1 10,657 + E19 r2 44,087 + E22 depth-1 A 224,811 + B 5,085 + depth2P 19,988 + depth2R (22% done) 3,638 = 3,564,994 unique imprint_found hosts vs original 3,226,331 (+10.5%). With www.x = x: 3,136,881 (-2.8%), because 423k E16 sites are found under both www.x and x. The original count was probably exact-host too (E16 alone matches it within +0.9%).
 Count 2026-10-29 ~16:00 UTC (unique hosts with status imprint_found, all VMs): E16 seeds 3,256,728 of 6,560,119 rows (49.6%) vs original 3,226,331 (+30,397, +0.9%). Added so far: E19 round 1 10,559 (4 shards 82-94% + 22,909 old rows), E22 depth 1 137,916 of 1,396,338 rows (9.9%). Projection before depth 2: E22 A ~225k, B ~9k, E19 round 1 ~12-13k, E19 round 2 (batches 50-262, not started) ~40-55k (round-1 rate scaled) -> ~3.5M (+~10%). Caveats: D16 keeps link-expansion imprints only with a DACH address (E10: 83%), so E22's final count is lower; E9 precision of newly gained imprints 49/50.
 
 ### E22-link-frontier-round1 (frontier A built; depth-1 crawl running on 5 VMs; scripts/E22/)
@@ -45,7 +46,9 @@ Round-1 frontier from E16 discovered hosts, snapshot 2026-10-26 17:23 UTC (batch
 ### E20-fetch-memory-leak (merged)
 Orphaned request threads kept downloading endless bodies; fixed. Test: RSS 1,901 -> 1,061 MB after 3x1,000 hosts. Production check pending.
 
-### E19-crawl-recovery-pass (pilot done; round 1 running on apfel)
+### E19-crawl-recovery-pass (rounds 1-2 done except 36,577 Shopify hosts, D32)
+
+Round 2 report (2026-11-03, lorbeer results/E19/round2_report.tsv): 227,711 listed, 191,134 done, 44,087 imprint_found (23.1% of listed), all net new vs E16; by cause throttle 29,885/114,193 (38.5%), timeout 10,644/85,594 (12.4%), conn_refused 3,558/27,924 (12.7%); 36,577 not retried (Shopify, D32).
 41,516 of 525,000 hosts (7.9%) retryable: 403 21.3k, timeout 8.7k, 429/503 8.4k, conn 3.1k; many on Cloudflare.
 Pilot, 1,000 random retryable hosts re-fetched from apfel (second IP, same /24 as aspe; 2 per provider, 2 s gap; results/E19/pilot_report.tsv on aspe):
 
