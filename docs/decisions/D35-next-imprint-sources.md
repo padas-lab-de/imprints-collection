@@ -12,4 +12,4 @@ Issued 2026-11-03 ~21:00 UTC by the data-collection lead. User asked: "What coul
 A + B + C, D as planned. C first (small, tells whether millions of existing rows hide imprints), B pilots on lorbeer, A when E26 frees VMs.
 
 ## Answer
-(open)
+User 2026-11-03 ~21:05 UTC: "D35 A B C". -> C = E32-imprint-recall-audit, B = E33-more-dump-pilots, A = E34-new-seed-outlink-pilot; D stays D32. Each pilot under the D33 >10% rule.
