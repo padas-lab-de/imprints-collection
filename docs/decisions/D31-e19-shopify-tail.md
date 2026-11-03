@@ -17,4 +17,4 @@ Issued 2026-11-03 by the data-collection lead. Blocks: the rest of E19 round 2 (
 - **C** As A, but drop the Shopify hosts from E19 (~4k imprints lost, estimate).
 
 ## Answer
-(open)
+"D31 A." (user, 2026-11-03). Done 2026-11-03 08:20 UTC: 47,251 non-Shopify hosts on 7 VMs (round2d), 500-host Shopify pilot on mispel; 36,577 Shopify hosts left in total.
