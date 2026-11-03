@@ -18,4 +18,5 @@ Issued 2026-11-03 by the data-collection lead, after the user asked: "Would [Com
 **Recommend A:** the list costs nothing to build, and the pilot gives the yield number that decides whether Common Crawl is worth a full pass.
 
 ## Answer
-(open)
+User 2026-11-03: "regarding D33. Wouldn't it be possible to run the pilot on another VM? ... could you use the findweb2 German to find new German language hosts? ... Maybe looking at another common crawl dump or the findweb2 German dataset could help us to find even more seeds. Furthermore, go ahead with your proposal on the German language hosts on other TLDs. It is important for me to not miss other TLDs."
+-> A, pilot on mispel (E25-cc-seed-pilot); multi-crawl union on all TLDs (E23-cc-seed-candidates); FineWeb-2 + other HF corpora (E24-fineweb2-seed-hosts).
