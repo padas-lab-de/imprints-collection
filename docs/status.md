@@ -52,6 +52,8 @@ Next: re-run at the final merge, when the crawls end.
 - Pilots (5,000 each): Q3 20.7%, Q4 20.9%, Q1 18.1% imprint_found (pass D33); Q2 8.1% (fails; net 12.7%, eu 11.3%, com 9.4%). Q1/Q4 host_not_found ~64%.
 - Full crawl of Q4+Q3+Q1: 2,429,968 hosts (tmp/E33/e33_rest.txt), waits for D36-fetch-recall-patch. Details tmp/E33/summary.md.
 
+Full crawl (D33 rule, D36 B fetcher E35 b54aaa1) running since 2026-11-04 07:54 UTC: 2,429,968 hosts (Q4, Q3, Q1), 98 batches on apfel, mispel, abelie, aspe.
+
 ### E34-new-seed-outlink-pilot
 - Frontier of hosts linked from E25-E30 pages (snapshot 21:21 UTC), minus all known/crawled: 49,142 (tmp/E34/frontier_new_seeds.txt, sha256 cf9361b7...); ~0.11 new hosts per fetched host; com 34%, de 15%, ch 8%, at 2%.
 - Pilot 5,000: imprint_found 555 = 11.1% (14.6% of reachable); DACH 406/1,239 = 32.8%, other TLDs 149/3,761 = 4.0%; host_not_found 24%. Passes D33; full crawl of 44,142 running on mispel since 22:10 UTC (datasets/E34/full). D16 address filter at merge.
