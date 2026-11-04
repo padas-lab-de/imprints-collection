@@ -24,4 +24,5 @@ E34-new-seed-outlink-pilot round 2: the pilot misses the D33 bar overall, but it
 **Recommend A**: the DACH part has its own random sample of 756 hosts at 35.3%, well above 10%; the non-DACH part fails the rule on its own.
 
 ## Answer
-(open)
+User 2026-11-04 ~15:50 UTC: "D38 A if this also includes .org TLDs, etc.?" Lead: A is de/at/ch/li only; pilot generic TLDs 119/3,012 = 4.0% (.org 6/159 = 3.8%). User: "Then D38 B".
+Done: full crawl of all 242,928 rest hosts on mispel (batches 0-4) + abelie (5-9) since 15:54 UTC, e35 tree.

@@ -67,7 +67,7 @@ Done 2026-11-04 08:30 UTC (D36 B). 5,000 random E16 .de/.at/.ch imprint_not_foun
 Full crawl (D33 rule passed) done 2026-11-04 00:59 UTC: 5,242 / 44,142 (11.9%); total with pilot 5,797 / 49,142 (11.8%). D16 address filter applies at merge.
 
 Round 2 started 2026-11-04 ~13:20 UTC: new frontier from the finished E26/E29 crawls (+ partial E30/E33, E34), minus round 1 and all known lists; 5k pilot (seed 342) on mispel with the E35 fetcher; tmp/E34/round2/.
-Round 2 frontier 247,928 hosts (com 46.7%, de 8.6%, ch 5.2%). Pilot done 13:51 UTC: 421 / 5,000 imprint_found = 8.4% (CI 7.7-9.2%) -> below the D33 bar overall; DACH TLDs 267 / 756 = 35.3% (de 41.4%, at 45.5%, ch 22.7%), other TLDs 154 / 4,244 = 3.6%. Card D38 (DACH-only full crawl, 38,375 hosts).
+Round 2 frontier 247,928 hosts (com 46.7%, de 8.6%, ch 5.2%). Pilot done 13:51 UTC: 421 / 5,000 imprint_found = 8.4% (CI 7.7-9.2%) -> below the D33 bar overall; DACH TLDs 267 / 756 = 35.3% (de 41.4%, at 45.5%, ch 22.7%), other TLDs 154 / 4,244 = 3.6%. D38 B (user): full crawl of all 242,928 rest hosts (DACH 38,375 + other 204,553) since 2026-11-04 15:54 UTC on mispel + abelie (E35 fetcher, datasets/E34r2/full); pilot TLD groups: DACH 35.3%, generic (com/org/net/...) 4.0%, other ccTLDs 2.8%.
 
 ### E32-imprint-recall-audit
 - 300 DACH imprint_not_found hosts (150 E26, 150 E16): 20 (6.7%, CI 4.4-10.1%) have a real imprint (name + postal address); 6 of them are crawl-time errors. Missed by today's code 4.7%.
