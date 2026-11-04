@@ -67,6 +67,7 @@ Only on aspe (untracked): datasets/E16/seeds (batches 0-156), datasets/gold (952
 ## Cards
 | ID | Date | Question | Outcome | Landed in |
 |---|---|---|---|---|
+| A13-github-push-access-20261104 | 2026-11-04 | Push to GitHub fails: Permission denied (publickey) | resolved: GitHub accepts ~/.ssh/id_ed25519 (SHA256:ysdpVHou...) only on some tries; push with retries (tmp/push_retry.sh, 5 tries) | lead-record pushed e18cb90 |
 | A11-known-hosts-cleanup-20261103 | 2026-11-03 | Remove the lorbeer known_hosts entry a subagent added (its own removal was denied) | done: user ran ssh-keygen -R lorbeer 2026-11-04; lead checked -F lorbeer empty | ~/.ssh/known_hosts (.old backup) |
 | D37-full-e16-recheck | 2026-11-04 | Re-fetch all 484.6k E16 DACH not_found hosts with the E35 fetcher? (E36: 5.9% yield, Kontakt 10% false) | A (user 2026-11-04) | E37 queued behind E33 |
 | A12-e30-lorbeer-driver-restart | 2026-11-04 | Approve: stop lorbeer E30 driver (PID 2400802) between batches, restart with batches up to 27 (aspe runs 28-54) | done: user yes 2026-11-04; driver now 9-27 (waiter 541785 behind batch-8 fetch 408845) | |
