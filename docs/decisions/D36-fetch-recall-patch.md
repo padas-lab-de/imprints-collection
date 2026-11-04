@@ -7,6 +7,9 @@ E32-imprint-recall-audit (tmp/E32/summary.md; branch worktree-agent-a9cc78812de3
 
 Running crawls (E26, E29, E30, E34, depth2R) use fetch.py sha256 c34d09b2... in the d29 tree; changing that file mid-crawl changes later batches.
 
+## Review (E35, 2026-11-04 ~03:15 UTC)
+Branch E35-fetch-recall-patch @ b54aaa1, fetch.py sha256 a9dc1ddd...; 216 tests pass (18 new, offline). One fix added: a Kontakt page that redirects to the landing page is rejected. Cost: worst case 15 instead of 10 requests per host (+5 probes after failed candidates); hosts whose landing page yields an imprint: no change. Risk: the Kontakt rule accepts a contact page with an address plus the word Impressum anywhere (e.g. footer link); every such record has found_by=kontakt. With A or B the lead labels a sample of 50 found_by=kontakt records from the first 5k hosts before the rule runs at scale.
+
 ## Options
 - **A** Apply the patch (after review + tests) in a new tree for crawls started from now on; running crawls stay on c34d09b2. No re-check of old hosts. The paper states the fetcher version per source. Cost: none extra; recall differs slightly between sources.
 - **B** A, plus a 5k re-check pilot of E16 imprint_not_found DACH hosts with the patched fetcher; full re-check (~486k hosts, rough +26k imprints) only if you approve after the pilot. Expected pilot yield ~4-5%, below the D33 10% rule, so it needs your explicit yes.

@@ -38,6 +38,9 @@ Liveness and imprint yield untested -> E27-hf-source-pilots.
 ### E25-cc-seed-pilot (done 2026-11-03; D33; lists tmp/E25/, mispel d29 tree datasets/E25/pilot)
 Candidate list from Common Crawl CC-MAIN-2026-43, .de/.at/.ch hosts with a German page: 2,691,932 -> not known (seeds + E22 frontiers, www-collapsed), passed clean-hosts + E10 platform filters, www-collapsed within the list: 618,841 (de 437,194, ch 112,434, at 69,213; cc43_dach_new.txt sha256 a607305a...). Pilot 20,000 random (seed 25, stratified by TLD), mispel 16:30-17:39 UTC, Shopify skipped: imprint_found 9,918 = 49.6% of all hosts (53.3% of reachable); de 57.1%, at 44.0%, ch 24.0%. host_not_found 5.7%. Lead-verified (sha256 + status counts). Yield > 10% -> full crawl E26-cc-dach-full-crawl (598,841 rest hosts) running since 17:43 UTC on mispel/abelie/apfel/aspe; 50% imprint_found in the first 33.7k rows.
 
+### E35-fetch-recall-patch-review
+Goal: make the E32 fetch patch ready for D36 A/B. Result: branch E35-fetch-recall-patch @ b54aaa1, 216 tests pass; one guard added (Kontakt redirect to landing). Worst case +5 requests/host. Open: false-positive rate of the Kontakt rule at scale (audit found_by=kontakt sample). Next: deploy in a new tree only after D36.
+
 ### E31-release-dedup-count
 Goal: one release count of unique imprint sites over all crawl sources, with the D34 rule (redirect target if it is a crawled host, else the non-www form). Code: scripts/E31/ (extract.py on each VM, pull.py, release_count.py; tests/test_e31_release_count.py).
 Result (partial data, snapshot 2026-11-03 21:20 to 2026-11-04 01:20 UTC; crawls still run): **3,069,472 sites** (D34); 3,368,667 www-collapsed; 3,796,840 exact hosts. Cumulative D34 per source: E16 2,631,493; E22d1A +156,649; E26 +157,266; E29 +32,845; E30 +3,644; rest in tmp/E31/release_count.tsv. 328,695 found hosts redirect to another site, 98.7% of targets are crawled hosts.
