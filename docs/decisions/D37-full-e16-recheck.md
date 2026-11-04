@@ -21,4 +21,5 @@ Issued 2026-11-04 by the data-collection lead. Blocks: the full E16 re-check (D3
 Recommend A: about 28.5k new sites at no money cost; the Kontakt errors are tagged and mostly removed by address extraction.
 
 ## Answer
-(open)
+User 2026-11-04 ~09:15 UTC: "D37 A."
+Run as E37-e16-full-recheck.

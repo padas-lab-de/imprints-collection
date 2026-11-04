@@ -54,6 +54,9 @@ Next: re-run at the final merge, when the crawls end.
 
 Full crawl (D33 rule, D36 B fetcher E35 b54aaa1) running since 2026-11-04 07:54 UTC: 2,429,968 hosts (Q4, Q3, Q1), 98 batches on apfel, mispel, abelie, aspe.
 
+### E37-e16-full-recheck
+Queued 2026-11-04 09:23 UTC (D37 A): the remaining 479,573 E16 .de/.at/.ch imprint_not_found hosts, E35 fetcher, 20 batches on apfel, mispel, abelie, aspe; each VM starts when its E33 part ends. Pilot (E36) expects about 5.9% new imprint_found.
+
 ### E36-fetch-recall-recheck-pilot
 Done 2026-11-04 08:30 UTC (D36 B). 5,000 random E16 .de/.at/.ch imprint_not_found hosts (of 484,573 after removing hosts found in any source and the E32 sample; seed 36), re-fetched with the E35 fetcher (b54aaa1) on apfel. 294 imprint_found (5.9%; 6.1% of reachable): link 174, probe 63, kontakt 57. Labels (80, single rater, lead spot-check 3/3 agree): kontakt 38 true / 5 false / 7 unclear (false 10%, Wilson CI 4.3-21.4%); other 25 / 0 / 5. False Kontakt finds: casino-spam pages on hijacked domains, contact pages without operator or address. Some link finds point to another registered domain (imprint of the redirect target). Files: tmp/E36/pilot/ (pilot.txt sha256 9fe5c6ef..., out/, labels.json, summary.md); apfel e35/datasets/E36/pilot. Full re-check: card D37.
 
