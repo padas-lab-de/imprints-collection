@@ -68,7 +68,8 @@ THROTTLE_CODES = (429, 503)
 BODY_CHUNK_SIZE = 10 * 1024  # bytes per read of a response body (as requests' .content)
 MAX_BODY_BYTES = 10 * 1024 * 1024  # a larger response body (decoded) is dropped, not kept in memory
 # Paths probed when the landing page has no imprint link
-IMPRINT_PROBE_PATHS = ["/impressum", "/impressum.html", "/imprint"]
+# E32: /impressum.php and /impressum.htm added (4 of 300 sampled missed imprints)
+IMPRINT_PROBE_PATHS = ["/impressum", "/impressum.html", "/imprint", "/impressum.php", "/impressum.htm"]
 # Word-boundary patterns for the imprint terms. "impressum" stays a substring match
 # (e.g. "agb-impressum") except for article URLs such as "impressumspflicht".
 IMPRINT_PATTERNS = {
@@ -455,6 +456,10 @@ def process_host(
                 result["main"].get("main_content", ""),
                 keyword_links.get("impressum", []),
             )
+            if imprint is None and "kontakt" in result:
+                imprint = kontakt_as_imprint(
+                    result["kontakt"], result["main"].get("main_content", ""), base_url
+                )
             includes_imprint = imprint is not None
             if imprint:
                 result["impressum"] = imprint
@@ -562,7 +567,7 @@ def find_imprint(
       ("link" or "probe"), "found_keyword" (matched keyword or probed path),
       "candidate_rank" and "fallback_extraction", or None.
     """
-    tried = False
+    tried_urls = []
     for rank, (url, keyword) in enumerate(candidates[:MAX_IMPRINT_CANDIDATES]):
         # A link to the landing page itself (e.g. "#impressum") is no imprint page
         if same_page(url, base_url):
@@ -570,7 +575,7 @@ def find_imprint(
         # A privacy policy is no imprint unless the URL also names the imprint
         if keyword != "impressum" and is_privacy_url(url):
             continue
-        tried = True
+        tried_urls.append(url)
         sub_url, parse_result, fallback = fetch_imprint_page(url)
         if (
             parse_result
@@ -587,19 +592,23 @@ def find_imprint(
                 "fallback_extraction": fallback,
             }
 
-    if tried:
-        return None
-
-    # No imprint link: probe common paths on the final host
+    # No imprint link, or none of the linked pages was an imprint (E32): probe common
+    # paths on the final host, skipping URLs that were just tried
     parsed = urlparse(base_url)
     for path in IMPRINT_PROBE_PATHS:
-        sub_url, parse_result, fallback = fetch_imprint_page(
-            f"{parsed.scheme}://{parsed.netloc}{path}"
-        )
+        probe_url = f"{parsed.scheme}://{parsed.netloc}{path}"
+        if any(same_page(probe_url, u) for u in tried_urls):
+            continue
+        sub_url, parse_result, fallback = fetch_imprint_page(probe_url)
         if not parse_result:
             continue
         text = parse_result.get("main_content", "")
-        if same_text(parse_result, landing_text):
+        # A path that redirects to the landing page or to a privacy policy is no imprint
+        if (
+            same_text(parse_result, landing_text)
+            or same_page(sub_url, base_url)
+            or is_privacy_url(sub_url)
+        ):
             continue
         if not IMPRINT_WORD_PATTERN.search(text) or not has_imprint_evidence(text):
             continue
@@ -612,6 +621,35 @@ def find_imprint(
             "fallback_extraction": fallback,
         }
     return None
+
+
+def kontakt_as_imprint(
+    kontakt: Dict[str, Union[str, int]],
+    landing_text: str,
+    base_url: Optional[str] = None,
+) -> Optional[Dict[str, Any]]:
+    """
+    E32: the contact page (already fetched for the "kontakt" keyword) is the imprint of many
+    small sites ("Kontakt / Impressum"). Accept it with the same test as probed pages: the word
+    impressum/imprint/angaben gemäß plus imprint evidence, and not the landing page itself.
+    """
+    text = kontakt.get("main_content", "")
+    if (
+        not IMPRINT_WORD_PATTERN.search(text)
+        or not has_imprint_evidence(text)
+        or same_text(kontakt, landing_text)
+        or is_privacy_url(str(kontakt.get("url", "")))
+        # A contact link that redirects to the landing page is no imprint
+        or (base_url is not None and same_page(str(kontakt.get("url", "")), base_url))
+    ):
+        return None
+    return {
+        **kontakt,
+        "found_by": "kontakt",
+        "found_keyword": "kontakt",
+        "candidate_rank": 0,
+        "fallback_extraction": False,
+    }
 
 
 def get_base_href(tree: HTMLTree) -> Optional[str]:
@@ -774,8 +812,8 @@ def discover_links(
             abs_url = urldefrag(urljoin(resolve_base, href.strip()))[0]
             parsed_url = urlparse(abs_url)
 
-            # Skip if link is empty
-            if not parsed_url.path:
+            # Skip if link is empty (E32: "https://host?page=impressum" has no path but a query)
+            if not parsed_url.path and not parsed_url.query:
                 continue
 
             discovered_links[abs_url] = (
