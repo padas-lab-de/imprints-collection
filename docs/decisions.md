@@ -67,6 +67,7 @@ Only on aspe (untracked): datasets/E16/seeds (batches 0-156), datasets/gold (952
 ## Cards
 | ID | Date | Question | Outcome | Landed in |
 |---|---|---|---|---|
+| A11-known-hosts-cleanup-20261103 | 2026-11-03 | Remove the lorbeer known_hosts entry a subagent added (its own removal was denied) | done: user ran ssh-keygen -R lorbeer 2026-11-04; lead checked -F lorbeer empty | ~/.ssh/known_hosts (.old backup) |
 | D37-full-e16-recheck | 2026-11-04 | Re-fetch all 484.6k E16 DACH not_found hosts with the E35 fetcher? (E36: 5.9% yield, Kontakt 10% false) | A (user 2026-11-04) | E37 queued behind E33 |
 | A12-e30-lorbeer-driver-restart | 2026-11-04 | Approve: stop lorbeer E30 driver (PID 2400802) between batches, restart with batches up to 27 (aspe runs 28-54) | open | |
 | D36-fetch-recall-patch | 2026-11-03 | Apply E32 fetcher patch for new crawls; re-check old imprint_not_found hosts? | B (user 2026-11-04) | E35 tree, E33 full, E16 re-check pilot |
