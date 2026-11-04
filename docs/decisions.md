@@ -67,7 +67,7 @@ Only on aspe (untracked): datasets/E16/seeds (batches 0-156), datasets/gold (952
 | ID | Date | Question | Outcome | Landed in |
 |---|---|---|---|---|
 | A12-e30-lorbeer-driver-restart | 2026-11-04 | Approve: stop lorbeer E30 driver (PID 2400802) between batches, restart with batches up to 27 (aspe runs 28-54) | open | |
-| D36-fetch-recall-patch | 2026-11-03 | Apply E32 fetcher patch for new crawls; re-check old imprint_not_found hosts? | open | |
+| D36-fetch-recall-patch | 2026-11-03 | Apply E32 fetcher patch for new crawls; re-check old imprint_not_found hosts? | B (user 2026-11-04) | E35 tree, E33 full, E16 re-check pilot |
 | D35-next-imprint-sources | 2026-11-03 | Next sources for more imprints: A new-seed outlinks, B more dumps, C imprint_not_found recall audit, D Shopify | A B C (user 2026-11-03) | E32, E33, E34 |
 | D34-release-www-dedup | 2026-11-03 | Release and paper count www.x = x as one site; report only the current count, no comparison to the original | decided by user: dedup www; keep redirect target, else non-www | docs/decisions/D34-release-www-dedup.md |
 | D33-common-crawl-seeds | 2026-11-03 | Add Common Crawl URL index as seed source (622k new DACH German-language hosts in one crawl): pilot 20k now, after depth2R, or not? | A, pilot on mispel + all TLDs + more crawls + FineWeb-2; full crawl if pilot yield >10% (user 2026-11-03) | E23, E24, E25 |

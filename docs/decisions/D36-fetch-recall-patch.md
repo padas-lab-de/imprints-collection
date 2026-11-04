@@ -18,4 +18,4 @@ Branch E35-fetch-recall-patch @ b54aaa1, fetch.py sha256 a9dc1ddd...; 216 tests 
 Recommend B: the patch is cheap and validated; the re-check pilot measures the real gain before any large run.
 
 ## Answer
-(open)
+User 2026-11-04 ~07:15 UTC: "D36 B."
