@@ -66,6 +66,8 @@ Done 2026-11-04 08:30 UTC (D36 B). 5,000 random E16 .de/.at/.ch imprint_not_foun
 
 Full crawl (D33 rule passed) done 2026-11-04 00:59 UTC: 5,242 / 44,142 (11.9%); total with pilot 5,797 / 49,142 (11.8%). D16 address filter applies at merge.
 
+Round 2 started 2026-11-04 ~13:20 UTC: new frontier from the finished E26/E29 crawls (+ partial E30/E33, E34), minus round 1 and all known lists; 5k pilot (seed 342) on mispel with the E35 fetcher; tmp/E34/round2/.
+
 ### E32-imprint-recall-audit
 - 300 DACH imprint_not_found hosts (150 E26, 150 E16): 20 (6.7%, CI 4.4-10.1%) have a real imprint (name + postal address); 6 of them are crawl-time errors. Missed by today's code 4.7%.
 - Best changes: accept the already fetched Kontakt page with imprint word + evidence (7 strict), /impressum.php and /impressum.htm, probe after failed link candidates. Patch finds 18/20 on 32 replayed hosts; new yield 4.0% (CI 2.3-6.9%). Details tmp/E32/summary.md; decision D36-fetch-recall-patch.
