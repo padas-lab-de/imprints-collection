@@ -53,6 +53,8 @@ Next: re-run at the final merge, when the crawls end.
 - Frontier of hosts linked from E25-E30 pages (snapshot 21:21 UTC), minus all known/crawled: 49,142 (tmp/E34/frontier_new_seeds.txt, sha256 cf9361b7...); ~0.11 new hosts per fetched host; com 34%, de 15%, ch 8%, at 2%.
 - Pilot 5,000: imprint_found 555 = 11.1% (14.6% of reachable); DACH 406/1,239 = 32.8%, other TLDs 149/3,761 = 4.0%; host_not_found 24%. Passes D33; full crawl of 44,142 running on mispel since 22:10 UTC (datasets/E34/full). D16 address filter at merge.
 
+Full crawl (D33 rule passed) done 2026-11-04 00:59 UTC: 5,242 / 44,142 (11.9%); total with pilot 5,797 / 49,142 (11.8%). D16 address filter applies at merge.
+
 ### E32-imprint-recall-audit
 - 300 DACH imprint_not_found hosts (150 E26, 150 E16): 20 (6.7%, CI 4.4-10.1%) have a real imprint (name + postal address); 6 of them are crawl-time errors. Missed by today's code 4.7%.
 - Best changes: accept the already fetched Kontakt page with imprint word + evidence (7 strict), /impressum.php and /impressum.htm, probe after failed link candidates. Patch finds 18/20 on 32 replayed hosts; new yield 4.0% (CI 2.3-6.9%). Details tmp/E32/summary.md; decision D36-fetch-recall-patch.
