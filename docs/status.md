@@ -38,6 +38,12 @@ Liveness and imprint yield untested -> E27-hf-source-pilots.
 ### E25-cc-seed-pilot (done 2026-11-03; D33; lists tmp/E25/, mispel d29 tree datasets/E25/pilot)
 Candidate list from Common Crawl CC-MAIN-2026-43, .de/.at/.ch hosts with a German page: 2,691,932 -> not known (seeds + E22 frontiers, www-collapsed), passed clean-hosts + E10 platform filters, www-collapsed within the list: 618,841 (de 437,194, ch 112,434, at 69,213; cc43_dach_new.txt sha256 a607305a...). Pilot 20,000 random (seed 25, stratified by TLD), mispel 16:30-17:39 UTC, Shopify skipped: imprint_found 9,918 = 49.6% of all hosts (53.3% of reachable); de 57.1%, at 44.0%, ch 24.0%. host_not_found 5.7%. Lead-verified (sha256 + status counts). Yield > 10% -> full crawl E26-cc-dach-full-crawl (598,841 rest hosts) running since 17:43 UTC on mispel/abelie/apfel/aspe; 50% imprint_found in the first 33.7k rows.
 
+### E31-release-dedup-count
+Goal: one release count of unique imprint sites over all crawl sources, with the D34 rule (redirect target if it is a crawled host, else the non-www form). Code: scripts/E31/ (extract.py on each VM, pull.py, release_count.py; tests/test_e31_release_count.py).
+Result (partial data, snapshot 2026-11-03 21:20 to 2026-11-04 01:20 UTC; crawls still run): **3,069,472 sites** (D34); 3,368,667 www-collapsed; 3,796,840 exact hosts. Cumulative D34 per source: E16 2,631,493; E22d1A +156,649; E26 +157,266; E29 +32,845; E30 +3,644; rest in tmp/E31/release_count.tsv. 328,695 found hosts redirect to another site, 98.7% of targets are crawled hosts.
+Open doubt: a host folds into any crawled redirect target, also one that is not imprint_found (matches "if we know it"); requiring imprint_found is a one-line change in `canonical()`.
+Next: re-run at the final merge, when the crawls end.
+
 ### E33-more-dump-pilots
 - Four new pools minus all known/crawled hosts: Q3 CC host index 2024-46..2025-13 DACH 453,428; Q4 HPLT v2 IA-only DACH 516,971; Q1 FineWeb-2 DACH last seen before 2023 1,475,809; Q2 FineWeb-2 non-DACH 1,730,374.
 - Pilots (5,000 each): Q3 20.7%, Q4 20.9%, Q1 18.1% imprint_found (pass D33); Q2 8.1% (fails; net 12.7%, eu 11.3%, com 9.4%). Q1/Q4 host_not_found ~64%.
