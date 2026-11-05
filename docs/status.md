@@ -54,6 +54,12 @@ Next: re-run at the final merge, when the crawls end.
 
 Full crawl (D33 rule, D36 B fetcher E35 b54aaa1) done 2026-11-05 03:42 UTC: 2,429,968 hosts (Q4, Q3, Q1), all with a status row; 457,235 imprint_found = 18.8% (apfel 117,597, mispel 112,956, abelie 113,302, aspe 113,380). Per pool (lead-verified; pool = first in build order Q4, Q3, Q1): Q4 HPLT IA-only 108,276 / 511,763 = 21.2% (host_not_found 64.1%, of reachable 58.9%); Q3 CC index 79,560 / 447,400 = 17.8% (hnf 40.0%, reachable 29.6%; Q3 .ch only 6.7%); Q1 FineWeb-2 pre-2023 269,399 / 1,470,805 = 18.3% (hnf 63.8%, reachable 50.6%). By TLD: de 19.4%, at 20.2%, ch 13.8%. found_by: link 96.4%, probe 3.0%, kontakt 0.6%. Script + output tmp/E33/split_full.py, split_full_out.txt.
 
+### E39-kontakt-precision-audit (done 2026-11-05; agent labels, lead recounted and read samples; tmp/kontakt_audit/labels.tsv)
+- Real imprint = operator named + street and number + postcode and city. One rater (agent), pages cut at 4000 characters. Random samples, seed 37.
+- Kontakt finds: E37 87/100 = 87.0% [79.0, 92.2], E33 44/50 = 88.0% [76.2, 94.4]. Control, E37 link finds: 42/50 = 84.0% [71.5, 91.7]. The intervals overlap: no evidence that Kontakt is worse than link.
+- Misses: Kontakt mostly no address or no street; link also empty pages and disclaimer text. About 10 Kontakt "yes" records are contact blocks, not a legal notice; a strict rule gives a few points less.
+- So imprint_found is a page found, not an imprint with an address. Pages can list other parties' addresses before the imprint (ischmid.de), which is a case for the extraction evaluation.
+
 ### E37-e16-full-recheck
 Queued 2026-11-04 09:23 UTC (D37 A): the remaining 479,573 E16 .de/.at/.ch imprint_not_found hosts, E35 fetcher, 20 batches on apfel, mispel, abelie, aspe; each VM starts when its E33 part ends. Pilot (E36) expects about 5.9% new imprint_found.
 Done 2026-11-05 13:46 UTC: all 479,573 hosts have a status row; 29,855 new imprint_found = 6.2% (pilot E36 expected 5.9%); apfel 7,856, mispel 7,813, abelie 7,881, aspe 6,305. found_by: link 16,704 (56%), probe 6,003 (20%), kontakt 7,148 (24%); the Kontakt share is high, so a precision check of kontakt finds is needed before the merge.
