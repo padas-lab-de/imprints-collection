@@ -8,6 +8,8 @@ Two module leads share this record; each owns its In-flight block, cards and exp
 - Touch only your module's lines; anything that crosses modules (VM use, shared data on aspe/lorbeer, spend ledger) goes to Cards or a note in both In-flight blocks.
 
 ## In flight
+  - E34-new-seed-outlink-pilot round 3 STARTED 2026-11-05 (user go): DACH-only (de/at/ch/li) pilot 5,000 from new outlinks, mispel, NEW tree ~/GitHub/imprints-collection-e34r3 at 3a23d5d (D39 B User-Agent, first crawl with it), 64 workers, Shopify skipped until 2026-11-06 11:02 UTC. Output datasets/E34r3/pilot; scratch tmp/E34/round3/. Pilot only; full crawl after lead check by the D33 rule. Report found rate AND new D34 sites vs E31 canonical set.
+  - E40-parking-domain-filter STARTED 2026-11-05 (user: "Parking filter"): read-only, branch E40-parking-domain-filter from E31-final-count; classify 97 big redirect targets, text-detect parked/for-sale pages in found pages, D34 count after filter, precision sample 60+60. Scratch tmp/E40/.
 ### Gold set
 - Labelling not started: waits on D21, names for L1-L3, access route, calibration date. Tool + prefill on lorbeer (datasets/gold, prefill.jsonl e21-v1+filter1). Proposed: time-per-item summary; check the 11 hosts whose main address the filter removed.
 
