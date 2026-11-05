@@ -38,9 +38,9 @@ def extract(vm, d, fn):
     """Run extract.py on dir d of vm (stdin = script), write fn. Returns the #stats text."""
     script = (HERE / "extract.py").read_bytes()
     if vm == LOCAL_VM:
-        cmd = ["nice", "-n", "19", "python3", "-", d]
+        cmd = ["nice", "-n", "19", "ionice", "-c3", "python3", "-", d]
     else:
-        cmd = ["ssh", "-o", "BatchMode=yes", vm, "nice", "-n", "19", "python3", "-", d]
+        cmd = ["ssh", "-o", "BatchMode=yes", vm, "nice", "-n", "19", "ionice", "-c3", "python3", "-", d]
     tmp = fn.with_suffix(".tmp")
     with open(tmp, "wb") as f:
         r = subprocess.run(cmd, input=script, stdout=f, stderr=subprocess.PIPE)
@@ -54,7 +54,8 @@ def extract(vm, d, fn):
 
 
 def run_one(vm, src, tree, sub, out, reuse=()):
-    d = f"/home/dinzinger/{tree}/datasets/{sub}"
+    # tree starting with "/" = absolute directory tree/sub (local copy of a finished source)
+    d = f"{tree}/{sub}" if tree.startswith("/") else f"/home/dinzinger/{tree}/datasets/{sub}"
     fn = out / f"{vm}_{src}_{sub.replace('/', '_')}.tsv"
     for rd in reuse:  # finished file of an earlier run: take it instead of extracting again
         old = Path(rd) / fn.name
