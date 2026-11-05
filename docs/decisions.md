@@ -122,6 +122,7 @@ Only on aspe (untracked): datasets/E16/seeds (batches 0-156), datasets/gold (952
 | D1-revision-driver | 2026-10-23 | Why revise now? | Journal extension with better evaluation + fresh (larger) data snapshot; no hard deadline | — |
 
 ## Lead actions
+- 2026-11-05 16:55 UTC: apfel + aspe back: network issue, no restart (uptime 15 days, lead-checked). Data intact: E30 aspe 665,261 rows / 143,862 found; E37 apfel 125,000 / 7,856, aspe 104,573 / 6,305. Copies on lorbeer (rows + found match): d29 tree datasets/E30/full_aspe, e35 tree datasets/E37/full_<vm> (all 4 VMs). E31 no longer blocked. Still single copy on aspe: E16 seeds, E12, E19, gold captures, Photon.
 - 2026-11-05: E39-kontakt-precision-audit done: Kontakt 87.0% (E37, n=100), 88.0% (E33, n=50), link control 84.0% (n=50). Assumed: no Kontakt filter before the merge; all routes go to LLM extraction unchanged.
 - 2026-11-05 15:34 UTC: lorbeer + mispel rebooted ~14:12 UTC (user), no crawl of ours ran. apfel + aspe unreachable (ssh timeout; user knows). Blocks final E31/merge: E30 batches 28-54 and E37 parts exist only there, and E16 seeds + gold captures + Photon only on aspe. When back: copy E30 + E37 results to lorbeer.
 - 2026-11-05: abuse report mispel (132.231.12.31, 2026-11-04T16:11:57Z) traced to E33 batch 35 host templers.de (same IP 188.40.61.153), 7 requests incl. 5 probe paths; card D39.
