@@ -41,11 +41,13 @@ Candidate list from Common Crawl CC-MAIN-2026-43, .de/.at/.ch hosts with a Germa
 ### E35-fetch-recall-patch-review
 Goal: make the E32 fetch patch ready for D36 A/B. Result: branch E35-fetch-recall-patch @ b54aaa1, 216 tests pass; one guard added (Kontakt redirect to landing). Worst case +5 requests/host. Open: false-positive rate of the Kontakt rule at scale (audit found_by=kontakt sample). Next: deploy in a new tree only after D36.
 
-### E31-release-dedup-count
-Goal: one release count of unique imprint sites over all crawl sources, with the D34 rule (redirect target if it is a crawled host, else the non-www form). Code: scripts/E31/ (extract.py on each VM, pull.py, release_count.py; tests/test_e31_release_count.py).
-Result (partial data, snapshot 2026-11-03 21:20 to 2026-11-04 01:20 UTC; crawls still run): **3,069,472 sites** (D34); 3,368,667 www-collapsed; 3,796,840 exact hosts. Cumulative D34 per source: E16 2,631,493; E22d1A +156,649; E26 +157,266; E29 +32,845; E30 +3,644; rest in tmp/E31/release_count.tsv. 328,695 found hosts redirect to another site, 98.7% of targets are crawled hosts.
-Open doubt: a host folds into any crawled redirect target, also one that is not imprint_found (matches "if we know it"); requiring imprint_found is a one-line change in `canonical()`.
-Next: re-run at the final merge, when the crawls end.
+### E31-release-dedup-count (final count done 2026-11-05; branch E31-final-count 297322a, not merged; lorbeer e35 tree datasets/E31/final)
+Goal: one release count of unique imprint sites over all crawl sources, with the D34 rule (redirect target if it is a crawled host, else the non-www form). Code: scripts/E31/ on the branch; 6 tests pass.
+Result, all crawls finished, pull 2026-11-05 17:00-17:27 UTC, lead-verified (line count, sha, inputs of E30/E33/E34 round 2/E37 match): **3,859,210 sites** (D34; sha256 aea0f142...); 4,524,737 www-collapsed; 4,956,483 exact hosts. This counts sites with imprint_found, not the merged dataset: D16 address filter and LLM extraction are still to come, and E39 shows that not every found page has an address.
+New D34 sites per source (order matters, first source wins), new / crawled hosts: E16 2,631,463 / 6,560,119; E22d1A 156,638 / 2,275,329; E26 290,897 / 598,841; E29 184,266 / 962,942; E30 276,813 / 1,365,261 (20.3%); E33 186,731 / 2,429,968 (7.7%); E34 round 2 11,893 / 247,928 (4.8%); E37 23,518 / 479,573 (4.9%); rest in release_count.tsv.
+E33 folds 60.2% of its 457,235 found hosts into redirect targets (E16 8.0%, E30 6.3%), into 169,747 distinct targets, so no single target causes it. Raw found rate overstates E33: compare sources on new D34 sites.
+Open doubt closed: variant "fold only into imprint_found targets" gives 3,908,207, but 45,541 of the 57,655 hosts it would keep separate go to the parking target ts.domainname.de (not imprint_found itself). D34 rule stays.
+Assumed: pilots stay in (E27, E28, E33p); E13/E15 test dirs and E19 pilot + r403 dirs stay out, as in the earlier run (their rows not checked).
 
 ### E33-more-dump-pilots
 - Four new pools minus all known/crawled hosts: Q3 CC host index 2024-46..2025-13 DACH 453,428; Q4 HPLT v2 IA-only DACH 516,971; Q1 FineWeb-2 DACH last seen before 2023 1,475,809; Q2 FineWeb-2 non-DACH 1,730,374.
@@ -54,7 +56,7 @@ Next: re-run at the final merge, when the crawls end.
 
 Full crawl (D33 rule, D36 B fetcher E35 b54aaa1) done 2026-11-05 03:42 UTC: 2,429,968 hosts (Q4, Q3, Q1), all with a status row; 457,235 imprint_found = 18.8% (apfel 117,597, mispel 112,956, abelie 113,302, aspe 113,380). Per pool (lead-verified; pool = first in build order Q4, Q3, Q1): Q4 HPLT IA-only 108,276 / 511,763 = 21.2% (host_not_found 64.1%, of reachable 58.9%); Q3 CC index 79,560 / 447,400 = 17.8% (hnf 40.0%, reachable 29.6%; Q3 .ch only 6.7%); Q1 FineWeb-2 pre-2023 269,399 / 1,470,805 = 18.3% (hnf 63.8%, reachable 50.6%). By TLD: de 19.4%, at 20.2%, ch 13.8%. found_by: link 96.4%, probe 3.0%, kontakt 0.6%. Script + output tmp/E33/split_full.py, split_full_out.txt.
 
-### E39-kontakt-precision-audit (done 2026-11-05; agent labels, lead recounted and read samples; tmp/kontakt_audit/labels.tsv)
+### E39-kontakt-precision-audit (done 2026-11-05; agent labels, lead recounted and read samples; lorbeer e35 tree datasets/E39)
 - Real imprint = operator named + street and number + postcode and city. One rater (agent), pages cut at 4000 characters. Random samples, seed 37.
 - Kontakt finds: E37 87/100 = 87.0% [79.0, 92.2], E33 44/50 = 88.0% [76.2, 94.4]. Control, E37 link finds: 42/50 = 84.0% [71.5, 91.7]. The intervals overlap: no evidence that Kontakt is worse than link.
 - Misses: Kontakt mostly no address or no street; link also empty pages and disclaimer text. About 10 Kontakt "yes" records are contact blocks, not a legal notice; a strict rule gives a few points less.
