@@ -49,6 +49,13 @@ E33 folds 60.2% of its 457,235 found hosts into redirect targets (E16 8.0%, E30 
 Open doubt closed: variant "fold only into imprint_found targets" gives 3,908,207, but 45,541 of the 57,655 hosts it would keep separate go to the parking target ts.domainname.de (not imprint_found itself). D34 rule stays.
 Assumed: pilots stay in (E27, E28, E33p); E13/E15 test dirs and E19 pilot + r403 dirs stay out, as in the earlier run (their rows not checked).
 
+### E40-parking-domain-filter (done 2026-11-05; branch E40-parking-domain-filter 514f8f2, not merged; lorbeer e35 tree datasets/E40)
+Goal: remove parked, for-sale and placeholder sites from the E31 count. Method: classify the 97 redirect targets with >= 100 hosts (19 are parking: 15 domain sale, 2 registry, 2 hosting placeholder; 78 real), plus text patterns on the home page of every found host (all 73 source dirs scanned read-only, no HTTP). A D34 site is flagged when all its found hosts are flagged. 18 tests pass (lead ran them).
+Result on 3,859,210 D34 sites, lead-verified (row counts, per-source sums, 12 core items read): sale 18,200, park 5,565, host default page 1,026, under construction 15,722.
+Precision (agent hand labels, lead recounted): core sale+park 58/60 = 96.7% (CI 88.6-99.1; the 2 misses are live sites with a for-sale banner); host 20/20; constr 9/30 = 30%, so constr is not a drop rule. Unflagged found sites: 0/60 parked (miss rate CI 0-6.0%).
+**Assumed count after filter (sale + park + host): 3,834,419 sites** (core only 3,835,445). Largest share per source: E37 1,069 of 23,518 (4.5%, mostly host pages), E33 6,100 of 186,731 (3.3%), E16 0.2%.
+Open: detection reads only the home page; misses seen among non-found hosts give new phrases for a later pass ("domain names for sale", NamePros, "301Domains", "Website folgt", "Strona w przygotowaniu", "custom domain ... is now connected").
+
 ### E33-more-dump-pilots
 - Four new pools minus all known/crawled hosts: Q3 CC host index 2024-46..2025-13 DACH 453,428; Q4 HPLT v2 IA-only DACH 516,971; Q1 FineWeb-2 DACH last seen before 2023 1,475,809; Q2 FineWeb-2 non-DACH 1,730,374.
 - Pilots (5,000 each): Q3 20.7%, Q4 20.9%, Q1 18.1% imprint_found (pass D33); Q2 8.1% (fails; net 12.7%, eu 11.3%, com 9.4%). Q1/Q4 host_not_found ~64%.

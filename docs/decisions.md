@@ -9,7 +9,6 @@ Two module leads share this record; each owns its In-flight block, cards and exp
 
 ## In flight
   - E34-new-seed-outlink-pilot round 3: pilot DONE + lead-verified (36.1% found, 30.5% new D34 sites; status page). FULL crawl of 28,257 hosts started ~21:40 UTC on mispel, tree ~/GitHub/imprints-collection-e34r3 (3a23d5d, D39 UA), datasets/E34r3/full, Shopify skipped. Agent reports when done; then copy check + new D34 sites.
-  - E40-parking-domain-filter STARTED 2026-11-05 (user: "Parking filter"): read-only, branch E40-parking-domain-filter from E31-final-count; classify 97 big redirect targets, text-detect parked/for-sale pages in found pages, D34 count after filter, precision sample 60+60. Scratch tmp/E40/.
 ### Gold set
 - Labelling not started: waits on D21, names for L1-L3, access route, calibration date. Tool + prefill on lorbeer (datasets/gold, prefill.jsonl e21-v1+filter1). Proposed: time-per-item summary; check the 11 hosts whose main address the filter removed.
 
@@ -124,6 +123,7 @@ Only on aspe (untracked): datasets/E16/seeds (batches 0-156), datasets/gold (952
 | D1-revision-driver | 2026-10-23 | Why revise now? | Journal extension with better evaluation + fresh (larger) data snapshot; no hard deadline | — |
 
 ## Lead actions
+- 2026-11-05: E40 parking filter done and lead-verified (status page). Assumed: drop sale + park + host-default sites, keep under-construction sites; release count 3,834,419. Branch E40-parking-domain-filter 514f8f2 not merged; data lorbeer e35 tree datasets/E40.
 - 2026-11-05: E31 final count: 3,859,210 sites (D34), lead-verified; details in docs/status.md. Variant rejected: it keeps 45,541 parked hosts as separate sites. Branch E31-final-count not merged. Files on lorbeer: e35 tree datasets/E31/final, datasets/E39.
 - 2026-11-05 16:55 UTC: apfel + aspe back: network issue, no restart (uptime 15 days, lead-checked). Data intact: E30 aspe 665,261 rows / 143,862 found; E37 apfel 125,000 / 7,856, aspe 104,573 / 6,305. Copies on lorbeer (rows + found match): d29 tree datasets/E30/full_aspe, e35 tree datasets/E37/full_<vm> (all 4 VMs). E31 no longer blocked. Still single copy on aspe: E16 seeds, E12, E19, gold captures, Photon.
 - 2026-11-05: E39-kontakt-precision-audit done: Kontakt 87.0% (E37, n=100), 88.0% (E33, n=50), link control 84.0% (n=50). Assumed: no Kontakt filter before the merge; all routes go to LLM extraction unchanged.
