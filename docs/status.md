@@ -52,7 +52,7 @@ Next: re-run at the final merge, when the crawls end.
 - Pilots (5,000 each): Q3 20.7%, Q4 20.9%, Q1 18.1% imprint_found (pass D33); Q2 8.1% (fails; net 12.7%, eu 11.3%, com 9.4%). Q1/Q4 host_not_found ~64%.
 - Full crawl of Q4+Q3+Q1: 2,429,968 hosts (tmp/E33/e33_rest.txt), waits for D36-fetch-recall-patch. Details tmp/E33/summary.md.
 
-Full crawl (D33 rule, D36 B fetcher E35 b54aaa1) done 2026-11-05 03:42 UTC: 2,429,968 hosts (Q4, Q3, Q1), all with a status row; 457,235 imprint_found = 18.8% (apfel 117,597, mispel 112,956, abelie 113,302, aspe 113,380). Per-pool split: to do.
+Full crawl (D33 rule, D36 B fetcher E35 b54aaa1) done 2026-11-05 03:42 UTC: 2,429,968 hosts (Q4, Q3, Q1), all with a status row; 457,235 imprint_found = 18.8% (apfel 117,597, mispel 112,956, abelie 113,302, aspe 113,380). Per pool (lead-verified; pool = first in build order Q4, Q3, Q1): Q4 HPLT IA-only 108,276 / 511,763 = 21.2% (host_not_found 64.1%, of reachable 58.9%); Q3 CC index 79,560 / 447,400 = 17.8% (hnf 40.0%, reachable 29.6%; Q3 .ch only 6.7%); Q1 FineWeb-2 pre-2023 269,399 / 1,470,805 = 18.3% (hnf 63.8%, reachable 50.6%). By TLD: de 19.4%, at 20.2%, ch 13.8%. found_by: link 96.4%, probe 3.0%, kontakt 0.6%. Script + output tmp/E33/split_full.py, split_full_out.txt.
 
 ### E37-e16-full-recheck
 Queued 2026-11-04 09:23 UTC (D37 A): the remaining 479,573 E16 .de/.at/.ch imprint_not_found hosts, E35 fetcher, 20 batches on apfel, mispel, abelie, aspe; each VM starts when its E33 part ends. Pilot (E36) expects about 5.9% new imprint_found.
