@@ -67,7 +67,7 @@ Only on aspe (untracked): datasets/E16/seeds (batches 0-156), datasets/gold (952
 ## Cards
 | ID | Date | Question | Outcome | Landed in |
 |---|---|---|---|---|
-| D39-crawler-identification | 2026-11-05 | Abuse report mispel 2026-11-04 16:11 UTC = E33 probe paths on templers.de (188.40.61.153): new crawls with bot UA + contact, robots.txt, fewer probes? | B (user 2026-11-05 ~12:20 UTC): UA with contact https://www.fim.uni-passau.de/data-science only; probes, robots.txt unchanged | branch D39-crawler-user-agent (new crawls only) |
+| D39-crawler-identification | 2026-11-05 | Abuse report mispel 2026-11-04 16:11 UTC = E33 probe paths on templers.de (188.40.61.153): new crawls with bot UA + contact, robots.txt, fewer probes? | B (user 2026-11-05 ~12:20 UTC): UA with contact https://www.fim.uni-passau.de/data-science only; probes, robots.txt unchanged | branch D39-crawler-user-agent 3a23d5d (from E35 b54aaa1; 217 tests pass, lead-verified); deploy to VMs for new crawls only |
 | D38-e34-round2-dach-only | 2026-11-04 | E34 round 2 pilot 8.4% overall (DACH 35.3%, other 3.6%): full crawl of the 38,375 DACH hosts only? | B (user 2026-11-04 ~15:50 UTC; .org etc. wanted too) | E34 round 2 full, mispel + abelie |
 | A13-github-push-access-20261104 | 2026-11-04 | Push to GitHub fails: Permission denied (publickey) | resolved: GitHub accepts ~/.ssh/id_ed25519 (SHA256:ysdpVHou...) only on some tries; push with retries (tmp/push_retry.sh, 5 tries) | lead-record pushed e18cb90 |
 | A11-known-hosts-cleanup-20261103 | 2026-11-03 | Remove the lorbeer known_hosts entry a subagent added (its own removal was denied) | done: user ran ssh-keygen -R lorbeer 2026-11-04; lead checked -F lorbeer empty | ~/.ssh/known_hosts (.old backup) |
