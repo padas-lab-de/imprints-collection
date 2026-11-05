@@ -16,4 +16,4 @@ Issued 2026-11-05. Blocks: the next crawl starts (E34 round 3, D32 Shopify re-pi
 - **C** As A, and stop the running crawls now; restart them with the new fetcher.
 
 ## Answer
-(open)
+User 2026-11-05 ~12:20 UTC: "D39 B. Use this as URL: https://www.fim.uni-passau.de/data-science". UA: `Mozilla/5.0 (compatible; ImprintsCollectionBot/1.0; +https://www.fim.uni-passau.de/data-science)` (bot name assumed by lead), branch D39-crawler-user-agent from E35-fetch-recall-patch; for new crawls only, running E30/E37 unchanged.
