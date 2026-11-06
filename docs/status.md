@@ -49,6 +49,12 @@ E33 folds 60.2% of its 457,235 found hosts into redirect targets (E16 8.0%, E30 
 Open doubt closed: variant "fold only into imprint_found targets" gives 3,908,207, but 45,541 of the 57,655 hosts it would keep separate go to the parking target ts.domainname.de (not imprint_found itself). D34 rule stays.
 Assumed: pilots stay in (E27, E28, E33p); E13/E15 test dirs and E19 pilot + r403 dirs stay out, as in the earlier run (their rows not checked).
 
+### E42-shopify-repilot (2026-11-06; mispel ~/GitHub/imprints-collection-e34r3/pilot_e42; scratch tmp/E42)
+D32 A re-pilot after the 72 h quiet period: 1 request per 60 s to group v4:23.227.38, D39 B User-Agent, 11:03-15:05 UTC (4 h cap). Lead-verified on mispel.
+- 36 of 100 hosts done; 240 requests, **0 HTTP 429**. 14 imprint_found (39%), 20 imprint_not_found, 2 host_not_found; 6.7 requests per host; about 9 hosts per hour.
+- Shopify hosts not fetched in any source (www-collapsed, not found elsewhere): **97,489** (tmp/E42/shopify_all.txt).
+- D32 A allows the rest at this rate. Rate and scope: card D42.
+
 ### E43-hplt-rest-pilot and E44-fw2-dialect-pilot (2026-11-06; branch E43-hplt-rest-fw2-dialect-pilots 712c3dd; lorbeer e35 tree datasets/E43, datasets/E44)
 All TLDs, minus all crawled hosts and the E41 lists; 5,000-host pilots on lorbeer, D39 B tree, 32 workers, 0 Shopify requests. Lead-verified from the status files.
 - E43, HPLT IA-only hosts from the 3,209 unused shards: pool 1,255,808 (32.2% DACH TLDs). Pilot 442 found (8.84%; DACH TLDs 18.2%, others 4.4%), 3,657 host_not_found, 174 new D34 sites (3.48%).
