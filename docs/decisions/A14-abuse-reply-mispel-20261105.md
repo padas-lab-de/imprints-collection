@@ -10,4 +10,4 @@ Issued 2026-11-05 11:37 UTC. Corrected 2026-11-05 after the user chose D39 B. Ca
 
 **Correction:** the first draft also promised "read robots.txt", "reduce the number of path requests" and a "block list". D39 B does not include them and no block list exists, so they are removed. The first draft also said "one request per path"; the status log shows 7 requests, so the text now states 7. The user must check the "University of Passau" wording.
 
-**Outcome:** open. User has not said whether it was sent.
+**Outcome:** done. User 2026-11-06: "record the reply to the abuse report as done, as this matter has been clarified."
