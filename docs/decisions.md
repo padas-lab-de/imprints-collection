@@ -10,7 +10,6 @@ Two module leads share this record; each owns its In-flight block, cards and exp
 ## In flight
   - E41-non-dach-parity-crawls STARTED 2026-11-06 (user: "go ahead with the crawling on FineWeb for non-DACH TLDs" + "for everything that we have only crawled DACH TLDs, also initiate the same for the non-DACH TLDs"): FineWeb-2 non-DACH (E33 Q2) full; HPLT Internet-Archive-only non-DACH pool; E34 round 3 outlinks on non-DACH TLDs; E16 non-DACH imprint_not_found recheck (E37 parity). D39 B tree (3a23d5d), Shopify skipped, full crawls without the 10% gate (user override). Scratch tmp/E41/.
   - E42-shopify-repilot (D32 A): from 2026-11-06 11:02 UTC, 100 Shopify hosts at 1 request per 60 s on one VM; count all Shopify hosts skipped in all sources. Scratch tmp/E42/.
-  - Collection history doc STARTED 2026-11-06 (user request): docs/collection_history.md, structured by seeds, link rounds and sources, what ran and what did not; draft by agent, lead verifies.
 ### Gold set
 - Labelling not started: waits on D21, names for L1-L3, access route, calibration date. Tool + prefill on lorbeer (datasets/gold, prefill.jsonl e21-v1+filter1). Proposed: time-per-item summary; check the 11 hosts whose main address the filter removed.
 
@@ -125,6 +124,7 @@ Only on aspe (untracked): datasets/E16/seeds (batches 0-156), datasets/gold (952
 | D1-revision-driver | 2026-10-23 | Why revise now? | Journal extension with better evaluation + fresh (larger) data snapshot; no hard deadline | — |
 
 ## Lead actions
+- 2026-11-06: Collection history done: docs/collection_history.md (agent draft 60c0c17, lead-verified; per-source new sites filled from recount r3 release_count.tsv).
 - 2026-11-06: Recount r3 done, lead-verified: 3,865,119 D34 sites, 3,840,198 after E40 filter (status page, Current count).
 - 2026-11-05: E34 round 3 full crawl done and lead-verified: 9,753 new D34 sites in round 3 (pilot + full), not yet in the E31 count or the E40 filter. Data lorbeer e35 tree datasets/E34r3.
 - 2026-11-05: E40 parking filter done and lead-verified (status page). Assumed: drop sale + park + host-default sites, keep under-construction sites; release count 3,834,419. Branch E40-parking-domain-filter 514f8f2 not merged; data lorbeer e35 tree datasets/E40.
