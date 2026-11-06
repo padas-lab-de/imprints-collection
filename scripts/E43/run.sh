@@ -14,7 +14,7 @@ WORKERS=${WORKERS:-64}
 SKIP=(); for g in ${SKIPGROUPS:-}; do SKIP+=(--skip-provider-group "$g"); done
 LIST=$1; OUT=$2; FIRST=$3; LAST=$4; STEP=${STEP:-3}
 [ -s "$LIST" ] && [ -n "$OUT" ] && [ -n "$FIRST" ] && [ -n "$LAST" ] || { echo "usage: run.sh LIST OUT FIRST LAST"; exit 1; }
-LOGS=$ROOT/results/E22/logs
+LOGS=${LOGS:-$ROOT/results/E22/logs}
 mkdir -p "$OUT" "$LOGS" || exit 1
 cd "$ROOT" || exit 1   # ic reads topics/ and prompts/ relative to the repo root
 for ((s = FIRST; s <= LAST; s += STEP)); do
