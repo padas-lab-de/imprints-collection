@@ -18,4 +18,4 @@ Issued 2026-11-06 (lead). Blocks: when the higher-yield non-DACH lists start.
 - **A** Stop the L4 fetches now (rows done so far are kept; the driver restarts on the rest later). Run L3, L1, L2, then the rest of L4.
 - **B** Keep the order: L4, L3, L1, L2.
 
-**Answer:** (open)
+**Answer (user, 2026-11-06):** "D40 B." Keep the order L4, L3, L1, L2. No change on the VMs.
