@@ -23,4 +23,4 @@ Issued 2026-11-06 (lead). Blocks: the crawl of the Shopify hosts that are not fe
 - **B** Full run at 1 per 10 s on one VM (mispel), with the same stop rule. About 1,490 hosts per day.
 - **C** Step test at 1 per 5 s on one VM (100 hosts, the same 5% stop rule), then a new card. This gives more speed per IP, if it holds.
 
-**Answer:** (open)
+**Answer (user, 2026-11-06):** "D43 C." Step test at 1 per 5 s on one VM (E46-shopify-rate-5s-test, mispel), then a new card.
