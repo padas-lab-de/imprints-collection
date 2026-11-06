@@ -21,4 +21,4 @@ Issued 2026-11-06 (lead). Blocks: the full crawl of the two remaining seed pools
 - **B** Crawl the E43 rest only; leave E44 (about 90 sites).
 - **C** Crawl neither (D33 10% rule). Record both as "piloted, below rule".
 
-**Answer:** (open)
+**Answer (user, 2026-11-06):** "D41 A." Crawl both rests on lorbeer: E44 first, then E43.

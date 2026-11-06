@@ -8,6 +8,8 @@ Two module leads share this record; each owns its In-flight block, cards and exp
 - Touch only your module's lines; anything that crosses modules (VM use, shared data on aspe/lorbeer, spend ledger) goes to Cards or a note in both In-flight blocks.
 
 ## In flight
+  - E43/E44 full crawls STARTED 2026-11-06 (D41 A): lorbeer, tree ~/GitHub/imprints-collection-e43, E44 rest (about 5,687) then E43 rest (about 1,250,808), 32 workers, Shopify skipped. Out datasets/E44/full, datasets/E43/full. Check: bash tmp/E43/st_full.sh. When done: copy to e35 tree, recount.
+  - E45-shopify-rate-step-test STARTED 2026-11-06 (D42 A): 100 Shopify hosts at 1 request per 10 s on mispel (e34r3 tree, pilot_e45a) + 100 at 1 per 60 s on apfel (e41 tree, pilot_e45b), at the same time. Stop a run if 429 > 5% of requests; 4 h cap. Scratch tmp/E45. Then card for the full run of 97,489 hosts.
   - E41-non-dach-parity-crawls RUNNING since 2026-11-06 08:01 UTC (user: "go ahead with the crawling on FineWeb for non-DACH TLDs" + parity for all DACH-only steps). Branch E41-non-dach-parity-crawls c91a527. Lists in tmp/E41 (lead-verified: sizes, sha, disjoint, no DACH TLD): L4 E16 not-found 1,439,316; L3 round 3 outlinks 565,218; L1 FineWeb-2 1,722,700; L2 HPLT IA-only (25% of shards, same slice as DACH) 468,286. apfel, aspe, abelie, mispel: tree ~/GitHub/imprints-collection-e41 (3a23d5d, D39 UA), driver runs L4 -> L3 -> L1 -> L2, out datasets/E41/<list>_<vm>, log results/E41/logs/driver.log. Check: bash tmp/E41/st.sh. Order L4 -> L3 -> L1 -> L2 kept (D40 B). When done: copy to lorbeer, recount r4.
 ### Gold set
 - Labelling not started: waits on D21, names for L1-L3, access route, calibration date. Tool + prefill on lorbeer (datasets/gold, prefill.jsonl e21-v1+filter1). Proposed: time-per-item summary; check the 11 hosts whose main address the filter removed.
@@ -68,8 +70,8 @@ Only on aspe (untracked): datasets/E16/seeds (batches 0-156), datasets/gold (952
 ## Cards
 | ID | Date | Question | Outcome | Landed in |
 |---|---|---|---|---|
-| D42-shopify-rest-rate | 2026-11-06 | Crawl 97,489 skipped Shopify hosts: step test at 1 per 10 s, full run at 1 per 60 s, or drop? | open (recommend A: step test) | decisions/D42-shopify-rest-rate.md |
-| D41-hplt-rest-dialect-full-crawl | 2026-11-06 | Full crawl of E43 HPLT rest (1.25M, pilot 8.84%) and E44 dialect rest (5,687, pilot 2.32%), below the 10% rule? | open (recommend A: both, on lorbeer) | decisions/D41-hplt-rest-dialect-full-crawl.md |
+| D42-shopify-rest-rate | 2026-11-06 | Crawl 97,489 skipped Shopify hosts: step test at 1 per 10 s, full run at 1 per 60 s, or drop? | A: step test 1/10 s + 1/60 s on two IPs (user, 2026-11-06) | decisions/D42-shopify-rest-rate.md |
+| D41-hplt-rest-dialect-full-crawl | 2026-11-06 | Full crawl of E43 HPLT rest (1.25M, pilot 8.84%) and E44 dialect rest (5,687, pilot 2.32%), below the 10% rule? | A: crawl both rests on lorbeer (user, 2026-11-06) | decisions/D41-hplt-rest-dialect-full-crawl.md |
 | D40-e41-list-order | 2026-11-06 | E41 list order: L4 (0.5% yield) first, or L3/L1/L2 first? | B: keep order L4, L3, L1, L2 (user, 2026-11-06) | decisions/D40-e41-list-order.md |
 | A14-abuse-reply-mispel-20261105 | 2026-11-05 | Send reply to abuse desk about mispel (corrected to D39 B) | done 2026-11-06 (user: matter clarified) | docs/decisions/A14-abuse-reply-mispel-20261105.md |
 | D39-crawler-identification | 2026-11-05 | Abuse report mispel 2026-11-04 16:11 UTC = E33 probe paths on templers.de (188.40.61.153): new crawls with bot UA + contact, robots.txt, fewer probes? | B (user 2026-11-05 ~12:20 UTC): UA with contact https://www.fim.uni-passau.de/data-science only; probes, robots.txt unchanged | branch D39-crawler-user-agent 3a23d5d (from E35 b54aaa1; 217 tests pass, lead-verified); deploy to VMs for new crawls only |

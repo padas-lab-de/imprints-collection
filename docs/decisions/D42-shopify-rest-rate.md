@@ -19,4 +19,4 @@ Issued 2026-11-06 (lead). Blocks: the crawl of all Shopify hosts that were skipp
 - **B** Start the full run now at 1 request per 60 s on the free VM (lorbeer), as D32 A allows.
 - **C** Do not crawl Shopify hosts. Record them as "skipped, throttled platform".
 
-**Answer:** (open)
+**Answer (user, 2026-11-06):** "D42 A." Step test (E45-shopify-rate-step-test): 1 per 10 s on mispel, 1 per 60 s on apfel.
