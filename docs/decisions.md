@@ -8,7 +8,6 @@ Two module leads share this record; each owns its In-flight block, cards and exp
 - Touch only your module's lines; anything that crosses modules (VM use, shared data on aspe/lorbeer, spend ledger) goes to Cards or a note in both In-flight blocks.
 
 ## In flight
-  - E43-hplt-rest-pilot + E44-fw2-dialect-pilot STARTED 2026-11-06 (user: "go ahead with your two proposals"): agent (sonnet, worktree), branch E43-hplt-rest-fw2-dialect-pilots. E43: HPLT IA-only hosts from the 3,209 shards not used yet; E44: FineWeb-2 dialect-config hosts (29,436 not-known). All TLDs, minus all crawled hosts and E41 lists. 5,000-host pilot each on lorbeer (D39 B tree ~/GitHub/imprints-collection-e43, 32 workers, Shopify skipped). Scratch tmp/E43, tmp/E44. Lead verifies; full crawl only after the user's go.
   - E41-non-dach-parity-crawls RUNNING since 2026-11-06 08:01 UTC (user: "go ahead with the crawling on FineWeb for non-DACH TLDs" + parity for all DACH-only steps). Branch E41-non-dach-parity-crawls c91a527. Lists in tmp/E41 (lead-verified: sizes, sha, disjoint, no DACH TLD): L4 E16 not-found 1,439,316; L3 round 3 outlinks 565,218; L1 FineWeb-2 1,722,700; L2 HPLT IA-only (25% of shards, same slice as DACH) 468,286. apfel, aspe, abelie, mispel: tree ~/GitHub/imprints-collection-e41 (3a23d5d, D39 UA), driver runs L4 -> L3 -> L1 -> L2, out datasets/E41/<list>_<vm>, log results/E41/logs/driver.log. Check: bash tmp/E41/st.sh. Order L4 -> L3 -> L1 -> L2 kept (D40 B). When done: copy to lorbeer, recount r4.
   - E42-shopify-repilot (D32 A): from 2026-11-06 11:02 UTC, 100 Shopify hosts at 1 request per 60 s on one VM; count all Shopify hosts skipped in all sources. Scratch tmp/E42/.
 ### Gold set
@@ -70,6 +69,7 @@ Only on aspe (untracked): datasets/E16/seeds (batches 0-156), datasets/gold (952
 ## Cards
 | ID | Date | Question | Outcome | Landed in |
 |---|---|---|---|---|
+| D41-hplt-rest-dialect-full-crawl | 2026-11-06 | Full crawl of E43 HPLT rest (1.25M, pilot 8.84%) and E44 dialect rest (5,687, pilot 2.32%), below the 10% rule? | open (recommend A: both, on lorbeer) | decisions/D41-hplt-rest-dialect-full-crawl.md |
 | D40-e41-list-order | 2026-11-06 | E41 list order: L4 (0.5% yield) first, or L3/L1/L2 first? | B: keep order L4, L3, L1, L2 (user, 2026-11-06) | decisions/D40-e41-list-order.md |
 | A14-abuse-reply-mispel-20261105 | 2026-11-05 | Send reply to abuse desk about mispel (corrected to D39 B) | done 2026-11-06 (user: matter clarified) | docs/decisions/A14-abuse-reply-mispel-20261105.md |
 | D39-crawler-identification | 2026-11-05 | Abuse report mispel 2026-11-04 16:11 UTC = E33 probe paths on templers.de (188.40.61.153): new crawls with bot UA + contact, robots.txt, fewer probes? | B (user 2026-11-05 ~12:20 UTC): UA with contact https://www.fim.uni-passau.de/data-science only; probes, robots.txt unchanged | branch D39-crawler-user-agent 3a23d5d (from E35 b54aaa1; 217 tests pass, lead-verified); deploy to VMs for new crawls only |
@@ -126,6 +126,7 @@ Only on aspe (untracked): datasets/E16/seeds (batches 0-156), datasets/gold (952
 | D1-revision-driver | 2026-10-23 | Why revise now? | Journal extension with better evaluation + fresh (larger) data snapshot; no hard deadline | — |
 
 ## Lead actions
+- 2026-11-06: E43 + E44 pilots done, lead-verified (status page, E43/E44 section); card D41.
 - 2026-11-06: Collection history done: docs/collection_history.md (agent draft 60c0c17, lead-verified; per-source new sites filled from recount r3 release_count.tsv).
 - 2026-11-06: Recount r3 done, lead-verified: 3,865,119 D34 sites, 3,840,198 after E40 filter (status page, Current count).
 - 2026-11-05: E34 round 3 full crawl done and lead-verified: 9,753 new D34 sites in round 3 (pilot + full), not yet in the E31 count or the E40 filter. Data lorbeer e35 tree datasets/E34r3.

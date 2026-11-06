@@ -49,6 +49,12 @@ E33 folds 60.2% of its 457,235 found hosts into redirect targets (E16 8.0%, E30 
 Open doubt closed: variant "fold only into imprint_found targets" gives 3,908,207, but 45,541 of the 57,655 hosts it would keep separate go to the parking target ts.domainname.de (not imprint_found itself). D34 rule stays.
 Assumed: pilots stay in (E27, E28, E33p); E13/E15 test dirs and E19 pilot + r403 dirs stay out, as in the earlier run (their rows not checked).
 
+### E43-hplt-rest-pilot and E44-fw2-dialect-pilot (2026-11-06; branch E43-hplt-rest-fw2-dialect-pilots 712c3dd; lorbeer e35 tree datasets/E43, datasets/E44)
+All TLDs, minus all crawled hosts and the E41 lists; 5,000-host pilots on lorbeer, D39 B tree, 32 workers, 0 Shopify requests. Lead-verified from the status files.
+- E43, HPLT IA-only hosts from the 3,209 unused shards: pool 1,255,808 (32.2% DACH TLDs). Pilot 442 found (8.84%; DACH TLDs 18.2%, others 4.4%), 3,657 host_not_found, 174 new D34 sites (3.48%).
+- E44, FineWeb-2 dialect configs: pool 10,687. Pilot 116 found (2.32%), 80 new D34 sites.
+- Both below the D33 10% rule. Full crawl: card D41.
+
 ### Current count (recount r3, 2026-11-06; branch E31-recount-r3 1db9b20, not merged; lorbeer e35 tree datasets/E31/r3)
 All sources incl. E34 round 3, lead-verified (sha, set difference, every removed site checked): **3,865,119 D34 sites** (sha256 9a9a324f...); 4,536,458 www-collapsed; 4,968,204 exact. Round 3 adds net +5,909, not +9,753: 9,822 sites added, 3,913 earlier found hosts now fold into their redirect target, which round 3 crawled. **After E40 filter (drop sale + park + host): 3,840,198** (sale 18,332, park 5,567, host 1,022; constr 15,730 kept). Same 97 big targets, no new parking target.
 
