@@ -1,0 +1,10 @@
+{
+ "files": 75,
+ "pilots": [
+  "/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/E33/q1_pilot.txt",
+  "/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/E33/q2_pilot.txt",
+  "/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/E33/q3_pilot.txt",
+  "/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/E33/q4_pilot.txt"
+ ],
+ "crawled_www_collapsed": 15879365
+}
