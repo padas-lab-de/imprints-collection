@@ -49,6 +49,11 @@ E33 folds 60.2% of its 457,235 found hosts into redirect targets (E16 8.0%, E30 
 Open doubt closed: variant "fold only into imprint_found targets" gives 3,908,207, but 45,541 of the 57,655 hosts it would keep separate go to the parking target ts.domainname.de (not imprint_found itself). D34 rule stays.
 Assumed: pilots stay in (E27, E28, E33p); E13/E15 test dirs and E19 pilot + r403 dirs stay out, as in the earlier run (their rows not checked).
 
+### E46-shopify-rate-5s-test (2026-11-06/07; D43 C; scratch tmp/E46; results lorbeer e35 datasets/E46)
+mispel, 1 request per 5 s to Shopify group v4:23.227.38, D39 B User-Agent, 100 new hosts (seed 46), 23:41-00:28 UTC. Lead-verified.
+- 100 of 100 hosts; 564 requests (all Shopify, 5.0 s apart on average), **0 HTTP 429**; 50 imprint_found (50%), 36 imprint_not_found, 14 host_not_found; 5.6 requests per host; about 128 hosts per hour.
+- Shopify hosts left: 97,216. Full run: card D44.
+
 ### E45-shopify-rate-step-test (2026-11-06; D42 A; scratch tmp/E45; results lorbeer e35 datasets/E45)
 Two runs at the same time on the Shopify group v4:23.227.38, D39 B User-Agent, 100 new hosts each (seed 45). Lead-verified.
 - A, mispel, 1 request per 10 s, 16:52-18:30 UTC: 100 of 100 hosts; 612 requests (589 Shopify, about 9.9 s apart), **0 HTTP 429**; 38 imprint_found (38%), 51 imprint_not_found, 10 host_not_found, 1 filtered; 6.1 requests per host; about 62 hosts per hour.
