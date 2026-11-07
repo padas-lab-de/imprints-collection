@@ -8,6 +8,7 @@ Two module leads share this record; each owns its In-flight block, cards and exp
 - Touch only your module's lines; anything that crosses modules (VM use, shared data on aspe/lorbeer, spend ledger) goes to Cards or a note in both In-flight blocks.
 
 ## In flight
+  - E47-shopify-rate-2s-test RUNNING since 2026-11-07 08:43Z (D44 C): mispel, tree ~/GitHub/imprints-collection-e34r3/pilot_e47, 100 new Shopify hosts (seed 47, tmp/E47/list.txt, sha 9707c84f…), 1 request per 2 s, PIDs 2776461/2776469. Stop if 429 > 5% after 20+ requests; cap 12:43Z. Lead watcher tmp/E47/watch.sh (every 2 min, log tmp/E47/watch.log). Then a card for the full run.
   - E43 full crawl RUNNING since 2026-11-06 17:13Z (D41 A): lorbeer, tree ~/GitHub/imprints-collection-e43, rest 1,250,808 hosts (tmp/E43/rest_E43.txt, sha c060acb0…), 51 batches, 32 workers, Shopify skipped, driver scripts/E43/run_full.sh (branch E43-hplt-rest-fw2-dialect-pilots 8014473, PID 1639158, restart loop). Out datasets/E43/full. Check: bash tmp/E43/st_full.sh. After reboot: bash tmp/E43/launch_full.sh (resumes). When done: copy to e35 tree, recount.
   - E41-non-dach-parity-crawls RUNNING since 2026-11-06 08:01 UTC (user: "go ahead with the crawling on FineWeb for non-DACH TLDs" + parity for all DACH-only steps). Branch E41-non-dach-parity-crawls c91a527. Lists in tmp/E41 (lead-verified: sizes, sha, disjoint, no DACH TLD): L4 E16 not-found 1,439,316; L3 round 3 outlinks 565,218; L1 FineWeb-2 1,722,700; L2 HPLT IA-only (25% of shards, same slice as DACH) 468,286. apfel, aspe, abelie, mispel: tree ~/GitHub/imprints-collection-e41 (3a23d5d, D39 UA), driver runs L4 -> L3 -> L1 -> L2, out datasets/E41/<list>_<vm>, log results/E41/logs/driver.log. Check: bash tmp/E41/st.sh. Order L4 -> L3 -> L1 -> L2 kept (D40 B). When done: copy to lorbeer, recount r4.
 ### Gold set
@@ -69,7 +70,7 @@ Only on aspe (untracked): datasets/E16/seeds (batches 0-156), datasets/gold (952
 ## Cards
 | ID | Date | Question | Outcome | Landed in |
 |---|---|---|---|---|
-| D44-shopify-full-run-rate | 2026-11-07 | Full run of 97,216 Shopify hosts: 1 per 5 s on 1 VM, on 5 VMs, or a 1 per 2 s step test? | open (recommend A: 1 VM at 1 per 5 s) | decisions/D44-shopify-full-run-rate.md |
+| D44-shopify-full-run-rate | 2026-11-07 | Full run of 97,216 Shopify hosts: 1 per 5 s on 1 VM, on 5 VMs, or a 1 per 2 s step test? | C: step test at 1 per 2 s first (user, 2026-11-07) | decisions/D44-shopify-full-run-rate.md |
 | D43-shopify-full-run | 2026-11-06 | Full run of 97,316 Shopify hosts: 1 per 10 s on 5 VMs with a global stop rule, on 1 VM, or a 1 per 5 s step test? | C: step test at 1 per 5 s first (user, 2026-11-06) | decisions/D43-shopify-full-run.md |
 | D42-shopify-rest-rate | 2026-11-06 | Crawl 97,489 skipped Shopify hosts: step test at 1 per 10 s, full run at 1 per 60 s, or drop? | A: step test 1/10 s + 1/60 s on two IPs (user, 2026-11-06) | decisions/D42-shopify-rest-rate.md |
 | D41-hplt-rest-dialect-full-crawl | 2026-11-06 | Full crawl of E43 HPLT rest (1.25M, pilot 8.84%) and E44 dialect rest (5,687, pilot 2.32%), below the 10% rule? | A: crawl both rests on lorbeer (user, 2026-11-06) | decisions/D41-hplt-rest-dialect-full-crawl.md |

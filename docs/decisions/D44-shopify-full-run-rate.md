@@ -19,4 +19,4 @@ Issued 2026-11-07 (lead). Blocks: the crawl of the Shopify hosts that are not fe
 - **B** Full run at 1 per 5 s on each of 5 VMs (apfel, aspe, abelie, mispel, lorbeer), with the list split into 5 parts. Global stop rule: a stop on one VM stops all 5. About 15,300 hosts per day. The total rate (1 per s) is 5 times what we tested from one client.
 - **C** One more step test at 1 per 2 s on one VM (100 hosts, the same rule), then a new card.
 
-**Answer:** (open)
+**Answer (user, 2026-11-07):** "D44 C." Step test at 1 per 2 s on one VM (E47-shopify-rate-2s-test, mispel), then a new card.
