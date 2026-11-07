@@ -27,4 +27,4 @@ Issued 2026-11-07 (lead). Blocks: the crawl of the Shopify hosts that are not fe
 - **B** Full run at 1 per 2 s on one VM (mispel), with the window stop rule. About 7,300 hosts per day. If the 2 responses were a rate limit, they may grow over a long run; the window rule then stops it.
 - **C** Full run at 1 per 5 s on each of 5 VMs (apfel, aspe, abelie, mispel, lorbeer), with the list split into 5 parts. Global stop: a stop on one VM stops all 5. About 15,300 hosts per day. Shopify then gets 1 request per second from us in total, which is above the rate where throttle responses started from one IP.
 
-**Answer:** (open)
+**Answer (user, 2026-11-07):** "D45: go with one per three seconds on multiple VMs. Check what is possible there. So not just one VM, but try to scale it so that the entire crawling is done as soon as possible. But check whether the other VMs are free."

@@ -49,6 +49,9 @@ E33 folds 60.2% of its 457,235 found hosts into redirect targets (E16 8.0%, E30 
 Open doubt closed: variant "fold only into imprint_found targets" gives 3,908,207, but 45,541 of the 57,655 hosts it would keep separate go to the parking target ts.domainname.de (not imprint_found itself). D34 rule stays.
 Assumed: pilots stay in (E27, E28, E33p); E13/E15 test dirs and E19 pilot + r403 dirs stay out, as in the earlier run (their rows not checked).
 
+### E48-shopify-full-crawl (since 2026-11-07 10:45Z; D45; scripts lorbeer ~/E48-shopify)
+Recrawl of all 96,722 Shopify hosts not fetched yet, 5 VMs with own IPs (apfel .89, aspe .90, abelie .86, mispel .87, lorbeer .88 in 193.175.2.80/28), 1 request per 3 s per VM to Shopify group v4:23.227.38, D39 B User-Agent, RESTARTS 5. Global window stop rule (>5% 429/503 in the last 200 requests on any VM stops all). Runs next to E41/E43 on the same VMs. RUNNING.
+
 ### E47-shopify-rate-2s-test (2026-11-07; D44 C; scratch tmp/E47; results lorbeer e35 datasets/E47)
 mispel, 1 request per 2 s to Shopify group v4:23.227.38, D39 B User-Agent, 100 new hosts (seed 47), 08:43-09:03 UTC. Lead-verified.
 - 100 of 100 hosts; 582 requests (all Shopify, about 2.0 s apart); **2 throttle responses (0.3%; 429 or 503, logs do not say which)**, the first in any Shopify test, both on one host (account.efixelle.de) after request 540; 39 imprint_found (39%), 53 imprint_not_found, 5 host_not_found, 3 filtered; 5.8 requests per host; about 304 hosts per hour.
