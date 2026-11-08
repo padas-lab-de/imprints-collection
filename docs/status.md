@@ -74,6 +74,9 @@ D32 A re-pilot after the 72 h quiet period: 1 request per 60 s to group v4:23.22
 - Shopify hosts not fetched in any source (www-collapsed, not found elsewhere): **97,489** (tmp/E42/shopify_all.txt).
 - D32 A allows the rest at this rate. Rate and scope: card D42.
 
+### E43-hplt-rest-full-crawl (2026-11-06 17:13Z - 2026-11-08 05:49Z; D41 A; lorbeer; results lorbeer e35 datasets/E43/full)
+1,250,808 of 1,250,808 hosts (list sha c060acb0…). imprint_found 115,837 (9.3%), imprint_not_found 129,890, host_not_found 987,792, filtered 13,095, no_valid_html_tree 3,333, skipped_provider 861 (Shopify; covered by E48). Lead-verified. Goes into recount r4.
+
 ### E43-hplt-rest-pilot and E44-fw2-dialect-pilot (2026-11-06; branch E43-hplt-rest-fw2-dialect-pilots 712c3dd; lorbeer e35 tree datasets/E43, datasets/E44)
 All TLDs, minus all crawled hosts and the E41 lists; 5,000-host pilots on lorbeer, D39 B tree, 32 workers, 0 Shopify requests. Lead-verified from the status files.
 - E43, HPLT IA-only hosts from the 3,209 unused shards: pool 1,255,808 (32.2% DACH TLDs). Pilot 442 found (8.84%; DACH TLDs 18.2%, others 4.4%), 3,657 host_not_found, 174 new D34 sites (3.48%).
