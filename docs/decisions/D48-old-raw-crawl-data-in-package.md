@@ -8,4 +8,4 @@ Issued 2026-11-09 (lead). Blocks: the completeness of the S3 package innkube dat
 - **A** Copy the old raw dirs from all VMs (incl. read-only access to akazie and aralie) to lorbeer, gzip-check them, and upload them to crawls/<source>/ in the package. Cost: about 40+ GB on lorbeer (203 GB free) and S3; read-only copy traffic from the VMs.
 - **B** Tables only for the old sources: the package documents that their page text stays on the VMs. Cost: none now; the page text is lost when a VM is wiped.
 
-**Outcome:** open.
+**Outcome:** A (user, 2026-11-09: "D48 A."). Agent copies the old raw dirs read-only from the VMs (rsync with bandwidth limit, E48 still runs) to lorbeer, gzip-checks, adds them to crawls/<source>/ and uploads.
