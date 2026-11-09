@@ -44,3 +44,17 @@ One JSON line per host and schema, in `results/E49/refs/<schema>.jsonl`:
   prediction file: it reports `unresolved_refs`).
 - Exactly one line per host and schema.
 - Labels come only from the captured texts and screenshot, not from model predictions of this experiment.
+
+## Adjudication rules (E49)
+
+These rules decide the reference labels when the two label passes (A, B) disagree. They also apply to lines where A and B agree.
+
+- **R1 Hijacked or spam domain.** If the site has no coherent operator or topic, set main = null (path []). If the current content is coherent (for example casino reviews), label that content with confidence low and the note "hijacked".
+- **R2 Activity the site presents.** Label the activity that the site presents, homepage first. If the main business of the imprint operator is different, add it as an extra.
+- **R3 Private homepages and blogs.** Private, non-commercial homepage: WZ 98.20.0. Editorial blog of an individual: WZ 58.19.0. POI: the leaf of the topic when it is clear, else the topic root; confidence low.
+- **R4 POI online-only operators** (blog, forum, portal, dating, web service, online magazine): the nearest leaf if one fits, else the topic root. Set the boolean field "online_only": true on such POI lines. Set it to false on all other POI lines.
+- **R5 Extras.** Extras can be leaves or inner nodes. An extra must not be the main or an ancestor of the main. Remove such extras. At most 2 extras.
+- **R6 Stop above leaf level** only when the text does not decide between the children (example: Gymnasium -> WZ 85.31). A WZ klasse with exactly one child counts as its leaf; write the leaf.
+- **R7 Hotels and wineries.** Hotel that mentions only breakfast: WZ 55.10.2. Winery that makes wine: WZ 11.02.0 with 01.21.0 as an extra.
+
+Adjudicated lines have the note "adjudicated: A|B|new; <reason>". The reference files are in results/E49/refs/ (see results/E49/refs/adjudication.md).
