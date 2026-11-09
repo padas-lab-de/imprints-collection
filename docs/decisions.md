@@ -132,6 +132,7 @@ Only on aspe (untracked): datasets/E16/seeds (batches 0-156), datasets/gold (952
 | D1-revision-driver | 2026-10-23 | Why revise now? | Journal extension with better evaluation + fresh (larger) data snapshot; no hard deadline | — |
 
 ## Lead actions
+- 2026-11-09: D47 step 1 lead-verified: branch collection-release edc3d83 contains all remote branches (git branch -r --no-merged empty), record and gold files equal lead-record, fetch.py keeps D39 B UA, THROTTLE_CODES (429, 503), MAX_BODY_BYTES 10 MB; pytest (branch .venv) 322 passed, 1 skipped. Adds docs/reproduce_collection.md (skeleton, TODO(lead) items) and scripts/README.md. Step 2 (import out-of-git run scripts, fill the guide, r2_name_for_sale flag-only option) waits for the inventory agent.
 - 2026-11-09: E40 round 3 done, lead-verified (sha, 60 rows read): kept constr sites 47/60 real (78%), 3/60 placeholders (5%). Constr stays kept; count 3,908,045 unchanged. Output lorbeer e35 datasets/E40/r3.
 - 2026-11-09: E40 round 2 done, lead-verified (sha, line count, category sums, labels read, own draw 40/40): 3,908,045 sites after filter on recount r4 (-84,759). Assumed: adopt as release filter; r2_name_for_sale flag-only in recount r5 (269 sites). Branch E40-parking-filter-r2 e65d59f (not merged), output lorbeer e35 datasets/E40/r2.
 - 2026-11-09: D46 C: E34 round 4 closed after the pilot (97/5,000 = 1.94%; 88 new sites). rest_r4.txt (696,697) not crawled; pilot results mispel e34r3 datasets/E34r4/pilot and tmp/E34/round4/pilot; add the pilot to the next recount (r5, with E48).
