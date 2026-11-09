@@ -8,6 +8,7 @@ Two module leads share this record; each owns its In-flight block, cards and exp
 - Touch only your module's lines; anything that crosses modules (VM use, shared data on aspe/lorbeer, spend ledger) goes to Cards or a note in both In-flight blocks.
 
 ## In flight
+  - E40 round 3 (user: "E40 round 3 go", 2026-11-09): RUNNING, lead agent (background, read-only, no HTTP). Hand-label 60 random kept under-construction sites (constr 18,455 in E40 r2, seed 50): real but empty site with own imprint vs placeholder/parking vs other. Output lorbeer e35 datasets/E40/r3. When it returns: verify (read labels, recount), then status.md E40 section + collection_history precision row.
   - E48-shopify-full-crawl RUNNING since 2026-11-07 10:45Z (D45): 96,722 Shopify hosts (all not fetched yet; seed 48) split into 5 parts of 19,344-19,345, 1 request per 3 s per VM to Shopify, from 5 IPs: apfel, aspe, abelie, mispel (tree imprints-collection-e41) and lorbeer (tree imprints-collection-e43); data in <tree>/shopify_e48; process groups in lorbeer ~/E48-shopify/pgids.tsv. Global watcher (detached, lorbeer ~/E48-shopify/watch.sh, log watch.log, every 5 min): if any VM's last 200 requests have >5% 429/503, it kills all 5. Check: `bash ~/E48-shopify/chk.sh <vm> <tree>`. When done: copy to lorbeer e35 datasets/E48, recount.
 ### Gold set
 - Labelling not started: waits on D21, names for L1-L3, access route, calibration date. Tool + prefill on lorbeer (datasets/gold, prefill.jsonl e21-v1+filter1). Proposed: time-per-item summary; check the 11 hosts whose main address the filter removed.
