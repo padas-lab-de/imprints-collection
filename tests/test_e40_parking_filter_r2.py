@@ -167,3 +167,45 @@ def test_scan_r2_rows_carry_r1_result_and_text(tmp_path):
     p.write_text(buf.getvalue())
     fl, _, _ = pf.load_scan([p])
     assert fl["b.de"][:2] == ("park", "r2_park_template")
+
+
+def _apply_inputs(tmp_path):
+    """x.de: only found host flagged by r2_name_for_sale; y.de: flagged park; z.de: not flagged."""
+    ind = tmp_path / "in"
+    ind.mkdir()
+    (ind / "a.tsv").write_text("x.de\timprint_found\t\ny.de\timprint_found\t\nz.de\timprint_found\t\n")
+    (ind / "manifest.tsv").write_text("source\tvm\tdir\tfile\trows\tsha256\tstats\nS1\tv\td\ta.tsv\t0\t0\t\n")
+    scan = tmp_path / "scan.tsv"
+    scan.write_text(
+        "x.de\tF\tsale\tr2_name_for_sale\thttps://x.de/\tt\tx.de steht zum Verkauf\n"
+        "y.de\tF\tpark\tr2_park_phrase\thttps://y.de/\tt\tDiese Domain ist reserviert.\n"
+    )
+    targets = tmp_path / "targets.tsv"
+    targets.write_text("target\tclass\n")
+    return ind, scan, targets
+
+
+def _finalize(tmp_path, r2):
+    import subprocess
+    import sys
+
+    sites = tmp_path / "canonical_sites.txt"
+    sites.write_text("x.de\ny.de\nz.de\n")
+    cmd = [sys.executable, str(_root / "finalize_r2.py"), "--sites", str(sites), "--r1", str(r2), "--r2", str(r2)]
+    subprocess.run(cmd, check=True, capture_output=True)
+    return (r2 / "canonical_sites_after_filter.txt").read_text().split()
+
+
+@pytest.mark.parametrize("flag_only", [False, True])
+def test_name_for_sale_flag_only(tmp_path, flag_only):
+    ind, scan, targets = _apply_inputs(tmp_path)
+    out = tmp_path / "out"
+    args = ["apply", "--in", str(ind), "--scan", str(scan), "--targets", str(targets), "--out", str(out)]
+    pf.main(args + (["--name-for-sale-flag-only"] if flag_only else []))
+    rows = [l.split("\t")[:2] for l in (out / "flagged_sites.tsv").read_text().splitlines()[1:]]
+    # x.de is listed in both modes; only its category changes
+    assert dict(rows) == {"x.de": "sale_flag" if flag_only else "sale", "y.de": "park"}
+    # finalize_r2.py needs no option: sale_flag is kept, sale is dropped
+    assert _finalize(tmp_path, out) == (["x.de", "z.de"] if flag_only else ["z.de"])
+    rc = (out / "release_count_after_filter.tsv").read_text()
+    assert ("flagged_sale_flag_kept\t1" in rc) == flag_only

@@ -5,8 +5,10 @@ Library (detect, site_flags, ...) plus commands:
 
   scan DIR [TARGET_HOST ...]     one fetch output dir -> flagged rows on stdout (runs on a VM as
                                  `ssh -o BatchMode=yes VM nice -n 19 ionice -c3 python3 - scan DIR < parking_filter.py`)
-  apply --in E31_INDIR --scan FILE [FILE ...] --targets TARGETS.tsv --out OUTDIR
+  apply --in E31_INDIR --scan FILE [FILE ...] --targets TARGETS.tsv --out OUTDIR [--name-for-sale-flag-only]
                                  combine scan rows with the E31 D34 canonical sites (see apply_filter)
+                                 --name-for-sale-flag-only: hosts flagged only by r2_name_for_sale get category
+                                 sale_flag (listed in flagged_sites.tsv, site kept; default: sale, site dropped)
 
 Detection works on the home page record ("main": title, description, main_content) of imprints_batch*.jsonl.gz.
 Categories: sale (domain for sale / broker), park (parked, registrar/registry placeholder), host (hosting
@@ -216,7 +218,9 @@ _GATES_R2 = {
 }
 PATTERNS_R2 = [(c, lab, re.compile(rx, re.I | re.M), strong, _GATES_R2[lab]) for c, lab, rx, strong in _P_R2]
 PATTERNS = PATTERNS_R1 + PATTERNS_R2  # default: round 1 + round 2
-CAT_ORDER = {"sale": 0, "park": 1, "host": 2, "constr": 3}
+CAT_ORDER = {"sale": 0, "park": 1, "host": 2, "constr": 3, "sale_flag": 4}
+# --name-for-sale-flag-only: scan label -> kept category (flag only, like constr; not in finalize_r2.DROP)
+FLAG_ONLY = {"r2_name_for_sale": "sale_flag"}
 CORE = ("sale", "park")
 
 
@@ -391,15 +395,22 @@ def wilson(k, n, z=1.96):
     return (c - h, c + h)
 
 
-def apply_filter(indir, scan_paths, targets_path, outdir):
+def apply_filter(indir, scan_paths, targets_path, outdir, name_for_sale_flag_only=False):
     """D34 sites of the E31 inputs, flagged sites by category, and the D34 count per source after the filter.
 
     Site model: for each source, each found host h (last-row rule) with target t gets canonical c = D34 rule.
-    A site's found hosts are collected over all sources. "new per source" = first-source rule as in E31."""
+    A site's found hosts are collected over all sources. "new per source" = first-source rule as in E31.
+
+    name_for_sale_flag_only: a host whose scan label is r2_name_for_sale gets category sale_flag instead of
+    sale. It still counts as flagged for site_flags (as constr does), so a site whose found hosts are all
+    flagged is listed; its category is the most severe one, so the site is dropped by finalize_r2.py only if
+    another host has sale, park or host. Default False = round-2 behaviour."""
     sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "E31"))
     import release_count as rc
 
     flagged, _, _ = load_scan(scan_paths)
+    if name_for_sale_flag_only:
+        flagged = {h: ((FLAG_ONLY[v[1]],) + v[1:] if v[1] in FLAG_ONLY else v) for h, v in flagged.items()}
     target_class = load_targets(targets_path)
     real = load_real_targets(targets_path)
     sources = list(rc.load_manifest(indir).items())
@@ -426,6 +437,7 @@ def apply_filter(indir, scan_paths, targets_path, outdir):
         seen |= sites
         nf = Counter(sf[s] for s in new if s in sf)
         rows.append((name, len(new), sum(nf.values()), nf["sale"], nf["park"], nf["host"], nf["constr"]))
+    # filter_by_source.tsv keeps its round-2 columns: sale_flag sites are in flagged_all, not in sale..constr
     out = Path(outdir)
     out.mkdir(parents=True, exist_ok=True)
     tot = Counter(sf.values())
@@ -465,8 +477,13 @@ def main(argv=None):
     a.add_argument("--scan", nargs="+", required=True)
     a.add_argument("--targets", required=True)
     a.add_argument("--out", required=True)
+    a.add_argument(
+        "--name-for-sale-flag-only",
+        action="store_true",
+        help="r2_name_for_sale hosts -> category sale_flag: listed in flagged_sites.tsv, site not dropped",
+    )
     a = ap.parse_args(argv)
-    apply_filter(a.indir, a.scan, a.targets, a.out)
+    apply_filter(a.indir, a.scan, a.targets, a.out, a.name_for_sale_flag_only)
     return 0
 
 

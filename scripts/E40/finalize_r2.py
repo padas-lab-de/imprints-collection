@@ -5,6 +5,9 @@ Usage: finalize_r2.py --sites E31_OUT/canonical_sites.txt --r1 R1_E40_OUT --r2 R
   R1_E40_OUT / R2_DIR hold flagged_sites.tsv and filter_by_source.tsv (`parking_filter.py apply` output).
 Writes into R2_DIR: canonical_sites_after_filter.txt (D34 sites minus sale, park and host sites; sorted, as in
 E31/compare_r3_r4.py), release_count_after_filter.tsv, delta_by_category.tsv, delta_by_source.tsv, SHA256SUMS.txt.
+
+Category sale_flag (from `parking_filter.py apply --name-for-sale-flag-only`) is kept, like constr: it is not in
+DROP, so no option is needed here. Its rows are written only when such sites exist, so round-2 output is unchanged.
 """
 
 import argparse
@@ -14,6 +17,7 @@ from pathlib import Path
 
 DROP = ("sale", "park", "host")
 CATS = ("sale", "park", "host", "constr")
+KEPT_EXTRA = ("sale_flag",)  # written only if present
 
 
 def sha(fn):
@@ -60,7 +64,7 @@ def main():
     trans = Counter((f1.get(s, "-"), f2.get(s, "-")) for s in set(f1) | set(f2) if f1.get(s) != f2.get(s))
     with open(r2d / "delta_by_category.tsv", "w") as f:
         f.write("category\tr1_sites\tr2_sites\tdelta\n")
-        for c in CATS:
+        for c in CATS + tuple(c for c in KEPT_EXTRA if c1[c] or c2[c]):
             f.write(f"{c}\t{c1[c]}\t{c2[c]}\t{c2[c] - c1[c]}\n")
         f.write(f"drop_total(sale+park+host)\t{len(drop1)}\t{len(drop2)}\t{len(drop2) - len(drop1)}\n")
         f.write(f"sites_after_filter\t{after1}\t{len(after)}\t{len(after) - after1}\n")
@@ -87,6 +91,7 @@ def main():
             ("flagged_park", c2["park"]),
             ("flagged_host", c2["host"]),
             ("flagged_constr_kept", c2["constr"]),
+            *([("flagged_sale_flag_kept", c2["sale_flag"])] if c2["sale_flag"] else []),
             ("dropped_sale_park_host", len(drop2)),
             ("d34_sites_after_filter", len(after)),
             ("r1_d34_sites_after_filter", after1),
