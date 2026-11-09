@@ -82,6 +82,28 @@ def test_last_row_wins_and_counts(tmp_path):
     assert st["changed_by_d34"] == 1 and st["target_site_known"] == 1 and st["target_site_unknown"] == 1
 
 
+def test_variant_folds_only_into_found_target(tmp_path):
+    m = _manifest(
+        tmp_path,
+        [
+            (
+                "A",
+                "a.tsv",
+                [
+                    ("a.de", "imprint_found", "b.de"),  # b.de is crawled but not found
+                    ("b.de", "host_not_found", ""),
+                    ("c.de", "imprint_found", "d.de"),  # d.de is found
+                    ("d.de", "imprint_found", ""),
+                ],
+            )
+        ],
+    )
+    table, st, sites, cases = rc.compute(list(m.items()))
+    assert sites == {"b.de", "d.de"}  # D34: a.de -> b.de, c.de -> d.de
+    assert rc.compute.d34f_sites == {"a.de", "d.de"}  # variant: a.de stays, c.de -> d.de
+    assert table[-1]["cum_d34"] == 2 and table[-1]["cum_d34f"] == 2
+
+
 def test_extract_reads_status_and_redirect(tmp_path):
     d = tmp_path / "src"
     _status(

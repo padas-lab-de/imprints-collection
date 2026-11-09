@@ -14,6 +14,9 @@ Three counts over the union of all sources:
           crawled host (any row of any source, www-collapsed), the site is collapse(t); else collapse(h).
 "new" per source = items not present in any earlier source (same measure).
 
+  d34f    variant of d34: a host folds into its redirect target only if the target (www-collapsed) is itself
+          imprint_found in some source (canonical_sites_found_only.txt). d34 stays the primary count.
+
 Writes OUTDIR/release_count.tsv, release_stats.tsv, canonical_sites.txt (sorted), redirect_cases.tsv.
 """
 
@@ -29,7 +32,10 @@ def collapse(h):
 
 
 def canonical(host, target, crawled_collapsed):
-    """D34 canonical site of a found host. crawled_collapsed: set of www-collapsed crawled hosts."""
+    """D34 canonical site of a found host. crawled_collapsed: set of www-collapsed crawled hosts.
+
+    Variant (open doubt of E31): pass the set of www-collapsed imprint_found hosts instead; a host then
+    folds into its redirect target only if the target is itself imprint_found."""
     if target:
         t = collapse(target)
         if t in crawled_collapsed:
@@ -72,16 +78,18 @@ def compute(sources):
     for name, paths in sources:  # first pass: all crawled hosts needed before any canonical form
         n, found = read_source(paths, crawled)
         loaded.append((name, len(paths), n, found))
-    cum = dict(exact=set(), www=set(), d34=set())
+    found_collapsed = {collapse(h) for _, _, _, f in loaded for h in f}
+    cum = dict(exact=set(), www=set(), d34=set(), d34f=set())
     table, st, cases = [], Counter(), []
     first_seen = set()
     for name, nfiles, nhosts, found in loaded:
         ex = set(found)
         ww = {collapse(h) for h in ex}
-        d3 = set()
+        d3, d3f = set(), set()
         for h, t in found.items():
             c = canonical(h, t, crawled)
             d3.add(c)
+            d3f.add(canonical(h, t, found_collapsed))
             if h in first_seen:
                 continue
             first_seen.add(h)  # stats over distinct exact hosts, first source wins
@@ -108,18 +116,23 @@ def compute(sources):
             new_exact=len(ex - cum["exact"]),
             new_www=len(ww - cum["www"]),
             new_d34=len(d3 - cum["d34"]),
+            new_d34f=len(d3f - cum["d34f"]),
         )
         cum["exact"] |= ex
         cum["www"] |= ww
         cum["d34"] |= d3
-        row.update(cum_exact=len(cum["exact"]), cum_www=len(cum["www"]), cum_d34=len(cum["d34"]))
+        cum["d34f"] |= d3f
+        row.update(
+            cum_exact=len(cum["exact"]), cum_www=len(cum["www"]), cum_d34=len(cum["d34"]), cum_d34f=len(cum["d34f"])
+        )
         table.append(row)
     st["crawled_hosts_collapsed"] = len(crawled)
     total = dict(source="TOTAL", files=sum(r["files"] for r in table), hosts=sum(r["hosts"] for r in table))
     total.update(imprint_found=sum(r["imprint_found"] for r in table))
-    for k in ("exact", "www", "d34"):
+    for k in ("exact", "www", "d34", "d34f"):
         total["new_" + k] = total["cum_" + k] = len(cum[k])
     table.append(total)
+    compute.d34f_sites = cum["d34f"]  # variant site set, written by main()
     return table, st, cum["d34"], cases
 
 
@@ -134,6 +147,8 @@ COLS = [
     "cum_www",
     "new_d34",
     "cum_d34",
+    "new_d34f",
+    "cum_d34f",
 ]
 
 
@@ -154,6 +169,7 @@ def main(argv=None):
     (out / "release_count.tsv").write_text(text)
     (out / "release_stats.tsv").write_text("".join(f"{k}\t{v}\n" for k, v in sorted(st.items())))
     (out / "canonical_sites.txt").write_text("".join(s + "\n" for s in sorted(sites)))
+    (out / "canonical_sites_found_only.txt").write_text("".join(s + "\n" for s in sorted(compute.d34f_sites)))
     changed = [c for c in cases if c[2] != collapse(c[0])]
     keep = [c for c in cases if c[2] == collapse(c[0])]
     with open(out / "redirect_cases.tsv", "w") as f:
