@@ -42,10 +42,55 @@ crawl VMs (`/home/dinzinger/...`, `~/.claude/jobs/.../tmp`); see "Known non-repr
 
 `E41/hplt_shard.py` and `E43/hplt_shard.py` (and the two `run_hplt.sh`) differ only in their output folder; both are kept as the record of each run.
 
-### Not in this folder yet
+`E31/recount.sh PKG OUT [--r5]` runs the whole no-crawl chain on the data package (release count, parking
+filter, finalize, sha256 compare); see [`docs/reproduce_collection.md`](../docs/reproduce_collection.md).
+`E40/parking_filter.py apply --name-for-sale-flag-only` keeps sites flagged only by `r2_name_for_sale` (r5 rule).
 
-Run scripts of E24-E30, E33, E34, E35-E37, E42 and E45-E48 were run from the lead's temp folder and the
-crawl VMs, not from git. TODO(lead): import them (D47 step 2).
+### Imported run scripts (D47)
+
+These scripts ran from the lead's temp folder (`/home/dinzinger/.claude/jobs/cfd8c2d0/tmp`) or from the crawl
+VMs and were imported unchanged in D47 (source path per file: `docs/inventory.tsv` and `scripts_to_import.tsv`
+in the data package). They are the record of what ran, not cleaned-up tools.
+
+| ID | Folder | What it does | Step |
+|---|---|---|---|
+| E19 round 1 | `E19r1/` | D25 reshard launch (`d25_apfel.sh`, `d25_waiter.sh`), E22 depth-1 start (`e22_start.sh`, `e22all.sh`, `run_frontier.sh`, `hosts_e22.py`), `run_test.sh`, `e19.sh`. | crawl launch |
+| E19 round 2 | `E19r2/` | Round 2b-2d: `plan_d30.py` / `plan_d31.py` build the round2c / round2d lists; `deploy_d30.sh`, `deploy_d31.sh`, `launch_d30.sh`, `launch_all.sh`, `launch_e19agent.sh`, `pilot.sh`, `pre.sh`, `prep.sh` start them; `collect*.sh`, `gather.sh`, `merge1.sh`, `list2.sh` collect results; `stop*.sh`; `net.py`, `shopcount.py`, `ua.sh` (403 / User-Agent checks). | list build, crawl launch |
+| E22 depth 2 rest | `E22d2R/` | `pre.sh`, `deploy.sh`, `launch_all.sh`: deploy the d29 tree and crawl `round2_frontier_rest.txt`. | crawl launch |
+| E24 | `E24/` | Host extraction from FineWeb-2 (`fw_shard*.py`, `run_fw.sh`), HPLT (`hplt_meta.py`, `run_hplt.sh`), Common Crawl host index (`hostindex.py`, `hi.py`); `httpfile.py` HTTP range reads; `agg.py`, `mkknown.py`, `extra.py`, `meta.py`, `hf*.py`. Output: the E24 parquets used by E27, E33, E41. | list build |
+| E25, E26 | `E25/`, `E26/` | `E25/build.py` builds the CC-MAIN-2026-43 DACH pool, the 20k pilot (E25) and the rest (E26); `E26/e26_launch.sh` (copied from mispel). | list build, crawl launch |
+| E27-E30 | `E27/` ... `E30/` | `build.py` per experiment (pilots P1-P3, CC 8-crawl pilots, full pools); `e27_run.sh`, `e28_run.sh`, `launch_*.sh`, `setup_*.sh`, `remote.sh` start `scripts/E22/run.sh` on the VMs. | list build, crawl launch |
+| E33, E36 | `E33/` | Pilots Q1-Q4 and the full crawl: `build.py`, `mkexcl.py`, `mkq3.py`, `q3_load.py`, `hplt_shard.py`, `run_hplt.sh`, `run_q3load.sh`, `build_rest.py`; `deploy.sh`, `launch*.sh`, `chain.sh`, `e33_run.sh`, `setup_lorbeer.sh`. E36 (re-check pilot) is here too: `mk.py`, `launch_e36.sh`. | list build, crawl launch |
+| E34 | `E34/`, `E34/round2/` ... `round4/` | Outlink rounds 1-4: `build*.py`, `mk_*.py`, `tld_groups.py`, `snap*.sh` (frontier snapshots); `setup_*.sh`, `deploy*.sh`, `launch*.sh`, `*_run.sh`, `go_pilot.sh` start the crawls; `pull*.sh`, `getall.sh` collect results; `round3/verify_ua.sh` checks the D39 B User-Agent. | list build, crawl launch |
+| E37 | `E37/` | Re-check of E16 DACH not-found: `mk.py`, `deploy.sh`, `launch_e37.sh`, `a12.sh`. | list build, crawl launch |
+| E31, E40 extras | `E31/`, `E40/` | `E31/run_pull.sh`, `copy.sh` (r3 pull and copy); `E40/run_apply.sh`, `keep.sh`, `classify.py`, `counts.py`, `labels.py` (round-1 runs). | recount, filter |
+| E41, E43, E44 extras | `E41/`, `E43/`, `E44/` | `copy_all.sh`, `copy_full.sh` (copy results to lorbeer), `E43/launch*.sh`, `mkrest.sh`, `wait_e43.sh`. | crawl launch |
+| E42, E45-E48 | `E42/`, `E45/` ... `E48/` | Shopify: `E42/s1.py`, `s1b.py` (Shopify host set), `s2.py` (re-pilot list); `draw.py` (lists, fixed seeds), `start.sh`, `launch.sh`, `watch.sh`, `final.sh`, `E45/loop.sh`, `E48/vmrun.sh`, `chk.sh` drive `scripts/E19/run.sh` at 1 request per 2-60 s. | list build, crawl launch |
+
+Five candidates were not imported because they are byte-identical to files in git: `tmp/e22_run.sh` and
+`datasets/E22/code/scripts/E22/run.sh` (= `scripts/E22/run.sh` before f9da3ad), `~/stage_run.sh` and
+`datasets/E19/code/scripts/E19/run.sh` (= `scripts/E19/run.sh` before f9da3ad), `datasets/E19/reshard/reshard.py.used`
+(= `scripts/E19/reshard.py`).
+
+### Absolute paths
+
+Most scripts were written for one machine. Path constants at the top of a script (`ROOT`, `T`, `D`, `R`, `W`,
+`PY*`, `OUT`, ...) can be set from the environment; the old value is the default, so a script without env runs
+as before:
+
+```console
+T=/data/tmp D=$HOME/trees/imprints-collection-d29 bash scripts/E34/round2/snap.sh
+ROOT=$PWD python3 scripts/E16/shuffle.py
+```
+
+Not covered (read the script before you run it):
+
+- paths inside the script body: `cd /home/dinzinger/GitLab/.../worktrees/agent-...` (`E31/run_pull.sh`,
+  `E40/run_apply.sh`), `os.chdir(...)` (`E42/s2.py`), `sys.path.insert(0, '/home/.../tmp/E24')` (`E24/fw_shard*.py`),
+  DuckDB `temp_directory` (`E24/hostindex.py`), and literal paths in `open(...)` (`E40/counts.py`, `E40/labels.py`);
+- remote paths in single quotes that the VM shell expands (`'$HOME/GitHub/imprints-collection-d29'` in `snap*.sh`,
+  `PYA='...'` in `E37/deploy.sh`) and VM names in ssh loops;
+- relative paths (`E42/s1.py` reads `E31/r3/in/` from the current folder).
 
 ## Other module: gold set and extraction
 
