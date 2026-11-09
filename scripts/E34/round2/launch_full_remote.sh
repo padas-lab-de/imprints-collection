@@ -1,5 +1,5 @@
 # runs on the VM: bash -s FIRST LAST
-D=$HOME/GitHub/imprints-collection-e35
+D=${D:-$HOME/GitHub/imprints-collection-e35}
 F=$1; L=$2
 avail=$(free -g | awk 'NR==2{print $7}')
 if [ "$avail" -lt 8 ]; then echo "ABORT: only ${avail} GB available"; exit 1; fi

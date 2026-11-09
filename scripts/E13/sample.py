@@ -4,7 +4,7 @@ import gzip
 import os
 import random
 
-ROOT = "/home/dinzinger/GitHub/imprints-collection"
+ROOT = os.environ.get("ROOT", "/home/dinzinger/GitHub/imprints-collection")
 SEED = 20261024
 
 with gzip.open(f"{ROOT}/seed_hosts.txt.gz", "rt", encoding="UTF-8") as f:

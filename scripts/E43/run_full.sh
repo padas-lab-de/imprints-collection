@@ -3,8 +3,8 @@
 # 32 workers, provider cap 8, Shopify group skipped, nice 10, STEP=1. Restart loop: re-runs scripts/E43/run.sh
 # (which resumes from done hosts) until every range of a pass exits 0 (max 30 passes, 60 s apart).
 # List files rest_<X>.txt + .sha256 are in $T/<X>; copied to datasets/<X>/rest_<X>.txt. Output datasets/<X>/full.
-D=$HOME/GitHub/imprints-collection-e43
-T=/home/dinzinger/.claude/jobs/cfd8c2d0/tmp
+D=${D:-$HOME/GitHub/imprints-collection-e43}
+T=${T:-/home/dinzinger/.claude/jobs/cfd8c2d0/tmp}
 export ROOT=$D PY=$D/.venv/bin/python STEP=1 SKIPGROUPS="v4:23.227.38" WORKERS=32
 for X in E44 E43; do
   F=$T/$X/rest_$X.txt

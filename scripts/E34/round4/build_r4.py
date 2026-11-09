@@ -6,9 +6,9 @@ from collections import Counter
 from pathlib import Path
 import numpy as np
 
-W = "/home/dinzinger/GitLab/fim/imprints-collection/.claude/worktrees/dc-lead-status-20261026"
-T = "/home/dinzinger/.claude/jobs/cfd8c2d0/tmp"
-E35 = "/home/dinzinger/GitHub/imprints-collection-e35/datasets"
+W = os.environ.get("W", "/home/dinzinger/GitLab/fim/imprints-collection/.claude/worktrees/dc-lead-status-20261026")
+T = os.environ.get("T", "/home/dinzinger/.claude/jobs/cfd8c2d0/tmp")
+E35 = os.environ.get("E35", "/home/dinzinger/GitHub/imprints-collection-e35/datasets")
 O = T + "/E34/round4"
 sys.path.insert(0, W + "/src")
 from ic.utils.filter_utils import check_url

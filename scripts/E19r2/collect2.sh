@@ -1,7 +1,7 @@
 set -e
-R=~/GitHub/imprints-collection
+R=${R:-$HOME/GitHub/imprints-collection}
 W=$R/datasets/E19/merge_work
-L=/home/dinzinger/GitLab/fim/imprints-collection/.claude/worktrees/dc-lead-status-20261026
+L=${L:-/home/dinzinger/GitLab/fim/imprints-collection/.claude/worktrees/dc-lead-status-20261026}
 mkdir -p $W/e16_50_262
 for i in $(seq 50 262); do ln -sf ../e16/fetch_status_batch$(printf %06d $i).tsv $W/e16_50_262/; done
 ls $W/e16_50_262 | wc -l

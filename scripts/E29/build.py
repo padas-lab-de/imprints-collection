@@ -1,5 +1,6 @@
 import hashlib
-T="/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/"
+import os  # D47: path constants below can be overridden by env
+T=os.environ.get("T", "/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/")
 def c(h):
     s=h.strip().lower()
     return s[4:] if s.startswith("www.") else s

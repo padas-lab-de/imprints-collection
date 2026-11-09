@@ -1,5 +1,5 @@
 set -e
-R=~/GitHub/imprints-collection
+R=${R:-$HOME/GitHub/imprints-collection}
 W=$R/datasets/E19/merge_work
 mkdir -p $W/e16 $W/r1/round1 $W/r1/round1_s0 $W/r1/round1_s1 $W/r1/round1_s2 $W/r1/round1_s3
 INC="--include=fetch_status_batch*.tsv --exclude=*"

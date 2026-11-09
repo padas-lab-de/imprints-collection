@@ -1,4 +1,4 @@
-D=$HOME/GitHub/imprints-collection-d29
+D=${D:-$HOME/GitHub/imprints-collection-d29}
 free -g | head -2
 sha256sum $D/src/ic/cli/fetch.py
 for pid in $(pgrep -f "ic.*fetch|ic.py.*fetch|-m ic"); do echo "PID $pid: $(tr '\0' ' ' < /proc/$pid/cmdline | cut -c1-300)"; done

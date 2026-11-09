@@ -1,4 +1,4 @@
-T=/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/E34/round2/snap
+T=${T:-/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/E34/round2/snap}
 D29='$HOME/GitHub/imprints-collection-d29'
 E35='$HOME/GitHub/imprints-collection-e35'
 for vm in mispel abelie apfel aspe; do
@@ -17,7 +17,7 @@ for vm in mispel abelie apfel aspe; do
   fi
  done
 done
-D=$HOME/GitHub/imprints-collection-d29
+D=${D:-$HOME/GitHub/imprints-collection-d29}
 for dd in E30/full E28/p1 E28/p2; do
  f=$D/datasets/$dd/discovered_external_hosts.txt
  if test -f $f; then n=$(echo $dd | tr / _); cp $f $T/lorbeer__d29_$n.txt; echo "$(date -u +%FT%TZ) lorbeer d29 $dd $(wc -l < $T/lorbeer__d29_$n.txt)"; fi

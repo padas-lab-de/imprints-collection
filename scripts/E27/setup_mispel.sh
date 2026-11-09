@@ -1,5 +1,5 @@
 set -e
-D=$HOME/GitHub/imprints-collection-d29
+D=${D:-$HOME/GitHub/imprints-collection-d29}
 mkdir -p $D/datasets/E27 $D/results/E27/root/results $D/results/E27/logs
 cd $D/results/E27/root
 for x in src topics prompts scripts; do ln -sfn $D/$x $x; done

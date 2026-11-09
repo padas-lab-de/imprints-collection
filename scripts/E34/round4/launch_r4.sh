@@ -1,4 +1,4 @@
-D=$HOME/GitHub/imprints-collection-e34r3
+D=${D:-$HOME/GitHub/imprints-collection-e34r3}
 if [ -e $D/datasets/E34r4/pilot ]; then echo "ABORT pilot dir exists"; exit 1; fi
 mkdir -p $D/datasets/E34r4 $D/results/E34r4/logs
 mv $HOME/pilot_r4.txt $D/datasets/E34r4/pilot_r4.txt

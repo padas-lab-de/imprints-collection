@@ -1,6 +1,6 @@
 import json, os
 
-S = "/home/dinzinger/GitHub/imprints-collection/results/E6/"
+S = os.environ.get("S", "/home/dinzinger/GitHub/imprints-collection/results/E6/")
 s = json.load(open(S + "sample.json"))
 bad = {
     1: "full-body fallback returned only nav and footer; imprint text not on the page",

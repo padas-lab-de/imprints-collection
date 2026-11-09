@@ -1,4 +1,6 @@
-T = "/home/dinzinger/.claude/jobs/cfd8c2d0/tmp"
+import os  # D47: path constants below can be overridden by env
+
+T = os.environ.get("T", "/home/dinzinger/.claude/jobs/cfd8c2d0/tmp")
 used = {l.strip() for l in open(T + "/E41/hplt_files_all.txt")}
 allf = [f"deu_Latn/train-{i:05d}-of-04279.parquet" for i in range(4279)]
 rest = [f for f in allf if f not in used]

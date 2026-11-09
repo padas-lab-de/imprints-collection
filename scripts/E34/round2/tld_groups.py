@@ -1,6 +1,7 @@
 import csv, collections, math
 
-R = "/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/E34/round2/"
+import os  # D47: path constants below can be overridden by env
+R = os.environ.get("R", "/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/E34/round2/")
 G = {"dach": {"de", "at", "ch", "li"}, "generic": {"com", "org", "net", "info", "eu", "io", "biz", "online", "shop", "app", "co", "me", "site", "xyz", "store", "tech"}}
 
 

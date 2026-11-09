@@ -1,6 +1,7 @@
 import random
 
-T = '/home/dinzinger/.claude/jobs/cfd8c2d0/tmp'
+import os  # D47: path constants below can be overridden by env
+T = os.environ.get("T", "/home/dinzinger/.claude/jobs/cfd8c2d0/tmp")
 allh = [l.strip() for l in open(f'{T}/E42/shopify_all.txt') if l.strip()]
 ex = set()
 for f in ('E42/pilot100.txt', 'd31/shopify_pilot.txt', 'E45/listA.txt', 'E45/listB.txt', 'E46/list.txt'):

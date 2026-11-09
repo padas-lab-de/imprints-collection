@@ -1,6 +1,6 @@
 #!/bin/bash
 # Lead watcher for E45: every 10 min check A and B; apply the D42 A stop rule; exit when both runs ended.
-T=/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/E45
+T=${T:-/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/E45}
 LOG=$T/watch.log
 declare -A VM=([A]=mispel [B]=apfel)
 declare -A TREE=([A]=imprints-collection-e34r3 [B]=imprints-collection-e41)

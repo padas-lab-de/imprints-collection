@@ -1,9 +1,10 @@
 import sys, gzip, random, hashlib, duckdb
 from collections import Counter
-R="/home/dinzinger/GitLab/fim/imprints-collection/.claude/worktrees/dc-lead-status-20261026"
+import os  # D47: path constants below can be overridden by env
+R=os.environ.get("R", "/home/dinzinger/GitLab/fim/imprints-collection/.claude/worktrees/dc-lead-status-20261026")
 sys.path.insert(0,R+"/src"); sys.path.insert(0,R+"/scripts/E22")
 import frontier as F
-T="/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/"; O=T+"E27/"
+T=os.environ.get("T", "/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/"); O=T+"E27/"
 con=duckdb.connect(); con.execute("set memory_limit='1.5GB'; set threads=4")
 known=set()
 with gzip.open(R+"/seed_hosts.txt.gz","rt") as f:

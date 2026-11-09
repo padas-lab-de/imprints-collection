@@ -1,4 +1,4 @@
-R=/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/E34/round3
+R=${R:-/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/E34/round3}
 T=$R/snap
 mkdir -p $T
 # unchanged sources: reuse round 2 snapshots

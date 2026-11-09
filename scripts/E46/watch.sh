@@ -1,6 +1,6 @@
 #!/bin/bash
 # Lead watcher for E46: every 10 min; D43 C stop rule (>5% 429 after 20+ requests); 4 h cap; exit when the run ended.
-T=/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/E46
+T=${T:-/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/E46}
 LOG=$T/watch.log
 PIDS="1860354 1860363"
 CAP=$(date -u -d "2026-11-07 03:41:30" +%s)

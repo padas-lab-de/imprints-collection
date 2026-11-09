@@ -2,8 +2,8 @@
 # expects staged ~/stage_d30.tar (git archive of the D30 commit) and ~/stage_round2c_<vm>.txt
 set -e
 V=$1; SHA=$2
-R=$HOME/GitHub/imprints-collection-d30
-PY=$HOME/GitHub/imprints-collection/.venv/bin/python
+R=${R:-$HOME/GitHub/imprints-collection-d30}
+PY=${PY:-$HOME/GitHub/imprints-collection/.venv/bin/python}
 [ -e $R ] && { echo "$R exists"; exit 1; }
 mkdir -p $R && tar -xf $HOME/stage_d30.tar -C $R && rm $HOME/stage_d30.tar
 grep -n "^MAX_BODY_BYTES" $R/src/ic/cli/fetch.py

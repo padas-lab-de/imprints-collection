@@ -1,5 +1,5 @@
 set -e
-D=/home/dinzinger/GitHub/imprints-collection-d29
+D=${D:-/home/dinzinger/GitHub/imprints-collection-d29}
 DRV=2400802; FET=408845
 tr '\0' ' ' < /proc/$DRV/cmdline | grep -q "E30/e30_rest.txt.*0 54" || { echo DRV_MISMATCH; exit 1; }
 tr '\0' ' ' < /proc/$FET/cmdline | grep -q "E30/e30_rest.txt 25000 8 8" || { echo FET_MISMATCH; exit 1; }

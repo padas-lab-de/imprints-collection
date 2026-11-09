@@ -2,11 +2,12 @@
 
 import gzip
 import json
+import os  # D47: path constants below can be overridden by env
 import sys
 
 from ic.utils.imprint_utils import _EVIDENCE_RE, _POSTCODE_RE
 
-R = "/home/dinzinger/GitHub/imprints-collection/"
+R = os.environ.get("R", "/home/dinzinger/GitHub/imprints-collection/")
 path = R + "datasets/E6/random20k/imprints_batch000000.jsonl.gz"
 hosts = set(sys.argv[1:])
 with gzip.open(path, "rt", encoding="utf-8") as f:

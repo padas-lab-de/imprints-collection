@@ -1,4 +1,4 @@
-D=$HOME/GitHub/imprints-collection-e34r3
+D=${D:-$HOME/GitHub/imprints-collection-e34r3}
 mkdir -p $D/datasets/E34r3 $D/results/E34r3/logs
 mv $HOME/pilot_r3.txt $D/datasets/E34r3/pilot_r3.txt
 mv $HOME/e34r3_run.sh $D/results/E34r3/e34r3_run.sh

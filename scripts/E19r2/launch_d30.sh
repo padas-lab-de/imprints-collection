@@ -1,4 +1,4 @@
-D=/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/d30
+D=${D:-/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/d30}
 for v in abelie apfel; do
   echo "== $v"
   sha=$(grep " round2c_$v.txt" $D/sha.txt | cut -d' ' -f1)

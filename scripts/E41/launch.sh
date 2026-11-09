@@ -1,6 +1,6 @@
 #!/bin/bash
 # Start the E41 driver on the VMs given (refuses if an ic fetch / driver already runs there or avail RAM < 8 GB).
-T=/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/E41
+T=${T:-/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/E41}
 for vm in "$@"; do
   scp -q $T/run_e41_vm.sh $vm:GitHub/imprints-collection-e41/results/E41/run_e41_vm.sh
   ssh $vm "VM=$vm bash -s" <<'EOF'

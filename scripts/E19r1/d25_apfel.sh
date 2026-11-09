@@ -1,5 +1,5 @@
 cd "$HOME/GitHub/imprints-collection" || exit 1
-R=$HOME/GitHub/imprints-collection
+R=${R:-$HOME/GitHub/imprints-collection}
 LOG=results/E19/logs/driver_round1.log
 ps -o pid=,args= -p 133338,133348 | cut -c1-90
 kill 133338 133348

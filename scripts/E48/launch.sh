@@ -1,6 +1,6 @@
 # Run on a VM: bash -s with TREE, STAGE (list in ~), RATE. Data in ~/GitHub/$TREE/shopify_e48.
 set -e
-R=$HOME/GitHub/$TREE
+R=${R:-$HOME/GitHub/$TREE}
 P=$R/shopify_e48
 [ -e $P ] && { echo "$P exists"; exit 1; }
 avail=$(free -m | awk '/^Mem:/{print $7}')

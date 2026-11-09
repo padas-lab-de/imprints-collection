@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-D=/home/dinzinger/GitHub/imprints-collection-d29
+D=${D:-/home/dinzinger/GitHub/imprints-collection-d29}
 export ROOT=$D/results/E27/root
 export PY=/home/dinzinger/GitHub/imprints-collection/.venv/bin/python
 export STEP=1 SKIPGROUPS="v4:23.227.38"

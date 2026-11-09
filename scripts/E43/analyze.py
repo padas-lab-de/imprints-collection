@@ -3,7 +3,8 @@ import glob, json, subprocess, sys
 from collections import Counter
 
 X = sys.argv[1]
-T = "/home/dinzinger/.claude/jobs/cfd8c2d0/tmp"
+import os  # D47: path constants below can be overridden by env
+T = os.environ.get("T", "/home/dinzinger/.claude/jobs/cfd8c2d0/tmp")
 D = f"/home/dinzinger/GitHub/imprints-collection-e43/datasets/{X}/pilot"
 DACH = ("de", "at", "ch", "li")
 EX = T + "/E41/R/scripts/E31/extract.py"

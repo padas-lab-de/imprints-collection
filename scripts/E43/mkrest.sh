@@ -1,5 +1,5 @@
 #!/bin/bash
-T=/home/dinzinger/.claude/jobs/cfd8c2d0/tmp
+T=${T:-/home/dinzinger/.claude/jobs/cfd8c2d0/tmp}
 for X in E43 E44; do
   cd "$T/$X" || exit 1
   grep -vxFf "pilot_$X.txt" "pool_$X.txt" > "rest_$X.txt"

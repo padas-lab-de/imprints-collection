@@ -5,7 +5,7 @@ from collections import Counter
 from pathlib import Path
 import duckdb
 
-T = "/home/dinzinger/.claude/jobs/cfd8c2d0/tmp"
+T = os.environ.get("T", "/home/dinzinger/.claude/jobs/cfd8c2d0/tmp")
 O = T + "/E41"
 W = O + "/R"
 sys.path.insert(0, W + "/src")

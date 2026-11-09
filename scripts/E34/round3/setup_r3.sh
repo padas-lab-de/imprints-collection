@@ -1,10 +1,10 @@
 set -e
-D=$HOME/GitHub/imprints-collection-e34r3
+D=${D:-$HOME/GitHub/imprints-collection-e34r3}
 mkdir -p $D
 cd $D
 test -f pyproject.toml || tar xzf $HOME/e34r3_tree.tgz -C $D
 rm -rf .venv
-OLD=$HOME/GitHub/imprints-collection/.venv
+OLD=${OLD:-$HOME/GitHub/imprints-collection/.venv}
 $OLD/bin/python --version
 $OLD/bin/python -m pip --version
 $OLD/bin/python -m venv --without-pip .venv

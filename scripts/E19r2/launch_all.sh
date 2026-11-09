@@ -1,8 +1,8 @@
-D=/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/d31
-T=/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/d30/d30.tar
-PYDEF=/home/dinzinger/GitHub/imprints-collection/.venv/bin/python
-PYE22=/home/dinzinger/GitHub/imprints-collection-e22/.venv/bin/python
-PYASPE=/home/dinzinger/GitHub/imprints-collection/.claude/worktrees/agent-a9795ebab2b1874a2/.venv/bin/python
+D=${D:-/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/d31}
+T=${T:-/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/d30/d30.tar}
+PYDEF=${PYDEF:-/home/dinzinger/GitHub/imprints-collection/.venv/bin/python}
+PYE22=${PYE22:-/home/dinzinger/GitHub/imprints-collection-e22/.venv/bin/python}
+PYASPE=${PYASPE:-/home/dinzinger/GitHub/imprints-collection/.claude/worktrees/agent-a9795ebab2b1874a2/.venv/bin/python}
 sha() { grep " $1\$" $D/sha.txt | cut -d' ' -f1; }
 go() { # vm python fresh(1/0)
   v=$1; echo "== $v"

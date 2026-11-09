@@ -7,7 +7,8 @@ from collections import Counter
 from pathlib import Path
 import duckdb
 
-T = "/home/dinzinger/.claude/jobs/cfd8c2d0/tmp"
+import os  # D47: path constants below can be overridden by env
+T = os.environ.get("T", "/home/dinzinger/.claude/jobs/cfd8c2d0/tmp")
 O = T + "/E43"
 O44 = T + "/E44"
 W = T + "/E41/R"

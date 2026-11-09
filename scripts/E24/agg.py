@@ -1,7 +1,8 @@
 import duckdb,sys,time,hashlib,json
 # usage: agg.py "<shard glob>" <out_hosts.parquet> <new_hosts_txt> [<tag>]
 glob,outp,newtxt=sys.argv[1:4]
-E='/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/E24/'
+import os  # D47: path constants below can be overridden by env
+E=os.environ.get("E", "/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/E24/")
 t=time.time()
 c=duckdb.connect(E+'agg_'+(sys.argv[4] if len(sys.argv)>4 else 'x')+'.duckdb')
 c.execute(f"SET memory_limit='1500MB'; SET threads=4; SET temp_directory='{E}tmpdb'")

@@ -1,7 +1,7 @@
 set -e
-R=~/GitHub/imprints-collection
+R=${R:-$HOME/GitHub/imprints-collection}
 W=$R/datasets/E19/merge_work
-L=/home/dinzinger/GitLab/fim/imprints-collection/.claude/worktrees/dc-lead-status-20261026
+L=${L:-/home/dinzinger/GitLab/fim/imprints-collection/.claude/worktrees/dc-lead-status-20261026}
 D=$R/datasets/E19/round2
 mkdir -p $D $W/emptystatus
 awk -F'\t' 'NR>1 && $2!="403"{print $1}' $W/r2_collect/recovery_hosts.tsv | sort -u > $D/cand.tmp

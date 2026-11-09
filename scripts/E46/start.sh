@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-T=/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/E46
+T=${T:-/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/E46}
 sha256sum $T/list.txt > $T/list.txt.sha256
 cat $T/list.txt.sha256
 ssh mispel 'cd ~/GitHub/imprints-collection-e34r3 && .venv/bin/python -c "from ic.cli.fetch import HEADERS; print(HEADERS)"'

@@ -1,7 +1,7 @@
 set -e
-E=$HOME/GitHub/imprints-collection-e35
+E=${E:-$HOME/GitHub/imprints-collection-e35}
 [ "$(sha256sum $E/src/ic/cli/fetch.py | cut -d' ' -f1)" = a9dc1dddce1af24adfeb30c451697695c60d2a23cbd144d7d567e9fd7692bbab ] || { echo FETCH_SHA_MISMATCH; exit 1; }
-PY=/home/dinzinger/GitHub/imprints-collection/.venv/bin/python
+PY=${PY:-/home/dinzinger/GitHub/imprints-collection/.venv/bin/python}
 mkdir -p $E/datasets/E36
 cp $HOME/e36_pilot.txt $E/datasets/E36/pilot.txt
 [ "$(sha256sum $E/datasets/E36/pilot.txt | cut -d' ' -f1)" = 9fe5c6ef6c74e29e3a1b51222d28819c6b4010127613d15b08cd87eafc91c452 ] || { echo LIST_SHA_MISMATCH; exit 1; }

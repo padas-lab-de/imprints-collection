@@ -1,6 +1,6 @@
 set -e
-D=/home/dinzinger/GitHub/imprints-collection-e35/datasets/E31/r3
-T=/home/dinzinger/.claude/jobs/cfd8c2d0/tmp
+D=${D:-/home/dinzinger/GitHub/imprints-collection-e35/datasets/E31/r3}
+T=${T:-/home/dinzinger/.claude/jobs/cfd8c2d0/tmp}
 mkdir -p $D/E31_out $D/E40_out $D/E40_scan_new $D/E31_in_new
 cp $T/E31/r3/out/* $D/E31_out/
 cp $T/E40/r3/out/* $T/E40/r3/targets_raw.tsv $D/E40_out/

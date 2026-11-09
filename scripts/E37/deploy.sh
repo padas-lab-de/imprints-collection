@@ -1,5 +1,5 @@
-L=/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/E37
-PYD=/home/dinzinger/GitHub/imprints-collection/.venv/bin/python
+L=${L:-/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/E37}
+PYD=${PYD:-/home/dinzinger/GitHub/imprints-collection/.venv/bin/python}
 PYA='$HOME/GitHub/imprints-collection/.claude/worktrees/agent-a9795ebab2b1874a2/.venv/bin/python'
 go() { v=$1; d=$2; f=$3; l=$4; py=$5
   scp -q $L/e37_rest.txt $v:e37_rest.txt

@@ -4,7 +4,7 @@
 # Shard file datasets/E41/<list>_<vm>.txt is waited for (delivered by scp then mv, so it is complete when it appears).
 # Usage: run_e41_vm.sh VMNAME
 VM=$1
-D=$HOME/GitHub/imprints-collection-e41
+D=${D:-$HOME/GitHub/imprints-collection-e41}
 export ROOT=$D
 export PY=$D/.venv/bin/python
 export STEP=1 SKIPGROUPS="v4:23.227.38"

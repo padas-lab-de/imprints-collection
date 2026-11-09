@@ -5,7 +5,7 @@ from concurrent.futures import ThreadPoolExecutor
 # Reads ONLY the url (+dump) column chunks via HTTP range requests; writes shards/<tag>_<path>.
 repo,path,ucol,dcol,tag=sys.argv[1:6]
 NT=int(sys.argv[6]) if len(sys.argv)>6 else 24
-OUT="/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/E41/shards"
+OUT=os.environ.get("OUT", "/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/E41/shards")
 out=f"{OUT}/{tag}_{path.replace('/','_')}"
 if os.path.exists(out): sys.exit(0)
 URL=f"https://huggingface.co/datasets/{repo}/resolve/main/{path}"

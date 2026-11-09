@@ -2,7 +2,7 @@
 # fresh VM: expects ~/stage_d30.tar; VM with D30 tree: reuses it (round2c log renamed). Always ~/stage_round2d_<vm>.txt
 set -e
 V=$1; SHA=$2; PY=$3
-R=$HOME/GitHub/imprints-collection-d30
+R=${R:-$HOME/GitHub/imprints-collection-d30}
 FSHA=9ef3536c36daa01cc190813517130a8515d55ecd87fde1f9351303b65f4ee873
 [ -x $PY ] || { echo "no python $PY"; exit 1; }
 if [ -e $R ]; then

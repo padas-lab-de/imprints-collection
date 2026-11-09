@@ -1,9 +1,9 @@
 import sys, random, hashlib, json, os, duckdb
 from collections import Counter
-R = "/home/dinzinger/GitLab/fim/imprints-collection/.claude/worktrees/dc-lead-status-20261026"
+R = os.environ.get("R", "/home/dinzinger/GitLab/fim/imprints-collection/.claude/worktrees/dc-lead-status-20261026")
 sys.path.insert(0, R + "/src"); sys.path.insert(0, R + "/scripts/E22")
 import frontier as F
-T = "/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/"; O = T + "E33/"
+T = os.environ.get("T", "/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/"); O = T + "E33/"
 q = sys.argv[1]  # q1..q4
 ORDER = ["q3", "q4", "q1", "q2"]
 con = duckdb.connect(O + "excl.duckdb", read_only=False)

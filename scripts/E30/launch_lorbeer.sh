@@ -1,6 +1,6 @@
 set -e
-T=/home/dinzinger/.claude/jobs/cfd8c2d0/tmp
-D=$HOME/GitHub/imprints-collection-d29
+T=${T:-/home/dinzinger/.claude/jobs/cfd8c2d0/tmp}
+D=${D:-$HOME/GitHub/imprints-collection-d29}
 FIRST=0; LAST=54
 [ "$(sha256sum $D/src/ic/cli/fetch.py | cut -d' ' -f1)" = c34d09b29442e39bb7e956a0024bb769bcefbe816f53e9b9c30e4f32bf5a0ebc ] || { echo FETCH_SHA_MISMATCH; exit 1; }
 echo "avail before: $(free -g | sed -n 2p)"

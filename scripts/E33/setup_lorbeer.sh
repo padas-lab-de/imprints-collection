@@ -1,6 +1,6 @@
 set -e
-D=$HOME/GitHub/imprints-collection-d29
-T=/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/E33
+D=${D:-$HOME/GitHub/imprints-collection-d29}
+T=${T:-/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/E33}
 mkdir -p $D/datasets/E33 $D/results/E33/root/results $D/results/E33/logs
 cd $D/results/E33/root
 for x in src topics prompts scripts; do ln -sfn $D/$x $x; done

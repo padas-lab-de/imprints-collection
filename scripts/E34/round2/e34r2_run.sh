@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-D=$HOME/GitHub/imprints-collection-e35
+D=${D:-$HOME/GitHub/imprints-collection-e35}
 export ROOT=$D/results/E34r2/root
 export PY=$HOME/GitHub/imprints-collection/.venv/bin/python
 export STEP=1 SKIPGROUPS="v4:23.227.38"

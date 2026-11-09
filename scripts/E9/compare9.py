@@ -8,7 +8,8 @@ import gzip
 import json
 import random
 
-R = "/home/dinzinger/GitHub/imprints-collection/"
+import os  # D47: path constants below can be overridden by env
+R = os.environ.get("R", "/home/dinzinger/GitHub/imprints-collection/")
 P = "datasets/%s/random20k/imprints_batch000000.jsonl.gz"
 
 

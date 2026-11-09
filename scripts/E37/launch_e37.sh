@@ -1,6 +1,6 @@
 set -e
 # usage (on VM): DPID=<E33 driver pid> FIRST=.. LAST=.. PY=.. bash -s < launch_e37.sh ; expects ~/e37_rest.txt
-E=$HOME/GitHub/imprints-collection-e35
+E=${E:-$HOME/GitHub/imprints-collection-e35}
 [ "$(sha256sum $E/src/ic/cli/fetch.py | cut -d' ' -f1)" = a9dc1dddce1af24adfeb30c451697695c60d2a23cbd144d7d567e9fd7692bbab ] || { echo FETCH_SHA_MISMATCH; exit 1; }
 mkdir -p $E/datasets/E37
 [ -f $E/datasets/E37/e37_rest.txt ] || cp $HOME/e37_rest.txt $E/datasets/E37/e37_rest.txt

@@ -13,7 +13,8 @@ from collections import Counter, defaultdict
 
 from ic.utils.imprint_utils import _POSTCODE_RE, has_imprint_evidence
 
-R = "/home/dinzinger/GitHub/imprints-collection/"
+import os  # D47: path constants below can be overridden by env
+R = os.environ.get("R", "/home/dinzinger/GitHub/imprints-collection/")
 OUT = R + "datasets/E10/expansion/imprints_batch000000.jsonl.gz"
 cands = [l.strip() for l in open(R + "datasets/E10/candidate_hosts.txt") if l.strip()]
 

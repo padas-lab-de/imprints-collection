@@ -1,4 +1,4 @@
-D=$HOME/GitHub/imprints-collection-e35
+D=${D:-$HOME/GitHub/imprints-collection-e35}
 cd $D/results/E34r2
 nohup setsid bash $D/results/E34r2/e34r2_run.sh > $D/results/E34r2/logs/driver.log 2>&1 < /dev/null &
 sleep 60

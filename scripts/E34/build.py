@@ -2,8 +2,8 @@ import glob, gzip, hashlib, json, os, random, sys
 from collections import Counter
 from pathlib import Path
 
-W = "/home/dinzinger/GitLab/fim/imprints-collection/.claude/worktrees/dc-lead-status-20261026"
-T = "/home/dinzinger/.claude/jobs/cfd8c2d0/tmp"
+W = os.environ.get("W", "/home/dinzinger/GitLab/fim/imprints-collection/.claude/worktrees/dc-lead-status-20261026")
+T = os.environ.get("T", "/home/dinzinger/.claude/jobs/cfd8c2d0/tmp")
 O = T + "/E34"
 sys.path.insert(0, W + "/src")
 from ic.utils.filter_utils import check_url

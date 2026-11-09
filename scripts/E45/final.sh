@@ -1,6 +1,6 @@
 #!/bin/bash
-T=/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/E45
-D=/home/dinzinger/GitHub/imprints-collection-e35/datasets/E45
+T=${T:-/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/E45}
+D=${D:-/home/dinzinger/GitHub/imprints-collection-e35/datasets/E45}
 mkdir -p $T/res/A $T/res/B $D
 ssh apfel 'ps -p 3296865,3296874 -o pid,cmd || echo B-procs-gone'
 ssh mispel 'ps -p 1152947,1152955 -o pid,cmd || echo A-procs-gone'

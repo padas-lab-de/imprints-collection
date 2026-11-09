@@ -1,5 +1,5 @@
 set -e
-D=$HOME/GitHub/imprints-collection-d29
+D=${D:-$HOME/GitHub/imprints-collection-d29}
 FIRST=@FIRST@; LAST=@LAST@
 [ "$(sha256sum $D/src/ic/cli/fetch.py | cut -d' ' -f1)" = c34d09b29442e39bb7e956a0024bb769bcefbe816f53e9b9c30e4f32bf5a0ebc ] || { echo FETCH_SHA_MISMATCH; exit 1; }
 mkdir -p $D/datasets/E29 $D/results/E29/root/results $D/results/E29/logs

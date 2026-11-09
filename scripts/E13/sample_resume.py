@@ -3,7 +3,8 @@
 import gzip
 import random
 
-ROOT = "/home/dinzinger/GitHub/imprints-collection"
+import os  # D47: path constants below can be overridden by env
+ROOT = os.environ.get("ROOT", "/home/dinzinger/GitHub/imprints-collection")
 with gzip.open(f"{ROOT}/seed_hosts.txt.gz", "rt") as f:
     seeds = sorted({line.strip() for line in f if line.strip()})
 used = set()

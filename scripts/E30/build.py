@@ -1,5 +1,6 @@
 import duckdb, glob, hashlib
-T = '/home/dinzinger/.claude/jobs/cfd8c2d0/tmp'
+import os  # D47: path constants below can be overridden by env
+T = os.environ.get("T", "/home/dinzinger/.claude/jobs/cfd8c2d0/tmp")
 O = T + '/E30'
 col = lambda h: (h.strip().lower()[4:] if h.strip().lower().startswith('www.') else h.strip().lower())
 excl25 = {col(l) for l in open(T + '/E25/cc43_dach_new.txt') if l.strip()}

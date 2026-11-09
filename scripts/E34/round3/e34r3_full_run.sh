@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # E34 round 3 full crawl (rest of frontier_r3 minus pilot), tree imprints-collection-e34r3 @ 3a23d5d
-D=$HOME/GitHub/imprints-collection-e34r3
+D=${D:-$HOME/GitHub/imprints-collection-e34r3}
 export ROOT=$D
 export PY=$D/.venv/bin/python
 export STEP=1 SKIPGROUPS="v4:23.227.38"

@@ -10,7 +10,8 @@ import sys
 
 from ic.utils.imprint_utils import has_imprint_evidence
 
-R = "/home/dinzinger/GitHub/imprints-collection/"
+import os  # D47: path constants below can be overridden by env
+R = os.environ.get("R", "/home/dinzinger/GitHub/imprints-collection/")
 path = sys.argv[1] if len(sys.argv) > 1 else R + "datasets/E6/random20k/imprints_batch000000.jsonl.gz"
 stats = collections.defaultdict(lambda: [0, 0])
 verdict = {}

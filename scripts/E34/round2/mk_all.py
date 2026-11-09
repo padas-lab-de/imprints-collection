@@ -1,7 +1,8 @@
 import collections, hashlib, random
 from pathlib import Path
 
-R = "/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/E34/round2/"
+import os  # D47: path constants below can be overridden by env
+R = os.environ.get("R", "/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/E34/round2/")
 pil = {l.strip() for l in open(R + "pilot_r2.txt") if l.strip()}
 fr = {l.strip() for l in open(R + "frontier_r2.txt") if l.strip()}
 rest = sorted(fr - pil)

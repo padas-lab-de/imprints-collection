@@ -1,7 +1,7 @@
 #!/bin/bash
 # Split E41/<LIST>.txt into contiguous shards (equal line counts) over the VMs and deliver them (scp to .part, then mv).
 # Usage: ship.sh L4 [vm ...]   (default apfel aspe abelie mispel). Shards kept in E41/shards_<LIST>/<LIST>_<vm>.txt
-T=/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/E41
+T=${T:-/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/E41}
 L=$1; shift
 VMS=${*:-apfel aspe abelie mispel}
 set -- $VMS

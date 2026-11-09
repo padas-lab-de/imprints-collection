@@ -4,7 +4,7 @@
 # The fetcher writes to ./datasets, so run it from a scratch dir whose datasets/ points to the round dir.
 set -e
 W=$(cd "$(dirname "$0")/../.." && pwd)
-D=/home/dinzinger/GitHub/imprints-collection
+D=${D:-/home/dinzinger/GitHub/imprints-collection}
 ROUND=$1
 RUN=${RUN_BASE:-/tmp}/E14-run-$ROUND
 rm -rf "$RUN"; mkdir -p "$RUN" "$D/results/logs"

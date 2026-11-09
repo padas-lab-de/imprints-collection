@@ -5,10 +5,11 @@ import random
 import sys
 from urllib.parse import urlparse
 
-R = "/home/dinzinger/GitHub/imprints-collection/"
+import os  # D47: path constants below can be overridden by env
+R = os.environ.get("R", "/home/dinzinger/GitHub/imprints-collection/")
 OLD = R + "datasets/E4/random20k/imprints_batch000000.jsonl.gz"
 NEW = R + "datasets/E6/random20k/imprints_batch000000.jsonl.gz"
-S = "/home/dinzinger/GitHub/imprints-collection/results/E6/"
+S = os.environ.get("S", "/home/dinzinger/GitHub/imprints-collection/results/E6/")
 
 
 def load(p):

@@ -2,7 +2,7 @@ import sys, hashlib, os, random, glob
 sys.path.insert(0, "/home/dinzinger/GitLab/fim/imprints-collection/.claude/worktrees/dc-lead-status-20261026/scripts/E19")
 from collect import read_rows
 M = os.path.expanduser("~/GitHub/imprints-collection/datasets/E19")
-T = "/home/dinzinger/.claude/jobs/cfd8c2d0/tmp"
+T = os.environ.get("T", "/home/dinzinger/.claude/jobs/cfd8c2d0/tmp")
 D = f"{T}/d31"
 SHOP = "v4:23.227.38"
 def origin(b):

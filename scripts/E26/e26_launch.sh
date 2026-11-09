@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # usage: e26_launch.sh PY FIRST LAST   (run on the VM)
 PYBIN=$1; F=$2; L=$3
-D=~/GitHub/imprints-collection-d29
+D=${D:-$HOME/GitHub/imprints-collection-d29}
 R=$D/results/E26/root
 mkdir -p $D/datasets/E26/full $D/results/E26/logs $R/results
 for n in src topics prompts scripts; do [ -e $R/$n ] || ln -s $D/$n $R/$n; done

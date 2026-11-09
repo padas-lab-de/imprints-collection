@@ -3,8 +3,9 @@ from concurrent.futures import ThreadPoolExecutor
 sys.path.insert(0, "src")
 from ic.cli import fetch
 
-R = "/home/dinzinger/GitHub/imprints-collection/"
-S = "/home/dinzinger/GitHub/imprints-collection/results/E6/"
+import os  # D47: path constants below can be overridden by env
+R = os.environ.get("R", "/home/dinzinger/GitHub/imprints-collection/")
+S = os.environ.get("S", "/home/dinzinger/GitHub/imprints-collection/results/E6/")
 
 
 def load(p):

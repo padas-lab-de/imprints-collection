@@ -1,6 +1,6 @@
-T=/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/E34/snap
+T=${T:-/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/E34/snap}
 mkdir -p $T
-D=/home/dinzinger/GH/imprints-collection-d29
+D=${D:-/home/dinzinger/GH/imprints-collection-d29}
 D=$(echo $D | sed 's#/GH/#/Git''Hub/#')
 for vm in mispel abelie apfel aspe; do
  for dd in E26/full E29/full E25/pilot E27/p1 E27/p2 E27/p3 E28/p1 E28/p2; do

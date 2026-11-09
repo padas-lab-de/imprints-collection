@@ -2,7 +2,7 @@
 # expects ~/stage_d29.tar (git archive of the skip-provider commit) and ~/stage_rest.txt
 set -e
 V=$1; SHA=$2; FSHA=$3; PY=$4; FIRST=$5; LAST=$6; STEP=$7
-R=$HOME/GitHub/imprints-collection-d29
+R=${R:-$HOME/GitHub/imprints-collection-d29}
 [ -x $PY ] || { echo "no python $PY"; exit 1; }
 [ -e $R ] && { echo "$R exists"; exit 1; }
 mkdir -p $R && tar -xf $HOME/stage_d29.tar -C $R && rm $HOME/stage_d29.tar

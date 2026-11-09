@@ -2,7 +2,7 @@
 # E41: deploy the D39 B tree (git archive of 3a23d5d = T/E34/round3/e34r3_tree.tgz) to ~/GitHub/imprints-collection-e41 on a VM
 # Usage (on the VM): bash setup_e41.sh   (expects ~/e41_tree.tgz). Like T/E34/round3/setup_r3.sh.
 set -e
-D=$HOME/GitHub/imprints-collection-e41
+D=${D:-$HOME/GitHub/imprints-collection-e41}
 mkdir -p $D
 cd $D
 test -f pyproject.toml || tar xzf $HOME/e41_tree.tgz -C $D

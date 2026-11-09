@@ -1,6 +1,6 @@
 import glob, random, os
 
-T = '/home/dinzinger/.claude/jobs/cfd8c2d0/tmp'
+T = os.environ.get("T", "/home/dinzinger/.claude/jobs/cfd8c2d0/tmp")
 allh = [l.strip() for l in open(f'{T}/E42/shopify_all.txt') if l.strip()]
 ex = set(l.strip() for l in open(f'{T}/E42/pilot100.txt')) | set(l.strip() for l in open(f'{T}/d31/shopify_pilot.txt'))
 pool = sorted(set(allh) - ex)

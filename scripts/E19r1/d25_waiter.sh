@@ -1,6 +1,6 @@
 # usage: bash -s <shard> <e16_driver_pid> <python>   (run in the VM's repo; shard file already copied)
 S=$1; P=$2; PYB=$3
-R=$HOME/GitHub/imprints-collection
+R=${R:-$HOME/GitHub/imprints-collection}
 cd "$R" || exit 1
 sha256sum datasets/E19/reshard/remaining_shard$S.txt
 grep "remaining_shard$S.txt" datasets/E19/reshard/sha256.txt

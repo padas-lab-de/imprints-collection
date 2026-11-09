@@ -1,5 +1,5 @@
 set -e
-R=$HOME/GitHub/$TREE
+R=${R:-$HOME/GitHub/$TREE}
 P=$R/$PD
 [ -e $P ] && { echo "$P exists"; exit 1; }
 avail=$(free -m | awk '/^Mem:/{print $7}')

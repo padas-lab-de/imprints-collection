@@ -2,8 +2,8 @@ import sys, hashlib, os
 sys.path.insert(0, "/home/dinzinger/GitLab/fim/imprints-collection/.claude/worktrees/dc-lead-status-20261026/scripts/E19")
 from collect import read_rows
 M = os.path.expanduser("~/GitHub/imprints-collection/datasets/E19")
-A = "/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/e19agent2"
-D = "/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/d30"
+A = os.environ.get("A", "/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/e19agent2")
+D = os.environ.get("D", "/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/d30")
 def origin(b):
     return "aspe" if b <= 106 else "lorbeer" if b <= 156 else "apfel" if b <= 213 else "mispel"
 b = {}

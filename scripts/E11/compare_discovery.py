@@ -20,7 +20,8 @@ from resiliparse.parse.html import HTMLTree
 from ic.cli import fetch as cur
 from ic.utils.filter_utils import check_url
 
-R = "/home/dinzinger/GitHub/imprints-collection"
+import os  # D47: path constants below can be overridden by env
+R = os.environ.get("R", "/home/dinzinger/GitHub/imprints-collection")
 src = subprocess.run(
     ["git", "show", "fe4963b:src/ic/cli/fetch.py"], capture_output=True, text=True, check=True
 ).stdout

@@ -2,7 +2,7 @@
 # Shopify pilot: 1 request at a time to the Shopify /24, 10 s apart; own DATA dir so its log is separate
 set -e
 SHA=$1; PY=$2
-R=$HOME/GitHub/imprints-collection-d30
+R=${R:-$HOME/GitHub/imprints-collection-d30}
 P=$R/pilot_d31
 [ -e $P ] && { echo "$P exists"; exit 1; }
 mkdir -p $P/datasets/E19 $P/results/E19/logs

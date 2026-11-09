@@ -1,4 +1,4 @@
-D=$HOME/GitHub/imprints-collection-e34r3
+D=${D:-$HOME/GitHub/imprints-collection-e34r3}
 echo "other fetch processes:"; pgrep -af "ic.ic import main|fetch " | grep -v pgrep | cut -c1-150
 rm -f $HOME/e34r3_tree.tgz
 mv $HOME/e34r3_rest.txt $D/datasets/E34r3/e34r3_rest.txt

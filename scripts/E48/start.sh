@@ -1,6 +1,6 @@
 #!/bin/bash
 # Start E48 on the 5 VMs at RATE s per request to each provider group. Writes pgids.tsv (vm tree pgid).
-W=/home/dinzinger/E48-shopify
+W=${W:-/home/dinzinger/E48-shopify}
 RATE=3
 sha256sum $W/list_*.txt > $W/lists.sha256
 : > $W/pgids.tsv

@@ -2,7 +2,7 @@
 # run on the target VM: launch.sh <k> <expected sha256 of ~/round2_shard<k>.txt as staged>
 set -e
 k=$1; sha=$2
-R=~/GitHub/imprints-collection-e22
+R=${R:-$HOME/GitHub/imprints-collection-e22}
 S=$R/datasets/E19/round2_s$k
 mkdir -p $R/datasets/E19 $S $R/results/E19/logs
 got=$(sha256sum $R/datasets/E19/round2_shard$k.txt | cut -d' ' -f1)

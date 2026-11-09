@@ -1,6 +1,6 @@
 set -e
 # usage (on VM): FIRST=.. LAST=.. PY=.. bash -s < launch_e33.sh ; expects ~/e35_tree.tar.gz and ~/e33_rest.txt
-E=$HOME/GitHub/imprints-collection-e35
+E=${E:-$HOME/GitHub/imprints-collection-e35}
 if [ ! -d $E ]; then mkdir -p $E && tar -xzf $HOME/e35_tree.tar.gz -C $E; fi
 [ "$(sha256sum $E/src/ic/cli/fetch.py | cut -d' ' -f1)" = a9dc1dddce1af24adfeb30c451697695c60d2a23cbd144d7d567e9fd7692bbab ] || { echo FETCH_SHA_MISMATCH; exit 1; }
 mkdir -p $E/datasets/E33

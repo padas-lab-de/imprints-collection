@@ -1,5 +1,5 @@
 import glob,random,hashlib,os
-T='/home/dinzinger/.claude/jobs/cfd8c2d0/tmp'
+T=os.environ.get("T", "/home/dinzinger/.claude/jobs/cfd8c2d0/tmp")
 def col(h): 
     h=h.lower().strip()
     return h[4:] if h.startswith('www.') else h

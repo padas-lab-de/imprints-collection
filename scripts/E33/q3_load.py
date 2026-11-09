@@ -1,5 +1,6 @@
 import duckdb,time
-T='/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/E33/'
+import os  # D47: path constants below can be overridden by env
+T=os.environ.get("T", "/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/E33/")
 t=time.time()
 c=duckdb.connect(T+'q3raw.duckdb'); c.execute("install httpfs; load httpfs; SET memory_limit='1500MB'; SET threads=4; SET temp_directory='"+T+"tmpdb'")
 c.execute("create table if not exists q3raw(crawl varchar, h varchar, tld varchar, fetch_200 bigint)")

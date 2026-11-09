@@ -1,6 +1,6 @@
 #!/bin/bash
-T=/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/E47
-D=/home/dinzinger/GitHub/imprints-collection-e35/datasets/E47
+T=${T:-/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/E47}
+D=${D:-/home/dinzinger/GitHub/imprints-collection-e35/datasets/E47}
 mkdir -p $T/res $D
 ssh mispel 'ps -p 2776461,2776469 -o pid,cmd || echo procs-gone'
 rsync -a mispel:GitHub/imprints-collection-e34r3/pilot_e47/ $T/res/

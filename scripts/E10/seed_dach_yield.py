@@ -11,7 +11,8 @@ spec = importlib.util.spec_from_file_location("an", "scripts/E10/analyze_lib.py"
 an = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(an)
 
-R = "/home/dinzinger/GitHub/imprints-collection/"
+import os  # D47: path constants below can be overridden by env
+R = os.environ.get("R", "/home/dinzinger/GitHub/imprints-collection/")
 tot = Counter()
 with gzip.open(R + "datasets/E9/random20k/imprints_batch000000.jsonl.gz", "rt", encoding="utf-8") as f:
     for line in f:

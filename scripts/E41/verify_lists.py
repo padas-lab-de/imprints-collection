@@ -1,7 +1,8 @@
 """Check L1..L4: sizes, no www.-pairs, no DACH TLD, pairwise disjoint (www-collapsed), none crawled (L1-L3)."""
 import duckdb
 
-O = "/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/E41/"
+import os  # D47: path constants below can be overridden by env
+O = os.environ.get("O", "/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/E41/")
 c = duckdb.connect(O + "e41.duckdb", read_only=True)
 nw = lambda h: h[4:] if h.startswith("www.") else h
 L = {n: [l.strip().lower() for l in open(O + n + ".txt") if l.strip()] for n in ["L4", "L3", "L1", "L2"]}

@@ -5,7 +5,8 @@ import json
 import re
 import sys
 
-R = "/home/dinzinger/GitHub/imprints-collection/"
+import os  # D47: path constants below can be overridden by env
+R = os.environ.get("R", "/home/dinzinger/GitHub/imprints-collection/")
 hosts = set(sys.argv[1:])
 for ds in ("E6", "E9"):
     with gzip.open(R + f"datasets/{ds}/random20k/imprints_batch000000.jsonl.gz", "rt", encoding="utf-8") as f:

@@ -1,6 +1,6 @@
 #!/bin/bash
 # Wait until the E43 rest crawl starts on lorbeer; fail if the driver dies. Max 60 min.
-S=/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/E43/st_full.sh
+S=${S:-/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/E43/st_full.sh}
 for i in $(seq 1 60); do
   o=$(bash $S)
   if ! echo "$o" | grep -q "E43: not started"; then echo "$o"; exit 0; fi

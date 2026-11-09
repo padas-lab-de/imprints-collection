@@ -1,9 +1,10 @@
 """Shuffle the full seed list (fixed seed) so every 25k batch is a random sample."""
 
 import gzip
+import os  # D47: path constants below can be overridden by env
 import random
 
-ROOT = "/home/dinzinger/GitHub/imprints-collection"
+ROOT = os.environ.get("ROOT", "/home/dinzinger/GitHub/imprints-collection")
 
 with gzip.open(f"{ROOT}/seed_hosts.txt.gz", "rt", encoding="UTF-8") as f:
     hosts = sorted({l.strip() for l in f if l.strip()})

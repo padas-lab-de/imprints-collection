@@ -2,7 +2,7 @@
 # E16 snapshot crawl of the full seed list: 25k batches, cap 8 per provider network (D18 via E15),
 # one process per range of STEP batches (default 3; memory grows ~2.5 GB per batch in one process, seen 2026-10-25). Re-running resumes.
 # Usage: run.sh [first_batch] [last_batch]   (inclusive; default all 263 batches)
-ROOT=/home/dinzinger/GitHub/imprints-collection
+ROOT=${ROOT:-/home/dinzinger/GitHub/imprints-collection}
 PY=${PY:-$ROOT/.claude/worktrees/agent-a9795ebab2b1874a2/.venv/bin/python}
 FIRST=${1:-0}; LAST=${2:-262}; STEP=${STEP:-3}
 cd "$ROOT" || exit 1

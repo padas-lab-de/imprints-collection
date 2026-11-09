@@ -2,7 +2,8 @@
 
 import json
 
-R = "/home/dinzinger/GitHub/imprints-collection/results/E9/"
+import os  # D47: path constants below can be overridden by env
+R = os.environ.get("R", "/home/dinzinger/GitHub/imprints-collection/results/E9/")
 s = json.load(open(R + "sample.json"))
 bad = {
     25: "unrelated external page 'Rechtliches' of a medical chamber (ethics-committee guidelines), matched by the keyword 'rechtliches'",

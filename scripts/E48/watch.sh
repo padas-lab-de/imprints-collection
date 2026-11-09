@@ -1,7 +1,7 @@
 #!/bin/bash
 # E48 global watcher (D45): every 5 min check all 5 VMs; if any VM's last-200-request window has >5%
 # throttled (429/503), kill the run on ALL VMs (process groups in pgids.tsv). Exit when all runs ended.
-W=/home/dinzinger/E48-shopify
+W=${W:-/home/dinzinger/E48-shopify}
 LOG=$W/watch.log
 while true; do
   stop=0; alive=0

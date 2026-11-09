@@ -1,4 +1,4 @@
-D=$HOME/GitHub/imprints-collection-d29
+D=${D:-$HOME/GitHub/imprints-collection-d29}
 free -g | grep Mem
 sha256sum $D/src/ic/cli/fetch.py $D/datasets/E34/e34_rest.txt $D/results/E34/full_run.sh
 mkdir -p $D/datasets/E34/full

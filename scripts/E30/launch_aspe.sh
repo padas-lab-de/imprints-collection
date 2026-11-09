@@ -1,7 +1,7 @@
 set -e
-D=$HOME/GitHub/imprints-collection-d29
+D=${D:-$HOME/GitHub/imprints-collection-d29}
 FIRST=28; LAST=54
-PY=$HOME/GitHub/imprints-collection/.claude/worktrees/agent-a9795ebab2b1874a2/.venv/bin/python
+PY=${PY:-$HOME/GitHub/imprints-collection/.claude/worktrees/agent-a9795ebab2b1874a2/.venv/bin/python}
 [ "$(sha256sum $D/src/ic/cli/fetch.py | cut -d' ' -f1)" = c34d09b29442e39bb7e956a0024bb769bcefbe816f53e9b9c30e4f32bf5a0ebc ] || { echo FETCH_SHA_MISMATCH; exit 1; }
 [ "$(sha256sum $D/datasets/E30/e30_rest.txt | cut -d' ' -f1)" = 438aba2cf8f7bf8b26b0da19b1f12544cc195a1de363b12efd79ba428dcf5452 ] || { echo LIST_SHA_MISMATCH; exit 1; }
 [ -x $PY ] || { echo NO_PY; exit 1; }

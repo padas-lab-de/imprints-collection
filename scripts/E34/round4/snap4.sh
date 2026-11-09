@@ -2,10 +2,10 @@
 # E34 round 4 snapshots: copy each finished crawl dir's discovered_external_hosts.txt (outlink host list, written by ic fetch)
 # into round4/snap/<name>.txt. Same method as round2/snap.sh and round3/snap3.sh (cp of that file), here from local e35 copies.
 set -u
-R=/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/E34/round4
+R=${R:-/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/E34/round4}
 S=$R/snap
 mkdir -p $S
-E=/home/dinzinger/GitHub/imprints-collection-e35/datasets
+E=${E:-/home/dinzinger/GitHub/imprints-collection-e35/datasets}
 cp_one() { # name path
   if test -f "$2"; then cp "$2" "$S/$1.txt"; echo "$(date -u +%FT%TZ) $1 $(wc -l < "$S/$1.txt")"; else echo "MISSING $1 $2"; fi
 }

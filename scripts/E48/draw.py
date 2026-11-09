@@ -1,8 +1,9 @@
 """E48-shopify-full-crawl (D45): all Shopify hosts not fetched yet, split into 5 parts, one per VM."""
 import random
 
-T = '/home/dinzinger/.claude/jobs/cfd8c2d0/tmp'
-W = '/home/dinzinger/E48-shopify'
+import os  # D47: path constants below can be overridden by env
+T = os.environ.get("T", "/home/dinzinger/.claude/jobs/cfd8c2d0/tmp")
+W = os.environ.get("W", "/home/dinzinger/E48-shopify")
 VMS = ['apfel', 'aspe', 'abelie', 'mispel', 'lorbeer']
 allh = [l.strip() for l in open(f'{T}/E42/shopify_all.txt') if l.strip()]
 ex = set()

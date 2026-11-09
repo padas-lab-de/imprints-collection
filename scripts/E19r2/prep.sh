@@ -1,4 +1,4 @@
-D=/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/d30
+D=${D:-/home/dinzinger/.claude/jobs/cfd8c2d0/tmp/d30}
 mkdir -p $D/akazie $D/mispel
 scp -q akazie:GitHub/imprints-collection-e22/datasets/E19/round2b_akazie/fetch_status_batch\*.tsv $D/akazie/
 scp -q mispel:GitHub/imprints-collection/datasets/E19/round2b_mispel/fetch_status_batch\*.tsv $D/mispel/

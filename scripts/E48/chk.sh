@@ -1,7 +1,7 @@
 #!/bin/bash
 # usage: chk.sh VM TREE ; one line per VM: totals + window of the last >=200 requests (by end_time).
 # Prints WINDOW_STOP when that window has >5% throttled (429/503).
-W=/home/dinzinger/E48-shopify
+W=${W:-/home/dinzinger/E48-shopify}
 VM=$1; TREE=$2
 bash $W/vmrun.sh $VM <<EOF
 cd ~/GitHub/$TREE/shopify_e48/datasets/E48/out 2>/dev/null || { echo "$VM NO_DIR"; exit 0; }

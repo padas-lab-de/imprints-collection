@@ -1,4 +1,4 @@
-R=~/GitHub/imprints-collection
+R=${R:-$HOME/GitHub/imprints-collection}
 cd $R/datasets/E22/code/scripts/E22 || exit 1
 PY=$R/.claude/worktrees/agent-a9795ebab2b1874a2/.venv/bin/python
 nice -n 19 $PY -I frontier.py --seeds $R/datasets/E16/seed_hosts_shuffled.txt \

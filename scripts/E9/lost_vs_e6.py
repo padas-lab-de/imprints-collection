@@ -4,7 +4,8 @@ import collections
 import gzip
 import json
 
-R = "/home/dinzinger/GitHub/imprints-collection/"
+import os  # D47: path constants below can be overridden by env
+R = os.environ.get("R", "/home/dinzinger/GitHub/imprints-collection/")
 
 
 def load(p):
