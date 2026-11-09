@@ -8,7 +8,6 @@ Two module leads share this record; each owns its In-flight block, cards and exp
 - Touch only your module's lines; anything that crosses modules (VM use, shared data on aspe/lorbeer, spend ledger) goes to Cards or a note in both In-flight blocks.
 
 ## In flight
-  - E40 round 2 (user: "E40 round 2 go", 2026-11-09): RUNNING, lead agent (background, own worktree), branch E40-parking-filter-r2 off E31-recount-r4 181589e. New sale/park/host home-page patterns (r2 set beside r1), precision on hand-labelled sample (seed 49), new after-filter count on recount r4 (base 3,992,804). Read-only, no HTTP. Output lorbeer e35 datasets/E40/r2. When it returns: verify (sha, sums, read labels), then status.md count + collection_history.md.
   - E48-shopify-full-crawl RUNNING since 2026-11-07 10:45Z (D45): 96,722 Shopify hosts (all not fetched yet; seed 48) split into 5 parts of 19,344-19,345, 1 request per 3 s per VM to Shopify, from 5 IPs: apfel, aspe, abelie, mispel (tree imprints-collection-e41) and lorbeer (tree imprints-collection-e43); data in <tree>/shopify_e48; process groups in lorbeer ~/E48-shopify/pgids.tsv. Global watcher (detached, lorbeer ~/E48-shopify/watch.sh, log watch.log, every 5 min): if any VM's last 200 requests have >5% 429/503, it kills all 5. Check: `bash ~/E48-shopify/chk.sh <vm> <tree>`. When done: copy to lorbeer e35 datasets/E48, recount.
 ### Gold set
 - Labelling not started: waits on D21, names for L1-L3, access route, calibration date. Tool + prefill on lorbeer (datasets/gold, prefill.jsonl e21-v1+filter1). Proposed: time-per-item summary; check the 11 hosts whose main address the filter removed.
@@ -131,6 +130,7 @@ Only on aspe (untracked): datasets/E16/seeds (batches 0-156), datasets/gold (952
 | D1-revision-driver | 2026-10-23 | Why revise now? | Journal extension with better evaluation + fresh (larger) data snapshot; no hard deadline | — |
 
 ## Lead actions
+- 2026-11-09: E40 round 2 done, lead-verified (sha, line count, category sums, labels read, own draw 40/40): 3,908,045 sites after filter on recount r4 (-84,759). Assumed: adopt as release filter; r2_name_for_sale flag-only in recount r5 (269 sites). Branch E40-parking-filter-r2 e65d59f (not merged), output lorbeer e35 datasets/E40/r2.
 - 2026-11-09: D46 C: E34 round 4 closed after the pilot (97/5,000 = 1.94%; 88 new sites). rest_r4.txt (696,697) not crawled; pilot results mispel e34r3 datasets/E34r4/pilot and tmp/E34/round4/pilot; add the pilot to the next recount (r5, with E48).
 - 2026-11-08: docs/collection_history.md moved to recount r4 (agent draft, lead-reviewed: headline, filter sum and per-source sums check; doubt 9 resolved by lead).
 - 2026-11-08: Recount r4 done, lead-verified: 4,020,137 D34 sites, 3,992,804 after E40 filter (status page, Current count). Branch E31-recount-r4 181589e (not merged), output lorbeer e35 datasets/E31/r4.

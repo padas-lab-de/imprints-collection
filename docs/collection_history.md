@@ -11,10 +11,10 @@ Terms: "found" = host with status `imprint_found` (an imprint page was fetched; 
 | Count | Value | Date | Rule |
 |---|---|---|---|
 | Sites after D34 dedup | **4,020,137** | 2026-11-08 (recount r4, lead-verified) | One site per `www.x` / `x` pair. |
-| Sites after parking filter | **3,992,804** | 2026-11-08 | Drop sale, parking and host-default pages. |
+| Sites after parking filter | **3,908,045** | 2026-11-09 (E40 round 2, lead-verified) | Drop sale, parking and host-default pages. |
 
 - D34 rule: `www.x` and `x` count as one site. Keep the redirect target if it is a crawled host, else the non-www form.
-- Parking filter (E40): drop a site when all its found hosts are domain-sale (19,898), parking (6,276) or host-default pages (1,159). Keep under-construction pages (16,862). That drops 27,333 sites.
+- Parking filter (E40 round 2): drop a site when all its found hosts are domain-sale (70,982), parking (38,802) or host-default pages (2,308). Keep under-construction pages (18,455). That drops 112,092 sites. Output on lorbeer: e35 `datasets/E40/r2`; branch E40-parking-filter-r2 e65d59f, not merged.
 - Other views of the same data (2026-11-08): 4,844,209 www-collapsed only; 5,275,955 exact hosts.
 - Recount r4: branch E31-recount-r4, sha 181589e, made off E31-recount-r3, not merged. Output on lorbeer: e35 `datasets/E31/r4`. sha256 of the D34 site list: e4645f32…; of the filtered list: 85e12846….
 - r4 adds 155,287 new sites from the sources E41L1-L4, E43, E44 and E45-E47. 4,113 r3 sites fold into new r4 sites (their redirect target is now crawled). The old sources fall from 3,865,119 to 3,864,850. Check: 3,864,850 + 155,287 = 4,020,137.
@@ -202,6 +202,7 @@ All numbers are on random samples of seed hosts unless marked.
 | Kontakt precision, pilot labels | 38 true, 5 false, 7 unclear of 50 Kontakt finds (10% false, CI 4.3-21.4%). | 2026-11-04 |
 | Kontakt precision, audit (agent labels, lead recount) | 87.0% (87/100, full re-check), 88.0% (44/50, 2,429,968-host crawl). Control: link finds 84.0% (42/50). Intervals overlap, so no evidence Kontakt is worse. | 2026-11-05 |
 | Parking filter precision | Sale + park flags 58/60 = 96.7% (CI 88.6-99.1); host-default 20/20; under-construction only 9/30 = 30%. Unflagged found sites: 0/60 parked. | 2026-11-05 |
+| Parking filter round 2 precision | New flags 60/60 (CI 94.0-100); lead draw 40/40. Weak rule "name for sale" 13/20 (269 sites). Kept found sites: 0/60 parked. | 2026-11-09 |
 
 - In the Kontakt audit, "real imprint" means operator named, street and number, postcode and city. One rater (agent), pages cut at 4,000 characters.
 - Result: a found host means a page was found. It is not yet an imprint with a DACH address. About 10 of the Kontakt "yes" records are contact blocks. Some pages list other parties' addresses before the imprint.
@@ -217,7 +218,8 @@ All numbers are on random samples of seed hosts unless marked.
 | Exact host count | 5,275,955 | Not used as headline. |
 | www-collapse only, no redirect fold | 4,844,209 | Not used as headline. |
 | Variant: fold only into redirect targets that are themselves found | 4,073,897 (on the 4,020,137 base) | Rejected. At the 2026-11-05 count, 45,541 of the 57,655 hosts it kept apart went to the parking target ts.domainname.de. |
-| Parking filter: drop sale + park + host-default | 3,992,804 (sale 19,898, park 6,276, host 1,159) | Adopted as the assumed release count; branch not merged. |
+| Parking filter round 2: drop sale + park + host-default | 3,908,045 (sale 70,982, park 38,802, host 2,308) | Adopted as the assumed release count (2026-11-09); branch not merged. |
+| Parking filter round 1 | 3,992,804 (sale 19,898, park 6,276, host 1,159) | Replaced by round 2. |
 | Parking filter variant: also drop under-construction pages | not applied | Rejected: only 30% precision. |
 
 - History of the count: 3,069,472 D34 sites on a partial snapshot (2026-11-04 01:30 UTC); 3,859,210 at the final count (2026-11-05, all crawls finished); 3,865,119 at recount r3 (2026-11-06, with round 3 of the outlinks); 4,020,137 at recount r4 (2026-11-08, with the E41, E43, E44 and Shopify-test crawls).
@@ -314,7 +316,7 @@ Owned by the other lead (since 2026-10-26). This is a pointer only, from the doc
 Conflicts between docs (later doc wins in the text above):
 1. Round 1 recovery found: 10,697 (19.1%, In flight, 2026-10-31); 10,693 net new vs the seed crawl (round-1 report); 10,657 unique hosts (dedup, 2026-11-03). Section 4.1 uses 10,697.
 2. Round 3 new sites: 9,753 (hand count, 2026-11-05), net +5,909 (recount r3, 2026-11-06), 6,101 (recount r4, 2026-11-08). The latest recount wins.
-3. Parking filter: 3,834,419 on the 3,859,210 base (2026-11-05), 3,840,198 on the 3,865,119 base (2026-11-06), 3,992,804 on the 4,020,137 base (2026-11-08). Different bases. The latest one is used. Sale count 18,200, 18,332, 19,898.
+3. Parking filter: 3,834,419 on the 3,859,210 base (2026-11-05), 3,840,198 on the 3,865,119 base (2026-11-06), 3,992,804 on the 4,020,137 base (2026-11-08), 3,908,045 with the round-2 patterns on the same base (2026-11-09). The latest one is used. Sale count 18,200, 18,332, 19,898, 70,982. Per-source after-filter counts in section 4 use round 1; round-2 values are in datasets/E40/r2/filter_by_source.tsv.
 4. Shopify quiet period: D32 text says "to about 10:00 UTC"; the record says 11:02 UTC. 11:02 used.
 5. status.md header says "Updated 2026-10-26" and its E22 heading says "depth-1 crawl running". Both are stale. Content below them is current.
 6. Pool and crawled sizes differ slightly: HPLT pool 516,971 minus 5,000 pilot is 511,971, but 511,763 were crawled; the CC host-index pool minus pilot is 448,428, crawled 447,400. Crawled counts used.
