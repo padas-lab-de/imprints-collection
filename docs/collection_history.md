@@ -202,6 +202,7 @@ All numbers are on random samples of seed hosts unless marked.
 | Kontakt precision, pilot labels | 38 true, 5 false, 7 unclear of 50 Kontakt finds (10% false, CI 4.3-21.4%). | 2026-11-04 |
 | Kontakt precision, audit (agent labels, lead recount) | 87.0% (87/100, full re-check), 88.0% (44/50, 2,429,968-host crawl). Control: link finds 84.0% (42/50). Intervals overlap, so no evidence Kontakt is worse. | 2026-11-05 |
 | Parking filter precision | Sale + park flags 58/60 = 96.7% (CI 88.6-99.1); host-default 20/20; under-construction only 9/30 = 30%. Unflagged found sites: 0/60 parked. | 2026-11-05 |
+| Under-construction sites kept (E40 round 3) | 47/60 real operators (78.3%, CI 66.4-86.9); 3/60 placeholders (5.0%, CI 1.7-13.7); 10 unclear. Keeping them is right. | 2026-11-09 |
 | Parking filter round 2 precision | New flags 60/60 (CI 94.0-100); lead draw 40/40. Weak rule "name for sale" 13/20 (269 sites). Kept found sites: 0/60 parked. | 2026-11-09 |
 
 - In the Kontakt audit, "real imprint" means operator named, street and number, postcode and city. One rater (agent), pages cut at 4,000 characters.
