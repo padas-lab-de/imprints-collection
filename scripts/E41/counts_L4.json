@@ -1,0 +1,25 @@
+{
+ "e16_not_found_hosts_total": 1953994,
+ "not_found_never_found_all_tlds": 1920371,
+ "non_dach_never_found": 1439316,
+ "size": 1439316,
+ "sha256": "45ad7fc3f19b22c5656d7c0fe4fad1f9f91468e5ca4ed1a620d7050962d49201",
+ "tld_mix": {
+  "com": 592620,
+  "org": 130594,
+  "uk": 72648,
+  "net": 51552,
+  "it": 50094,
+  "jp": 46892,
+  "ru": 46011,
+  "fr": 44326,
+  "nl": 39603,
+  "pl": 28591,
+  "ca": 24649,
+  "tr": 19853,
+  "au": 16931,
+  "cz": 16403,
+  "edu": 15186
+ },
+ "n_tlds": 787
+}

@@ -1,0 +1,31 @@
+{
+ "q2_pool": 1730374,
+ "dropped_dach_tld_in_q2": 2677,
+ "removed_crawled": 4997,
+ "classify": {
+  "new": 1722700
+ },
+ "after_blog_drop": 1722700,
+ "after_www_dedup": 1722700,
+ "removed_overlap_earlier_lists": 0,
+ "size": 1722700,
+ "sha256": "0d1760ba15c017f6e265c9f05d723aea3d0e9c321a5403a91c442af4f9e5446f",
+ "tld_mix": {
+  "com": 826935,
+  "net": 122793,
+  "eu": 103206,
+  "org": 84621,
+  "info": 60285,
+  "us": 35240,
+  "ru": 30664,
+  "it": 25463,
+  "nl": 22437,
+  "io": 19946,
+  "pl": 18537,
+  "fr": 13179,
+  "site": 12681,
+  "biz": 12064,
+  "cz": 10924
+ },
+ "n_tlds": 775
+}

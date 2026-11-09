@@ -1,0 +1,35 @@
+{
+ "hplt_shards": 1070,
+ "hosts_all_tlds": 6006904,
+ "ia_only_all_tlds": 1672049,
+ "ia_only_not_crawled": 748180,
+ "ia_only_not_crawled_non_dach": 667713,
+ "classify": {
+  "new": 561065,
+  "bad": 100020,
+  "platform": 6628
+ },
+ "after_blog_drop": 561065,
+ "after_www_dedup": 561065,
+ "removed_overlap_earlier_lists": 92779,
+ "size": 468286,
+ "sha256": "e1df2fdd36f6e96ad0b1a4daf2583be1156b5fddf65263ddc691279d1b12243a",
+ "tld_mix": {
+  "com": 275815,
+  "net": 58128,
+  "org": 25625,
+  "eu": 18603,
+  "info": 16550,
+  "us": 10478,
+  "biz": 5051,
+  "it": 3878,
+  "fr": 3678,
+  "nl": 3367,
+  "ru": 2569,
+  "pl": 2336,
+  "in": 2113,
+  "uk": 1631,
+  "hu": 1624
+ },
+ "n_tlds": 521
+}
