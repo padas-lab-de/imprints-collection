@@ -129,7 +129,93 @@ _GATES = {
     "hosting_default": ("default", "nginx", "it works", "standard-index", "suspended", "account", "freigeschaltet", "all set to go", "congratulations", "webspace", "php version", "hosted by", "no web site", "you see this page", "placeholder", "platzhalter", "default-index", "default index", "apache", "ready to use", "created successfully", "no host", "unknown address", "one.com", "nicht erreichbar", "nicht verfügbar"),
     "under_construction": ("entsteh", "aufbau", "in arbeit", "bearbeitung", "construction", "coming soon", "verfügbar", "kürze", "folgt", "arbeiten", "reserved", "überarbeitet", "erstellt", "aufgebaut", "neu gestaltet", "wird zur", "wird gerade", "wird derzeit", "hier wird", "en construction"),
 }
-PATTERNS = [(c, lab, re.compile(rx, re.I | re.M), strong, _GATES[lab]) for c, lab, rx, strong in _P]
+PATTERNS_R1 = [(c, lab, re.compile(rx, re.I | re.M), strong, _GATES[lab]) for c, lab, rx, strong in _P]
+
+# ----------------------------------------------------------------------------------------- round 2 (E40 r2)
+# Added 2026-11-09 from the round-1 misses and from reading unflagged short found pages (E30, E33, E37, E41 L1).
+# The round-1 rules above are unchanged. All r2 labels start with "r2_" and map to the same categories.
+_DOM = r"[\w\-äöü]+(?:\.[\w\-äöü]+)*\.[a-z]{2,10}"  # a domain name token
+_P_R2 = [
+    # ---- sale ----
+    (
+        "sale",
+        "r2_sale_template",  # fixed sentences of sale templates (kv-gmbh, "aktuell kaufen und sofort übernehmen", ...)
+        r"(?:am\s+kauf\s+der\s+domain|können\s+die\s+domain\s+\S+\s+(?:aktuell\s+|jetzt\s+)?kaufen|wird\s+zum\s+kauf\s+angeboten"
+        r"|diese\s+domain\s+können\s+sie\s+(?:\w+\s+)?(?:käuflich\s+)?erwerben|domain\s+names?\s+(?:are\s+|is\s+)?for\s+sale|\bnamepros\b|\b301\s*domains\b"
+        r"|interested\s+in\s+(?:buying\s+)?(?:this|the)\s+domain|interesse\s+an\s+(?:dieser|einer\s+unserer)\s+(?:top-?\s*|premium-?\s*)?domains?\b"
+        r"|kooperation\s+zum\s+ausbau\s+der\s+domain|zu\s+verkaufen\s*\|\s*lemmynet|zu\s+verkaufen\W+weitere\s+domains"
+        r"|domains?,?\s+die\s+zum\s+verkauf\s+stehen|diese\s+domains\s+stehen\s+zum\s+verkauf)",
+        True,
+    ),
+    (
+        "sale",
+        "r2_name_for_sale",  # "<domain> steht zum Verkauf", "Die Domain <domain> ist zu verkaufen", "Diese Domain, , ist zum Verkauf"
+        r"(?:\b" + _DOM + r"|\bdomains?(?:\s+[„\"']?" + _DOM + r"[“\"']?|\s*,\s*,?))\s+(?:steht|ist|wird|stehen|sind)\s+"
+        r"(?:jetzt\s+|aktuell\s+|derzeit\s+|ab\s+sofort\s+)?(?:zum\s+verkauf|zu\s+verkaufen|for\s+sale|zum\s+kauf|zu\s+haben)"
+        r"|^\s*" + _DOM + r"\s+(?:zu\s+verkaufen|for\s+sale)\b|domain[^.\n]{0,80}\bum\s+sie\s+zu\s+erwerben",
+        False,
+    ),
+    # ---- parked / registrar and registry placeholder ----
+    (
+        "park",
+        "r2_park_template",  # fixed registrar / registry sentences (united-domains, IONOS, DENIC transit, BrandShelter, freenet)
+        r"(?:im\s+kundenauftrag\s+(?:registriert|reserviert)|diese\s+domain\s+ist\s+bereits\s+(?:bei\s+\S+\s+)?registriert"
+        r"|aufgerufene\s+domain\s+ist\s+derzeit\s+nicht\s+erreichbar|domaininhaber\s+ist\s+bereits\s+informiert"
+        r"|registered\s+on\s+behalf\s+of\s+a\s+client|\bbrand\s*shelter\b|als\s+mail[- ]?domain\s+registriert"
+        r"|used\s+for\s+e-?mail\s+purposes\s+only|als\s+kunde\s+von\s+\S+(?:\s+\S+){0,3}\s+können\s+sie\s+diese\s+domain"
+        r"|für\s+diese\s+domain\s+ist\s+noch\s+kein\s+inhalt\s+hinterlegt|domain\s+\S+\s+kann\s+noch\s+registriert\s+werden)",
+        True,
+    ),
+    (
+        "park",
+        "r2_park_phrase",  # shorter registrar phrases, only on short pages
+        r"(?:für\s+(?:einen|unsere[nm]?)\s+(?:unserer\s+)?kunden(?:\s+(?:von|der|bei)\s+\S+(?:\s+\S+)?)?\s+(?:registriert|reserviert)"
+        r"|domain\s+wurde\s+erfolgreich\s+registriert|domain\s+ist\s+registriert,?\s+(?:derzeit|jedoch|aber)|diese\s+domain\s+ist\s+reserviert"
+        r"|^\s*reserviert\s+für\b|diese\s+domain\s+(?:ist\s+(?:derzeit\s+)?inaktiv|wurde\s+deaktiviert)"
+        r"|diese\s+domain\s+wird\s+(?:derzeit|momentan|zur\s+zeit|aktuell)\s+nicht\s+(?:für\s+eine\s+(?:website|webseite)\s+)?genutzt"
+        r"|domain\s+aktiv\W+technische\s+bereitstellung)",
+        False,
+    ),
+    # ---- hosting default / account pages ----
+    (
+        "host",
+        "r2_host_template",  # fixed hoster placeholder sentences (EUserv, Advantic, compaso, nicmanager, tralios, ...)
+        r"(?:dieser\s+platzhalter\s+von|homepage,\s+webspace\s+oder\s+server\s+nicht\s+gefunden|keiner\s+aktiven\s+website\s+zugeordnet"
+        r"|webhost\s+wurde\s+neu\s+eingerichtet|auf\s+diesem\s+account\s+noch\s+keine\s+daten\s+hinterlegt"
+        r"|(?:\(noch\)|noch)\s+kein\s+(?:webseiten)?inhalt\s+hinterlegt|kein\s+webseiteninhalt\s+hinterlegt"
+        r"|für\s+diese\s+domain\s+ist\s+keine\s+(?:webseite|website)\s+verfügbar|domain\s+zeigt\s+erfolgreich\s+auf\s+(?:den|einen|unseren)\s+server"
+        r"|auf\s+diesem\s+knotenpunkt\s+nicht\s+konfiguriert|custom\s+domain\b.{0,80}?\bis\s+now\s+connected)",
+        True,
+    ),
+    (
+        "host",
+        "r2_host_phrase",  # shorter hoster phrases, only on short pages
+        r"(?:webserver\s+von\s+\S+(?:\s+\S+)?\s+erreicht|homepage\s+kann\s+leider\s+nicht\s+aufgerufen\s+werden"
+        r"|(?:webseite|website)\s+(?:ist\s+)?aktuell\s+nicht\s+erreichbar|ist\s+lediglich\s+(?:ein\s+)?platzhalter"
+        r"|domains?\s+&\s+hosting\s+von\s+helloly|in\s+3\s+minuten\s+zur\s+eigenen\s+domain|diese\s+domain\s+wird\s+bei\s+\S+(?:\s+\S+)?\s+gehostet)",
+        False,
+    ),
+    # ---- under construction (not a drop rule) ----
+    (
+        "constr",
+        "r2_under_construction",
+        r"(?:hier\s+entsteh(?:t|en)\s+(?:in\s+kürze|demnächst|gerade|zur\s+zeit|derzeit)|befindet\s+sich\s+(?:zur\s+zeit\s+|derzeit\s+|gerade\s+)?im\s+umbau"
+        r"|folgt\s+in\s+kürze|(?:website|webseite|homepage|internetseite|seite)\s+(?:ist\s+|befindet\s+sich\s+)?in\s+erstellung"
+        r"|(?:website|webseite|homepage)\s+folgt\b|strona\s+w\s+przygotowaniu|currently\s+being\s+migrated)",
+        False,
+    ),
+]
+_GATES_R2 = {
+    "r2_sale_template": ("kauf", "erwerben", "for sale", "namepros", "301", "interest", "interesse", "ausbau", "verkauf"),
+    "r2_name_for_sale": ("verkauf", "for sale", "zum kauf", "zu haben", "erwerben"),
+    "r2_park_template": ("kundenauftrag", "bereits", "nicht erreichbar", "on behalf", "shelter", "mail", "als kunde", "kein inhalt", "noch registriert"),
+    "r2_park_phrase": ("kunden", "registriert", "reserviert", "inaktiv", "deaktiviert", "genutzt", "bereitstellung"),
+    "r2_host_template": ("platzhalter", "nicht gefunden", "aktiven website", "webhost", "hinterlegt", "keine webseite", "keine website", "zeigt erfolgreich", "knotenpunkt", "now connected"),
+    "r2_host_phrase": ("erreicht", "nicht aufgerufen", "nicht erreichbar", "platzhalter", "helloly", "eigenen domain", "gehostet"),
+    "r2_under_construction": ("entsteh", "umbau", "kürze", "erstellung", "folgt", "przygotowaniu", "migrated"),
+}
+PATTERNS_R2 = [(c, lab, re.compile(rx, re.I | re.M), strong, _GATES_R2[lab]) for c, lab, rx, strong in _P_R2]
+PATTERNS = PATTERNS_R1 + PATTERNS_R2  # default: round 1 + round 2
 CAT_ORDER = {"sale": 0, "park": 1, "host": 2, "constr": 3}
 CORE = ("sale", "park")
 
@@ -139,15 +225,17 @@ def _flat(s, n=None):
     return s[:n] if n else s
 
 
-def detect(title, description, content, content_length=None):
-    """-> (category, label, context) of the most severe match (sale, park, host, constr), or None."""
+def detect(title, description, content, content_length=None, patterns=None):
+    """-> (category, label, context) of the most severe match (sale, park, host, constr), or None.
+    patterns: PATTERNS (round 1 + round 2, the default) or PATTERNS_R1 (reproduces round 1)."""
+    patterns = PATTERNS if patterns is None else patterns
     clen = len(content or "") if content_length is None else content_length
     if clen > STRONG_MAX:
         return None
     text = "\n".join(x for x in ((title or ""), (description or ""), (content or "")[:WINDOW]) if x)
     best = None
     low = text.lower()
-    for cat, label, rx, strong, gate in PATTERNS:
+    for cat, label, rx, strong, gate in patterns:
         if not strong and clen > WEAK_MAX:
             continue
         if not any(g in low for g in gate):
@@ -170,6 +258,7 @@ def is_sample(host):
 # ----------------------------------------------------------------------------- scan (runs on VMs)
 def scan_dir(d, targets, out, stats):
     """Writes TSV rows: host, kind, cat, label, final_url, title, ctx[, desc, content_len, content_head].
+    F rows decided by an r2 label carry r1_cat, r1_label, desc, content_len, content_head after ctx.
     One row per host (its last record in the dir). kind F = flagged, S = sample host (md5 rule, flagged or
     not), T = record of a listed target host. Hosts flagged by an earlier record but not by the last one are
     dropped (resume duplicates)."""
@@ -191,19 +280,23 @@ def scan_dir(d, targets, out, stats):
                     title, desc = m.get("title") or "", m.get("description") or ""
                     hit = detect(title, desc, content, m.get("content_length") or len(content))
                     url = _flat(m.get("url") or "", 200)
+                    snip = (_flat(desc, 150), str(len(content)), _flat(content, 400))
                     if hit:
-                        flagged[h] = (hit, url, _flat(title, 80))
+                        extra = ()
+                        if hit[1].startswith("r2_"):  # r2 decides: keep the round-1 result and the page text
+                            h1 = detect(title, desc, content, m.get("content_length") or len(content), PATTERNS_R1)
+                            extra = (h1[0] if h1 else "", h1[1] if h1 else "", *snip)
+                        flagged[h] = (hit, url, _flat(title, 80), extra)
                     else:
                         flagged.pop(h, None)
-                    snip = (_flat(desc, 150), str(len(content)), _flat(content, 400))
                     if is_sample(h):
                         samples[h] = (hit, url, _flat(title, 80), snip)
                     if collapse(h) in targets:
                         tgt[h] = (hit, url, _flat(title, 80), snip)
         except (EOFError, zlib.error, OSError):
             stats["truncated_gz"] += 1
-    for h, (hit, url, title) in flagged.items():
-        out.write("\t".join([h, "F", hit[0], hit[1], url, title, hit[2]]) + "\n")
+    for h, (hit, url, title, extra) in flagged.items():
+        out.write("\t".join([h, "F", hit[0], hit[1], url, title, hit[2], *extra]) + "\n")
         stats["flagged"] += 1
     for kind, dd in (("S", samples), ("T", tgt)):
         for h, (hit, url, title, snip) in dd.items():
@@ -347,6 +440,19 @@ def apply_filter(indir, scan_paths, targets_path, outdir):
         f.write("site\tcategory\tn_found_hosts\tsite_is_target\n")
         for s in sorted(sf):
             f.write(f"{s}\t{sf[s]}\t{len(canon_hosts.get(s, ()))}\t{int(s in target_class)}\n")
+    # inputs for the precision / miss samples (E40 r2): found hosts of flagged sites, and md5-sample found hosts
+    with open(out / "flagged_site_hosts.tsv", "w") as f:
+        f.write("site\tsite_category\thost\thost_category\thost_label\n")
+        for s in sorted(sf):
+            for h in sorted(canon_hosts.get(s, ())):
+                fl = flagged.get(h)
+                f.write(f"{s}\t{sf[s]}\t{h}\t{host_cat.get(h) or ''}\t{fl[1] if fl else ''}\n")
+    with open(out / "sample_found_hosts.tsv", "w") as f:
+        f.write("host\tsite\tsite_category\n")
+        for s in sorted(canon_hosts):
+            for h in sorted(canon_hosts[s]):
+                if is_sample(h):
+                    f.write(f"{h}\t{s}\t{sf.get(s, '')}\n")
     print(f"sites {total_sites} flagged_all {len(sf)} core {core} {dict(tot)} after_core {total_sites - core} after_all {total_sites - len(sf)}")
     return sf, canon_hosts
 
