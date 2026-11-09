@@ -12,6 +12,7 @@ Two module leads share this record; each owns its In-flight block, cards and exp
   - D47 wrap-up (user, 2026-11-09): (1) inventory agent, read-only: every experiment -> list, script, crawl dir, lorbeer copy; output tmp/wrapup/inventory.md. (2) merge agent, own worktree: branch collection-release off lead-record merging all collection branches, tests, layout; then run scripts + README reproduce section; draft PR to master. (3) after both: data package on lorbeer and upload to innkube datasets/imprints/20261109/. (4) after E48 ends: recount r5 = final count, add to package. No new crawls.
   - E48-shopify-full-crawl RUNNING since 2026-11-07 10:45Z (D45): 96,722 Shopify hosts (all not fetched yet; seed 48) split into 5 parts of 19,344-19,345, 1 request per 3 s per VM to Shopify, from 5 IPs: apfel, aspe, abelie, mispel (tree imprints-collection-e41) and lorbeer (tree imprints-collection-e43); data in <tree>/shopify_e48; process groups in lorbeer ~/E48-shopify/pgids.tsv. Global watcher (detached, lorbeer ~/E48-shopify/watch.sh, log watch.log, every 5 min): if any VM's last 200 requests have >5% 429/503, it kills all 5. Check: `bash ~/E48-shopify/chk.sh <vm> <tree>`. When done: copy to lorbeer e35 datasets/E48, recount.
 ### Gold set
+- E49-topic-schema-strategy STARTED 2026-11-09 (D49): best prompting strategy + reliable hierarchy level for POI (topics/poi_v2.jsonl) and WZ 2025 on homepage/imprint; innkube models; agent dev set ~200 gold hosts. Gold labelling waits on E49 (tool gets both schemas).
 - Labelling not started: waits on D21, names for L1-L3, access route, calibration date. Tool + prefill on lorbeer (datasets/gold, prefill.jsonl e21-v1+filter1). Proposed: time-per-item summary; check the 11 hosts whose main address the filter removed.
 
 ### Data collection (owned by the data-collection lead)
@@ -70,6 +71,7 @@ Only on aspe (untracked): datasets/E16/seeds (batches 0-156), datasets/gold (952
 ## Cards
 | ID | Date | Question | Outcome | Landed in |
 |---|---|---|---|---|
+| D49-topic-study-setup | 2026-11-09 | Topic study (E49): reference labels, gold topic fields, label count, models? | Agent dev set; gold gets both schemas after the study; one main + up to 2 extra; innkube only (user) | docs/decisions/D49-topic-study-setup.md |
 | D48-old-raw-crawl-data-in-package | 2026-11-09 | Put the VM-only raw crawl data of E16, E19, E22, E25-E29, E34, E36 (~40 GB) into the S3 package? | A: copy and upload (user, 2026-11-09) | decisions/D48-old-raw-crawl-data-in-package.md |
 | D47-collection-wrap-up | 2026-11-09 | Wrap up the collection: git consolidation, scope, data location, recount r5 | One branch collection-release + draft PR; collection only; data to innkube s3 datasets/imprints/20261109/; r5 yes (user, 2026-11-09) | decisions/D47-collection-wrap-up.md |
 | D46-round4-full-crawl-scope | 2026-11-08 | Round-4 pilot 1.94% (< D33 10%): crawl full rest (696,697), DACH TLDs only (12,192), or stop? | C: stop after the pilot (user, 2026-11-09) | decisions/D46-round4-full-crawl-scope.md |
