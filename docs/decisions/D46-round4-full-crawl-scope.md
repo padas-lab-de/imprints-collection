@@ -23,4 +23,4 @@ Issued 2026-11-08 (lead). Blocks: the full crawl of E34 round 4.
 - **B** Crawl only the DACH-TLD part (12,192 hosts, about 30% yield), on one VM. About 3,600 imprint_found expected. This selects hosts by TLD, which breaks the rule to treat all TLDs the same, here as a crawl filter.
 - **C** Stop round 4 after the pilot. Keep the 88 new pilot sites and record the frontier. Outlink snowballing ends here.
 
-**Answer:** open.
+**Answer (user, 2026-11-09):** "D46 C." Round 4 stops after the pilot; rest_r4.txt is not crawled. The 88 new pilot sites go into the next recount.

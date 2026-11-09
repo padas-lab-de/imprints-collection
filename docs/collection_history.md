@@ -105,7 +105,7 @@ Frontier = hosts linked from pages of the new sources (section 2), minus all kno
 | Round 2 (2026-11-04) | 247,928 | 247,928 (pilot 5,000 + 242,928) | 21,071 (pilot 421 + full 20,650; 8.5%) | 11,880 | None. 6,992 non-DACH finds need a DACH address at merge. |
 | Round 3, DACH TLDs (2026-11-05) | 33,257 | 33,257 (pilot 5,000 + 28,257) | 11,721 (1,807 + 9,914; 35.1% on the full part) | 6,101 (after filter: 5,959) | Other TLDs: next row. |
 | Round 3, other TLDs (E41L3; all but .de/.at/.ch/.li; done 2026-11-08) | 572,749 (dropped by the round-3 TLD filter; 565,218 left after later exclusions) | 565,218 | 9,057 (1.6%) | 5,451 (after filter: 5,426) | None known. |
-| Round 4 (2026-11-08, all TLDs, pilot only) | 701,697 | 5,000 (pilot) | 97 (1.94%) | 88 | Below the D33 bar (10%). The full crawl waits on card D46. Not in recount r4. |
+| Round 4 (2026-11-08, all TLDs, pilot only) | 701,697 | 5,000 (pilot) | 97 (1.94%) | 88 | Below the D33 bar (10%). D46 C (user, 2026-11-09): stop after the pilot; the rest is not crawled. Outlink rounds end here. Not in recount r4. |
 
 - Round 2 by TLD group: DACH 13,658 / 38,375 = 35.6%; generic 5,618 / 145,446 = 3.9%; other ccTLDs 1,374 / 59,107 = 2.3%.
 - The pilot of round 2 was below the 10% rule (8.4%). The user chose the full crawl including generic TLDs (D38 B).
@@ -282,7 +282,7 @@ The 2026-11-06 parity crawls (E41L1-L4) are done and in recount r4 (sections 2, 
 
 - 403 hosts (270,624): pilot 0.75%.
 - 36,577 Shopify hosts of recovery round 2: now part of the Shopify work (E48 runs 96,722 hosts).
-- E34 round 4, full crawl of the rest of 701,697 hosts: pilot 1.94%, below the D33 bar; waits on card D46.
+- E34 round 4: closed after the pilot (D46 C, 2026-11-09); the rest of 696,697 hosts is not crawled.
 - Depth 3 of the seed outlinks and depth 2 of frontier B.
 - The other 25 host-index crawls.
 - A Kontakt filter before the merge.
@@ -377,7 +377,7 @@ Numbers I could not trace to a doc (the text avoids them or marks them):
 | D30 | Round 2 memory, body cap | 5, 8.3 |
 | D31, D32 | Shopify tail and throttle | 4.3 |
 | D33 | Common Crawl seeds, 10% rule | 2, 3.2 |
-| D46 | Full crawl of E34 round 4 (open card) | 3.2, 9.2 |
+| D46 | Full crawl of E34 round 4: C, stop after the pilot (2026-11-09) | 3.2, 9.2 |
 | D34 | www dedup | 1, 7 |
 | D35 | Next imprint sources | 2, 3.2, 4.2 |
 | D36, D37 | Recall patch, full re-check | 4.2, 5 |

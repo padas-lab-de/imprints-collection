@@ -8,7 +8,6 @@ Two module leads share this record; each owns its In-flight block, cards and exp
 - Touch only your module's lines; anything that crosses modules (VM use, shared data on aspe/lorbeer, spend ledger) goes to Cards or a note in both In-flight blocks.
 
 ## In flight
-  - E34 round 4: frontier 701,697 lead-verified (tmp/E34/round4, sha d18a36f1…). Pilot DONE 2026-11-08 20:26Z on mispel (datasets/E34r4/pilot, copy tmp/E34/round4/pilot, summary summ_r4_out.txt): 97/5,000 imprint_found = 1.94%, below the D33 bar -> card D46-round4-full-crawl-scope (open). rest_r4.txt 696,697 waits for D46.
   - E48-shopify-full-crawl RUNNING since 2026-11-07 10:45Z (D45): 96,722 Shopify hosts (all not fetched yet; seed 48) split into 5 parts of 19,344-19,345, 1 request per 3 s per VM to Shopify, from 5 IPs: apfel, aspe, abelie, mispel (tree imprints-collection-e41) and lorbeer (tree imprints-collection-e43); data in <tree>/shopify_e48; process groups in lorbeer ~/E48-shopify/pgids.tsv. Global watcher (detached, lorbeer ~/E48-shopify/watch.sh, log watch.log, every 5 min): if any VM's last 200 requests have >5% 429/503, it kills all 5. Check: `bash ~/E48-shopify/chk.sh <vm> <tree>`. When done: copy to lorbeer e35 datasets/E48, recount.
 ### Gold set
 - Labelling not started: waits on D21, names for L1-L3, access route, calibration date. Tool + prefill on lorbeer (datasets/gold, prefill.jsonl e21-v1+filter1). Proposed: time-per-item summary; check the 11 hosts whose main address the filter removed.
@@ -69,7 +68,7 @@ Only on aspe (untracked): datasets/E16/seeds (batches 0-156), datasets/gold (952
 ## Cards
 | ID | Date | Question | Outcome | Landed in |
 |---|---|---|---|---|
-| D46-round4-full-crawl-scope | 2026-11-08 | Round-4 pilot 1.94% (< D33 10%): crawl full rest (696,697), DACH TLDs only (12,192), or stop? | open | decisions/D46-round4-full-crawl-scope.md |
+| D46-round4-full-crawl-scope | 2026-11-08 | Round-4 pilot 1.94% (< D33 10%): crawl full rest (696,697), DACH TLDs only (12,192), or stop? | C: stop after the pilot (user, 2026-11-09) | decisions/D46-round4-full-crawl-scope.md |
 | D45-shopify-full-run-choice | 2026-11-07 | Full run of 97,116 Shopify hosts: 1 per 5 s on 1 VM, 1 per 2 s on 1 VM, or 1 per 5 s on 5 VMs? | other: 1 per 3 s per VM on as many free VMs as possible (user, 2026-11-07) | decisions/D45-shopify-full-run-choice.md |
 | D44-shopify-full-run-rate | 2026-11-07 | Full run of 97,216 Shopify hosts: 1 per 5 s on 1 VM, on 5 VMs, or a 1 per 2 s step test? | C: step test at 1 per 2 s first (user, 2026-11-07) | decisions/D44-shopify-full-run-rate.md |
 | D43-shopify-full-run | 2026-11-06 | Full run of 97,316 Shopify hosts: 1 per 10 s on 5 VMs with a global stop rule, on 1 VM, or a 1 per 5 s step test? | C: step test at 1 per 5 s first (user, 2026-11-06) | decisions/D43-shopify-full-run.md |
@@ -131,6 +130,7 @@ Only on aspe (untracked): datasets/E16/seeds (batches 0-156), datasets/gold (952
 | D1-revision-driver | 2026-10-23 | Why revise now? | Journal extension with better evaluation + fresh (larger) data snapshot; no hard deadline | — |
 
 ## Lead actions
+- 2026-11-09: D46 C: E34 round 4 closed after the pilot (97/5,000 = 1.94%; 88 new sites). rest_r4.txt (696,697) not crawled; pilot results mispel e34r3 datasets/E34r4/pilot and tmp/E34/round4/pilot; add the pilot to the next recount (r5, with E48).
 - 2026-11-08: docs/collection_history.md moved to recount r4 (agent draft, lead-reviewed: headline, filter sum and per-source sums check; doubt 9 resolved by lead).
 - 2026-11-08: Recount r4 done, lead-verified: 4,020,137 D34 sites, 3,992,804 after E40 filter (status page, Current count). Branch E31-recount-r4 181589e (not merged), output lorbeer e35 datasets/E31/r4.
 - 2026-11-08: E41 non-DACH parity crawls done (last driver abelie 12:06Z), lead-verified: 4,195,520 hosts, 191,089 imprint_found (4.6%): L1 FineWeb-2 135,853 of 1,722,700 (7.9%), L2 HPLT IA-only 38,867 of 468,286 (8.3%), L3 round-3 outlinks 9,057 of 565,218 (1.6%), L4 E16 not-found 7,312 of 1,439,316 (0.5%). Copied to lorbeer e35 datasets/E41/<vm>/ (rsync dry run: no difference). Recount r4 started.
