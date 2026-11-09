@@ -165,7 +165,8 @@ def test_find_imprint_probe_rejects_landing_copy_and_unrelated_text(monkeypatch)
     assert find_imprint("https://example.de/", landing_text, []) is None
 
 
-def test_find_imprint_no_probe_when_candidates_exist(monkeypatch):
+def test_find_imprint_probes_after_failed_candidates(monkeypatch):
+    """E32: a failed link candidate no longer blocks the path probes; tried URLs are not repeated."""
     calls = []
 
     def fake(url, num_redirects=10, retry=False):
@@ -173,8 +174,11 @@ def test_find_imprint_no_probe_when_candidates_exist(monkeypatch):
         return None, None
 
     monkeypatch.setattr(fetch, "try_fetch", fake)
-    assert find_imprint("https://example.de/", "x", [("https://example.de/i", "impressum")]) is None
-    assert calls == ["https://example.de/i"]
+    cand = [("https://example.de/impressum", "impressum")]
+    assert find_imprint("https://example.de/", "x", cand) is None
+    assert calls[0] == "https://example.de/impressum"
+    assert calls.count("https://example.de/impressum") == 1
+    assert "https://example.de/impressum.php" in calls
 
 
 def test_fetch_imprint_page_falls_back_to_full_text(monkeypatch):
