@@ -33,7 +33,9 @@ you take only `counts/` and `filter/E40r2/` (the whole package is 21.7 GB, mostl
 
 `--r5` as third argument makes `r2_name_for_sale` flag only (`parking_filter.py apply --name-for-sale-flag-only`, the
 r5 rule): those sites stay in `flagged_sites.tsv` with category `sale_flag` but are not dropped. The after-filter
-files then differ from the package; `compare.tsv` marks this as expected.
+files then differ from the package; `compare.tsv` marks this as expected. On the r4 data, `--r5` gives 3,908,315
+sites after the filter (+270: 269 sites become `sale_flag`, 1 site becomes `constr` because it also has an
+under-construction host; 7 min 46 s, 5.1 GB). This is a preview of the rule only, not the r5 count.
 
 Integrity of the whole package: `cd package && sha256sum -c MANIFEST.sha256`.
 
