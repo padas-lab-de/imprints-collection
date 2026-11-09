@@ -1,0 +1,139 @@
+import json
+import sys
+from pathlib import Path
+
+import pytest
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts" / "E49"))
+from score import score  # noqa: E402
+from tree import load_schema, load_tree  # noqa: E402
+from vote import level_majority, plurality  # noqa: E402
+
+
+def write(tmp_path, name, rows):
+    p = tmp_path / name
+    p.write_text("".join(json.dumps(r, ensure_ascii=False) + "\n" for r in rows), encoding="utf-8")
+    return p
+
+
+@pytest.fixture
+def poi(tmp_path):
+    rows = [
+        {"name": "Essen", "parent": "Essen"},
+        {"name": "Restaurant", "parent": "Essen"},
+        {"name": "Italienisches Restaurant", "parent": "Essen"},
+        {"name": "Einzelhandel", "parent": "Einzelhandel"},
+        {"name": "Lebensmittel", "parent": "Einzelhandel"},
+        {"name": "Bäckerei", "parent": "Lebensmittel"},
+        {"name": "Metzgerei", "parent": "Lebensmittel"},
+        {"name": "Bar", "parent": "Essen"},
+        {"name": "Bar", "parent": "Einzelhandel"},  # same name, two parents
+        {"name": "Restaurant", "parent": "Essen"},  # exact duplicate row
+    ]
+    return load_tree(write(tmp_path, "poi.jsonl", rows), "poi")
+
+
+@pytest.fixture
+def wz(tmp_path):
+    rows = [
+        {"code": "I", "level": "abschnitt", "title": "Gastgewerbe", "parent": None, "keywords": []},
+        {"code": "56", "level": "abteilung", "title": "Gastronomie", "parent": "I", "keywords": []},
+        {"code": "56.1", "level": "gruppe", "title": "Restaurants", "parent": "56", "keywords": []},
+        {"code": "56.11", "level": "klasse", "title": "Restaurants", "parent": "56.1", "keywords": []},
+        {"code": "56.11.1", "level": "unterklasse", "title": "Restaurants mit Bedienung", "parent": "56.11",
+         "keywords": ["Gaststätten", "Wirtshaus"]},
+        {"code": "56.11.2", "level": "unterklasse", "title": "Selbstbedienung", "parent": "56.11", "keywords": []},
+        {"code": "M", "level": "abschnitt", "title": "Freiberufliche Dienstleistungen", "parent": None, "keywords": []},
+        {"code": "69", "level": "abteilung", "title": "Rechtsberatung", "parent": "M", "keywords": []},
+    ]
+    return load_tree(write(tmp_path, "wz.jsonl", rows), "wz")
+
+
+def test_poi_loader(poi):
+    assert len(poi) == 9  # duplicate Restaurant merged
+    assert poi.roots == ["Essen", "Einzelhandel"]
+    assert "Bar (Essen)" in poi and "Bar (Einzelhandel)" in poi and "Bar" not in poi
+    assert poi.path("Bäckerei") == ["Einzelhandel", "Lebensmittel", "Bäckerei"]
+    assert poi["Bäckerei"].level == 3 and poi.max_level == 3
+    assert not poi.coded and poi.label("Bäckerei") == "Bäckerei"
+    assert poi.resolve("bäckerei") == ("Bäckerei", "ci")
+    assert poi.resolve("Einzelhandel > Lebensmittel > Metzgerei") == ("Metzgerei", "title")
+    assert poi.resolve("Raumfahrt")[0] is None
+    assert poi.resolve("[Lebensmittel] Einzelhandel > Lebensmittel") == ("Lebensmittel", "exact")
+    assert "umfasst u. a.: Bäckerei, Metzgerei" in poi.text("Lebensmittel", "kw")
+
+
+def test_wz_loader(wz):
+    assert wz.coded and wz.roots == ["I", "M"]
+    assert wz.path("56.11.1") == ["I", "56", "56.1", "56.11", "56.11.1"]
+    assert wz["56.11.1"].level == 5 and wz["56.11.1"].level_name == "unterklasse"
+    # single-child chains: 56.1 -> 56.11 (56 -> 56.1 too)
+    assert wz.extend("56") == "56.11" and wz.extend("56.11") == "56.11"
+    assert wz.canonical_path("56.1") == ["I", "56", "56.1", "56.11"]
+    assert wz.candidates_up_to(4) == ["56.11", "69"]  # single-child nodes are stood for by their child
+    assert wz.resolve("56.11.1 Restaurants mit Bedienung") == ("56.11.1", "title")
+    assert "Stichwörter: Gaststätten, Wirtshaus" in wz.text("56.11.1", "kw")
+    assert wz.text("56.11.1", "name") == "Restaurants mit Bedienung"
+
+
+def test_real_schemas_load():
+    for s in ("poi", "wz"):
+        if Path(f"topics/{'poi_v2' if s == 'poi' else 'wz2025'}.jsonl").is_file():
+            t = load_schema(s)
+            assert len(t) > 100 and t.roots
+            assert all(t.path(i)[0] in t.roots for i in t.nodes)
+
+
+def test_loader_rejects_unknown_parent(tmp_path):
+    p = write(tmp_path, "bad.jsonl", [{"name": "A", "parent": "A"}, {"name": "B", "parent": "X"}])
+    with pytest.raises(ValueError):
+        load_tree(p)
+
+
+def pred(host, main, ranked=None, error=None):
+    return {"host": host, "main": main, "ranked": ranked or ([main] if main else []), "error": error,
+            "usage": {"calls": 1, "prompt_tokens": 10, "completion_tokens": 2}, "latency_s": 1.0}
+
+
+def test_score_levels(poi):
+    refs = {
+        "a": {"host": "a", "main": "Bäckerei", "extra": []},
+        "b": {"host": "b", "main": "Italienisches Restaurant", "extra": ["Restaurant"]},
+        "c": {"host": "c", "main": "Lebensmittel", "extra": []},  # labeller stopped at level 2
+        "d": {"host": "d", "main": "Metzgerei", "extra": []},
+        "e": {"host": "e", "main": None, "extra": []},
+    }
+    preds = [
+        pred("a", "Bäckerei"),  # right at all levels
+        pred("b", "Restaurant", ranked=["Restaurant", "Italienisches Restaurant"]),  # near / lenient / top3
+        pred("c", "Bäckerei"),  # deeper than the reference
+        pred("d", "Lebensmittel"),  # stopped at level 2 (not covered at 3)
+        pred("e", None),
+        pred("x", "Essen", error="no_input"),  # not scored
+    ]
+    m = score(poi, refs, preds)
+    assert m["n_scored"] == 4 and m["n_ref_none"] == 1 and m["ref_none_pred_abstained"] == 1
+    L1, L2, L3 = m["levels"]
+    assert L1["n_ref"] == 4 and L1["coverage"] == 1.0 and L1["precision"] == 1.0
+    assert L2["n_ref"] == 4 and L2["precision"] == 0.75  # b wrong at level 2
+    assert L3["n_ref"] == 2 and L3["coverage"] == 0.5 and L3["precision"] == 1.0 and L3["acc"] == 0.5
+    # truncate both: a ok, b wrong, c: ref ends at Lebensmittel, pred[:3] longer -> wrong, d: pred[:3]=[E,L] != ref -> wrong
+    assert L3["acc_trunc"] == 0.25
+    assert L2["lenient"] == 1.0 and L2["near"] == 1.0 and L2["top3"] == 1.0
+    assert m["cost_per_host"]["calls"] == 1.0
+
+
+def test_score_single_child_chain(wz):
+    refs = {"h": {"host": "h", "main": "56.11", "extra": []}}
+    m = score(wz, refs, [pred("h", "56.1")])  # 56.1 has one child: same decision
+    assert [lv["acc_trunc"] for lv in m["levels"]] == [1.0, 1.0, 1.0, 1.0, 1.0]
+
+
+def test_votes(poi):
+    assert level_majority(poi, ["Bäckerei", "Metzgerei", "Bäckerei"]) == "Bäckerei"
+    assert level_majority(poi, ["Bäckerei", "Metzgerei", "Lebensmittel"]) == "Lebensmittel"
+    assert level_majority(poi, ["Bäckerei", "Restaurant", None]) is None
+    assert level_majority(poi, ["Bäckerei", "Metzgerei", "Restaurant"]) == "Lebensmittel"
+    assert level_majority(poi, ["Bäckerei", "Bar (Einzelhandel)", "Restaurant"]) == "Einzelhandel"
+    assert plurality(poi, ["Restaurant", "Bäckerei", "Bäckerei"]) == "Bäckerei"
+    assert plurality(poi, [None, None]) is None
