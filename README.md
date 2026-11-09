@@ -6,6 +6,8 @@ The project enables large-scale extraction of postal addresses from legal imprin
 
 The resulting dataset can be used for regional web analysis, web curation, and selective web archiving.
 
+**Data collection (2026 snapshot):** how to reproduce the crawl and the site count is described in [docs/reproduce_collection.md](docs/reproduce_collection.md). The experiment scripts are indexed in [scripts/README.md](scripts/README.md); the history of the collection is in [docs/collection_history.md](docs/collection_history.md).
+
 ---
 
 ## Repository Structure
