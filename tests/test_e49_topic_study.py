@@ -239,3 +239,21 @@ def test_rules_candidates(wz, tmp_path):
     finally:
         strategies.choose = orig
     assert "69" in seen.get("c", [])
+
+
+def test_poi3_prompts_use_v3_names():
+    from strategies import DEFAULTS, cand_line, fewshot_block, schema_line, system_prompt
+
+    if not Path("topics/poi_v3.jsonl").is_file():
+        pytest.skip("topics/poi_v3.jsonl missing")
+    t3, t2 = load_schema("poi3"), load_schema("poi")
+    for lang in ("de", "en"):
+        cfg = dict(DEFAULTS, lang=lang, shots=3)
+        s3 = system_prompt(t3, cfg)
+        assert "Italian Restaurant" in s3 and "Italienisches Restaurant" not in s3.split("Beispiele")[0].split("Examples")[0]
+        assert ("english" in schema_line(cfg, t3).lower() or "englisch" in schema_line(cfg, t3).lower()) and "englis" not in schema_line(cfg, t2).lower()
+        assert "Italienisches Restaurant" in system_prompt(t2, cfg)  # poi v2 prompt unchanged
+    # few-shot labels come through the v2 -> v3 map: ids and paths are v3
+    fs = fewshot_block(t3, dict(DEFAULTS, shots=2))
+    assert fs and "[italian-restaurant] Dining and Drinking > Restaurant > Italian Restaurant" in fs
+    assert cand_line(t3, "italian-restaurant", dict(DEFAULTS, node_text="path")).startswith("[italian-restaurant] Dining")
