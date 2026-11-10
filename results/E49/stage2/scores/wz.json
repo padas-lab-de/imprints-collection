@@ -1,0 +1,1154 @@
+{
+ "describe__agentworld__home__dmax__nt-path__k30__emb-kw__chooser-both": {
+  "n_scored": 199,
+  "n_ref_none": 1,
+  "ref_none_pred_abstained": 0,
+  "unresolved_refs": 0,
+  "abstain": 2,
+  "errors": 0,
+  "levels": [
+   {
+    "level": 1,
+    "n_ref": 199,
+    "coverage": 0.99,
+    "precision": 0.792,
+    "acc": 0.784,
+    "acc_trunc": 0.784,
+    "lenient": 0.925,
+    "near": 0.784,
+    "top3": 0.784
+   },
+   {
+    "level": 2,
+    "n_ref": 199,
+    "coverage": 0.985,
+    "precision": 0.75,
+    "acc": 0.739,
+    "acc_trunc": 0.739,
+    "lenient": 0.864,
+    "near": 0.739,
+    "top3": 0.739
+   },
+   {
+    "level": 3,
+    "n_ref": 199,
+    "coverage": 0.985,
+    "precision": 0.684,
+    "acc": 0.673,
+    "acc_trunc": 0.673,
+    "lenient": 0.814,
+    "near": 0.673,
+    "top3": 0.673
+   },
+   {
+    "level": 4,
+    "n_ref": 199,
+    "coverage": 0.98,
+    "precision": 0.641,
+    "acc": 0.628,
+    "acc_trunc": 0.628,
+    "lenient": 0.764,
+    "near": 0.628,
+    "top3": 0.628
+   },
+   {
+    "level": 5,
+    "n_ref": 193,
+    "coverage": 0.959,
+    "precision": 0.611,
+    "acc": 0.585,
+    "acc_trunc": 0.573,
+    "lenient": 0.729,
+    "near": 0.583,
+    "top3": 0.573
+   }
+  ],
+  "cost_per_host": {
+   "calls": 2.0,
+   "prompt_tokens": 4166,
+   "completion_tokens": 96,
+   "embed_tokens": 111,
+   "latency_s": 2.74
+  }
+ },
+ "describe__gemma__home__dmax__nt-path__k30__emb-kw__chooser-both": {
+  "n_scored": 199,
+  "n_ref_none": 1,
+  "ref_none_pred_abstained": 0,
+  "unresolved_refs": 0,
+  "abstain": 2,
+  "errors": 0,
+  "levels": [
+   {
+    "level": 1,
+    "n_ref": 199,
+    "coverage": 0.99,
+    "precision": 0.843,
+    "acc": 0.834,
+    "acc_trunc": 0.834,
+    "lenient": 0.95,
+    "near": 0.834,
+    "top3": 0.834
+   },
+   {
+    "level": 2,
+    "n_ref": 199,
+    "coverage": 0.99,
+    "precision": 0.761,
+    "acc": 0.754,
+    "acc_trunc": 0.754,
+    "lenient": 0.869,
+    "near": 0.754,
+    "top3": 0.754
+   },
+   {
+    "level": 3,
+    "n_ref": 199,
+    "coverage": 0.99,
+    "precision": 0.726,
+    "acc": 0.719,
+    "acc_trunc": 0.719,
+    "lenient": 0.839,
+    "near": 0.719,
+    "top3": 0.719
+   },
+   {
+    "level": 4,
+    "n_ref": 199,
+    "coverage": 0.97,
+    "precision": 0.694,
+    "acc": 0.673,
+    "acc_trunc": 0.673,
+    "lenient": 0.809,
+    "near": 0.673,
+    "top3": 0.673
+   },
+   {
+    "level": 5,
+    "n_ref": 193,
+    "coverage": 0.974,
+    "precision": 0.66,
+    "acc": 0.642,
+    "acc_trunc": 0.638,
+    "lenient": 0.789,
+    "near": 0.638,
+    "top3": 0.638
+   }
+  ],
+  "cost_per_host": {
+   "calls": 2.0,
+   "prompt_tokens": 4190,
+   "completion_tokens": 84,
+   "embed_tokens": 88,
+   "latency_s": 3.95
+  }
+ },
+ "describe__qwen__home__dmax__nt-path__k30__emb-kw__chooser-both": {
+  "n_scored": 199,
+  "n_ref_none": 1,
+  "ref_none_pred_abstained": 0,
+  "unresolved_refs": 0,
+  "abstain": 2,
+  "errors": 0,
+  "levels": [
+   {
+    "level": 1,
+    "n_ref": 199,
+    "coverage": 0.99,
+    "precision": 0.797,
+    "acc": 0.789,
+    "acc_trunc": 0.789,
+    "lenient": 0.955,
+    "near": 0.789,
+    "top3": 0.789
+   },
+   {
+    "level": 2,
+    "n_ref": 199,
+    "coverage": 0.99,
+    "precision": 0.741,
+    "acc": 0.734,
+    "acc_trunc": 0.734,
+    "lenient": 0.889,
+    "near": 0.734,
+    "top3": 0.734
+   },
+   {
+    "level": 3,
+    "n_ref": 199,
+    "coverage": 0.99,
+    "precision": 0.721,
+    "acc": 0.714,
+    "acc_trunc": 0.714,
+    "lenient": 0.869,
+    "near": 0.714,
+    "top3": 0.714
+   },
+   {
+    "level": 4,
+    "n_ref": 199,
+    "coverage": 0.985,
+    "precision": 0.679,
+    "acc": 0.668,
+    "acc_trunc": 0.668,
+    "lenient": 0.824,
+    "near": 0.668,
+    "top3": 0.668
+   },
+   {
+    "level": 5,
+    "n_ref": 193,
+    "coverage": 0.984,
+    "precision": 0.632,
+    "acc": 0.622,
+    "acc_trunc": 0.608,
+    "lenient": 0.784,
+    "near": 0.618,
+    "top3": 0.608
+   }
+  ],
+  "cost_per_host": {
+   "calls": 2.0,
+   "prompt_tokens": 4130,
+   "completion_tokens": 90,
+   "embed_tokens": 108,
+   "latency_s": 0.25
+  }
+ },
+ "describe__soofi__home__dmax__nt-path__k30__emb-kw__chooser-both": {
+  "n_scored": 199,
+  "n_ref_none": 1,
+  "ref_none_pred_abstained": 0,
+  "unresolved_refs": 0,
+  "abstain": 29,
+  "errors": 23,
+  "levels": [
+   {
+    "level": 1,
+    "n_ref": 199,
+    "coverage": 0.854,
+    "precision": 0.729,
+    "acc": 0.623,
+    "acc_trunc": 0.623,
+    "lenient": 0.724,
+    "near": 0.623,
+    "top3": 0.623
+   },
+   {
+    "level": 2,
+    "n_ref": 199,
+    "coverage": 0.854,
+    "precision": 0.682,
+    "acc": 0.583,
+    "acc_trunc": 0.583,
+    "lenient": 0.683,
+    "near": 0.583,
+    "top3": 0.583
+   },
+   {
+    "level": 3,
+    "n_ref": 199,
+    "coverage": 0.854,
+    "precision": 0.624,
+    "acc": 0.533,
+    "acc_trunc": 0.533,
+    "lenient": 0.633,
+    "near": 0.533,
+    "top3": 0.533
+   },
+   {
+    "level": 4,
+    "n_ref": 199,
+    "coverage": 0.849,
+    "precision": 0.544,
+    "acc": 0.462,
+    "acc_trunc": 0.462,
+    "lenient": 0.583,
+    "near": 0.462,
+    "top3": 0.462
+   },
+   {
+    "level": 5,
+    "n_ref": 193,
+    "coverage": 0.85,
+    "precision": 0.463,
+    "acc": 0.394,
+    "acc_trunc": 0.382,
+    "lenient": 0.503,
+    "near": 0.397,
+    "top3": 0.382
+   }
+  ],
+  "cost_per_host": {
+   "calls": 1.89,
+   "prompt_tokens": 4664,
+   "completion_tokens": 85,
+   "embed_tokens": 87,
+   "latency_s": 1.66
+  }
+ },
+ "retrieve__agentworld__home__dmax__nt-path__k30__emb-kw": {
+  "n_scored": 199,
+  "n_ref_none": 1,
+  "ref_none_pred_abstained": 0,
+  "unresolved_refs": 0,
+  "abstain": 4,
+  "errors": 0,
+  "levels": [
+   {
+    "level": 1,
+    "n_ref": 199,
+    "coverage": 0.98,
+    "precision": 0.8,
+    "acc": 0.784,
+    "acc_trunc": 0.784,
+    "lenient": 0.905,
+    "near": 0.784,
+    "top3": 0.784
+   },
+   {
+    "level": 2,
+    "n_ref": 199,
+    "coverage": 0.98,
+    "precision": 0.738,
+    "acc": 0.724,
+    "acc_trunc": 0.724,
+    "lenient": 0.864,
+    "near": 0.724,
+    "top3": 0.724
+   },
+   {
+    "level": 3,
+    "n_ref": 199,
+    "coverage": 0.975,
+    "precision": 0.696,
+    "acc": 0.678,
+    "acc_trunc": 0.678,
+    "lenient": 0.814,
+    "near": 0.678,
+    "top3": 0.678
+   },
+   {
+    "level": 4,
+    "n_ref": 199,
+    "coverage": 0.97,
+    "precision": 0.653,
+    "acc": 0.633,
+    "acc_trunc": 0.633,
+    "lenient": 0.784,
+    "near": 0.633,
+    "top3": 0.633
+   },
+   {
+    "level": 5,
+    "n_ref": 193,
+    "coverage": 0.943,
+    "precision": 0.626,
+    "acc": 0.591,
+    "acc_trunc": 0.578,
+    "lenient": 0.744,
+    "near": 0.588,
+    "top3": 0.578
+   }
+  ],
+  "cost_per_host": {
+   "calls": 1.0,
+   "prompt_tokens": 3295,
+   "completion_tokens": 28,
+   "embed_tokens": 877,
+   "latency_s": 1.32
+  }
+ },
+ "retrieve__agentworld__home__dmax__nt-path__think__k30__emb-kw": {
+  "n_scored": 199,
+  "n_ref_none": 1,
+  "ref_none_pred_abstained": 0,
+  "unresolved_refs": 0,
+  "abstain": 73,
+  "errors": 72,
+  "levels": [
+   {
+    "level": 1,
+    "n_ref": 199,
+    "coverage": 0.633,
+    "precision": 0.952,
+    "acc": 0.603,
+    "acc_trunc": 0.603,
+    "lenient": 0.628,
+    "near": 0.603,
+    "top3": 0.603
+   },
+   {
+    "level": 2,
+    "n_ref": 199,
+    "coverage": 0.633,
+    "precision": 0.921,
+    "acc": 0.583,
+    "acc_trunc": 0.583,
+    "lenient": 0.618,
+    "near": 0.583,
+    "top3": 0.583
+   },
+   {
+    "level": 3,
+    "n_ref": 199,
+    "coverage": 0.633,
+    "precision": 0.897,
+    "acc": 0.568,
+    "acc_trunc": 0.568,
+    "lenient": 0.618,
+    "near": 0.568,
+    "top3": 0.568
+   },
+   {
+    "level": 4,
+    "n_ref": 199,
+    "coverage": 0.633,
+    "precision": 0.897,
+    "acc": 0.568,
+    "acc_trunc": 0.568,
+    "lenient": 0.613,
+    "near": 0.568,
+    "top3": 0.568
+   },
+   {
+    "level": 5,
+    "n_ref": 193,
+    "coverage": 0.653,
+    "precision": 0.865,
+    "acc": 0.565,
+    "acc_trunc": 0.548,
+    "lenient": 0.608,
+    "near": 0.558,
+    "top3": 0.548
+   }
+  ],
+  "cost_per_host": {
+   "calls": 1.0,
+   "prompt_tokens": 3293,
+   "completion_tokens": 4246,
+   "embed_tokens": 877,
+   "latency_s": 69.72
+  }
+ },
+ "retrieve__gemma__both__dmax__nt-path__k30__emb-kw": {
+  "n_scored": 199,
+  "n_ref_none": 1,
+  "ref_none_pred_abstained": 0,
+  "unresolved_refs": 0,
+  "abstain": 2,
+  "errors": 0,
+  "levels": [
+   {
+    "level": 1,
+    "n_ref": 199,
+    "coverage": 0.99,
+    "precision": 0.858,
+    "acc": 0.849,
+    "acc_trunc": 0.849,
+    "lenient": 0.955,
+    "near": 0.849,
+    "top3": 0.849
+   },
+   {
+    "level": 2,
+    "n_ref": 199,
+    "coverage": 0.99,
+    "precision": 0.772,
+    "acc": 0.764,
+    "acc_trunc": 0.764,
+    "lenient": 0.899,
+    "near": 0.764,
+    "top3": 0.764
+   },
+   {
+    "level": 3,
+    "n_ref": 199,
+    "coverage": 0.99,
+    "precision": 0.726,
+    "acc": 0.719,
+    "acc_trunc": 0.719,
+    "lenient": 0.864,
+    "near": 0.719,
+    "top3": 0.719
+   },
+   {
+    "level": 4,
+    "n_ref": 199,
+    "coverage": 0.98,
+    "precision": 0.687,
+    "acc": 0.673,
+    "acc_trunc": 0.673,
+    "lenient": 0.824,
+    "near": 0.673,
+    "top3": 0.673
+   },
+   {
+    "level": 5,
+    "n_ref": 193,
+    "coverage": 0.964,
+    "precision": 0.667,
+    "acc": 0.642,
+    "acc_trunc": 0.633,
+    "lenient": 0.789,
+    "near": 0.638,
+    "top3": 0.633
+   }
+  ],
+  "cost_per_host": {
+   "calls": 1.0,
+   "prompt_tokens": 3846,
+   "completion_tokens": 29,
+   "embed_tokens": 1102,
+   "latency_s": 2.69
+  }
+ },
+ "retrieve__gemma__home__dmax__nt-path__k30__emb-kw": {
+  "n_scored": 199,
+  "n_ref_none": 1,
+  "ref_none_pred_abstained": 0,
+  "unresolved_refs": 0,
+  "abstain": 3,
+  "errors": 0,
+  "levels": [
+   {
+    "level": 1,
+    "n_ref": 199,
+    "coverage": 0.985,
+    "precision": 0.857,
+    "acc": 0.844,
+    "acc_trunc": 0.844,
+    "lenient": 0.955,
+    "near": 0.844,
+    "top3": 0.844
+   },
+   {
+    "level": 2,
+    "n_ref": 199,
+    "coverage": 0.985,
+    "precision": 0.786,
+    "acc": 0.774,
+    "acc_trunc": 0.774,
+    "lenient": 0.905,
+    "near": 0.774,
+    "top3": 0.774
+   },
+   {
+    "level": 3,
+    "n_ref": 199,
+    "coverage": 0.985,
+    "precision": 0.75,
+    "acc": 0.739,
+    "acc_trunc": 0.739,
+    "lenient": 0.874,
+    "near": 0.739,
+    "top3": 0.739
+   },
+   {
+    "level": 4,
+    "n_ref": 199,
+    "coverage": 0.97,
+    "precision": 0.71,
+    "acc": 0.688,
+    "acc_trunc": 0.688,
+    "lenient": 0.834,
+    "near": 0.688,
+    "top3": 0.688
+   },
+   {
+    "level": 5,
+    "n_ref": 193,
+    "coverage": 0.964,
+    "precision": 0.683,
+    "acc": 0.658,
+    "acc_trunc": 0.648,
+    "lenient": 0.814,
+    "near": 0.648,
+    "top3": 0.648
+   }
+  ],
+  "cost_per_host": {
+   "calls": 1.0,
+   "prompt_tokens": 3363,
+   "completion_tokens": 29,
+   "embed_tokens": 877,
+   "latency_s": 2.26
+  }
+ },
+ "retrieve__gemma__home__dmax__nt-path__think__k30__emb-kw": {
+  "n_scored": 199,
+  "n_ref_none": 1,
+  "ref_none_pred_abstained": 0,
+  "unresolved_refs": 0,
+  "abstain": 3,
+  "errors": 0,
+  "levels": [
+   {
+    "level": 1,
+    "n_ref": 199,
+    "coverage": 0.985,
+    "precision": 0.857,
+    "acc": 0.844,
+    "acc_trunc": 0.844,
+    "lenient": 0.955,
+    "near": 0.844,
+    "top3": 0.844
+   },
+   {
+    "level": 2,
+    "n_ref": 199,
+    "coverage": 0.985,
+    "precision": 0.786,
+    "acc": 0.774,
+    "acc_trunc": 0.774,
+    "lenient": 0.905,
+    "near": 0.774,
+    "top3": 0.774
+   },
+   {
+    "level": 3,
+    "n_ref": 199,
+    "coverage": 0.985,
+    "precision": 0.75,
+    "acc": 0.739,
+    "acc_trunc": 0.739,
+    "lenient": 0.874,
+    "near": 0.739,
+    "top3": 0.739
+   },
+   {
+    "level": 4,
+    "n_ref": 199,
+    "coverage": 0.97,
+    "precision": 0.71,
+    "acc": 0.688,
+    "acc_trunc": 0.688,
+    "lenient": 0.834,
+    "near": 0.688,
+    "top3": 0.688
+   },
+   {
+    "level": 5,
+    "n_ref": 193,
+    "coverage": 0.964,
+    "precision": 0.677,
+    "acc": 0.653,
+    "acc_trunc": 0.643,
+    "lenient": 0.809,
+    "near": 0.648,
+    "top3": 0.643
+   }
+  ],
+  "cost_per_host": {
+   "calls": 1.0,
+   "prompt_tokens": 3363,
+   "completion_tokens": 29,
+   "embed_tokens": 877,
+   "latency_s": 2.39
+  }
+ },
+ "retrieve__gemma__home__dmax__nt-path__think__k60__emb-kw": {
+  "n_scored": 199,
+  "n_ref_none": 1,
+  "ref_none_pred_abstained": 0,
+  "unresolved_refs": 0,
+  "abstain": 1,
+  "errors": 0,
+  "levels": [
+   {
+    "level": 1,
+    "n_ref": 199,
+    "coverage": 0.995,
+    "precision": 0.838,
+    "acc": 0.834,
+    "acc_trunc": 0.834,
+    "lenient": 0.945,
+    "near": 0.834,
+    "top3": 0.834
+   },
+   {
+    "level": 2,
+    "n_ref": 199,
+    "coverage": 0.995,
+    "precision": 0.753,
+    "acc": 0.749,
+    "acc_trunc": 0.749,
+    "lenient": 0.879,
+    "near": 0.749,
+    "top3": 0.749
+   },
+   {
+    "level": 3,
+    "n_ref": 199,
+    "coverage": 0.995,
+    "precision": 0.717,
+    "acc": 0.714,
+    "acc_trunc": 0.714,
+    "lenient": 0.849,
+    "near": 0.714,
+    "top3": 0.714
+   },
+   {
+    "level": 4,
+    "n_ref": 199,
+    "coverage": 0.99,
+    "precision": 0.685,
+    "acc": 0.678,
+    "acc_trunc": 0.678,
+    "lenient": 0.834,
+    "near": 0.678,
+    "top3": 0.678
+   },
+   {
+    "level": 5,
+    "n_ref": 193,
+    "coverage": 0.984,
+    "precision": 0.658,
+    "acc": 0.648,
+    "acc_trunc": 0.643,
+    "lenient": 0.799,
+    "near": 0.643,
+    "top3": 0.643
+   }
+  ],
+  "cost_per_host": {
+   "calls": 1.0,
+   "prompt_tokens": 5467,
+   "completion_tokens": 29,
+   "embed_tokens": 877,
+   "latency_s": 5.31
+  }
+ },
+ "retrieve__qwen__both__dmax__nt-path__k30__emb-kw": {
+  "n_scored": 199,
+  "n_ref_none": 1,
+  "ref_none_pred_abstained": 0,
+  "unresolved_refs": 0,
+  "abstain": 4,
+  "errors": 0,
+  "levels": [
+   {
+    "level": 1,
+    "n_ref": 199,
+    "coverage": 0.98,
+    "precision": 0.805,
+    "acc": 0.789,
+    "acc_trunc": 0.789,
+    "lenient": 0.955,
+    "near": 0.789,
+    "top3": 0.789
+   },
+   {
+    "level": 2,
+    "n_ref": 199,
+    "coverage": 0.98,
+    "precision": 0.764,
+    "acc": 0.749,
+    "acc_trunc": 0.749,
+    "lenient": 0.899,
+    "near": 0.749,
+    "top3": 0.749
+   },
+   {
+    "level": 3,
+    "n_ref": 199,
+    "coverage": 0.98,
+    "precision": 0.749,
+    "acc": 0.734,
+    "acc_trunc": 0.734,
+    "lenient": 0.884,
+    "near": 0.734,
+    "top3": 0.734
+   },
+   {
+    "level": 4,
+    "n_ref": 199,
+    "coverage": 0.975,
+    "precision": 0.701,
+    "acc": 0.683,
+    "acc_trunc": 0.683,
+    "lenient": 0.839,
+    "near": 0.683,
+    "top3": 0.683
+   },
+   {
+    "level": 5,
+    "n_ref": 193,
+    "coverage": 0.969,
+    "precision": 0.674,
+    "acc": 0.653,
+    "acc_trunc": 0.638,
+    "lenient": 0.819,
+    "near": 0.648,
+    "top3": 0.638
+   }
+  ],
+  "cost_per_host": {
+   "calls": 1.0,
+   "prompt_tokens": 3759,
+   "completion_tokens": 25,
+   "embed_tokens": 1102,
+   "latency_s": 2.17
+  }
+ },
+ "retrieve__qwen__home__dmax__nt-path__k30__emb-kw": {
+  "n_scored": 199,
+  "n_ref_none": 1,
+  "ref_none_pred_abstained": 0,
+  "unresolved_refs": 0,
+  "abstain": 7,
+  "errors": 0,
+  "levels": [
+   {
+    "level": 1,
+    "n_ref": 199,
+    "coverage": 0.965,
+    "precision": 0.818,
+    "acc": 0.789,
+    "acc_trunc": 0.789,
+    "lenient": 0.94,
+    "near": 0.789,
+    "top3": 0.789
+   },
+   {
+    "level": 2,
+    "n_ref": 199,
+    "coverage": 0.965,
+    "precision": 0.771,
+    "acc": 0.744,
+    "acc_trunc": 0.744,
+    "lenient": 0.884,
+    "near": 0.744,
+    "top3": 0.744
+   },
+   {
+    "level": 3,
+    "n_ref": 199,
+    "coverage": 0.965,
+    "precision": 0.755,
+    "acc": 0.729,
+    "acc_trunc": 0.729,
+    "lenient": 0.869,
+    "near": 0.729,
+    "top3": 0.729
+   },
+   {
+    "level": 4,
+    "n_ref": 199,
+    "coverage": 0.965,
+    "precision": 0.714,
+    "acc": 0.688,
+    "acc_trunc": 0.688,
+    "lenient": 0.829,
+    "near": 0.688,
+    "top3": 0.688
+   },
+   {
+    "level": 5,
+    "n_ref": 193,
+    "coverage": 0.964,
+    "precision": 0.677,
+    "acc": 0.653,
+    "acc_trunc": 0.638,
+    "lenient": 0.799,
+    "near": 0.648,
+    "top3": 0.638
+   }
+  ],
+  "cost_per_host": {
+   "calls": 1.0,
+   "prompt_tokens": 3295,
+   "completion_tokens": 25,
+   "embed_tokens": 877,
+   "latency_s": 0.23
+  }
+ },
+ "retrieve__qwen__home__dmax__nt-path__think__k30__emb-kw": {
+  "n_scored": 199,
+  "n_ref_none": 1,
+  "ref_none_pred_abstained": 0,
+  "unresolved_refs": 0,
+  "abstain": 11,
+  "errors": 9,
+  "levels": [
+   {
+    "level": 1,
+    "n_ref": 199,
+    "coverage": 0.945,
+    "precision": 0.84,
+    "acc": 0.794,
+    "acc_trunc": 0.794,
+    "lenient": 0.905,
+    "near": 0.794,
+    "top3": 0.794
+   },
+   {
+    "level": 2,
+    "n_ref": 199,
+    "coverage": 0.945,
+    "precision": 0.777,
+    "acc": 0.734,
+    "acc_trunc": 0.734,
+    "lenient": 0.844,
+    "near": 0.734,
+    "top3": 0.734
+   },
+   {
+    "level": 3,
+    "n_ref": 199,
+    "coverage": 0.945,
+    "precision": 0.745,
+    "acc": 0.704,
+    "acc_trunc": 0.704,
+    "lenient": 0.814,
+    "near": 0.704,
+    "top3": 0.704
+   },
+   {
+    "level": 4,
+    "n_ref": 199,
+    "coverage": 0.93,
+    "precision": 0.703,
+    "acc": 0.653,
+    "acc_trunc": 0.653,
+    "lenient": 0.784,
+    "near": 0.653,
+    "top3": 0.653
+   },
+   {
+    "level": 5,
+    "n_ref": 193,
+    "coverage": 0.917,
+    "precision": 0.655,
+    "acc": 0.601,
+    "acc_trunc": 0.598,
+    "lenient": 0.754,
+    "near": 0.608,
+    "top3": 0.598
+   }
+  ],
+  "cost_per_host": {
+   "calls": 1.0,
+   "prompt_tokens": 3331,
+   "completion_tokens": 1058,
+   "embed_tokens": 877,
+   "latency_s": 22.73
+  }
+ },
+ "retrieve__qwen__home__dmax__nt-path__think__k60__emb-kw": {
+  "n_scored": 199,
+  "n_ref_none": 1,
+  "ref_none_pred_abstained": 0,
+  "unresolved_refs": 0,
+  "abstain": 9,
+  "errors": 7,
+  "levels": [
+   {
+    "level": 1,
+    "n_ref": 199,
+    "coverage": 0.955,
+    "precision": 0.863,
+    "acc": 0.824,
+    "acc_trunc": 0.824,
+    "lenient": 0.91,
+    "near": 0.824,
+    "top3": 0.824
+   },
+   {
+    "level": 2,
+    "n_ref": 199,
+    "coverage": 0.955,
+    "precision": 0.784,
+    "acc": 0.749,
+    "acc_trunc": 0.749,
+    "lenient": 0.859,
+    "near": 0.749,
+    "top3": 0.749
+   },
+   {
+    "level": 3,
+    "n_ref": 199,
+    "coverage": 0.955,
+    "precision": 0.753,
+    "acc": 0.719,
+    "acc_trunc": 0.719,
+    "lenient": 0.829,
+    "near": 0.719,
+    "top3": 0.719
+   },
+   {
+    "level": 4,
+    "n_ref": 199,
+    "coverage": 0.95,
+    "precision": 0.72,
+    "acc": 0.683,
+    "acc_trunc": 0.683,
+    "lenient": 0.819,
+    "near": 0.683,
+    "top3": 0.683
+   },
+   {
+    "level": 5,
+    "n_ref": 193,
+    "coverage": 0.933,
+    "precision": 0.683,
+    "acc": 0.637,
+    "acc_trunc": 0.628,
+    "lenient": 0.779,
+    "near": 0.633,
+    "top3": 0.628
+   }
+  ],
+  "cost_per_host": {
+   "calls": 1.0,
+   "prompt_tokens": 5375,
+   "completion_tokens": 1023,
+   "embed_tokens": 877,
+   "latency_s": 15.38
+  }
+ },
+ "retrieve__soofi__home__dmax__nt-path__k30__emb-kw": {
+  "n_scored": 199,
+  "n_ref_none": 1,
+  "ref_none_pred_abstained": 0,
+  "unresolved_refs": 0,
+  "abstain": 3,
+  "errors": 0,
+  "levels": [
+   {
+    "level": 1,
+    "n_ref": 199,
+    "coverage": 0.985,
+    "precision": 0.638,
+    "acc": 0.628,
+    "acc_trunc": 0.628,
+    "lenient": 0.774,
+    "near": 0.628,
+    "top3": 0.628
+   },
+   {
+    "level": 2,
+    "n_ref": 199,
+    "coverage": 0.985,
+    "precision": 0.602,
+    "acc": 0.593,
+    "acc_trunc": 0.593,
+    "lenient": 0.724,
+    "near": 0.593,
+    "top3": 0.593
+   },
+   {
+    "level": 3,
+    "n_ref": 199,
+    "coverage": 0.985,
+    "precision": 0.556,
+    "acc": 0.548,
+    "acc_trunc": 0.548,
+    "lenient": 0.673,
+    "near": 0.548,
+    "top3": 0.548
+   },
+   {
+    "level": 4,
+    "n_ref": 199,
+    "coverage": 0.985,
+    "precision": 0.454,
+    "acc": 0.447,
+    "acc_trunc": 0.447,
+    "lenient": 0.593,
+    "near": 0.447,
+    "top3": 0.447
+   },
+   {
+    "level": 5,
+    "n_ref": 193,
+    "coverage": 0.969,
+    "precision": 0.385,
+    "acc": 0.373,
+    "acc_trunc": 0.362,
+    "lenient": 0.503,
+    "near": 0.372,
+    "top3": 0.362
+   }
+  ],
+  "cost_per_host": {
+   "calls": 1.0,
+   "prompt_tokens": 3869,
+   "completion_tokens": 25,
+   "embed_tokens": 877,
+   "latency_s": 0.9
+  }
+ },
+ "retrieve__soofi__home__dmax__nt-path__think__k30__emb-kw": {
+  "n_scored": 199,
+  "n_ref_none": 1,
+  "ref_none_pred_abstained": 0,
+  "unresolved_refs": 0,
+  "abstain": 4,
+  "errors": 4,
+  "levels": [
+   {
+    "level": 1,
+    "n_ref": 199,
+    "coverage": 0.98,
+    "precision": 0.769,
+    "acc": 0.754,
+    "acc_trunc": 0.754,
+    "lenient": 0.859,
+    "near": 0.754,
+    "top3": 0.754
+   },
+   {
+    "level": 2,
+    "n_ref": 199,
+    "coverage": 0.98,
+    "precision": 0.697,
+    "acc": 0.683,
+    "acc_trunc": 0.683,
+    "lenient": 0.799,
+    "near": 0.683,
+    "top3": 0.683
+   },
+   {
+    "level": 3,
+    "n_ref": 199,
+    "coverage": 0.98,
+    "precision": 0.667,
+    "acc": 0.653,
+    "acc_trunc": 0.653,
+    "lenient": 0.769,
+    "near": 0.653,
+    "top3": 0.653
+   },
+   {
+    "level": 4,
+    "n_ref": 199,
+    "coverage": 0.97,
+    "precision": 0.632,
+    "acc": 0.613,
+    "acc_trunc": 0.613,
+    "lenient": 0.739,
+    "near": 0.613,
+    "top3": 0.613
+   },
+   {
+    "level": 5,
+    "n_ref": 193,
+    "coverage": 0.969,
+    "precision": 0.583,
+    "acc": 0.565,
+    "acc_trunc": 0.553,
+    "lenient": 0.693,
+    "near": 0.568,
+    "top3": 0.553
+   }
+  ],
+  "cost_per_host": {
+   "calls": 1.0,
+   "prompt_tokens": 3869,
+   "completion_tokens": 1407,
+   "embed_tokens": 877,
+   "latency_s": 9.9
+  }
+ }
+}
