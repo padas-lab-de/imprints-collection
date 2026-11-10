@@ -155,3 +155,17 @@ def test_rules_block(wz, tmp_path):
     assert on.startswith(off) and on.endswith("1. Weingut: 11.02.0") and "comment" not in on
     assert make_tag(base, "gemma4-31b-it", 1) == "flat__gemma__home__dmax__nt-path"
     assert make_tag(dict(base, rules=rules), "gemma4-31b-it", 1, "wz_rules").endswith("__rules-wz_rules")
+
+
+def test_keep_outside(wz):
+    from client import Usage
+    from strategies import DEFAULTS, choose
+
+    class Fake:
+        def chat(self, *a, **k):
+            return {"id": "69", "konfidenz": 0.9}, None  # valid node, not offered
+
+    drop = choose(Fake(), "m", wz, dict(DEFAULTS), Usage(), "site", ["56.11.1"])
+    assert drop["ids"] == [] and "outside_candidates" in drop["how"]
+    keep = choose(Fake(), "m", wz, dict(DEFAULTS, keep_outside=True), Usage(), "site", ["56.11.1"])
+    assert keep["ids"] == ["69"] and "outside_kept" in keep["how"]

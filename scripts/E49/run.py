@@ -60,6 +60,8 @@ def make_tag(cfg: dict, model: str, samples: int, rules_name: str | None = None)
         parts.append("nonone")
     if cfg.get("rules"):
         parts.append("rules-" + (rules_name or "x"))
+    if cfg.get("keep_outside"):
+        parts.append("keepout")
     if samples > 1:
         parts.append(f"sc{samples}-t{cfg['temperature']}")
     return "__".join(parts)
@@ -88,6 +90,8 @@ def main() -> None:
     ap.add_argument("--vote", default="level_majority", choices=sorted(VOTES))
     ap.add_argument("--temperature", type=float, default=0.0)
     ap.add_argument("--rules", default=None, help="rules file inserted into the system prompt ('#' lines dropped); default off")
+    ap.add_argument("--keep-outside", action="store_true",
+                    help="keep answers naming a valid node outside the offered candidates (default: drop -> abstain)")
     ap.add_argument("--node-desc", default=None, help="node description file (default results/E49/node_desc/<schema>.jsonl)")
     ap.add_argument("--dev", default=DEV)
     ap.add_argument("--hosts", default=None, help="file with hosts to run (default: all dev hosts)")
@@ -106,7 +110,7 @@ def main() -> None:
     cfg = dict(DEFAULTS, strategy=a.strategy, input=a.input, depth=a.depth, node_text=a.node_text, emb_text=a.emb_text,
                output=a.output, reason=a.reason, think=a.think, shots=a.shots, lang=a.lang, k=a.k, rerank=a.rerank,
                beam=a.beam, chooser=a.chooser, allow_none=not a.no_none, temperature=a.temperature,
-               rules=load_rules(a.rules) if a.rules else None)
+               rules=load_rules(a.rules) if a.rules else None, keep_outside=a.keep_outside)
     tag = make_tag(cfg, a.model, a.samples, Path(a.rules).stem if a.rules else None)
     recs = [json.loads(l) for l in open(a.dev, encoding="utf-8") if l.strip()]
     if a.hosts:

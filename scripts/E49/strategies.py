@@ -13,7 +13,8 @@ Strategies (cfg["strategy"]):
 
 Options (cfg keys, with defaults in DEFAULTS): input home|imprint|both; depth D; node_text name|path|kw|desc|incl;
 output one|top3; reason none|short; think off|on; shots 0..4; lang de|en; k; rerank; temperature; seed;
-rules (text of a rules block appended to the system prompt of every choice call; None = off, prompt unchanged).
+rules (text of a rules block appended to the system prompt of every choice call; None = off, prompt unchanged);
+keep_outside (keep an answer that names a valid node outside the offered candidates; default: drop it).
 Every strategy returns a dict with main (node id or None), ranked (ids, best first), trace, error.
 """
 
@@ -37,6 +38,7 @@ DEFAULTS = {
     "strategy": "flat", "input": "home", "depth": 99, "node_text": "path", "output": "one", "reason": "none",
     "think": "off", "shots": 0, "lang": "de", "k": 30, "rerank": False, "beam": 1, "chooser": "desc",
     "emb_text": "kw", "temperature": 0.0, "seed": None, "max_kw": 12, "allow_none": True, "rules": None,
+    "keep_outside": False,
 }
 SITE_CHARS = 6_000  # per text field (dev_inputs are already cut to 6k)
 QUERY_CHARS = 4_000  # embedding query
@@ -204,7 +206,9 @@ def choose(client: Client, model: str, tree: Tree, cfg, usage: Usage, user_head:
                          temperature=cfg["temperature"], seed=cfg["seed"], think=cfg["think"] == "on")
     ids, how = _ids(ans, tree)
     allowed = set(cands)
-    if restrict:
+    if restrict and cfg.get("keep_outside") and any(i not in allowed and i not in ("KEINE", "STOP") for i in ids):
+        how.append("outside_kept")  # answer names a real node that was not offered (e.g. a code from the rules)
+    elif restrict:
         kept = [i for i in ids if i in allowed or i in ("KEINE", "STOP")]
         if len(kept) < len(ids):
             how.append("outside_candidates")
