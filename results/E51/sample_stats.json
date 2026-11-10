@@ -1,0 +1,171 @@
+{
+ "seed": 51,
+ "pool_imprint_found": 3256728,
+ "excluded": 715,
+ "pool_after_exclusion": 3256013,
+ "skipped_before_500": [],
+ "dev2": {
+  "n": 300,
+  "homepage_empty": 3,
+  "homepage_lt300": 33,
+  "imprint_empty": 0,
+  "homepage_chars_p10_p50_p90": [
+   229,
+   2143,
+   5910
+  ],
+  "imprint_chars_p10_p50_p90": [
+   429,
+   2321,
+   5772
+  ],
+  "homepage_truncated": 47,
+  "imprint_truncated": 27,
+  "lang": [
+   [
+    "deu",
+    273
+   ],
+   [
+    "eng",
+    20
+   ],
+   [
+    "ita",
+    3
+   ],
+   [
+    "?",
+    3
+   ],
+   [
+    "spa",
+    1
+   ]
+  ],
+  "tld": [
+   [
+    "de",
+    213
+   ],
+   [
+    "com",
+    23
+   ],
+   [
+    "at",
+    18
+   ],
+   [
+    "ch",
+    15
+   ],
+   [
+    "eu",
+    9
+   ],
+   [
+    "it",
+    5
+   ],
+   [
+    "org",
+    4
+   ],
+   [
+    "net",
+    3
+   ]
+  ],
+  "found_by": [
+   [
+    "link",
+    294
+   ],
+   [
+    "probe",
+    6
+   ]
+  ]
+ },
+ "heldout2": {
+  "n": 200,
+  "homepage_empty": 2,
+  "homepage_lt300": 25,
+  "imprint_empty": 0,
+  "homepage_chars_p10_p50_p90": [
+   198,
+   1913,
+   5915
+  ],
+  "imprint_chars_p10_p50_p90": [
+   354,
+   2145,
+   5809
+  ],
+  "homepage_truncated": 28,
+  "imprint_truncated": 26,
+  "lang": [
+   [
+    "deu",
+    181
+   ],
+   [
+    "eng",
+    17
+   ],
+   [
+    "pol",
+    1
+   ],
+   [
+    "?",
+    1
+   ]
+  ],
+  "tld": [
+   [
+    "de",
+    149
+   ],
+   [
+    "com",
+    16
+   ],
+   [
+    "ch",
+    10
+   ],
+   [
+    "at",
+    7
+   ],
+   [
+    "eu",
+    5
+   ],
+   [
+    "org",
+    3
+   ],
+   [
+    "uk",
+    2
+   ],
+   [
+    "net",
+    2
+   ]
+  ],
+  "found_by": [
+   [
+    "link",
+    197
+   ],
+   [
+    "probe",
+    3
+   ]
+  ]
+ }
+}

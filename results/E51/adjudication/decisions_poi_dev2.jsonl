@@ -1,0 +1,56 @@
+{"host": "60plusbewegt.de", "pick": "B", "reason": "association: label its purpose (service for older people)"}
+{"host": "autismus-muenster.de", "pick": "B", "reason": "association: label its purpose (support for people with autism)"}
+{"host": "b224werden.de", "pick": "B", "reason": "residents' action group; no child of organization fits"}
+{"host": "brumm-maschinenbau.de", "pick": "A", "reason": "Maschinenbau = machine manufacturing, not a machine shop"}
+{"host": "deliteam.de", "pick": "B", "reason": "food wholesale; wholesaler is the closer leaf"}
+{"host": "ede-home.net", "pick": "B", "label": {"extra": ["general-entertainment"]}, "reason": "performer without a performer node: stop at the arts root (same as other performers)"}
+{"host": "energy-coaching-sap-consultants.com", "pick": "A", "reason": "training for SAP consultants = adult education"}
+{"host": "fadenfinden.de", "pick": "A", "reason": "hypnosis practice: alternative-medicine-clinic"}
+{"host": "feder-und-wild.de", "pick": "B", "label": {"note": "Poultry and game meat retailer; injected casino spam texts on the page, the operator content is coherent."}, "reason": "R1: operator content (game meat shop) is coherent; casino text is injected spam"}
+{"host": "fishkiss-swimwear.com", "pick": "A", "label": {"extra": ["clothing-store"]}, "reason": "swimwear-store is the deepest fitting leaf; clothing-store as sibling extra"}
+{"host": "fotobox-nordwest.de", "pick": "A", "reason": "photo booth hire = equipment rental"}
+{"host": "gbm-online.de", "pick": "B", "reason": "member society: club-or-association"}
+{"host": "gesa-rusche.de", "pick": "B", "reason": "Heilpraktiker for psychotherapy: mental-health-service with alternative-medicine-clinic extra (consistent rule)"}
+{"host": "hamawardz.app", "pick": "A", "reason": "title names a web app (log check); some activity is shown"}
+{"host": "jgerdum.com", "pick": "B", "reason": "digital product designer: design-studio"}
+{"host": "mkm-datenschutz.de", "pick": "B", "reason": "law firm with lawyers: law-office leaf"}
+{"host": "mottokrosh.com", "pick": "A", "reason": "publishes role-playing games; publisher"}
+{"host": "mw-energietechnik.de", "pick": "B", "reason": "Energietechnik: heating contractor first, plumber extra"}
+{"host": "mycrolab.de", "pick": "B", "reason": "virtual tours and 3D twins: media-agency"}
+{"host": "new.drk-herrenberg.de", "pick": "A", "reason": "Red Cross branch with social services"}
+{"host": "nutztier.net", "pick": "A", "reason": "purpose unclear: stop at inner node organization"}
+{"host": "oikos-institut.de", "pick": "B", "reason": "institute, not a church congregation"}
+{"host": "rvv-vilsendorf.de", "pick": "A", "label": {"extra": ["equestrian-facility"]}, "reason": "riding club is a sports club; facility as extra"}
+{"host": "suess-foto.de", "pick": "B", "reason": "photographer is the deeper leaf under photography-service"}
+{"host": "swiss-kaffee-service.ch", "pick": "B", "reason": "sale first, rental and repair as extras"}
+{"host": "tettnang.feripro.de", "pick": "B", "reason": "municipal holiday programme: public-and-social-service"}
+{"host": "unki.stadtfehmarn.de", "pick": "B", "reason": "municipal environment info: government-department"}
+{"host": "vereinsportal-innsbruck.at", "pick": "A", "reason": "city club directory; no leaf fits, root"}
+{"host": "wehnert.de", "pick": "A", "reason": "metal construction (railings, stairs) is not key service; manufacturer with locksmith extra"}
+{"host": "wolffstore.de", "pick": "B", "reason": "e-commerce fulfillment: distribution-center"}
+{"host": "www.albflyer.de", "pick": "A", "reason": "private kite hobby page, not a festival operator: root"}
+{"host": "www.alexandragillich.at", "pick": "A", "reason": "counselling, coaching and horse therapy; no leaf decides"}
+{"host": "www.ares-adhesive.com", "pick": "B", "reason": "adhesives maker: chemicals-and-gasses-manufacturer (same as biopin)"}
+{"host": "www.artistravel.eu", "pick": "A", "reason": "organizer of own painting trips: tour-provider"}
+{"host": "www.beautypunk.com", "pick": "B", "reason": "online magazine: publisher (R4)"}
+{"host": "www.bernerkonferenz.ch", "pick": "B", "reason": "member association of social welfare bodies"}
+{"host": "www.biopin.de", "pick": "A", "reason": "paints maker: chemicals-and-gasses-manufacturer"}
+{"host": "www.fw-unterhaching.de", "pick": "A", "reason": "political voter group: organization (same as party branches)"}
+{"host": "www.heilpraxis-dubjella.de", "pick": "A", "reason": "Heilpraktiker for psychotherapy: mental-health-service with alternative-medicine-clinic extra"}
+{"host": "www.hochseefeuer.com", "pick": "A", "reason": "liqueur brand site: producer first"}
+{"host": "www.hyperwerk.ch", "pick": "B", "reason": "site is the HyperMagazine (online magazine), not the institute"}
+{"host": "www.inmotionstudio.de", "pick": "B", "reason": "3D visualisation studio: design-studio leaf"}
+{"host": "www.koroch.de", "pick": "B", "reason": "general Heilpraktiker: alternative-medicine-clinic"}
+{"host": "www.markusklimesch.de", "pick": "B", "reason": "recruiting consultant: human-resources-agency"}
+{"host": "www.matsreinhardt.de", "pick": "B", "label": {"extra": ["general-entertainment"]}, "reason": "performer without a performer node: arts root"}
+{"host": "www.meinemelktechnik.de", "pick": "B", "reason": "equipment shop: industrial-equipment-supplier"}
+{"host": "www.openapp.de", "pick": "A", "reason": "slogan plus e.K. imprint shows a software company; low"}
+{"host": "www.paraviz.com", "pick": "B", "label": {"extra": ["general-entertainment"]}, "reason": "painter and sound artist: art-studio"}
+{"host": "www.radmilabesic.com", "pick": "B", "label": {"extra": ["general-entertainment"]}, "reason": "performer without a musician node: arts root"}
+{"host": "www.sfv-magdeburg.de", "pick": "B", "reason": "football association, not a club"}
+{"host": "www.shop.emsl.de", "pick": "B", "reason": "shops are not online_only (R4); electronics-store leaf"}
+{"host": "www.stefangossling.de", "pick": "A", "reason": "professor page: university leaf"}
+{"host": "www.susannedraxler.at", "pick": "B", "label": {"online_only": false}, "reason": "imprint lists theatre productions; actress page; not an online service"}
+{"host": "www.wassereisenland.de", "pick": "A", "reason": "heritage tourism network association"}
+{"host": "www.wdpx.de", "pick": "B", "reason": "web design first"}
+{"host": "z-quadrat-mainz.de", "pick": "B", "reason": "coaching and exam preparation lead the homepage"}
