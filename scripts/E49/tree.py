@@ -2,6 +2,8 @@
 
 Formats (one JSON object per line):
 - POI  (topics/poi_v2.jsonl):  {"name", "parent"}; a root has parent == name (or empty parent).
+- POI3 (topics/poi_v3.jsonl):  {"id", "name", "parent", "fsq_ids", "de"}; a root has parent == id. Any file
+  whose rows carry "id" is read this way: node id = "id", title = "name" (English), keywords = German name(s).
 - WZ   (topics/wz2025.jsonl):  {"code", "level", "title", "parent", "keywords", ...}; a root has an empty parent.
   Any file whose rows carry "code" is read this way.
 
@@ -18,7 +20,7 @@ from collections import Counter
 from dataclasses import dataclass, field
 from pathlib import Path
 
-SCHEMAS = {"poi": "topics/poi_v2.jsonl", "wz": "topics/wz2025.jsonl"}
+SCHEMAS = {"poi": "topics/poi_v2.jsonl", "poi3": "topics/poi_v3.jsonl", "wz": "topics/wz2025.jsonl"}
 
 
 @dataclass
@@ -210,6 +212,15 @@ def load_tree(path: str | Path, name: str = "") -> Tree:
             for r in rows
         ]
         return Tree(nodes, name or Path(path).stem, coded=True)
+    if "id" in rows[0]:
+        nodes = []
+        for r in rows:
+            i = str(r["id"]).strip()
+            par = str(r.get("parent") or "").strip()
+            de = r.get("de")
+            nodes.append(Node(id=i, title=str(r["name"]).strip(), parent=None if par in ("", i) else par,
+                              keywords=[de] if isinstance(de, str) else _kw(de)))
+        return Tree(nodes, name or Path(path).stem)
     # POI format
     pairs, seen = [], set()
     for r in rows:

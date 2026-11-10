@@ -1,0 +1,201 @@
+host	main_v2	main_v3	flags
+2024.conf.vuejs.de	Konferenz	conference	
+actualidad.asturias.es	Regierungsabteilung	government-department	
+amnesty-peru-bolivien.de	Gemeinnützige Organisation	non-profit-organization	extra now ancestor or duplicate: Organisation -> organization
+artaufachse.de	Versand-, Fracht- und Materialtransportservice	shipping-freight-and-material-transportation-service	
+arts.columbia.edu	Universität	university	
+autorin-stark.de	Kunst und Unterhaltung	arts-entertainment-and-events	
+awbury.org	Botanischer Garten	botanical-garden	
+bayern.moose-deutschland.de	Forschungslabor	laboratory	main merged: Forschungslabor -> laboratory
+birgitta-schuler.de	Geschäfts- und professionelle Dienstleistungen	business-and-professional-services	
+bis.campus-comteach.de	Erwachsenenbildung	adult-education	main widened: adult-education also covers Volkshochschule
+blog.barcamps.eu	Softwareunternehmen	software-company	
+bnn-grafschaft.baeder-suite.de	Schwimmbad	swimming-pool	
+boa-stuttgart.de	Nachtclub	night-club	
+bueroservice-krefeld.de	Buchhaltungsservice	accounting-and-bookkeeping-service	
+contrax.app	Softwareunternehmen	software-company	
+cpg-hh.de	Gymnasium	high-school	
+cuba-undercover.com	Filmstudio	film-studio	
+daruweb.org	Gemeinschaft und Regierung	community-and-government	
+ddhaider.at	Weingut	winery	
+dieburger-jaeger.de	Organisation	organization	
+digital.berliner-ideenlabor.de	Erwachsenenbildung	adult-education	main widened: adult-education also covers Volkshochschule
+egus.at	Klinik für Alternativmedizin	alternative-medicine-clinic	
+event-m2.de	Veranstaltungsservice	event-service	
+externals.io	Softwareunternehmen	software-company	
+extravegant.de	Essen und Trinken	dining-and-drinking	
+fafco.fr	Hersteller	manufacturer-or-factory	main widened: manufacturer-or-factory also covers Fabrik
+fid-cassib.de	Universitätsbibliothek	college-library	
+frauen-bb.verdi.de	Gewerkschaft	labor-union	
+fulda.pneumatici100.it	Großhändler	wholesaler	main widened: wholesaler also covers Lager oder Großhandel
+gartenpfleger-heinz.de	Landschaftsgärtner und Gärtner	landscaper-and-gardener	
+gesundheit-ratgeber.com	Gesundheit und Medizin	health-and-medicine	
+gothe-edelstahl.de	Hersteller	manufacturer-or-factory	main widened: manufacturer-or-factory also covers Fabrik; extra merged into main: Fabrik
+gutschein.vdu-furtwangen.de	Organisation	organization	
+hellmuth-scheunemann.de	Kunstgalerie	art-gallery	
+hennche.de	Metzger	butcher-or-meat-store	main widened: butcher-or-meat-store also covers Fleisch- und Meeresfrüchteladen, Wurstladen; extra merged into main: Wurstladen
+hotel-goldene-rose.de	Hotel	hotel	
+hotel-westerfeld.de	Hotel	hotel	
+kalkhoffbrandstore.com	Fahrradladen	bicycle-store	
+kanzlei-spiess-badhersfeld.de	Anwaltskanzlei	law-office	extra now ancestor or duplicate: Juristischer Dienst -> legal-service
+karschter-stuben.de	Restaurant	restaurant	
+kern.bayern.de	Regierungsabteilung	government-department	
+ki-day.de	Konferenz	conference	
+kos.webuntis.com	Softwareunternehmen	software-company	
+ks-schlueter.de	Großhändler	wholesaler	main widened: wholesaler also covers Lager oder Großhandel; extra merged into main: Lager oder Großhandel
+ktm-gigla.de	Motorradhändler	motorcycle-dealership	
+landhaus-carolin-goehl.de	Ferienwohnung	vacation-rental	
+leipziger-muenzhandlung.de	Auktionshaus	auction-house	
+lescabrieres-vet.fr	Tierarzt	veterinarian	
+live.nordbayern-wetter.info	Forschungsstation	research-station	
+m.rasthaus-wulkatal.at	Restaurant	restaurant	
+magicmonday.ch	Unterhaltungsveranstaltung	entertainment-event	
+masberg-eikelau.de	Anwaltskanzlei	law-office	extra now ancestor or duplicate: Juristischer Dienst -> legal-service
+math.hanover.edu	Hochschule und Universität	college-and-university	
+matthiasheil.de	Gymnasium	high-school	
+minktronik.de	Sicherheit und Schutz	security-and-safety	
+monoceros-peers.ch	Erwachsenenbildung	adult-education	main widened: adult-education also covers Volkshochschule
+mussgrillen.de	Essen und Trinken	dining-and-drinking	
+obs-luechow.de	Mittelschule	middle-school	
+oss.m-privacy.de	Softwareunternehmen	software-company	
+ostsee-immo-makler.de	Immobilienagentur	real-estate-agency	
+owh.at	Restaurant	restaurant	
+peisker-ranch.de	Reitanlage	equestrian-facility	
+pesticides.cvuas.de	Labor	laboratory	main widened: laboratory also covers Forschungslabor; extra merged into main: Forschungslabor
+pipapo.at	Italienisches Restaurant	italian-restaurant	extra now ancestor or duplicate: Restaurant -> restaurant
+portal-ow.vsz.ch	Regierungsabteilung	government-department	
+ps-media.ch	Website-Designer	website-designer	
+psychotherapie-groengroeft.de	Psychologe	psychologist	
+rechtsanwalt-duran.de	Anwaltskanzlei	law-office	extra now ancestor or duplicate: Juristischer Dienst -> legal-service
+reisebuero-korb.de	Reisebüro	travel-agency	
+religie.wiara.pl	Herausgeber	publisher	
+ruhrgold-das-buch.de	Herausgeber	publisher	
+rvs.bewerberportal.at	Bank	bank	
+scandicrusher.cz	Lieferant von Industrieausrüstung	industrial-equipment-supplier	
+schaffer-garten.de	Landschaftsgärtner und Gärtner	landscaper-and-gardener	
+school.the-skill.io	Erwachsenenbildung	adult-education	main widened: adult-education also covers Volkshochschule
+sippd.conservatoriodimusica.it	Hochschule und Universität	college-and-university	
+subvencije.bar.me	Regierungsabteilung	government-department	
+tanjarobisch.com	Kunstatelier	art-studio	
+tc-kappelrodeck.de	Sportverein	sports-club	
+thunderalleyspeedpark.com	Kasino	casino	
+trauer.rheinpfalz.de	Herausgeber	publisher	
+ttc-oberriet.ch	Sportverein	sports-club	
+ubw-wis.de	Organisation	organization	
+weko-online.de	Hersteller	manufacturer-or-factory	main widened: manufacturer-or-factory also covers Fabrik; extra merged into main: Fabrik
+wiki.k10plus.de	Bibliothek	library	
+wintergarten-ratgeber.net	Heimwerkerservice	home-improvement-service	
+www.akademie-systemische-beratung.de	Erwachsenenbildung	adult-education	main widened: adult-education also covers Volkshochschule
+www.alexandros-leipzig.de	Griechisches Restaurant	greek-restaurant	extra now ancestor or duplicate: Restaurant -> restaurant
+www.almudena.de	Kunstatelier	art-studio	
+www.altaro.com	Softwareunternehmen	software-company	
+www.altes-freibad.de	Veranstaltungsraum im Freien	outdoor-event-space	
+www.amer.net	Softwareunternehmen	software-company	
+www.besen-zum-kuahstall.de	Weinbar	wine-bar	
+www.betipul.de	Psychologe	psychologist	
+www.bienenbleibe.com	Land- und Forstwirtschaftsdienst	agriculture-and-forestry-service	
+www.bismarckturm-herford.de	Monument	monument	
+www.bkstiftung.de	Wohltätigkeit	charity	
+www.brunnenfest-lengerich.de	Straßenfest	street-fair	
+www.carpartbrand.de	Großhändler	wholesaler	main widened: wholesaler also covers Lager oder Großhandel
+www.cdh-koeln.de	Abfallentsorgungsdienst	waste-management-service	main widened: waste-management-service also covers Entsorgung
+www.chefdujour.com	Caterer	caterer	extra now ancestor or duplicate: Lebensmittel- und Getränkeservice -> food-and-beverage-service
+www.dag-event.de	Veranstaltungsservice	event-service	
+www.dauris.com	Spirituelles Zentrum	spiritual-center	
+www.dealabs.com	Online-Werbedienst	online-advertising-service	
+www.diethelm-informatik.ch	IT-Service	it-service	
+www.diligentia-verlag.de	Herausgeber	publisher	
+www.dkbav.de	Finanzplaner	financial-planner	
+www.dorntherapie-pasing.de	Klinik für Alternativmedizin	alternative-medicine-clinic	
+www.e-fuku.net	Schneider	tailor	
+www.easternhills.org	Kirche	church	
+www.eiposcert.de	Unternehmensdienst	business-service	
+www.elisondentalcenter.com	Zahnarzt	dentist	
+www.eng.osaka-u.ac.jp	Universität	university	
+www.fackelzauber.de	Straßenfest	street-fair	
+www.fdp-gruenstadt-leiningerland.de	Organisation	organization	
+www.ferienhaus-nordseebad-otterndorf.de	Ferienwohnung	vacation-rental	extra now ancestor or duplicate: Unterkunft -> lodging
+www.finanzdienst-24.de	Versicherungsagentur	insurance-agency	extra now ancestor or duplicate: Finanzdienstleistung -> financial-service
+www.florafelt.de	Gartencenter	garden-center	
+www.foerderverein-wendepunkt-arnsberg.de	Gemeinnützige Organisation	non-profit-organization	
+www.galerie-schumannfengler.de	Kunstatelier	art-studio	
+www.grasse.ch	Filmstudio	film-studio	
+www.haustueren-kinge.de	Auftragnehmer für Türen und Fenster	doors-and-windows-contractor	
+www.heckelbassoons.info	Musikladen	music-store	
+www.hed-solutions.de	Ingenieur	engineer	
+www.hotelalcaval.it	Hotel	hotel	
+www.houstonbluessociety.org	Gemeinnützige Organisation	non-profit-organization	extra now ancestor or duplicate: Organisation -> organization
+www.karate-grossheirath.de	Sportverein	sports-club	
+www.kgc.keio.ac.jp	Mittelschule	middle-school	
+www.khs-erzgebirge.de	Organisation	organization	
+www.korat-katzen.de	Haustierservice	pet-service	
+www.kreuzbund-bamberg.de	Organisation für soziale Dienste	social-services-organization	
+www.krueger-werbemittel.de	Werbeartikel-Service	promotional-item-service	
+www.landlerkirtag.at	Festival	festival	extra now ancestor or duplicate: Unterhaltungsveranstaltung -> entertainment-event
+www.latein-online.net	Nachhilfeservice	tutoring-service	extra now ancestor or duplicate: Ausbildung -> education; root changed: Geschäfts- und professionelle Dienstleistungen -> community-and-government
+www.lieber-lieber.de	Heizungs-, Lüftungs- und Klimaanlageninstallateur	heating-ventilating-and-air-conditioning-contractor	
+www.lila-panther.de	Sozial-Club	club-or-association	main widened: club-or-association also covers Clubhaus; extra now ancestor or duplicate: Organisation -> organization
+www.luemmelwiese.de	Matratzengeschäft	mattress-store	extra now ancestor or duplicate: Möbel- und Einrichtungsgeschäft -> furniture-and-home-store
+www.luftbilder-von-deutschland.de	Fotograf	photographer	extra now ancestor or duplicate: Fotoservice -> photography-service
+www.luisenhof-merschwitz.de	Bauernhof	farm	
+www.lwbfs-mistelbach.ac.at	Ausbildung	education	
+www.martin-riedlingen.de	Seniorenservice	senior-citizen-service	
+www.martinamuth.de	Werbeartikel-Service	promotional-item-service	
+www.maxwellhouseprinters.co.uk	Druckshop	print-shop	
+www.mechanicalmayhem.org	Jugendorganisation	youth-organization	
+www.mfkamouraska.com	Organisation für soziale Dienste	social-services-organization	
+www.molumrealestate.com	Immobilienentwicklungs- und Titelunternehmen	real-estate-developer	main merged: Immobilienentwicklungs- und Titelunternehmen -> real-estate-developer
+www.mueller-thurgau-preis.de	Anderes Ereignis	other-event	
+www.mva-group.ru	Autoteile und Zubehör	car-parts-and-accessories	
+www.mvh-shop.de	Autoteile und Zubehör	car-parts-and-accessories	
+www.nachtwei.de	Gemeinschaft und Regierung	community-and-government	
+www.nageldesign-by-lina.de	Nagelstudio	nail-salon	
+www.ncapplefestival.org	Festival	festival	
+www.nesk.fr	Kunstatelier	art-studio	
+www.neukloster.fitplus-club.de	Fitnessstudio	gym-and-fitness-studio	
+www.old-wheelers.de	Bekleidungsgeschäft	clothing-store	extra now ancestor or duplicate: Modeeinzelhandel -> fashion-retail
+www.opel-amz.de	Autohaus	car-dealership	
+www.philippinenforum.net	Gemeinschaft und Regierung	community-and-government	
+www.probenlagerung.de	Hersteller	manufacturer-or-factory	main widened: manufacturer-or-factory also covers Fabrik; extra merged into main: Fabrik
+www.purux-pool.de	Hersteller von Chemikalien und Gasen	chemicals-and-gasses-manufacturer	
+www.quater-research.com	Hersteller	manufacturer-or-factory	main widened: manufacturer-or-factory also covers Fabrik
+www.raiffeisendruckerei.de	Hersteller	manufacturer-or-factory	main widened: manufacturer-or-factory also covers Fabrik; extra merged into main: Fabrik
+www.rechtsanwalt-notar-stade.de	Anwaltskanzlei	law-office	extra now ancestor or duplicate: Juristischer Dienst -> legal-service
+www.respektiere.at	Gemeinnützige Organisation	non-profit-organization	
+www.schaffner-praxis.ch	Klinik für Alternativmedizin	alternative-medicine-clinic	
+www.sex-in-frauenfeld.ch	Kunst und Unterhaltung	arts-entertainment-and-events	
+www.sex-in-neuss.com	Kunst und Unterhaltung	arts-entertainment-and-events	
+www.sffaudio.com	Herausgeber	publisher	
+www.sg-meiningen.de	Schießstand	gun-range	
+www.siltex-srl.it	Hersteller	manufacturer-or-factory	main widened: manufacturer-or-factory also covers Fabrik
+www.spd-koepenick-nord.de	Organisation	organization	
+www.spitiko-zumfroschenteich.de	Griechisches Restaurant	greek-restaurant	extra now ancestor or duplicate: Restaurant -> restaurant
+www.sportkanton-zuerich.ch	Organisation	organization	
+www.spvgg-ramspau.de	Sportverein	sports-club	
+www.sr-beratungen.de	Unternehmensberater	management-consultant	
+www.stephanh.de	Sport und Freizeit	sports-recreation-and-outdoors	
+www.strasbourg.aeroport.fr	Flughafen	airport	
+www.street-workout-place.com	Fitnessstudio	gym-and-fitness-studio	
+www.surfecole-cotebasque.com	Sport und Freizeit	sports-recreation-and-outdoors	
+www.technodrive.com	Hersteller	manufacturer-or-factory	main widened: manufacturer-or-factory also covers Fabrik
+www.thecitypress.com			
+www.thyssenkrupp-materials.ch	Metalllieferant	metals-supplier	
+www.tierschutzlehre.com	Tierheim	animal-shelter	
+www.tierurnen-guenstig.de	Geschäft für Heimtierbedarf	pet-supplies-store	
+www.training-for-pets.com	Haustierservice	pet-service	
+www.transportsecurity.com	Hersteller	manufacturer-or-factory	main widened: manufacturer-or-factory also covers Fabrik
+www.traumarta.de	Unterhaltungsveranstaltung	entertainment-event	
+www.tus-hsh.de	Sportverein	sports-club	
+www.uroswiss.ch	Urologe	urologist	extra now ancestor or duplicate: Arzt -> physician
+www.vetlab.ru	Medizinisches Labor	medical-lab	
+www.vom-allenbach.de	Kasino	casino	
+www.weingut-hess-hautt.de	Weingut	winery	
+www.weingut-prasser.de	Weingut	winery	
+www.wertheim-nassig.de	Rathaus	city-hall	extra now ancestor or duplicate: Regierungsgebäude -> government-building
+www.whiterivercu.com	Kreditgenossenschaft	credit-union	
+www.wunschlicht.de	Beleuchtungsgeschäft	lighting-store	extra now ancestor or duplicate: Möbel- und Einrichtungsgeschäft -> furniture-and-home-store
+www.zeit-stiftung.de	Gemeinnützige Organisation	non-profit-organization	
+www.zelte-eickhoff.de	Ausrüstungsverleih	equipment-rental-service	
+www.zooundco-linz.de	Geschäft für Heimtierbedarf	pet-supplies-store	
+yo.ceramic.school	Kunstschule	art-school	
+zuba-tech.ch	Hobbyladen	hobby-store	
