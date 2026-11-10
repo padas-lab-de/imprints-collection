@@ -14,7 +14,8 @@ Strategies (cfg["strategy"]):
 Options (cfg keys, with defaults in DEFAULTS): input home|imprint|both; depth D; node_text name|path|kw|desc|incl;
 output one|top3; reason none|short; think off|on; shots 0..4; lang de|en; k; rerank; temperature; seed;
 rules (text of a rules block appended to the system prompt of every choice call; None = off, prompt unchanged);
-keep_outside (keep an answer that names a valid node outside the offered candidates; default: drop it).
+keep_outside (keep an answer that names a valid node outside the offered candidates; default: drop it);
+rules_cands (list of node ids added to the retrieve candidates, e.g. the codes cited in the rules; None = off).
 Every strategy returns a dict with main (node id or None), ranked (ids, best first), trace, error.
 """
 
@@ -34,11 +35,26 @@ def load_rules(path) -> str:
     lines = [l.rstrip() for l in Path(path).read_text(encoding="utf-8").splitlines() if not l.lstrip().startswith("#")]
     return "\n".join(lines).strip()
 
+def rules_code_ids(tree: Tree, rules_text: str) -> list[str]:
+    """Node ids of WZ codes cited in a rules text (e.g. 58.29.0, 62.10, 47), in order of first citation.
+    Rule numbering at line start ("1. ") is skipped; codes that are not nodes of the tree are dropped."""
+    import re
+
+    ids: list[str] = []
+    for line in rules_text.splitlines():
+        line = re.sub(r"^\s*\d+\.\s+", "", line)
+        for m in re.finditer(r"(?<![\d.])\d{2}(?:\.\d{1,2}(?:\.\d)?)?(?![\d])", line):
+            c = m.group(0)
+            if c in tree and c not in ids:
+                ids.append(c)
+    return ids
+
+
 DEFAULTS = {
     "strategy": "flat", "input": "home", "depth": 99, "node_text": "path", "output": "one", "reason": "none",
     "think": "off", "shots": 0, "lang": "de", "k": 30, "rerank": False, "beam": 1, "chooser": "desc",
     "emb_text": "kw", "temperature": 0.0, "seed": None, "max_kw": 12, "allow_none": True, "rules": None,
-    "keep_outside": False,
+    "keep_outside": False, "rules_cands": None,
 }
 SITE_CHARS = 6_000  # per text field (dev_inputs are already cut to 6k)
 QUERY_CHARS = 4_000  # embedding query
@@ -360,6 +376,8 @@ def retrieve(client, model, tree: Tree, rec, cfg, usage, query: str | None = Non
         return _result([], error="no_input")
     trace = trace or []
     top = retrieve_ids(client, tree, query or site, cfg, usage)
+    if cfg.get("rules_cands"):
+        top = top + [i for i in cfg["rules_cands"] if i in tree and i not in top]
     cands = with_ancestors(tree, top)
     r = choose(client, model, tree, cfg, usage, head or site, cands)
     trace.append({"step": "retrieve", "topk": top, "n_cands": len(cands), **r})

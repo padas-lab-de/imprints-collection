@@ -169,3 +169,36 @@ def test_keep_outside(wz):
     assert drop["ids"] == [] and "outside_candidates" in drop["how"]
     keep = choose(Fake(), "m", wz, dict(DEFAULTS, keep_outside=True), Usage(), "site", ["56.11.1"])
     assert keep["ids"] == ["69"] and "outside_kept" in keep["how"]
+
+
+def test_rules_candidates(wz, tmp_path):
+    from run import make_tag
+    from strategies import DEFAULTS, retrieve, rules_code_ids
+
+    ids = rules_code_ids(wz, "1. Restaurant 56.11.1 und 69, nicht 99.99.9 [56.11]\n2. 56.11.1 wieder 2025")
+    assert ids == ["56.11.1", "69", "56.11"]
+    assert len(ids) == len(set(ids)) and "99.99.9" not in ids and "1" not in ids
+    base = dict(DEFAULTS)
+    assert make_tag(base, "m", 1) == make_tag(dict(base, rules_cands=None), "m", 1)  # off: tag unchanged
+    assert make_tag(dict(base, rules_cands=ids), "m", 1).endswith("rulescand")
+
+    class Fake:
+        def embed(self, texts, usage):
+            return [[1.0] + [0.0] * 3 for _ in texts]
+
+        def chat(self, *a, **k):
+            return {"id": "69"}, None
+
+    rec = {"host": "h", "home": "Weingut"}
+    import strategies
+
+    seen = {}
+    orig = strategies.choose
+    strategies.choose = lambda c, m, t, cfg, u, h, cands, *a, **k: seen.setdefault("c", cands) and orig(c, m, t, cfg, u, h, cands, *a, **k)
+    try:
+        strategies.retrieve(Fake(), "m", wz, rec, dict(base, strategy="retrieve", k=1, rules_cands=["69"]), strategies.Usage())
+    except Exception:
+        pass
+    finally:
+        strategies.choose = orig
+    assert "69" in seen.get("c", [])
