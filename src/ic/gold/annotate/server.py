@@ -8,7 +8,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, unquote, urlparse
 
-from . import schema
+from . import schema, topics
 from .store import Store
 
 PAGE = Path(__file__).with_name("page.html")
@@ -54,9 +54,26 @@ def make_handler(store: Store):
                             "topics": schema.TOPICS,
                             "flags": schema.FLAGS,
                             "no_address_reason": schema.NO_ADDRESS_REASON,
+                            "confidence": topics.CONFIDENCE,
+                            "schema_version": schema.SCHEMA_VERSION,
                         },
                     }
                 )
+            elif u.path == "/api/topic_search":
+                q = parse_qs(u.query)
+                sch = q.get("schema", [""])[0]
+                if sch not in topics.SCHEMAS:
+                    return self._json({"error": "unknown schema"}, 400)
+                if "id" in q:  # exact lookup (to show a saved label's path)
+                    try:
+                        return self._json({"results": [topics.describe(sch, q["id"][0])]})
+                    except KeyError:
+                        return self._json({"error": "unknown id"}, 404)
+                try:
+                    limit = int(q.get("limit", ["20"])[0])
+                except ValueError:
+                    limit = 20
+                self._json({"results": topics.search(sch, q.get("q", [""])[0], limit)})
             elif u.path == "/api/item":
                 host = parse_qs(u.query).get("host", [""])[0]
                 if not store.has_host(host):

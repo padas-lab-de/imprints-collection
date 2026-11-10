@@ -15,10 +15,21 @@ PYTHONPATH=src python -m ic.gold.annotate --labeller L1 --port 8800
 ## Per item
 
 1. Look at the screenshot (left; click to zoom) and the DOM text (middle). The **Landing** and **Imprint** buttons switch both panes; keys L and I do the same.
-2. The form (right) is pre-filled with a model suggestion (pill "pre-filled", banner on top). Violet values are suggested and not yet confirmed. Orange fields are not found verbatim in the captured text: check them. Go through the form top to bottom: site status, imprint, addresses, operator type, topic, flags, comment.
+2. The form (right) is pre-filled with a model suggestion (pill "pre-filled", banner on top). Violet values are suggested and not yet confirmed. Orange fields are not found verbatim in the captured text: check them. Go through the form top to bottom: site status, imprint, addresses, operator type, topic, topic labels (POI and WZ), flags, comment.
 3. Accept, correct or remove each value. Address cards have buttons for main, show evidence (the evidence is highlighted in the DOM text) and remove. To correct an address field: select the text in the middle pane, then press the arrow button beside the field. Use "split selection into fields" for a whole address, then check each field. Type only for addresses that exist only in an image.
 4. Press **Save & next (Ctrl+Enter)**, or **Save** to stay on the item. Errors are shown in red and nothing is saved until they are fixed. Orange warnings (a field is not found in the DOM text) are only hints.
 5. Use the live site (header link) only as a fallback; the link ticks `used_live_site` for you. Say why in the comment.
+
+## Topic labels (sections 5a and 5b)
+
+Rules: section 5.1 to 5.9 of the guideline. Nothing is pre-filled here.
+
+- Type in the search field (POI: English or German name; WZ: code or German title). Each result shows its full path. Click a result to pick it.
+- Pick one **main label** per schema. Pick the finest node you can decide. An inner node is allowed when the site does not decide between its children.
+- Add 0 to 2 **extra labels**. An extra must not be the main label or an ancestor of it; the tool refuses to save it.
+- Set **confidence** (high, medium, low) for each schema. Tick **online only** for blogs, forums, portals and web services (POI only).
+- No node fits, or the site is parked or hijacked: leave the main label empty and write the reason in the note.
+- Press the x on a label to change it.
 
 ## Good to know
 
