@@ -100,6 +100,22 @@
   .addbtn:hover { border-color: var(--acc); background: var(--acc-soft); }
   textarea.comment { width: 100%; min-height: 60px; border: 1.5px solid var(--line); border-radius: 8px; background: var(--panel); padding: 6px 9px; margin-top: 8px; }
   .mute { color: var(--mute); }
+  /* topic pickers (POI v3, WZ 2025) */
+  .tp { margin: 8px 0; }
+  .tp > .k { display: block; font-size: 12px; color: var(--mute); margin: 0 0 4px; text-transform: uppercase; letter-spacing: .5px; }
+  .tp .sel { display: flex; gap: 8px; align-items: center; border: 1.5px solid var(--acc); border-radius: 9px; background: var(--acc-soft); padding: 6px 10px; }
+  .tp .sel .grow { flex: 1; min-width: 0; }
+  .tp .sel .path, .tp .hit .path { font-size: 12px; color: var(--mute); }
+  .tp .box { position: relative; }
+  .tp input.q { width: 100%; min-height: 38px; border: 1.5px solid var(--line); border-radius: 8px; background: var(--panel); padding: 6px 9px; }
+  .tp input.q:focus { outline: none; border-color: var(--acc); }
+  .tp .hits { border: 1.5px solid var(--line); border-radius: 8px; background: var(--panel); max-height: 280px; overflow: auto; margin-top: 2px; }
+  .tp .hit { display: block; width: 100%; text-align: left; border: 0; border-bottom: 1px solid var(--line); background: transparent; padding: 6px 10px; cursor: pointer; }
+  .tp .hit:hover, .tp .hit:focus { background: var(--acc-soft); outline: none; }
+  .tp .hit .tag { font-size: 11px; color: var(--mute); margin-left: 6px; }
+  .tp .none { padding: 6px 10px; color: var(--mute); font-style: italic; }
+  .tpnote { font-size: 12.5px; color: var(--warn); margin: 4px 0; }
+  .tpnote.hint { color: var(--mute); }
   .ok { color: var(--ok); font-weight: 600; }
   .errs { margin: 2px 0 0; padding-left: 18px; }
   .warns { color: var(--warn); margin: 0; padding-left: 18px; }
@@ -212,7 +228,99 @@ setInterval(() => { if (!document.hidden && document.hasFocus() && idx >= 0) act
 function blankModel(host) {
   return { host, site_status: "", imprint_present: null, imprint_url: "", imprint_location: "",
            addresses: [], main_address_index: null, no_address_reason: "", operator_type: "",
-           topic: "", topic_ambiguous: false, flags: [], comment: "", prefilled_from: false };
+           topic: "", topic_ambiguous: false, flags: [], comment: "", prefilled_from: false,
+           schema_version: 2, topic_labels: blankTL() };
+}
+// ---- topic labels (POI v3 + WZ 2025): main + up to 2 extra, no prefill ---------
+const TSCHEMAS = [["poi", "POI v3 (what the site offers)"], ["wz", "WZ 2025 (economic activity)"]];
+const NODE = { poi: {}, wz: {} };   // cache of nodes seen: id -> {id,title,de,path,leaf}
+let tpNote = "";
+function blankTL() {
+  return { poi: { main: null, extra: [], confidence: "", note: "", online_only: false },
+           wz: { main: null, extra: [], confidence: "", note: "" } };
+}
+function mergeTL(tl) {
+  const b = blankTL();
+  for (const k of Object.keys(b)) if (tl && tl[k]) Object.assign(b[k], tl[k], { extra: [...(tl[k].extra || [])] });
+  return b;
+}
+async function ensureNodes() {
+  const need = [];
+  for (const [sch] of TSCHEMAS) {
+    const d = M.topic_labels[sch];
+    for (const id of [d.main, ...d.extra]) if (id && !NODE[sch][id]) need.push([sch, id]);
+  }
+  if (!need.length) return;
+  await Promise.all(need.map(async ([sch, id]) => {
+    const r = await fetch(`/api/topic_search?schema=${sch}&id=${encodeURIComponent(id)}`);
+    if (r.ok) NODE[sch][id] = (await r.json()).results[0];
+  }));
+  renderForm();
+}
+const nodeName = (sch, n) => sch === "wz" ? `${n.id} ${n.title}` : (n.de ? `${n.title} / ${n.de}` : n.title);
+const nodePath = (sch, n) => n.path.map(x => sch === "wz" ? `${x.id} ${x.title}` : x.title).join(" › ");
+// type-ahead: typing only redraws the list; picking redraws the form
+function topicPicker(sch, label, onpick, hintText) {
+  let seq = 0, timer = null;
+  const hits = el("div", { class: "hits", style: "display:none" });
+  const q = el("input", { type: "text", class: "q", placeholder: hintText, autocomplete: "off", spellcheck: "false" });
+  const show = async () => {
+    const my = ++seq, v = q.value.trim();
+    if (!v) { hits.style.display = "none"; return; }
+    const r = await fetch(`/api/topic_search?schema=${sch}&limit=20&q=${encodeURIComponent(v)}`);
+    if (my !== seq) return;
+    const res = (await r.json()).results || [];
+    hits.replaceChildren(...(res.length ? res.map(n => {
+      NODE[sch][n.id] = n;
+      return el("button", { type: "button", class: "hit", onclick: () => onpick(n) },
+        [el("b", {}, nodeName(sch, n)), el("span", { class: "tag" }, n.leaf ? "leaf" : "inner node"),
+         el("div", { class: "path" }, nodePath(sch, n))]);
+    }) : [el("div", { class: "none" }, "nothing found; try another word")]));
+    hits.style.display = "block";
+  };
+  q.addEventListener("input", () => { clearTimeout(timer); timer = setTimeout(show, 150); });
+  q.addEventListener("keydown", e => {
+    if (e.key === "Enter" && !e.ctrlKey && !e.metaKey) { e.preventDefault(); const b = hits.querySelector("button.hit"); if (b) b.click(); }
+    if (e.key === "Escape") hits.style.display = "none";
+  });
+  return el("div", { class: "tp" }, [el("span", { class: "k" }, label), el("div", { class: "box" }, [q, hits])]);
+}
+function selectedNode(sch, id, onclear) {
+  const n = NODE[sch][id];
+  return el("div", { class: "sel" }, [el("div", { class: "grow" },
+    n ? [el("b", {}, nodeName(sch, n)), el("span", { class: "path" }, "  " + (n.leaf ? "(leaf)" : "(inner node)")), el("div", { class: "path" }, nodePath(sch, n))]
+      : [el("b", {}, id), el("div", { class: "path" }, "loading path ...")]),
+    el("button", { type: "button", class: "chip sm", onclick: onclear }, "✕")]);
+}
+function topicSection(sch, title) {
+  const d = M.topic_labels[sch];
+  const pathIds = id => (NODE[sch][id] ? NODE[sch][id].path.map(x => x.id) : [id]);
+  const kids = [el("legend", {}, title)];
+  const clean = () => {   // R5: an extra must not be the main or an ancestor of the main
+    const mp = d.main ? pathIds(d.main) : [];
+    const keep = d.extra.filter(x => !mp.includes(x));
+    if (keep.length !== d.extra.length) tpNote = "An extra label was removed: it was the main label or an ancestor of it (R5).";
+    d.extra = keep;
+  };
+  const hint = sch === "wz" ? "type a code or a German title, e.g. 56.10 or Gaststätten" : "type an English or German name, e.g. restaurant or Zahnarzt";
+  kids.push(el("div", { class: "tp" }, [el("span", { class: "k" }, "main label (finest level you can decide; an inner node is fine)"),
+    d.main ? selectedNode(sch, d.main, () => { d.main = null; touch(); }) : null].filter(Boolean)));
+  if (!d.main) kids.push(topicPicker(sch, "search", n => { d.main = n.id; tpNote = ""; clean(); touch(); ensureNodes(); }, hint));
+  if (d.main) {
+    d.extra.forEach((id, i) => kids.push(el("div", { class: "tp" }, [el("span", { class: "k" }, `extra label ${i + 1}`),
+      selectedNode(sch, id, () => { d.extra.splice(i, 1); touch(); })])));
+    if (d.extra.length < 2) kids.push(topicPicker(sch, `add extra label (${d.extra.length}/2, optional)`, n => {
+      if (n.id === d.main || pathIds(d.main).includes(n.id)) { tpNote = "Not added: an extra must not be the main label or an ancestor of it (R5)."; renderForm(); return; }
+      if (d.extra.includes(n.id)) { tpNote = "Not added: already listed."; renderForm(); return; }
+      d.extra.push(n.id); tpNote = ""; touch();
+    }, hint));
+  }
+  kids.push(el("div", { class: "sub" }, [el("span", { class: "k" }, "confidence"),
+    chips(S.enums.confidence, d.confidence, v => { d.confidence = v; dirty = true; renderForm(); }, { sm: true })]));
+  if (sch === "poi") kids.push(el("div", { class: "sub" }, [toggle("online only (blog, forum, portal, web service, online magazine: R4)", d.online_only, v => { d.online_only = v; dirty = true; renderForm(); })]));
+  kids.push(el("div", { class: "field" }, [el("span", { class: "k" }, "note"),
+    el("input", { type: "text", value: d.note || "", placeholder: "short; required if you give no main label", oninput: e => { d.note = e.target.value; dirty = true; } })]));
+  return el("fieldset", {}, kids);
 }
 function blankAddr() {
   return { role: "operator", street: "", number: "", postcode: "", town: "", country: "",
@@ -222,6 +330,8 @@ function fromSaved(l) {
   const m = blankModel(l.host);
   for (const k of Object.keys(m)) if (l[k] !== undefined && l[k] !== null) m[k] = l[k];
   m.prefilled_from = !!l.prefilled_from;
+  m.schema_version = 2;
+  m.topic_labels = mergeTL(l.topic_labels);   // old records without topic labels load blank
   m.addresses = (l.addresses || []).map(a => Object.assign(blankAddr(), a, { _sugg: new Set(), _check: [] }));
   m.main_address_index = l.main_address_index === undefined ? null : l.main_address_index;
   m.none_op = !!(m.addresses.length && l.no_address_reason === "imprint_without_address");
@@ -368,6 +478,11 @@ function renderForm() {
       chips(E.topics, M.topic, v => set("topic", v), { grid: "g2", sugg: PF.has("topic") }),
       el("div", { class: "sub" }, [toggle("topic is ambiguous", M.topic_ambiguous, v => { M.topic_ambiguous = v; dirty = true; renderForm(); })])]));
   }
+  if (isLive()) {
+    f.append(el("div", { class: "tpnote hint" }, "Topic labels (5a, 5b): per schema one main label and up to 2 extra labels. Type to search; pick the finest node you can decide, or an inner node when the site does not decide between its children. Nothing is pre-filled."));
+    for (const [sch, title] of TSCHEMAS) f.append(topicSection(sch, (sch === "poi" ? "5a. " : "5b. ") + title));
+    if (tpNote) f.append(el("div", { class: "tpnote" }, tpNote));
+  }
   f.append(el("fieldset", {}, [el("legend", {}, "Flags and comment"),
     el("div", { class: "chips" }, E.flags.map(fl => toggle(nice(fl), M.flags.includes(fl), v => {
       M.flags = M.flags.filter(x => x !== fl); if (v) M.flags.push(fl); dirty = true; renderForm(); }))),
@@ -471,7 +586,8 @@ async function load(i) {
     "Violet = suggested, not yet confirmed; orange = not found verbatim in the text. Check against the text, fix what is wrong, then Save & next."]));
   for (const p of ["landing", "imprint"]) document.querySelectorAll(`[data-page="${p}"]`).forEach(x => x.disabled = cap.texts[p] === undefined && !cap.images[p]);
   lastSel = ""; window.getSelection().removeAllRanges();
-  normalise(); renderHeader(); renderForm();
+  tpNote = "";
+  normalise(); renderHeader(); renderForm(); ensureNodes();
   // start on the page that holds the main address, else the imprint, else the landing page
   const ev = M.addresses.length ? (evidencePage(M.main_address_index === null ? undefined : M.main_address_index) || evidencePage()) : null;
   setPage(ev || (cap.texts.imprint !== undefined || cap.images.imprint ? "imprint" : "landing"));
@@ -490,6 +606,7 @@ async function save(next) {
   const msg = $("#msg"); msg.replaceChildren();
   showErrors([]);
   const label = JSON.parse(JSON.stringify(M, (k, v) => (k === "_sugg" || k === "_check") ? undefined : v));
+  if (!isLive()) delete label.topic_labels;
   if (label.imprint_present === null && !isLive()) label.imprint_present = false;
   label.no_address_reason = M.no_address_reason || null;
   const r = await fetch("/api/label", { method: "POST", headers: { "Content-Type": "application/json" },

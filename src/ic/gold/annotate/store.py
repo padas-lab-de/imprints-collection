@@ -99,7 +99,8 @@ class Store:
         if not it or not r or it.get("role") not in self.prefill_roles:
             return None
         src = r.get("source") or {}
-        return {"label": r.get("label") or {}, "source": f"{src.get('model', '?')}/{src.get('prompt', '?')}"}
+        lab = {k: v for k, v in (r.get("label") or {}).items() if k != "topic_labels"}  # never anchor topics
+        return {"label": lab, "source": f"{src.get('model', '?')}/{src.get('prompt', '?')}"}
 
     def has_host(self, host: str) -> bool:
         return host in self._by_host

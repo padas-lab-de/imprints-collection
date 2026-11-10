@@ -20,6 +20,7 @@ Every item opens with a model suggestion. A banner and the pill "pre-filled" mar
 - Known weak spots: a town-only main address, template placeholder text, a house number left in the street field, an extra country.
 - An empty suggestion does not mean there is no address. Look at the imprint yourself.
 - Never accept a value you have not seen in the capture.
+- The detailed topic labels (5.1) are never pre-filled. Decide them yourself.
 
 ## 2. Site status and imprint
 
@@ -175,6 +176,80 @@ Tie-breakers:
 - Two classes fit equally: tick `topic_ambiguous` and take the one that matches the first screen of the landing page.
 
 Example: `heroes-burgers.de` (Heroes Burgers, *Leibnizstr. 13, 60316 Frankfurt am Main*) is `Dining and Drinking`. `herxheimamberg.de` is the municipality site of Herxheim am Berg: `Community and Government`.
+
+### 5.1 Topic labels: POI v3 and WZ 2025
+
+Status: 2026-11-10 (D51 B). Rules R1 to R7 come from the E49 topic study (`results/E49/labelling_spec.md`). The 11-class topic above stays. In addition, give each live site two detailed topic labels: one from the POI v3 tree (what the site offers, 753 nodes) and one from the WZ 2025 tree (economic activity, German WZ codes). The tool shows these in sections 5a and 5b. They are **not pre-filled**. Decide them yourself, from the capture only.
+
+Each schema has these fields:
+
+| Field | Rule |
+|---|---|
+| main label | One node. The finest level that you can decide. |
+| extra labels | 0, 1 or 2 more nodes that are also correct (5.4). |
+| confidence | `high`: the text makes it clear. `medium`: probably right, some doubt. `low`: a guess. |
+| note | One short sentence. Write it when you stop above a leaf, when you leave the main label empty, or when the case is hard. |
+| online only | POI only. Tick it for an online-only operator (5.6). |
+
+How to search: type a word in the search field. For POI, the search finds English and German names (`Zahnarzt`, `dentist`). For WZ, it finds codes and German titles (`56.11`, `Gaststätten`). Each result shows its full path from the root. Check the path before you pick. The results show inner nodes and leaves. Use the path to see which level you pick.
+
+### 5.2 Decide the activity that the site presents
+
+1. Ask: what does the operator offer on this site? The purpose of the site decides.
+2. Use the homepage first. Use the imprint only to understand who runs the site.
+3. Do not label a topic that the site mentions only in passing. Do not label the web designer, the hoster or the legal text of the imprint.
+4. A company site: the main business of the company. A shop: what it sells. An association: its purpose. A public body: the public body.
+5. Several activities: take the one that the homepage shows first or shows most.
+6. If the operator in the imprint has a different main business, add that business as an extra label (R2). Example: a car dealer's site that presents a workshop service. Main: the workshop. Extra: the car dealer.
+
+### 5.3 When to stop at a higher level
+
+Go down the tree. Take the deepest node that clearly fits (R6).
+
+- Stop at an inner node when the text does not decide between its children. Write the reason in the note. Example: the site of a Gymnasium. WZ: stop at `85.31` (general secondary schools) if the text does not decide the unterklasse.
+- Do not guess a leaf. A correct inner node is better than a wrong leaf.
+- If you can decide the child, take the child. Example: the menu shows Italian food: take Italian Restaurant, not Restaurant.
+- WZ: if a node has exactly one child, the two are the same decision. Write the child (the leaf, R6).
+- Use the root of a tree only when nothing below it fits and the root is true.
+- If no node fits, or the site has no usable content, leave the main label empty and write why in the note (5.7).
+
+### 5.4 Extra labels
+
+- You can add up to 2 extra labels per schema. Add one only if a careful labeller would also accept it. Do not add loosely related nodes.
+- Good reasons: the site has a second main activity; a general node and a specific node are both right (for example Restaurant and Italian Restaurant, as siblings); the activity sits on the border of two WZ classes; the operator's own business differs from the activity the site presents (R2).
+- An extra can be a leaf or an inner node.
+- **R5:** an extra must not be the main label, and must not be an ancestor of the main label. The tool refuses to save such an extra. A descendant of the main label is allowed.
+
+### 5.5 Private homepages and blogs
+
+- A private, non-commercial homepage: WZ `98.20.0` (R3).
+- The editorial blog of one person: WZ `58.19.0` (R3).
+- POI for both: the leaf of the topic when it is clear. Otherwise the root of the topic. Set confidence to `low`.
+- Do not decide the topic from the person's job when the site does not present that job.
+
+### 5.6 Online-only operators (POI)
+
+An online-only operator has no place that a visitor can visit: a blog, a forum, a portal, a dating site, a web service, an online magazine (R4).
+
+- Pick the nearest leaf if one fits. If none fits, pick the root of the topic.
+- Tick **online only**. Leave it off for all other sites, also for web shops of a real business.
+- WZ: label the activity as usual.
+
+### 5.7 Hijacked, parked and empty domains
+
+- **Parked domain, error page, empty shop template** (no content): leave the main label empty for both schemas. Write "parked" or the reason in the note. Site status `parked` is already enough for the tool to hide the topic section.
+- **Hijacked or spam domain** (R1): if the site has no operator and no topic that make sense together, leave the main label empty and write "hijacked" in the note. If the content now on the site is coherent (for example casino reviews), label that content, set confidence to `low`, and write "hijacked" in the note.
+
+### 5.8 Two special cases (R7)
+
+- A hotel whose site mentions only breakfast: WZ `55.10.2`.
+- A winery that makes wine: WZ `11.02.0` as main, and `01.21.0` as an extra.
+
+### 5.9 Checks before you save
+
+- Both schemas have confidence. POI has the online only setting.
+- Every extra is not the main and not an ancestor of the main.
+- You did not copy a label from a model, from another labeller or from your memory of the E49 study. Use the capture only.
 
 ## 6. Flags and comment
 

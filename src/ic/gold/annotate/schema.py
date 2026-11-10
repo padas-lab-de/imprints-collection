@@ -8,6 +8,8 @@ from __future__ import annotations
 
 import re
 
+from . import topics
+
 SITE_STATUS = (
     "live",
     "unreachable",
@@ -66,6 +68,9 @@ FLAGS = (
     "capture_problem",  # capture broken or incomplete
     "used_live_site",  # had to open the live site (say why in comment)
 )
+# 1 = original records (11-class topic only); 2 = adds ``topic_labels`` (POI v3 and WZ 2025,
+# D51 B). Records without ``schema_version`` are version 1 and stay valid.
+SCHEMA_VERSION = 2
 LABELLERS = ("L1", "L2", "L3")
 # statuses labelled in full (a real website is shown; redirect: label the site you land on)
 LIVE_LIKE = ("live", "redirect_other_domain")
@@ -111,6 +116,8 @@ def normalise_label(label: dict) -> dict:
     out["comment"] = _s(label.get("comment"))
     out["imprint_url"] = _s(label.get("imprint_url")) or None
     out["flags"] = list(label.get("flags") or [])
+    if "topic_labels" in label:
+        out["topic_labels"] = topics.normalise_schema_labels(label["topic_labels"])
     return out
 
 
@@ -211,6 +218,8 @@ def validate_label(label: dict) -> list[str]:
             errs.append("topic invalid")
     if not isinstance(label.get("topic_ambiguous", False), bool):
         errs.append("topic_ambiguous must be true or false")
+
+    errs.extend(topics.validate_schema_labels(label))
 
     flags = label.get("flags", [])
     if not isinstance(flags, list) or any(f not in FLAGS for f in flags):
