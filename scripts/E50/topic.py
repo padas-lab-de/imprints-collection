@@ -9,7 +9,8 @@ E50 keys (base level first):
   fmt        free | json_object | schema (json_schema strict; id = enum of the offered ids + KEINE)
   site_chars 6000 | <n>: characters per text field (landing page, imprint) sent to the model
   layout     site_first (user = site + list + answer format) | list_first (system = instructions + list +
-             answer format, user = site: a static prefix for the server prefix cache)
+             answer format, user = site: a static prefix for the server prefix cache) | list_first_q (system =
+             instructions + list, user = site + a question line + answer format: static prefix, question last)
   lang       de | en (E49 key; the retrieval query instruction stays German, so the candidates do not change)
   shots      0 | 4 (E49 key; results/E49/fewshot.jsonl)
 The retrieval query is the site text after the budget cut (as in a real run).
@@ -124,6 +125,12 @@ def response_format(cfg, cands: list[str], top3: bool = False) -> dict | None:
         "type": "object", "properties": props, "required": list(props), "additionalProperties": False}}}
 
 
+QUESTION = {
+    "de": "Welche Kategorie aus der Liste im Systemprompt passt zu dieser Website?",
+    "en": "Which category from the list in the system prompt fits this website?",
+}
+
+
 def messages(tree: Tree, cfg, head: str, cands: list[str]) -> list[dict]:
     lines = [S.cand_line(tree, i, cfg) for i in cands]
     if cfg["allow_none"]:
@@ -135,6 +142,9 @@ def messages(tree: Tree, cfg, head: str, cands: list[str]) -> list[dict]:
         return [{"role": "system", "content": sys_}, {"role": "user", "content": f"{head}\n\n{lst}\n\n{ans}"}]
     if cfg["layout"] == "list_first":
         return [{"role": "system", "content": f"{sys_}\n\n{lst}\n\n{ans}"}, {"role": "user", "content": head}]
+    if cfg["layout"] == "list_first_q":
+        q = QUESTION[cfg["lang"]]
+        return [{"role": "system", "content": f"{sys_}\n\n{lst}"}, {"role": "user", "content": f"{head}\n\n{q}\n{ans}"}]
     raise ValueError(f"unknown layout {cfg['layout']!r}")
 
 
@@ -208,8 +218,10 @@ def tag(cfg, model_short: str, task: str = "topic") -> str:
         parts.append(f"c{cfg['site_chars']}")
     if cfg["layout"] != "site_first":
         parts.append(cfg["layout"])
-    for k in ("mode", "addr_input"):
-        if cfg.get(k):
+    if task == "topic" and cfg["strategy"] == "retrieve" and int(cfg.get("k", 30)) != 30:
+        parts.append(f"k{cfg['k']}")
+    for k, base in (("mode", "list"), ("addr_input", "imprint")):
+        if cfg.get(k) and cfg[k] != base:
             parts.append(f"{k}-{cfg[k]}")
     return "__".join(parts)
 

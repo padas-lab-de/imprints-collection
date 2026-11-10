@@ -228,3 +228,82 @@ def test_compare_paired_and_verdict(poi3):
     same = CP.paired([(vb, vb)], hs, 2)
     assert CP.verdict(same, [0.0], [0.0]) == "no difference"
     assert CP.parse_tag("flat__gemma__r-short__f-schema__c3000") == ("gemma", "r-short", "f-schema__c3000")
+
+
+def test_layout_list_first_q_and_tags(poi3):
+    base = TP.full_cfg(strategy="flat", node_lang="both")
+    cands = poi3.candidates_up_to(2)[:5]
+    m = TP.messages(poi3, dict(base, layout="list_first_q"), "SITE", cands)
+    m0 = TP.messages(poi3, dict(base, layout="list_first_q"), "OTHER", cands)
+    assert m[0] == m0[0]  # static system prefix
+    assert m[1]["content"].startswith("SITE") and TP.QUESTION["de"] in m[1]["content"]
+    assert m[1]["content"].index(TP.QUESTION["de"]) > m[1]["content"].index("SITE")
+    assert "Antwortformat" in m[1]["content"] and "Antwortformat" not in m[0]["content"]
+    assert TP.tag(dict(base, layout="list_first_q"), "gemma") == "flat__gemma__r-none__list_first_q"
+    ret = dict(base, strategy="retrieve")
+    assert TP.tag(ret, "qwen") == "retrieve__qwen__r-none"
+    assert TP.tag(dict(ret, k=50), "qwen") == "retrieve__qwen__r-none__k50"
+    acfg = AD.full_cfg(reasoning="short")
+    assert TP.tag(acfg, "gemma", task="address") == "address__gemma__r-short"
+    assert TP.tag(dict(acfg, mode="main", fmt="schema"), "gemma", task="address") == \
+        "address__gemma__r-short__f-schema__mode-main"
+    # strategy-aware run keys
+    assert CP.parse_tag("retrieve__qwen__r-default", "poi3") == ("qwen", "r-default", "retrieve")
+    assert CP.parse_tag("retrieve__qwen__r-none__c1500", "wz") == ("qwen", "r-none", "c1500")
+    assert CP.parse_tag("joint-poi-wz__gemma__r-short", "wz") == ("gemma", "r-short", "joint-poi-wz")
+    assert CP.parse_tag("address__gemma__r-none__mode-main", "address") == ("gemma", "r-none", "mode-main")
+
+
+SPEC_REF = {"host": "u.de", "addresses": [
+    {"role": "operator", "street": "Schillingallee", "number": "35", "postcode": "18057", "town": "Rostock",
+     "country": "", "po_box": False, "modality": "text", "evidence": "x"},
+    {"role": "operator", "street": "Postfach", "number": "10 08 88", "postcode": "18055", "town": "Rostock",
+     "country": "", "po_box": True, "modality": "text", "evidence": "y"},
+    {"role": "agency", "street": "Weg", "number": "1", "postcode": "10115", "town": "Berlin", "country": "",
+     "po_box": False, "modality": "text", "evidence": "z"}],
+    "main_address_index": 0, "no_address_reason": None, "flags": ["po_box"], "confidence": "high", "note": "",
+    "agree_ab": True}
+
+
+def test_addr_spec_adapter():
+    r = AS.to_record(SPEC_REF)
+    assert r["main_index"] == 0 and r["no_address_reason"] is None and len(r["addresses"]) == 3
+    assert [a["po_box"] for a in r["addresses"]] == [False, True, False]
+    assert [a["role"] for a in r["addresses"]] == ["operator", "operator", "agency"]
+    only_box = dict(SPEC_REF, addresses=[SPEC_REF["addresses"][1]], main_address_index=0)
+    assert AS.to_record(only_box)["addresses"][0]["po_box"]
+    none = {"host": "n.de", "addresses": [SPEC_REF["addresses"][2]], "main_address_index": None,
+            "no_address_reason": "imprint_without_address"}
+    rn = AS.to_record(none)
+    assert rn["main_index"] is None and rn["no_address_reason"] == "imprint_without_address"
+    # a predicted P.O. box is recognised from the street word
+    pred = AD.parse({"addresses": [{"street": "Postfach", "number": "1137", "postcode": "91502", "town": "Ansbach",
+                                    "country": "", "role": "operator", "main": True}], "no_address_reason": None})
+    assert AS.to_record(pred)["addresses"][0]["po_box"]
+    # scoring: main ok, reason accuracy, P.O. box counts
+    refs = {"u.de": r, "n.de": rn, "e.de": AS.to_record({"addresses": [], "main_address_index": None,
+                                                         "no_address_reason": "no_imprint"})}
+    preds = {"u.de": AS.to_record({"addresses": [dict(SPEC_REF["addresses"][0], main=True)]}),
+             "n.de": AS.to_record({"addresses": [], "main_index": None, "no_address_reason": "no_imprint"}),
+             "e.de": AS.to_record({"addresses": [], "main_index": None, "no_address_reason": "no_imprint"})}
+    m = AS.score(refs, preds)
+    assert m["main_ok"] == 1.0 and m["main_exact"] == 1.0 and m["reason_acc"] == 0.5
+    assert m["per_host"]["u.de"]["both_main"] and not m["per_host"]["n.de"]["both_main"]
+    assert m["main_po_box_n"] == 0
+
+
+def test_compare_address_vectors():
+    refs = {"u.de": SPEC_REF, "n.de": {"host": "n.de", "addresses": [], "main_address_index": None,
+                                        "no_address_reason": "imprint_without_address"}}
+    good = [{"host": "u.de", "addresses": [dict(SPEC_REF["addresses"][0], main=True)], "main_index": 0,
+             "no_address_reason": None, "usage": {"prompt_tokens": 100, "completion_tokens": 10}},
+            {"host": "n.de", "addresses": [], "main_index": None, "no_address_reason": "imprint_without_address",
+             "usage": {}}]
+    bad = [dict(good[0], addresses=[dict(SPEC_REF["addresses"][1], main=True)]),
+           dict(good[1], addresses=[dict(SPEC_REF["addresses"][2], role="operator", main=True)], main_index=0,
+                no_address_reason=None)]
+    vg, vb = CP.addr_vectors(refs, good), CP.addr_vectors(refs, bad)
+    assert vg["u.de"]["hit"] == [1, 1] and vg["u.de"]["cov"] == [1, 1] and vg["u.de"]["C"] == 200
+    assert vg["n.de"]["hit"] == [1, 0] and vg["n.de"]["cov"] == [1, 0]
+    assert vb["u.de"]["hit"] == [0, 0] and vb["u.de"]["cov"] == [1, 1]
+    assert vb["n.de"]["hit"] == [0, 0]
