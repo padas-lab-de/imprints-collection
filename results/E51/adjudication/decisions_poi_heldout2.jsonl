@@ -1,0 +1,43 @@
+{"host": "alter-d-f.com", "pick": "A", "reason": "consulting leads; import/export as extra"}
+{"host": "aplux.de", "pick": "B", "reason": "R1: unrelated SEO posts, no coherent topic"}
+{"host": "appolino.ch", "pick": "B", "reason": "learning app of a school-book publisher"}
+{"host": "berlinphilosophyforum.org", "pick": "A", "reason": "non-profit forum with education events"}
+{"host": "black-tech.de", "pick": "B", "reason": "R3: private site, topic not a clear leaf: root"}
+{"host": "dasisstberlin.de", "pick": "B", "reason": "R3: private city blog with mixed topics: root"}
+{"host": "delfazzo.com", "pick": "B", "reason": "custom kitchens designed and built: kitchen-remodeler"}
+{"host": "designfarmberlin.com", "pick": "B", "reason": "description shows a grant and mentoring initiative"}
+{"host": "erhard-eppler.de", "pick": "A", "reason": "politician portrait; no politics node: root"}
+{"host": "etmn-nordholz.de", "pick": "B", "reason": "R3: private spotter hobby site: root"}
+{"host": "heil-dich.de", "pick": "B", "reason": "healer: alternative-medicine-clinic (consistent with Heilpraktiker rule)"}
+{"host": "hfwoelfe.de", "pick": "A", "reason": "supporters club, not a sports club"}
+{"host": "hunzaadventureleaders.de", "pick": "A", "reason": "organizes own tours: tour-provider"}
+{"host": "hza-media.de", "pick": "B", "reason": "recruiting marketing is marketing"}
+{"host": "kaizen-personalagentur.de", "pick": "A", "reason": "temp staffing: employment-agency"}
+{"host": "kreuz-gasthof.de", "pick": "B", "label": {"extra": ["hotel", "inn"]}, "reason": "Swabian kitchen: german-restaurant"}
+{"host": "kuel-shu.de", "pick": "A", "reason": "Sanitaer first in the SHK trade list"}
+{"host": "newsletter.news-on-tour.de", "pick": "B", "reason": "news portal: publisher (R4)"}
+{"host": "radiomuseum-koeln.de", "pick": "B", "reason": "R6: history vs science museum not decided"}
+{"host": "rc-aircombat.de", "pick": "A", "reason": "hobby group: club-or-association"}
+{"host": "rennsteig-alpakas.de", "pick": "B", "reason": "alpaca walks for guests lead the homepage"}
+{"host": "salevolution.de", "pick": "B", "reason": "platform software first"}
+{"host": "skn-unserhaus.kirche-bamberg.de", "pick": "B", "reason": "Catholic city church office: church"}
+{"host": "www.auto-technik.co.uk", "pick": "B", "reason": "title and description say specialist garage"}
+{"host": "www.axanta-unternehmensnachfolge.de", "pick": "A", "reason": "business succession offers: business-broker"}
+{"host": "www.burmester-it.biz", "pick": "B", "reason": "shop leaf electronics-store"}
+{"host": "www.bvdva.de", "pick": "B", "reason": "trade association; club-or-association is a social club: stop at organization"}
+{"host": "www.deerlandtea.com", "pick": "B", "reason": "imported Taiwanese tea: imported-food-store"}
+{"host": "www.die12tefee.de", "pick": "A", "reason": "holistic body treatment: alternative-medicine-clinic"}
+{"host": "www.feldmann-fisch.de", "pick": "A", "reason": "fish farm: farm"}
+{"host": "www.fink-garage.de", "pick": "A", "reason": "prefabricated garage maker: manufacturer"}
+{"host": "www.grabmale-vogt.de", "pick": "B", "reason": "stonemason; no node fits: root"}
+{"host": "www.holzbau-roessner.de", "pick": "B", "reason": "Holzbau = carpentry"}
+{"host": "www.jjmau.de", "pick": "A", "reason": "software and hardware development: software-company"}
+{"host": "www.jugendcreativ-video.de", "pick": "A", "label": {"online_only": false}, "reason": "competition = event; not an online service"}
+{"host": "www.langenlonsheim.net", "pick": "B", "reason": "municipality: city-hall (E49 convention)"}
+{"host": "www.livus.de", "pick": "B", "reason": "micro apartments for rent"}
+{"host": "www.mitmach-agentur.de", "pick": "B", "reason": "social services leaf"}
+{"host": "www.nextlevelbrewing.at", "pick": "A", "reason": "R2: brewery closed; current activity is the homebrew shop"}
+{"host": "www.pixum.co.uk", "pick": "A", "reason": "photo prints and books: photography-lab"}
+{"host": "www.schreiber-hochzeitsfilm.de", "pick": "B", "reason": "videographer: film-studio"}
+{"host": "www.xn--mnnermedizin-gcb.ch", "pick": "B", "reason": "practice: physician, stop above leaf"}
+{"host": "yamira-gesundheitszentrum.ch", "pick": "A", "reason": "counselling with energy work: mental-health-service"}

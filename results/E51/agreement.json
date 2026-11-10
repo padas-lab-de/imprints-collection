@@ -1,0 +1,86 @@
+{
+ "poi_dev2": {
+  "n": 300,
+  "main_exact": 244,
+  "main_lenient": 276,
+  "same_prefix_L1_L5": [
+   283,
+   250,
+   105,
+   0,
+   0
+  ]
+ },
+ "poi_heldout2": {
+  "n": 200,
+  "main_exact": 157,
+  "main_lenient": 180,
+  "same_prefix_L1_L5": [
+   180,
+   160,
+   74,
+   0,
+   0
+  ]
+ },
+ "wz_dev2": {
+  "n": 300,
+  "main_exact": 250,
+  "main_lenient": 277,
+  "same_prefix_L1_L5": [
+   267,
+   262,
+   254,
+   248,
+   241
+  ]
+ },
+ "wz_heldout2": {
+  "n": 200,
+  "main_exact": 160,
+  "main_lenient": 178,
+  "same_prefix_L1_L5": [
+   182,
+   180,
+   172,
+   170,
+   156
+  ]
+ },
+ "addr_dev2": {
+  "n": 300,
+  "strict (main + operator set)": 291,
+  "main": 294,
+  "main_postcode": 296,
+  "operator_set": 291,
+  "all_rows": 283,
+  "has_main_A_B": [
+   284,
+   282
+  ]
+ },
+ "addr_heldout2": {
+  "n": 200,
+  "strict (main + operator set)": 198,
+  "main": 198,
+  "main_postcode": 198,
+  "operator_set": 199,
+  "all_rows": 194,
+  "has_main_A_B": [
+   191,
+   191
+  ]
+ },
+ "addr_e49": {
+  "n": 300,
+  "strict (main + operator set)": 298,
+  "main": 298,
+  "main_postcode": 298,
+  "operator_set": 300,
+  "all_rows": 296,
+  "has_main_A_B": [
+   205,
+   205
+  ]
+ }
+}

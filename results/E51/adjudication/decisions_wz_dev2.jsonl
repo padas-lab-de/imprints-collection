@@ -1,0 +1,50 @@
+{"host": "bunte.vision", "pick": "B", "label": {"extra": ["47.51.0"]}, "reason": "iron-on transfers are not textiles; other retail, textiles as extra"}
+{"host": "childrenshope-ev.de", "pick": "B", "label": {"extra": ["88.99.9"]}, "reason": "charity association; association class first, social work as extra"}
+{"host": "danny-voss.de", "pick": "A", "reason": "textile printing leads the homepage"}
+{"host": "deutsche-casinos.pro", "pick": "A", "reason": "review portal: web portal 63.92.0"}
+{"host": "dev.family-office.de", "pick": "A", "reason": "matching portal: web portal 63.92.0"}
+{"host": "ede-home.net", "pick": "B", "label": {"extra": ["90.20.3"]}, "reason": "imprint says private homepage (R3); DJ as extra"}
+{"host": "feder-und-wild.de", "pick": "B", "reason": "R1: coherent operator content (game meat retail); casino text is injected"}
+{"host": "gauge-express.eu", "pick": "B", "reason": "web shop for gauges and tools: retail by product"}
+{"host": "gesa-rusche.de", "pick": "A", "reason": "Heilpraktiker for psychotherapy: 86.93.0 first (consistent with POI)"}
+{"host": "hamawardz.app", "pick": "A", "reason": "title names a web app; consistent with POI"}
+{"host": "ippodromomerano.it", "pick": "A", "reason": "race track operation: 93.11.0"}
+{"host": "jbo-spandau.de", "pick": "B", "label": {"extra": ["90.20.3"]}, "reason": "amateur music association: 94.99.2 with 90.20.3 extra (same rule for choirs)"}
+{"host": "kijuv-baiern.de", "pick": "B", "label": {"extra": ["94.99.4"]}, "reason": "club runs activities for children and families: youth work"}
+{"host": "moon-events.de", "pick": "B", "reason": "rental of an event hall: 68.20.2"}
+{"host": "noa-berlin-brandenburg.de", "pick": "A", "reason": "practitioner network = professional association"}
+{"host": "notfallplan.digital", "pick": "B", "reason": "white-label software portal: software"}
+{"host": "oel-fischer.de", "pick": "B", "reason": "delivery to households: retail first, wholesale extra"}
+{"host": "panther-batterien.de", "pick": "B", "reason": "battery shop: retail first"}
+{"host": "selig.de", "pick": "A", "reason": "outdoor advertising space: media representation 73.12.0"}
+{"host": "signus.de", "pick": "A", "reason": "sign making: 32.99.0"}
+{"host": "stage.liedertafel-elmshorn.de", "pick": "B", "label": {"extra": ["90.20.3"]}, "reason": "choir association: 94.99.2 with 90.20.3 extra"}
+{"host": "streaming.uni-konstanz.de", "pick": "A", "reason": "university unit; media production as extra"}
+{"host": "vereinsportal-innsbruck.at", "pick": "A", "reason": "R2: site presents a portal; city as extra"}
+{"host": "www.anderssein-ev.de", "pick": "B", "reason": "care and support for people with dementia: 88.10.3"}
+{"host": "www.constructa-bau.de", "pick": "A", "reason": "R6: several finishing trades, text does not decide"}
+{"host": "www.danielhense.de", "pick": "A", "reason": "sports instruction 85.51.0"}
+{"host": "www.feuerzangenbowle.at", "pick": "A", "reason": "drinks stand: beverage serving first"}
+{"host": "www.filmequipment.at", "pick": "B", "reason": "77.22.0 keywords list film equipment rental"}
+{"host": "www.formwerk-moulds.com", "pick": "A", "reason": "moulds for concrete paver machines: machinery"}
+{"host": "www.gefuehle-fetzen.de", "pick": "A", "reason": "R2: site is an information portal; chamber as extra"}
+{"host": "www.graf-schornsteinfeger.de", "pick": "A", "label": {"extra": ["71.20.0"]}, "reason": "chimney sweep cleaning 81.22.1; inspection 71.20.0 as extra"}
+{"host": "www.hyperwerk.ch", "pick": "B", "reason": "site is the HyperMagazine (consistent with POI)"}
+{"host": "www.kaarster-maeusebande.de", "pick": "B", "reason": "R6: ages 0-6, text does not decide"}
+{"host": "www.lisasteinhauser.de", "pick": "B", "reason": "coaching and workshops: 85.59.2"}
+{"host": "www.lospocolocos.ch", "pick": "B", "label": {"extra": ["90.20.3"]}, "reason": "choir association: 94.99.2 with 90.20.3 extra"}
+{"host": "www.luca-heidelberg.org", "pick": "B", "reason": "association; purpose not clear from the crawl text"}
+{"host": "www.markusklimesch.de", "pick": "B", "reason": "recruiting first (consistent with POI)"}
+{"host": "www.openapp.de", "pick": "A", "reason": "consistent with POI"}
+{"host": "www.paraviz.com", "pick": "B", "reason": "visual artist first (consistent with POI art-studio)"}
+{"host": "www.prozessleitbilder.de", "pick": "A", "reason": "information pages, no business visible: 58.19.0"}
+{"host": "www.s-u-p-e-r.ch", "pick": "B", "reason": "public awareness campaign, not a course provider"}
+{"host": "www.salsakurs.de", "pick": "B", "reason": "R3/R4: editorial site, 58.19.0"}
+{"host": "www.stefangossling.de", "pick": "A", "reason": "professor homepage: university"}
+{"host": "www.susannedraxler.at", "pick": "B", "label": {"main": "90.20.1", "extra": ["90.20.6"]}, "reason": "imprint lists theatre productions: acting 90.20.1"}
+{"host": "www.wassereisenland.de", "pick": "A", "reason": "industrial heritage network: cultural organisation"}
+{"host": "www.wdpx.de", "pick": "B", "reason": "web design first (consistent with POI)"}
+{"host": "www.werkzeugvermietung-teltow.de", "pick": "B", "label": {"extra": ["77.22.0", "47.52.0"]}, "reason": "tool and construction equipment rental"}
+{"host": "www.zeitbild-stiftung.de", "pick": "A", "reason": "foundation for education projects: 94.99.1"}
+{"host": "z-quadrat-mainz.de", "pick": "B", "label": {"extra": ["91.21.0"]}, "reason": "coaching first (consistent with POI); museum as extra"}
+{"host": "zweckverband-lsb.de", "pick": "A", "reason": "special-purpose body for regional development: 84.13.0"}

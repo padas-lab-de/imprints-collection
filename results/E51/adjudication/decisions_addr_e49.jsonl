@@ -1,0 +1,2 @@
+{"host": "daruweb.org", "pick": "A", "reason": "legal page names the provider (Breakthrough Center) with e-mail only, so imprint_without_address"}
+{"host": "www.latein-online.net", "pick": "B", "reason": "only a menu and an empty V.i.S.d.P. label, no provider name, so no_imprint"}

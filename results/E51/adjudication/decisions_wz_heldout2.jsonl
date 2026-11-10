@@ -1,0 +1,40 @@
+{"host": "aplux.de", "pick": "B", "reason": "R1: no coherent topic (consistent with POI)"}
+{"host": "autocash.eu", "pick": "B", "reason": "distribution of prepaid cards to resellers: wholesale n.e.c."}
+{"host": "berlinphilosophyforum.org", "pick": "B", "reason": "association, purpose not a single field; education as extra"}
+{"host": "bizarr-treff.de", "pick": "B", "reason": "erotic phone line: other personal services"}
+{"host": "black-tech.de", "pick": "B", "reason": "R3: private non-commercial homepage"}
+{"host": "club.web.de", "pick": "B", "reason": "webmail service: data processing and hosting"}
+{"host": "designfarmberlin.com", "pick": "B", "reason": "consistent with POI (grant and mentoring initiative)"}
+{"host": "diskursiv-online.de", "pick": "A", "reason": "academy for research and training: 94.99.1"}
+{"host": "erhard-eppler.de", "pick": "B", "label": {"extra": ["94.99.1"]}, "reason": "operator is an archive e.V., not a private person"}
+{"host": "fairfillment.de", "pick": "A", "reason": "fulfillment = warehousing 52.10.0"}
+{"host": "forschungskreis-externsteine.de", "pick": "A", "reason": "research circle: 94.99.1"}
+{"host": "fr.kfi-cargo.com", "pick": "B", "reason": "wholesale of lashing and lifting equipment"}
+{"host": "fuerniemanden.de", "pick": "A", "reason": "sound and text art project"}
+{"host": "gl-inspect.de", "pick": "A", "reason": "optical tyre measuring systems"}
+{"host": "heribertmarcher.de", "pick": "new", "label": {"main": "90.20.3", "extra": ["90.20.6"], "confidence": "medium"}, "reason": "solo party musician: musicians 90.20.3"}
+{"host": "hfwoelfe.de", "pick": "A", "reason": "supporters club, not a sports club (consistent with POI)"}
+{"host": "hunzaadventureleaders.de", "pick": "B", "reason": "R6: write the leaf of a one-child klasse"}
+{"host": "huushof.ch", "pick": "B", "reason": "R6: write the leaf of a one-child klasse"}
+{"host": "hza-media.de", "pick": "B", "reason": "recruiting marketing (consistent with POI)"}
+{"host": "infovictims.de", "pick": "B", "reason": "leaf 88.99.9"}
+{"host": "kita-st-josef-hoeingen.de", "pick": "B", "label": {"extra": ["85.10.1"]}, "reason": "ages 2 to 6: kindergarten; nursery as extra"}
+{"host": "klimaschutz-ergolding.de", "pick": "B", "reason": "R6: write the leaf of a one-child klasse"}
+{"host": "kreuz-gasthof.de", "pick": "A", "reason": "restaurant first (consistent with POI)"}
+{"host": "newsletter.news-on-tour.de", "pick": "B", "reason": "news portal: publishing (consistent with POI)"}
+{"host": "piraten-weimar.de", "pick": "B", "reason": "R6: write the leaf of a one-child klasse"}
+{"host": "salevolution.de", "pick": "B", "reason": "platform software first (consistent with POI)"}
+{"host": "seitz-immobilien.de", "pick": "A", "reason": "R6: residential and commercial"}
+{"host": "trauerbegleitung.website", "pick": "A", "reason": "96.30.1 excludes funeral speakers; other personal services"}
+{"host": "www.auto-technik.co.uk", "pick": "B", "reason": "garage per title (consistent with POI)"}
+{"host": "www.autoschluessel-schanzer.de", "pick": "A", "reason": "key copying and coding: 95.29.0"}
+{"host": "www.bfgev.de", "pick": "A", "reason": "R2: site is an information portal"}
+{"host": "www.birgitmuetze.de", "pick": "B", "reason": "guided mountain tours first"}
+{"host": "www.dswiss.com", "pick": "A", "reason": "secure online storage service"}
+{"host": "www.kreta-reiseimpressionen.de", "pick": "A", "reason": "R3: private homepage"}
+{"host": "www.ktopruef.de", "pick": "A", "reason": "software first"}
+{"host": "www.nextlevelbrewing.at", "pick": "A", "reason": "current activity is the shop (consistent with POI)"}
+{"host": "www.tp-elektro-kraemmer.de", "pick": "B", "reason": "homepage leads with the appliance shop"}
+{"host": "www.xn--mnnermedizin-gcb.ch", "pick": "A", "reason": "practice type not decided: stop above leaf"}
+{"host": "www.zum-ochsen-nordheim.de", "pick": "B", "reason": "R7: only breakfast mentioned"}
+{"host": "yamira-gesundheitszentrum.ch", "pick": "B", "reason": "psychological counselling first (consistent with POI)"}

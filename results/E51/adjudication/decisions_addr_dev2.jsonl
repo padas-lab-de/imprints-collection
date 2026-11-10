@@ -1,0 +1,9 @@
+{"host": "albino.18tickets.it", "pick": "A", "reason": "spec 4: town as written with additions ('Albino, BG')"}
+{"host": "fishkiss-swimwear.com", "pick": "A", "reason": "spec 4: street and town as written with additions"}
+{"host": "gloriabiberger.de", "pick": "B", "reason": "spec 3: address stands only under the § 55 RStV line and the operator block has none, so role editor is main"}
+{"host": "owngrid.de", "pick": "B", "reason": "spec 5: parked page with the domain marketplace imprint, not the site imprint"}
+{"host": "voice-community.eu", "pick": "B", "reason": "spec 3/4: the Sec. 5 provider gives postcode and town only (partial operator row is main); Eurice GmbH is the production agency"}
+{"host": "www.albflyer.de", "pick": "B", "reason": "spec 3: only the content-responsible person has an address, so role editor is main"}
+{"host": "www.ihre-reha.de", "pick": "B", "reason": "the Postanschrift is the operator's own postal address, so role operator"}
+{"host": "www.tierbestatter-offenbach.de", "pick": "B", "reason": "spec 5: parked page with the domain marketplace imprint, not the site imprint"}
+{"host": "www.toesocks.co.uk", "pick": "A", "reason": "spec 4: 'Unit 2' is not a house number; keep it with the street as written, number empty"}
