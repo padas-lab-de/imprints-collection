@@ -69,6 +69,7 @@ T = {
                    "Webdesigner, Hoster oder Datenschutzhinweise). Wähle die spezifischste Kategorie, die eindeutig passt (z. B. „Italienisches Restaurant“ "
                    "statt „Restaurant“, wenn die Küche klar ist); ist eine spezifischere Kategorie unsicher, wähle die allgemeinere. Antworte nur mit einem JSON-Objekt."),
         "schema_poi": "Schema: Themen- und Ortskategorien (POI).",
+        "schema_poi3": "Schema: Themen- und Ortskategorien (POI, englische Kategorienamen).",
         "schema_wz": ("Schema: Klassifikation der Wirtschaftszweige WZ 2025. Ordne die wirtschaftliche Haupttätigkeit "
                       "des Betreibers zu (auch Vereine, Behörden, Privatpersonen haben eine Tätigkeit)."),
         "schema_other": "Schema: {name}.",
@@ -94,6 +95,7 @@ T = {
                    "if the cuisine is clear); if a more specific category is uncertain, choose the more general one. "
                    "Answer with one JSON object only. The category names are German."),
         "schema_poi": "Schema: topic and place categories (POI).",
+        "schema_poi3": "Schema: topic and place categories (POI, English category names).",
         "schema_wz": ("Schema: German classification of economic activities WZ 2025. Classify the operator's main economic "
                       "activity (associations, authorities and private persons have an activity too)."),
         "schema_other": "Schema: {name}.",
@@ -121,7 +123,7 @@ def tx(cfg, key, **kw) -> str:
 
 
 def schema_line(cfg, tree: Tree) -> str:
-    key = "schema_" + tree.name if tree.name in ("poi", "wz") else "schema_other"
+    key = "schema_" + tree.name if tree.name in ("poi", "poi3", "wz") else "schema_other"
     return tx(cfg, key, name=tree.name)
 
 
@@ -160,6 +162,22 @@ def cand_line(tree: Tree, i: str, cfg) -> str:
 _FEW: dict = {}
 
 
+_V2V3: dict = {}
+
+
+def _fewshot_label(r: dict, tree: Tree):
+    """Few-shot label for the schema; poi3 falls back to the poi (v2) label mapped through poi_v2_to_v3.json."""
+    labels = r.get("labels") or {}
+    if tree.name in labels:
+        return labels[tree.name]
+    if tree.name == "poi3" and labels.get("poi"):
+        if "m" not in _V2V3:
+            f = FEWSHOT.parent / "poi_v2_to_v3.json"
+            _V2V3["m"] = json.loads(f.read_text(encoding="utf-8")) if f.is_file() else {}
+        return _V2V3["m"].get(labels["poi"])
+    return None
+
+
 def fewshot_block(tree: Tree, cfg) -> str:
     n = int(cfg.get("shots") or 0)
     if not n or not FEWSHOT.is_file():
@@ -169,7 +187,7 @@ def fewshot_block(tree: Tree, cfg) -> str:
     lines = [tx(cfg, "examples")]
     k = 0
     for r in _FEW["rows"]:
-        lab = (r.get("labels") or {}).get(tree.name)
+        lab = _fewshot_label(r, tree)
         if lab not in tree:
             continue
         lines.append(f"- „{r['text']}“ → [{lab}] {tree.path_titles(lab)}")
@@ -180,7 +198,11 @@ def fewshot_block(tree: Tree, cfg) -> str:
 
 
 def system_prompt(tree: Tree, cfg) -> str:
-    s = tx(cfg, "system") + "\n" + schema_line(cfg, tree)
+    s = tx(cfg, "system")
+    if tree.name == "poi3":  # v3 category names are English: the specificity example must use them
+        s = s.replace("„Italienisches Restaurant“", "„Italian Restaurant“")
+        s = s.replace('"Italienisches Restaurant"', '"Italian Restaurant"').replace(" The category names are German.", "")
+    s += "\n" + schema_line(cfg, tree)
     if cfg.get("rules"):
         s += "\n\n" + cfg["rules"].strip()
     fs = fewshot_block(tree, cfg)
