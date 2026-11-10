@@ -1,0 +1,730 @@
+{
+ "runs": {
+  "agentworld|r-none|base": {
+   "n": 42,
+   "acc": [
+    1.0,
+    0.0
+   ],
+   "P": [
+    1.0,
+    NaN
+   ],
+   "covL": 1.0,
+   "fail": 0.0,
+   "tok_in": 0.0,
+   "cached_in": 0.0,
+   "tok_out": 0.0,
+   "reasoning": 0.0,
+   "C": 0.0,
+   "C0": 0.0,
+   "calls": 0.0,
+   "s": 0.0,
+   "trunc": 0.0
+  },
+  "agentworld|r-none|c3000": {
+   "n": 42,
+   "acc": [
+    1.0,
+    0.0
+   ],
+   "P": [
+    1.0,
+    NaN
+   ],
+   "covL": 1.0,
+   "fail": 0.0,
+   "tok_in": 0.0,
+   "cached_in": 0.0,
+   "tok_out": 0.0,
+   "reasoning": 0.0,
+   "C": 0.0,
+   "C0": 0.0,
+   "calls": 0.0,
+   "s": 0.0,
+   "trunc": 0.0
+  },
+  "agentworld|r-none|f-schema": {
+   "n": 42,
+   "acc": [
+    1.0,
+    0.0
+   ],
+   "P": [
+    1.0,
+    NaN
+   ],
+   "covL": 1.0,
+   "fail": 0.0,
+   "tok_in": 0.0,
+   "cached_in": 0.0,
+   "tok_out": 0.0,
+   "reasoning": 0.0,
+   "C": 0.0,
+   "C0": 0.0,
+   "calls": 0.0,
+   "s": 0.0,
+   "trunc": 0.0
+  },
+  "agentworld|r-none|f-schema__mode-main": {
+   "n": 42,
+   "acc": [
+    1.0,
+    0.0
+   ],
+   "P": [
+    1.0,
+    NaN
+   ],
+   "covL": 1.0,
+   "fail": 0.0,
+   "tok_in": 0.0,
+   "cached_in": 0.0,
+   "tok_out": 0.0,
+   "reasoning": 0.0,
+   "C": 0.0,
+   "C0": 0.0,
+   "calls": 0.0,
+   "s": 0.0,
+   "trunc": 0.0
+  },
+  "agentworld|r-none|mode-main": {
+   "n": 42,
+   "acc": [
+    1.0,
+    0.0
+   ],
+   "P": [
+    1.0,
+    NaN
+   ],
+   "covL": 1.0,
+   "fail": 0.0,
+   "tok_in": 0.0,
+   "cached_in": 0.0,
+   "tok_out": 0.0,
+   "reasoning": 0.0,
+   "C": 0.0,
+   "C0": 0.0,
+   "calls": 0.0,
+   "s": 0.0,
+   "trunc": 0.0
+  },
+  "agentworld|r-short|base": {
+   "n": 42,
+   "acc": [
+    1.0,
+    0.0
+   ],
+   "P": [
+    1.0,
+    NaN
+   ],
+   "covL": 1.0,
+   "fail": 0.0,
+   "tok_in": 0.0,
+   "cached_in": 0.0,
+   "tok_out": 0.0,
+   "reasoning": 0.0,
+   "C": 0.0,
+   "C0": 0.0,
+   "calls": 0.0,
+   "s": 0.0,
+   "trunc": 0.0
+  },
+  "agentworld|r-short|joint-poi-wz-address": {
+   "n": 42,
+   "acc": [
+    0.5952380952380952,
+    0.0
+   ],
+   "P": [
+    0.5952380952380952,
+    NaN
+   ],
+   "covL": 1.0,
+   "fail": 0.0,
+   "tok_in": 26504.5,
+   "cached_in": 22678.85714285714,
+   "tok_out": 150.3095238095238,
+   "reasoning": 0.0,
+   "C": 5328.738095238095,
+   "C0": 28007.595238095237,
+   "calls": 1.0,
+   "s": 4.465,
+   "trunc": 0.023809523809523808
+  },
+  "gemma|r-low|base": {
+   "n": 42,
+   "acc": [
+    1.0,
+    0.0
+   ],
+   "P": [
+    1.0,
+    NaN
+   ],
+   "covL": 1.0,
+   "fail": 0.0,
+   "tok_in": 0.0,
+   "cached_in": 0.0,
+   "tok_out": 0.0,
+   "reasoning": 0.0,
+   "C": 0.0,
+   "C0": 0.0,
+   "calls": 0.0,
+   "s": 0.0,
+   "trunc": 0.0
+  },
+  "gemma|r-none|base": {
+   "n": 42,
+   "acc": [
+    1.0,
+    0.0
+   ],
+   "P": [
+    1.0,
+    NaN
+   ],
+   "covL": 1.0,
+   "fail": 0.0,
+   "tok_in": 0.0,
+   "cached_in": 0.0,
+   "tok_out": 0.0,
+   "reasoning": 0.0,
+   "C": 0.0,
+   "C0": 0.0,
+   "calls": 0.0,
+   "s": 0.0,
+   "trunc": 0.0
+  },
+  "gemma|r-none|c3000": {
+   "n": 42,
+   "acc": [
+    1.0,
+    0.0
+   ],
+   "P": [
+    1.0,
+    NaN
+   ],
+   "covL": 1.0,
+   "fail": 0.0,
+   "tok_in": 0.0,
+   "cached_in": 0.0,
+   "tok_out": 0.0,
+   "reasoning": 0.0,
+   "C": 0.0,
+   "C0": 0.0,
+   "calls": 0.0,
+   "s": 0.0,
+   "trunc": 0.0
+  },
+  "gemma|r-none|f-schema": {
+   "n": 42,
+   "acc": [
+    1.0,
+    0.0
+   ],
+   "P": [
+    1.0,
+    NaN
+   ],
+   "covL": 1.0,
+   "fail": 0.0,
+   "tok_in": 0.0,
+   "cached_in": 0.0,
+   "tok_out": 0.0,
+   "reasoning": 0.0,
+   "C": 0.0,
+   "C0": 0.0,
+   "calls": 0.0,
+   "s": 0.0,
+   "trunc": 0.0
+  },
+  "gemma|r-none|f-schema__mode-main": {
+   "n": 42,
+   "acc": [
+    1.0,
+    0.0
+   ],
+   "P": [
+    1.0,
+    NaN
+   ],
+   "covL": 1.0,
+   "fail": 0.0,
+   "tok_in": 0.0,
+   "cached_in": 0.0,
+   "tok_out": 0.0,
+   "reasoning": 0.0,
+   "C": 0.0,
+   "C0": 0.0,
+   "calls": 0.0,
+   "s": 0.0,
+   "trunc": 0.0
+  },
+  "gemma|r-none|mode-main": {
+   "n": 42,
+   "acc": [
+    1.0,
+    0.0
+   ],
+   "P": [
+    1.0,
+    NaN
+   ],
+   "covL": 1.0,
+   "fail": 0.0,
+   "tok_in": 0.0,
+   "cached_in": 0.0,
+   "tok_out": 0.0,
+   "reasoning": 0.0,
+   "C": 0.0,
+   "C0": 0.0,
+   "calls": 0.0,
+   "s": 0.0,
+   "trunc": 0.0
+  },
+  "gemma|r-short|base": {
+   "n": 42,
+   "acc": [
+    1.0,
+    0.0
+   ],
+   "P": [
+    1.0,
+    NaN
+   ],
+   "covL": 1.0,
+   "fail": 0.0,
+   "tok_in": 0.0,
+   "cached_in": 0.0,
+   "tok_out": 0.0,
+   "reasoning": 0.0,
+   "C": 0.0,
+   "C0": 0.0,
+   "calls": 0.0,
+   "s": 0.0,
+   "trunc": 0.0
+  },
+  "gemma|r-short|joint-poi-wz-address": {
+   "n": 42,
+   "acc": [
+    0.4523809523809524,
+    0.0
+   ],
+   "P": [
+    0.4523809523809524,
+    NaN
+   ],
+   "covL": 1.0,
+   "fail": 0.0,
+   "tok_in": 26780.071428571428,
+   "cached_in": 23424.0,
+   "tok_out": 131.14285714285714,
+   "reasoning": 0.0,
+   "C": 4667.5,
+   "C0": 28091.5,
+   "calls": 1.0,
+   "s": 6.682380952380953,
+   "trunc": 0.0
+  },
+  "qwen|r-default|joint-poi-wz-address": {
+   "n": 42,
+   "acc": [
+    0.9523809523809523,
+    0.0
+   ],
+   "P": [
+    0.9523809523809523,
+    NaN
+   ],
+   "covL": 1.0,
+   "fail": 0.07142857142857142,
+   "tok_in": 26525.5,
+   "cached_in": 22194.666666666668,
+   "tok_out": 2112.714285714286,
+   "reasoning": 2068.1190476190477,
+   "C": 25457.97619047619,
+   "C0": 47652.642857142855,
+   "calls": 1.0,
+   "s": 32.95380952380954,
+   "trunc": 0.07142857142857142
+  },
+  "qwen|r-low|base": {
+   "n": 42,
+   "acc": [
+    1.0,
+    0.0
+   ],
+   "P": [
+    1.0,
+    NaN
+   ],
+   "covL": 1.0,
+   "fail": 0.0,
+   "tok_in": 0.0,
+   "cached_in": 0.0,
+   "tok_out": 0.0,
+   "reasoning": 0.0,
+   "C": 0.0,
+   "C0": 0.0,
+   "calls": 0.0,
+   "s": 0.0,
+   "trunc": 0.0
+  },
+  "qwen|r-none|base": {
+   "n": 42,
+   "acc": [
+    1.0,
+    0.0
+   ],
+   "P": [
+    1.0,
+    NaN
+   ],
+   "covL": 1.0,
+   "fail": 0.0,
+   "tok_in": 0.0,
+   "cached_in": 0.0,
+   "tok_out": 0.0,
+   "reasoning": 0.0,
+   "C": 0.0,
+   "C0": 0.0,
+   "calls": 0.0,
+   "s": 0.0,
+   "trunc": 0.0
+  },
+  "qwen|r-none|c3000": {
+   "n": 42,
+   "acc": [
+    1.0,
+    0.0
+   ],
+   "P": [
+    1.0,
+    NaN
+   ],
+   "covL": 1.0,
+   "fail": 0.0,
+   "tok_in": 0.0,
+   "cached_in": 0.0,
+   "tok_out": 0.0,
+   "reasoning": 0.0,
+   "C": 0.0,
+   "C0": 0.0,
+   "calls": 0.0,
+   "s": 0.0,
+   "trunc": 0.0
+  },
+  "qwen|r-none|f-schema": {
+   "n": 42,
+   "acc": [
+    1.0,
+    0.0
+   ],
+   "P": [
+    1.0,
+    NaN
+   ],
+   "covL": 1.0,
+   "fail": 0.0,
+   "tok_in": 0.0,
+   "cached_in": 0.0,
+   "tok_out": 0.0,
+   "reasoning": 0.0,
+   "C": 0.0,
+   "C0": 0.0,
+   "calls": 0.0,
+   "s": 0.0,
+   "trunc": 0.0
+  },
+  "qwen|r-none|f-schema__mode-main": {
+   "n": 42,
+   "acc": [
+    1.0,
+    0.0
+   ],
+   "P": [
+    1.0,
+    NaN
+   ],
+   "covL": 1.0,
+   "fail": 0.0,
+   "tok_in": 0.0,
+   "cached_in": 0.0,
+   "tok_out": 0.0,
+   "reasoning": 0.0,
+   "C": 0.0,
+   "C0": 0.0,
+   "calls": 0.0,
+   "s": 0.0,
+   "trunc": 0.0
+  },
+  "qwen|r-none|mode-main": {
+   "n": 42,
+   "acc": [
+    1.0,
+    0.0
+   ],
+   "P": [
+    1.0,
+    NaN
+   ],
+   "covL": 1.0,
+   "fail": 0.0,
+   "tok_in": 0.0,
+   "cached_in": 0.0,
+   "tok_out": 0.0,
+   "reasoning": 0.0,
+   "C": 0.0,
+   "C0": 0.0,
+   "calls": 0.0,
+   "s": 0.0,
+   "trunc": 0.0
+  },
+  "qwen|r-short|base": {
+   "n": 42,
+   "acc": [
+    1.0,
+    0.0
+   ],
+   "P": [
+    1.0,
+    NaN
+   ],
+   "covL": 1.0,
+   "fail": 0.0,
+   "tok_in": 0.0,
+   "cached_in": 0.0,
+   "tok_out": 0.0,
+   "reasoning": 0.0,
+   "C": 0.0,
+   "C0": 0.0,
+   "calls": 0.0,
+   "s": 0.0,
+   "trunc": 0.0
+  }
+ },
+ "reasoning": [
+  {
+   "model": "agentworld",
+   "level": "r-short",
+   "base": "r-none",
+   "n": 42,
+   "d": 0.0,
+   "d_models": [
+    0.0
+   ],
+   "lo": 0.0,
+   "hi": 0.0,
+   "dP": 0.0,
+   "dP_lo": 0.0,
+   "dP_hi": 0.0,
+   "wins": 0,
+   "losses": 0,
+   "p": 1.0,
+   "cost_ratio": 0.0,
+   "verdict": "cheaper, non-inferior"
+  },
+  {
+   "model": "gemma",
+   "level": "r-low",
+   "base": "r-none",
+   "n": 42,
+   "d": 0.0,
+   "d_models": [
+    0.0
+   ],
+   "lo": 0.0,
+   "hi": 0.0,
+   "dP": 0.0,
+   "dP_lo": 0.0,
+   "dP_hi": 0.0,
+   "wins": 0,
+   "losses": 0,
+   "p": 1.0,
+   "cost_ratio": 0.0,
+   "verdict": "cheaper, non-inferior"
+  },
+  {
+   "model": "gemma",
+   "level": "r-short",
+   "base": "r-none",
+   "n": 42,
+   "d": 0.0,
+   "d_models": [
+    0.0
+   ],
+   "lo": 0.0,
+   "hi": 0.0,
+   "dP": 0.0,
+   "dP_lo": 0.0,
+   "dP_hi": 0.0,
+   "wins": 0,
+   "losses": 0,
+   "p": 1.0,
+   "cost_ratio": 0.0,
+   "verdict": "cheaper, non-inferior"
+  },
+  {
+   "model": "qwen",
+   "level": "r-low",
+   "base": "r-none",
+   "n": 42,
+   "d": 0.0,
+   "d_models": [
+    0.0
+   ],
+   "lo": 0.0,
+   "hi": 0.0,
+   "dP": 0.0,
+   "dP_lo": 0.0,
+   "dP_hi": 0.0,
+   "wins": 0,
+   "losses": 0,
+   "p": 1.0,
+   "cost_ratio": 0.0,
+   "verdict": "cheaper, non-inferior"
+  },
+  {
+   "model": "qwen",
+   "level": "r-short",
+   "base": "r-none",
+   "n": 42,
+   "d": 0.0,
+   "d_models": [
+    0.0
+   ],
+   "lo": 0.0,
+   "hi": 0.0,
+   "dP": 0.0,
+   "dP_lo": 0.0,
+   "dP_hi": 0.0,
+   "wins": 0,
+   "losses": 0,
+   "p": 1.0,
+   "cost_ratio": 0.0,
+   "verdict": "cheaper, non-inferior"
+  }
+ ],
+ "variants": [
+  {
+   "variant": "c3000",
+   "models": [
+    "gemma",
+    "qwen",
+    "agentworld"
+   ],
+   "n": 42,
+   "d": 0.0,
+   "d_models": [
+    0.0,
+    0.0
+   ],
+   "lo": 0.0,
+   "hi": 0.0,
+   "dP": 0.0,
+   "dP_lo": 0.0,
+   "dP_hi": 0.0,
+   "wins": 0,
+   "losses": 0,
+   "p": 1.0,
+   "cost_ratio": 0.0,
+   "guard": {
+    "gemma": 0.0,
+    "qwen": 0.0,
+    "agentworld": 0.0
+   },
+   "verdict": "cheaper, non-inferior"
+  },
+  {
+   "variant": "f-schema",
+   "models": [
+    "gemma",
+    "qwen",
+    "agentworld"
+   ],
+   "n": 42,
+   "d": 0.0,
+   "d_models": [
+    0.0,
+    0.0
+   ],
+   "lo": 0.0,
+   "hi": 0.0,
+   "dP": 0.0,
+   "dP_lo": 0.0,
+   "dP_hi": 0.0,
+   "wins": 0,
+   "losses": 0,
+   "p": 1.0,
+   "cost_ratio": 0.0,
+   "guard": {
+    "gemma": 0.0,
+    "qwen": 0.0,
+    "agentworld": 0.0
+   },
+   "verdict": "cheaper, non-inferior"
+  },
+  {
+   "variant": "f-schema__mode-main",
+   "models": [
+    "gemma",
+    "qwen",
+    "agentworld"
+   ],
+   "n": 42,
+   "d": 0.0,
+   "d_models": [
+    0.0,
+    0.0
+   ],
+   "lo": 0.0,
+   "hi": 0.0,
+   "dP": 0.0,
+   "dP_lo": 0.0,
+   "dP_hi": 0.0,
+   "wins": 0,
+   "losses": 0,
+   "p": 1.0,
+   "cost_ratio": 0.0,
+   "guard": {
+    "gemma": 0.0,
+    "qwen": 0.0,
+    "agentworld": 0.0
+   },
+   "verdict": "cheaper, non-inferior"
+  },
+  {
+   "variant": "mode-main",
+   "models": [
+    "gemma",
+    "qwen",
+    "agentworld"
+   ],
+   "n": 42,
+   "d": 0.0,
+   "d_models": [
+    0.0,
+    0.0
+   ],
+   "lo": 0.0,
+   "hi": 0.0,
+   "dP": 0.0,
+   "dP_lo": 0.0,
+   "dP_hi": 0.0,
+   "wins": 0,
+   "losses": 0,
+   "p": 1.0,
+   "cost_ratio": 0.0,
+   "guard": {
+    "gemma": 0.0,
+    "qwen": 0.0,
+    "agentworld": 0.0
+   },
+   "verdict": "cheaper, non-inferior"
+  }
+ ]
+}

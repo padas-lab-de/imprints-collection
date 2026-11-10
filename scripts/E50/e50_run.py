@@ -9,7 +9,7 @@ Topic defaults follow docs/extraction_strategy.md: POI flat, node names "English
 node text path, embedding text kw; input landing page + imprint. Factor switches: --reasoning --lang --wording
 --fmt --shots --site-chars --layout (topic.py), --mode --addr-input (address.py), --parts (joint.py).
 Output: <out-dir>/<schema|address|joint>/<tag>.jsonl (topic lines have the E49 format; scripts/E49/score.py reads
-them). A joint run also writes its POI and WZ parts to <out-dir>/poi3/ and <out-dir>/wz/ (usage = the whole call).
+them). A joint run also writes its POI, WZ (and address) parts to <out-dir>/poi3/, wz/, address/ (usage = the whole call).
 Resumable. Refuses input files whose name contains "heldout" unless --allow-heldout (selection is on dev only).
 Run from the repository root.
 """
@@ -41,9 +41,9 @@ NODE_LANG = {"poi3": "both", "wz": "en"}
 
 def build_cfg(a) -> dict:
     kw = dict(reasoning=a.reasoning, lang=a.lang, wording=a.wording, fmt=a.fmt, shots=a.shots,
-              site_chars=a.site_chars, layout=a.layout, input="both", k=30, node_text="path", emb_text="kw")
+              site_chars=a.site_chars, layout=a.layout, input="both", k=a.k, node_text="path", emb_text="kw")
     if a.task == "topic":
-        return TP.full_cfg(strategy=STRATEGY[a.schema], node_lang=NODE_LANG[a.schema], **kw)
+        return TP.full_cfg(strategy=a.strategy or STRATEGY[a.schema], node_lang=NODE_LANG[a.schema], **kw)
     kw.update(mode=a.mode, addr_input=a.addr_input)
     if a.task == "joint":
         kw["node_lang"] = "both"  # POI part; WZ titles have no German/English pair, so "both" leaves them unchanged
@@ -61,7 +61,10 @@ def main() -> None:
     ap.add_argument("--fmt", default="free", choices=["free", "json_object", "schema"])
     ap.add_argument("--shots", type=int, default=0)
     ap.add_argument("--site-chars", type=int, default=6000)
-    ap.add_argument("--layout", default="site_first", choices=["site_first", "list_first"])
+    ap.add_argument("--layout", default="site_first", choices=["site_first", "list_first", "list_first_q"])
+    ap.add_argument("--strategy", default=None, choices=["flat", "retrieve"],
+                    help="topic strategy (default: poi3 flat, wz retrieve)")
+    ap.add_argument("--k", type=int, default=30, help="retrieved candidates (strategy retrieve)")
     ap.add_argument("--mode", default="list", choices=["list", "main"])
     ap.add_argument("--addr-input", default="imprint", choices=["imprint", "both"])
     ap.add_argument("--parts", default="poi,wz,address")
@@ -117,7 +120,7 @@ def main() -> None:
 
     split = {}
     if a.task == "joint":
-        for s in ("poi3", "wz"):
+        for s in ("poi3", "wz") + (("address",) if "address" in parts else ()):
             q = Path(a.out_dir) / s / f"{tag}.jsonl"
             q.parent.mkdir(parents=True, exist_ok=True)
             split[s] = q.open("a", encoding="utf-8")
@@ -131,7 +134,10 @@ def main() -> None:
                 f.write(json.dumps(rec, ensure_ascii=False) + "\n")
                 f.flush()
                 for s, h in split.items():
-                    part = rec.get("poi" if s == "poi3" else "wz") or {"main": None, "ranked": [], "path": []}
+                    if s == "address":
+                        part = rec.get("address") or {"addresses": [], "main_index": None, "no_address_reason": None}
+                    else:
+                        part = rec.get("poi" if s == "poi3" else "wz") or {"main": None, "ranked": [], "path": []}
                     h.write(json.dumps({"host": rec["host"], "task": "joint", "schema": s, "tag": tag,
                                         "model": a.model, "cfg": cfg, "latency_s": rec["latency_s"], **part,
                                         "error": rec["error"], "usage": rec["usage"], "shared_usage": True},
