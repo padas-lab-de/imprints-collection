@@ -71,7 +71,7 @@ Only on aspe (untracked): datasets/E16/seeds (batches 0-156), datasets/gold (952
 ## Cards
 | ID | Date | Question | Outcome | Landed in |
 |---|---|---|---|---|
-| D52-wz-rules-after-heldout | 2026-11-10 | E49: WZ hint rules failed held-out check; keep or drop? | (open; recommend A drop) | docs/decisions/D52-wz-rules-after-heldout.md |
+| D52-wz-rules-after-heldout | 2026-11-10 | E49: WZ hint rules failed held-out check; keep or drop? | A: drop rules; WZ = ens2 plain retrieve k30 (user) | docs/decisions/D52-wz-rules-after-heldout.md |
 | D51-topic-schema-depth | 2026-11-10 | E49: level and setup per schema; gold label depth? | B: POI L2 qwen; WZ adaptive gemma+qwen; gold at finest decidable level (user) | docs/decisions/D51-topic-schema-depth.md |
 | D50-poi-second-pass | 2026-11-09 | Second cleanup pass on poi_v2 (synonyms, cross-root overlaps, odd parents and names)? | A, plus: map to English Foursquare originals, schema becomes English poi_v3 (user) | docs/decisions/D50-poi-second-pass.md |
 | D49-topic-study-setup | 2026-11-09 | Topic study (E49): reference labels, gold topic fields, label count, models? | Agent dev set; gold gets both schemas after the study; one main + up to 2 extra; innkube only (user) | docs/decisions/D49-topic-study-setup.md |

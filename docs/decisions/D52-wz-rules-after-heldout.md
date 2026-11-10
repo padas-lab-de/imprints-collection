@@ -20,4 +20,4 @@ Held-out differences are not significant (sign tests p >= 0.23, bootstrap CIs in
 - **C** Keep rules + rules-candidates (stage 3b). 2.6x tokens, best held-out P@2 by 1-2 hosts, more abstentions.
 
 ## Answer
-(open)
+A (user, 2026-11-10: "D52 A."). WZ setup: ens2 level majority of gemma4-31b-it and qwen38-27b, each retrieve k30, emb-text kw, node-text path, no --rules, no --keep-outside, no --rules-candidates. wz_rules.md stays as a labelling-guideline aid.
