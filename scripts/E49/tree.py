@@ -38,8 +38,9 @@ class Node:
 
 
 class Tree:
-    def __init__(self, nodes: list[Node], name: str = "", coded: bool = False):
+    def __init__(self, nodes: list[Node], name: str = "", coded: bool = False, bilingual: bool = False):
         self.name = name
+        self.bilingual = bilingual  # keywords hold the German node names (id-format schemas, poi3)
         self.coded = coded  # ids are codes (WZ), not names (POI)
         self.nodes: dict[str, Node] = {}
         for n in nodes:
@@ -96,8 +97,17 @@ class Tree:
         p = self.nodes[i].path
         return p[min(depth, len(p)) - 1]
 
-    def path_titles(self, i: str, sep: str = " > ") -> str:
-        return sep.join(self.nodes[j].title for j in self.nodes[i].path)
+    def title_of(self, i: str, lang: str = "en") -> str:
+        """Node title; lang "both" gives "English (Deutsch)" for nodes of a schema with German names in
+        `keywords` (poi3; merged nodes show the first two German names); unchanged for other nodes."""
+        n = self.nodes[i]
+        if lang != "both" or not n.keywords or not self.bilingual:
+            return n.title
+        de = [d for d in n.keywords[:2] if d and d.lower() != n.title.lower()]
+        return f"{n.title} ({' / '.join(de)})" if de else n.title
+
+    def path_titles(self, i: str, sep: str = " > ", lang: str = "en") -> str:
+        return sep.join(self.title_of(j, lang) for j in self.nodes[i].path)
 
     def resolve(self, answer) -> tuple[str | None, str]:
         """Map a model answer to a node id. Returns (id or None, how): exact, ci, title, fuzzy, none."""
@@ -154,14 +164,14 @@ class Tree:
         """Label shown in candidate lists: 'code title' for coded schemas, else the id (= the name)."""
         return f"{i} {self.nodes[i].title}" if self.coded else i
 
-    def text(self, i: str, mode: str = "path", max_kw: int = 12, max_chars: int = 300) -> str:
+    def text(self, i: str, mode: str = "path", max_kw: int = 12, max_chars: int = 300, lang: str = "en") -> str:
         """Node text for prompts and embeddings.
         mode: name (title only) | path (path titles) | kw (path + keywords; for nodes without keywords the
         child titles as hints) | desc (path + generated description) | incl (path + 'includes' text, WZ)."""
         n = self.nodes[i]
         if mode == "name":
-            return n.title
-        s = self.path_titles(i)
+            return self.title_of(i, lang)
+        s = self.path_titles(i, lang=lang)
         if mode == "kw":
             kw = n.keywords[:max_kw] or [self.nodes[c].title for c in n.children[:max_kw]]
             if kw:
@@ -220,7 +230,7 @@ def load_tree(path: str | Path, name: str = "") -> Tree:
             de = r.get("de")
             nodes.append(Node(id=i, title=str(r["name"]).strip(), parent=None if par in ("", i) else par,
                               keywords=[de] if isinstance(de, str) else _kw(de)))
-        return Tree(nodes, name or Path(path).stem)
+        return Tree(nodes, name or Path(path).stem, bilingual=True)
     # POI format
     pairs, seen = [], set()
     for r in rows:

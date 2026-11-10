@@ -60,6 +60,10 @@ def make_tag(cfg: dict, model: str, samples: int, rules_name: str | None = None)
         parts.append("nonone")
     if cfg.get("rules"):
         parts.append("rules-" + (rules_name or "x"))
+    if cfg.get("node_lang", "en") != "en":
+        parts.append("nl-" + cfg["node_lang"])
+    if cfg.get("mfr_line"):
+        parts.append("mfrline")
     if cfg.get("keep_outside"):
         parts.append("keepout")
     if cfg.get("rules_cands"):
@@ -83,6 +87,10 @@ def main() -> None:
     ap.add_argument("--think", default="off", choices=["off", "on"])
     ap.add_argument("--shots", type=int, default=0)
     ap.add_argument("--lang", default="de", choices=["de", "en"])
+    ap.add_argument("--node-lang", default="en", choices=["en", "both"],
+                    help="poi3: both = node names as 'English (Deutsch)' in candidates and few-shot (default en)")
+    ap.add_argument("--mfr-line", action="store_true",
+                    help="poi3: add one system-prompt line (manufacturer that also sells is Manufacturer, not Supplier)")
     ap.add_argument("--k", type=int, default=30)
     ap.add_argument("--rerank", action="store_true")
     ap.add_argument("--beam", type=int, default=1, choices=[1, 2])
@@ -116,7 +124,7 @@ def main() -> None:
     cfg = dict(DEFAULTS, strategy=a.strategy, input=a.input, depth=a.depth, node_text=a.node_text, emb_text=a.emb_text,
                output=a.output, reason=a.reason, think=a.think, shots=a.shots, lang=a.lang, k=a.k, rerank=a.rerank,
                beam=a.beam, chooser=a.chooser, allow_none=not a.no_none, temperature=a.temperature,
-               rules=load_rules(a.rules) if a.rules else None, keep_outside=a.keep_outside)
+               rules=load_rules(a.rules) if a.rules else None, keep_outside=a.keep_outside, node_lang=a.node_lang, mfr_line=a.mfr_line)
     if a.rules_candidates:
         cfg["rules_cands"] = rules_code_ids(tree, cfg["rules"])
     tag = make_tag(cfg, a.model, a.samples, Path(a.rules).stem if a.rules else None)
