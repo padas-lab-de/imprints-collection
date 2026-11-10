@@ -8,10 +8,10 @@ D51 B chose for WZ: ens2 (gemma4-31b-it + qwen38-27b, level majority) with retri
 ## Evidence
 | ens2 | dev acc@2 | held-out acc@2 | held-out P@2 | held-out no code | tokens/host (held-out) |
 |---|---|---|---|---|---|
-| (a) no rules | .764* | .768 | .854 | 6 | 6.7k |
+| (a) no rules | .719* | .768 | .854 | 6 | 6.7k |
 | (b) rules + keep-outside | .764 | .747 | .851 | 10 | 9.5k |
 | (c) (b) + rules-candidates | .809 | .737 | .869 | 11 | 17.3k |
-*dev (a) rebuilt from stage-2 preds; dev gains of (b)/(c) over (a) were +4.5/+9.0 pts at L2.
+*dev (a) rebuilt from stage-2 preds (.764 - 4.5 pts); dev gains of (b)/(c) over (a) were +4.5/+9.0 pts at L2.
 Held-out differences are not significant (sign tests p >= 0.23, bootstrap CIs include 0); dev gains lie at or above the held-out upper CI. Held-out refs: Sonnet passes, A=B 77/100 (dev 179/200).
 
 ## Options
