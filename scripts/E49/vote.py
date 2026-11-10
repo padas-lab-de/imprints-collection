@@ -8,9 +8,12 @@ Stdlib only.
 
 from __future__ import annotations
 
+import sys
 from collections import Counter
+from pathlib import Path
 
-from tree import Tree
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from tree import Tree  # noqa: E402
 
 
 def level_majority(tree: Tree, mains: list[str | None]) -> str | None:

@@ -12,7 +12,8 @@ Strategies (cfg["strategy"]):
             the retrieval query; the chooser sees the description (chooser=desc) or description + text.
 
 Options (cfg keys, with defaults in DEFAULTS): input home|imprint|both; depth D; node_text name|path|kw|desc|incl;
-output one|top3; reason none|short; think off|on; shots 0..4; lang de|en; k; rerank; temperature; seed.
+output one|top3; reason none|short; think off|on; shots 0..4; lang de|en; k; rerank; temperature; seed;
+rules (text of a rules block appended to the system prompt of every choice call; None = off, prompt unchanged).
 Every strategy returns a dict with main (node id or None), ranked (ids, best first), trace, error.
 """
 
@@ -26,10 +27,16 @@ from pathlib import Path
 from client import Client, Usage
 from tree import Tree
 
+
+def load_rules(path) -> str:
+    """Rules block from a text/markdown file; lines starting with '#' are comments (not sent to the model)."""
+    lines = [l.rstrip() for l in Path(path).read_text(encoding="utf-8").splitlines() if not l.lstrip().startswith("#")]
+    return "\n".join(lines).strip()
+
 DEFAULTS = {
     "strategy": "flat", "input": "home", "depth": 99, "node_text": "path", "output": "one", "reason": "none",
     "think": "off", "shots": 0, "lang": "de", "k": 30, "rerank": False, "beam": 1, "chooser": "desc",
-    "emb_text": "kw", "temperature": 0.0, "seed": None, "max_kw": 12, "allow_none": True,
+    "emb_text": "kw", "temperature": 0.0, "seed": None, "max_kw": 12, "allow_none": True, "rules": None,
 }
 SITE_CHARS = 6_000  # per text field (dev_inputs are already cut to 6k)
 QUERY_CHARS = 4_000  # embedding query
@@ -156,6 +163,8 @@ def fewshot_block(tree: Tree, cfg) -> str:
 
 def system_prompt(tree: Tree, cfg) -> str:
     s = tx(cfg, "system") + "\n" + schema_line(cfg, tree)
+    if cfg.get("rules"):
+        s += "\n\n" + cfg["rules"].strip()
     fs = fewshot_block(tree, cfg)
     return s + ("\n\n" + fs if fs else "")
 

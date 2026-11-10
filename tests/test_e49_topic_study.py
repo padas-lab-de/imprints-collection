@@ -137,3 +137,21 @@ def test_votes(poi):
     assert level_majority(poi, ["Bäckerei", "Bar (Einzelhandel)", "Restaurant"]) == "Einzelhandel"
     assert plurality(poi, ["Restaurant", "Bäckerei", "Bäckerei"]) == "Bäckerei"
     assert plurality(poi, [None, None]) is None
+
+
+def test_rules_block(wz, tmp_path):
+    from run import make_tag
+    from strategies import DEFAULTS, load_rules, system_prompt
+
+    f = tmp_path / "wz_rules.md"
+    f.write_text("# comment, not sent\nRegeln:\n1. Weingut: 11.02.0\n", encoding="utf-8")
+    rules = load_rules(f)
+    assert rules == "Regeln:\n1. Weingut: 11.02.0"
+    base = dict(DEFAULTS)
+    legacy = {k: v for k, v in base.items() if k != "rules"}  # configs from before --rules existed
+    off = system_prompt(wz, base)
+    assert off == system_prompt(wz, legacy) and "Regeln" not in off  # default off: prompt (cache key) unchanged
+    on = system_prompt(wz, dict(base, rules=rules))
+    assert on.startswith(off) and on.endswith("1. Weingut: 11.02.0") and "comment" not in on
+    assert make_tag(base, "gemma4-31b-it", 1) == "flat__gemma__home__dmax__nt-path"
+    assert make_tag(dict(base, rules=rules), "gemma4-31b-it", 1, "wz_rules").endswith("__rules-wz_rules")

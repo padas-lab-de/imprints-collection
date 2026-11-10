@@ -5,6 +5,7 @@
     python3 scripts/E49/run.py --schema poi --strategy retrieve --k 30 --rerank
     python3 scripts/E49/run.py --schema poi --strategy describe --chooser both
     python3 scripts/E49/run.py --schema poi --strategy flat --samples 5 --temperature 0.7   # self-consistency
+    python3 scripts/E49/run.py --schema wz --strategy retrieve --rules results/E49/wz_rules.md   # rules block in the prompt
 
 --schema takes poi | wz | a path to any schema file (tree.py formats).
 Output: <out-dir>/<schema>/<tag>.jsonl, one line per host:
@@ -26,7 +27,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from client import DEFAULT_CACHE, DEFAULT_ENV, Client  # noqa: E402
-from strategies import DEFAULTS, predict  # noqa: E402
+from strategies import DEFAULTS, load_rules, predict  # noqa: E402
 from tree import load_schema  # noqa: E402
 from vote import VOTES  # noqa: E402
 
@@ -35,7 +36,7 @@ SHORT = {"qwen38-27b": "qwen", "gemma4-31b-it": "gemma", "qwen-agentworld-35b-a3
          "soofi-s-isar-preview": "soofi"}
 
 
-def make_tag(cfg: dict, model: str, samples: int) -> str:
+def make_tag(cfg: dict, model: str, samples: int, rules_name: str | None = None) -> str:
     s = cfg["strategy"]
     parts = [s, SHORT.get(model, model), cfg["input"], f"d{cfg['depth']}" if cfg["depth"] < 99 else "dmax",
              f"nt-{cfg['node_text']}"]
@@ -57,6 +58,8 @@ def make_tag(cfg: dict, model: str, samples: int) -> str:
         parts.append(f"beam{cfg['beam']}")
     if not cfg["allow_none"]:
         parts.append("nonone")
+    if cfg.get("rules"):
+        parts.append("rules-" + (rules_name or "x"))
     if samples > 1:
         parts.append(f"sc{samples}-t{cfg['temperature']}")
     return "__".join(parts)
@@ -84,6 +87,7 @@ def main() -> None:
     ap.add_argument("--samples", type=int, default=1, help="self-consistency samples (use --temperature > 0)")
     ap.add_argument("--vote", default="level_majority", choices=sorted(VOTES))
     ap.add_argument("--temperature", type=float, default=0.0)
+    ap.add_argument("--rules", default=None, help="rules file inserted into the system prompt ('#' lines dropped); default off")
     ap.add_argument("--node-desc", default=None, help="node description file (default results/E49/node_desc/<schema>.jsonl)")
     ap.add_argument("--dev", default=DEV)
     ap.add_argument("--hosts", default=None, help="file with hosts to run (default: all dev hosts)")
@@ -101,8 +105,9 @@ def main() -> None:
         sys.exit(f"node_text desc needs descriptions for all nodes: {n_desc}/{len(tree)} in {nd} (run gen_node_desc.py)")
     cfg = dict(DEFAULTS, strategy=a.strategy, input=a.input, depth=a.depth, node_text=a.node_text, emb_text=a.emb_text,
                output=a.output, reason=a.reason, think=a.think, shots=a.shots, lang=a.lang, k=a.k, rerank=a.rerank,
-               beam=a.beam, chooser=a.chooser, allow_none=not a.no_none, temperature=a.temperature)
-    tag = make_tag(cfg, a.model, a.samples)
+               beam=a.beam, chooser=a.chooser, allow_none=not a.no_none, temperature=a.temperature,
+               rules=load_rules(a.rules) if a.rules else None)
+    tag = make_tag(cfg, a.model, a.samples, Path(a.rules).stem if a.rules else None)
     recs = [json.loads(l) for l in open(a.dev, encoding="utf-8") if l.strip()]
     if a.hosts:
         want = {l.strip() for l in open(a.hosts) if l.strip()}
