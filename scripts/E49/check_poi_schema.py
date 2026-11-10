@@ -1,5 +1,8 @@
 """Check a topic schema JSONL ({"name", "parent"}; root: parent == name or null).
 
+Also reads the v3 format ({"id", "name", "parent", ...}; root: parent == id): the node key is then "id",
+and names must be unique too.
+
 Checks: unique names, every parent exists, no cycles. Prints depth stats
 (root = depth 0), inner/leaf counts and leaves per root. Exit code 1 on error.
 
@@ -15,15 +18,17 @@ def main(path: str) -> int:
     rows = [json.loads(l) for l in open(path, encoding="utf-8") if l.strip()]
     errors = []
 
-    counts = Counter(r["name"] for r in rows)
-    for name, c in counts.items():
-        if c > 1:
-            errors.append(f"duplicate name: {name!r} ({c}x)")
+    key = "id" if rows and "id" in rows[0] else "name"
+    for k in sorted({key, "name"}):
+        counts = Counter(r[k] for r in rows)
+        for name, c in counts.items():
+            if c > 1:
+                errors.append(f"duplicate {k}: {name!r} ({c}x)")
 
     parent = {}
     for r in rows:
         p = r["parent"]
-        parent[r["name"]] = None if p is None or p == r["name"] else p
+        parent[r[key]] = None if p is None or p == r[key] else p
     for name, p in parent.items():
         if p is not None and p not in parent:
             errors.append(f"missing parent: {name!r} -> {p!r}")

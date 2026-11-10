@@ -77,11 +77,48 @@ def test_wz_loader(wz):
 
 
 def test_real_schemas_load():
-    for s in ("poi", "wz"):
-        if Path(f"topics/{'poi_v2' if s == 'poi' else 'wz2025'}.jsonl").is_file():
+    for s in ("poi", "poi3", "wz"):
+        if Path({"poi": "topics/poi_v2.jsonl", "poi3": "topics/poi_v3.jsonl", "wz": "topics/wz2025.jsonl"}[s]).is_file():
             t = load_schema(s)
             assert len(t) > 100 and t.roots
             assert all(t.path(i)[0] in t.roots for i in t.nodes)
+
+
+def test_poi3_loader(tmp_path):
+    rows = [
+        {"id": "dining", "name": "Dining and Drinking", "parent": "dining", "fsq_ids": ["a"], "de": "Essen"},
+        {"id": "restaurant", "name": "Restaurant", "parent": "dining", "fsq_ids": ["b"], "de": "Restaurant"},
+        {"id": "italian-restaurant", "name": "Italian Restaurant", "parent": "restaurant", "fsq_ids": ["c"],
+         "de": "Italienisches Restaurant"},
+        {"id": "butcher", "name": "Butcher or Meat Store", "parent": "dining", "fsq_ids": ["d", "e"],
+         "de": ["Metzger", "Wurstladen"]},
+    ]
+    t = load_tree(write(tmp_path, "poi_v3.jsonl", rows), "poi3")
+    assert t.roots == ["dining"] and len(t) == 4 and not t.coded
+    assert t.path("italian-restaurant") == ["dining", "restaurant", "italian-restaurant"]
+    assert t["italian-restaurant"].title == "Italian Restaurant"
+    assert t["butcher"].keywords == ["Metzger", "Wurstladen"]
+    assert t.resolve("Italian Restaurant") == ("italian-restaurant", "ci")
+    assert t.resolve("italian-restaurant") == ("italian-restaurant", "exact")
+
+
+def test_poi3_real_schema_and_migration_map():
+    if not Path("topics/poi_v3.jsonl").is_file():
+        pytest.skip("run from the repository root")
+    t = load_schema("poi3")
+    assert len(t.roots) == 8 and t.max_level <= 3
+    v2 = [json.loads(l)["name"] for l in Path("topics/poi_v2.jsonl").read_text(encoding="utf-8").splitlines() if l]
+    m = json.loads(Path("results/E49/poi_v2_to_v3.json").read_text(encoding="utf-8"))
+    assert set(m) == set(v2)  # every v2 node is mapped
+    assert all(m[n] in t for n in v2)  # to an existing v3 node
+    # every v3 node except added ones carries its v2 name(s), and they map back to it
+    for i, n in t.nodes.items():
+        assert all(m[de] == i for de in n.keywords)
+    refs = Path("results/E49/refs/poi_v3.jsonl")
+    for l in refs.read_text(encoding="utf-8").splitlines():
+        r = json.loads(l)
+        assert r["main"] is None or t.path(r["main"]) == r["path"]
+        assert all(e in t for e in r["extra"])
 
 
 def test_loader_rejects_unknown_parent(tmp_path):
