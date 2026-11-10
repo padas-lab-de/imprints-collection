@@ -18,5 +18,7 @@ gemma vs qwen: no significant difference (CI half-width ~.04-.05), gemma abstain
 - **B** Keep qwen b (D51 B as answered).
 - **C** ens2 like WZ: higher precision subset, lower coverage, 2x cost.
 
-## Answer
-(open)
+
+## Outcome: withdrawn 2026-11-10
+User: "The setups that we are looking for at the moment are not the ones that we will use for the full run ... Now we want to just find a strategy of how we can go forward. So maybe ensemble, maybe prompting only one LLM, maybe doing only top level labels, or doing an hierarchical approach or an adaptive approach, etc. So this has to be clarified now. Then we will do the labeling. Then we will do the evaluation on which model works best, given the efficiency effectiveness trade-off. Then we will, with the strategy that we determine now and the model that we will determine later, do the topic extraction and address extraction across all imprints."
+The model is chosen later (model evaluation on the gold set). Replaced by D54-topic-labelling-strategy.
