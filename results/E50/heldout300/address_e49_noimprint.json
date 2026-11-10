@@ -1,0 +1,72 @@
+{
+ "runs": {
+  "agentworld|r-none|f-schema__mode-main": {
+   "n": 30,
+   "acc": [
+    1.0,
+    0.0
+   ],
+   "P": [
+    1.0,
+    NaN
+   ],
+   "covL": 1.0,
+   "fail": 0.0,
+   "tok_in": 0.0,
+   "cached_in": 0.0,
+   "tok_out": 0.0,
+   "reasoning": 0.0,
+   "C": 0.0,
+   "C0": 0.0,
+   "calls": 0.0,
+   "s": 0.0,
+   "trunc": 0.0
+  },
+  "gemma|r-none|f-schema__mode-main": {
+   "n": 30,
+   "acc": [
+    1.0,
+    0.0
+   ],
+   "P": [
+    1.0,
+    NaN
+   ],
+   "covL": 1.0,
+   "fail": 0.0,
+   "tok_in": 0.0,
+   "cached_in": 0.0,
+   "tok_out": 0.0,
+   "reasoning": 0.0,
+   "C": 0.0,
+   "C0": 0.0,
+   "calls": 0.0,
+   "s": 0.0,
+   "trunc": 0.0
+  },
+  "qwen|r-none|f-schema__mode-main": {
+   "n": 30,
+   "acc": [
+    1.0,
+    0.0
+   ],
+   "P": [
+    1.0,
+    NaN
+   ],
+   "covL": 1.0,
+   "fail": 0.0,
+   "tok_in": 0.0,
+   "cached_in": 0.0,
+   "tok_out": 0.0,
+   "reasoning": 0.0,
+   "C": 0.0,
+   "C0": 0.0,
+   "calls": 0.0,
+   "s": 0.0,
+   "trunc": 0.0
+  }
+ },
+ "reasoning": [],
+ "variants": []
+}

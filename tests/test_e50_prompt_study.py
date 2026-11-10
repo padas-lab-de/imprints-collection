@@ -307,3 +307,17 @@ def test_compare_address_vectors():
     assert vg["n.de"]["hit"] == [1, 0] and vg["n.de"]["cov"] == [1, 0]
     assert vb["u.de"]["hit"] == [0, 0] and vb["u.de"]["cov"] == [1, 1]
     assert vb["n.de"]["hit"] == [0, 0]
+
+
+def test_final_table_row_and_jsonl_line_separators(tmp_path):
+    import final_table as FT
+
+    v = {f"h{i}": {"hit": [int(i < 3)], "cov": [1], "fail": 0, "C": 10} for i in range(4)}
+    r = FT.row(v, sorted(v), 1)
+    assert r["n"] == 4 and r["acc"] == 0.75 and r["P"] == 0.75 and r["C"] == 10
+    assert 0 <= r["lo"] <= r["acc"] <= r["hi"] <= 1
+    assert FT.row(v, [], 1) == {"n": 0}
+    p = tmp_path / "x.jsonl"
+    p.write_text(json.dumps({"host": "a.de", "t": "x y"}, ensure_ascii=False) + "\n", encoding="utf-8")
+    assert CP.load_jsonl(p)[0]["t"] == "x y"
+    assert list(AS.load(p)) == ["a.de"]
