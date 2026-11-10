@@ -100,6 +100,18 @@ def ok(cond, msg):
 ok.failed = 0
 
 
+def fill_topics(pg, poi="Zahnarzt", wz="56.1"):
+    """Minimal topic labels (section 5a/5b): one main label and a confidence per schema.
+
+    Needed since schema version 2: every live item carries topic labels."""
+    for sch, q in (("poi", poi), ("wz", wz)):
+        fs = pg.locator("#f fieldset", has=pg.locator("legend", has_text="5a." if sch == "poi" else "5b."))
+        fs.locator("input.q").first.fill(q)
+        fs.locator("button.hit").first.wait_for()
+        fs.locator("button.hit").first.click()
+        fs.locator(".chip[data-v='high']").click()
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--gold", default=str(ROOT / "datasets/gold"))
@@ -181,6 +193,7 @@ def main() -> int:
             ok(re.fullmatch(r"\d{5}", pc) is not None, "postcode filled by split: " + pc)
             chip("corporate").click()
             chip("Business and Professional Services").click()
+            fill_topics(pg)
             # rejected save: URL / where empty -> visible message
             save()
             ok(pg.locator("#errbox").is_visible() and "Not saved" in pg.inner_text("#errbox"), "rejected save shows a message")
@@ -205,6 +218,7 @@ def main() -> int:
             ok("no_imprint" in pg.inner_text("#f"), "form shows automatic reason no_imprint")
             chip("unclear").click()
             chip("Retail").click()
+            fill_topics(pg)
             save()
             rec = last_label(labels, h)
             ok(rec and rec["no_address_reason"] == "no_imprint" and rec["addresses"] == [] and rec["imprint_location"] == "none", "negative saved: " + str(rec and rec["no_address_reason"]))
@@ -247,6 +261,7 @@ def main() -> int:
             chip("separate_page").click()
             chip("corporate").click()
             chip("Business and Professional Services").click()
+            fill_topics(pg)
             save()
             rec = last_label(labels, h)
             ok(rec and len(rec["addresses"]) == 2 and rec["main_address_index"] == 0 and "multi_address" in rec["flags"], "multi-address label saved with flag")
@@ -258,6 +273,7 @@ def main() -> int:
             ok(pg.locator("#pfbanner .banner").is_visible(), "pre-fill banner shown")
             ok(pg.locator("#f .chip.on.sugg").count() >= 2, "suggested choices marked")
             ok(on(pg.locator("#shot button[data-page=imprint]")) == on(pg.locator("#textpane button[data-page=imprint]")), "both panes on the same page")
+            fill_topics(pg)
             save(True)
             rec = last_label(labels, h)
             ok(rec and rec["prefilled_from"] and rec["site_status"] == json.loads(pf)["label"].get("site_status"), "accepted suggestion saved with prefilled_from: " + str(rec and rec["prefilled_from"]))
