@@ -257,3 +257,30 @@ def test_poi3_prompts_use_v3_names():
     fs = fewshot_block(t3, dict(DEFAULTS, shots=2))
     assert fs and "[italian-restaurant] Dining and Drinking > Restaurant > Italian Restaurant" in fs
     assert cand_line(t3, "italian-restaurant", dict(DEFAULTS, node_text="path")).startswith("[italian-restaurant] Dining")
+
+
+def test_poi3_bilingual_node_text_opt_in():
+    from strategies import DEFAULTS, cand_line, fewshot_block, system_prompt
+    from run import make_tag
+
+    if not Path("topics/poi_v3.jsonl").is_file():
+        pytest.skip("topics/poi_v3.jsonl missing")
+    t3 = load_schema("poi3")
+    off, both = dict(DEFAULTS, node_text="path"), dict(DEFAULTS, node_text="path", node_lang="both")
+    # default is unchanged: English names only, no tag part
+    assert cand_line(t3, "italian-restaurant", off) == "[italian-restaurant] Dining and Drinking > Restaurant > Italian Restaurant"
+    assert "nl-" not in make_tag(off, "qwen38-27b", 1) and "mfrline" not in make_tag(off, "qwen38-27b", 1)
+    line = cand_line(t3, "italian-restaurant", both)
+    assert line.startswith("[italian-restaurant] Dining and Drinking (") and "Italian Restaurant (Italienisches Restaurant)" in line
+    assert "nl-both" in make_tag(both, "qwen38-27b", 1)
+    fs = fewshot_block(t3, dict(DEFAULTS, shots=2, node_lang="both"))
+    assert "Italian Restaurant (Italienisches Restaurant)" in fs
+    assert "(" not in fewshot_block(t3, dict(DEFAULTS, shots=2)).split("→")[1].split("\n")[0]
+    # a node whose German name is a list (merged v2 nodes) shows the first two names; v2 poi schema stays English-only
+    assert "(" in t3.title_of("manufacturer-or-factory", "both") and t3.title_of("manufacturer-or-factory") == "Manufacturer or Factory"
+    assert load_schema("poi").title_of("Restaurant", "both") == "Restaurant"
+    # manufacturer line: off by default, only poi3, tag part when on
+    assert system_prompt(t3, dict(DEFAULTS)) == system_prompt(t3, dict(DEFAULTS, mfr_line=False))
+    assert "Manufacturer or Factory" in system_prompt(t3, dict(DEFAULTS, mfr_line=True))
+    assert system_prompt(load_schema("poi"), dict(DEFAULTS, mfr_line=True)) == system_prompt(load_schema("poi"), dict(DEFAULTS))
+    assert "mfrline" in make_tag(dict(DEFAULTS, mfr_line=True), "qwen38-27b", 1)

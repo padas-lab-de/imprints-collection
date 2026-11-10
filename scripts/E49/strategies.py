@@ -13,6 +13,8 @@ Strategies (cfg["strategy"]):
 
 Options (cfg keys, with defaults in DEFAULTS): input home|imprint|both; depth D; node_text name|path|kw|desc|incl;
 output one|top3; reason none|short; think off|on; shots 0..4; lang de|en; k; rerank; temperature; seed;
+node_lang en|both (poi3: both = candidate and few-shot names as "English (Deutsch)"; default en = unchanged);
+mfr_line (poi3: one system-prompt line, a manufacturer that also sells is Manufacturer not Supplier; default off);
 rules (text of a rules block appended to the system prompt of every choice call; None = off, prompt unchanged);
 keep_outside (keep an answer that names a valid node outside the offered candidates; default: drop it);
 rules_cands (list of node ids added to the retrieve candidates, e.g. the codes cited in the rules; None = off).
@@ -54,7 +56,7 @@ DEFAULTS = {
     "strategy": "flat", "input": "home", "depth": 99, "node_text": "path", "output": "one", "reason": "none",
     "think": "off", "shots": 0, "lang": "de", "k": 30, "rerank": False, "beam": 1, "chooser": "desc",
     "emb_text": "kw", "temperature": 0.0, "seed": None, "max_kw": 12, "allow_none": True, "rules": None,
-    "keep_outside": False, "rules_cands": None,
+    "keep_outside": False, "rules_cands": None, "node_lang": "en", "mfr_line": False,
 }
 SITE_CHARS = 6_000  # per text field (dev_inputs are already cut to 6k)
 QUERY_CHARS = 4_000  # embedding query
@@ -117,6 +119,14 @@ T = {
 }
 
 
+MFR_LINE = {
+    "de": ("Ein Hersteller, der seine Produkte auch selbst verkauft, ist „Manufacturer or Factory“ (bzw. der passende "
+           "Hersteller-Knoten), nicht ein „… Supplier“ (Lieferant)."),
+    "en": ("A manufacturer that also sells its own products is \"Manufacturer or Factory\" (or the fitting manufacturer "
+           "node), not a \"... Supplier\"."),
+}
+
+
 def tx(cfg, key, **kw) -> str:
     s = T[cfg["lang"]][key]
     return s.format(**kw) if kw else s
@@ -156,7 +166,7 @@ def answer_spec(cfg, top3: bool | None = None) -> str:
 
 
 def cand_line(tree: Tree, i: str, cfg) -> str:
-    return f"[{i}] {tree.text(i, cfg['node_text'], max_kw=cfg['max_kw'])}"
+    return f"[{i}] {tree.text(i, cfg['node_text'], max_kw=cfg['max_kw'], lang=cfg.get('node_lang', 'en'))}"
 
 
 _FEW: dict = {}
@@ -190,7 +200,7 @@ def fewshot_block(tree: Tree, cfg) -> str:
         lab = _fewshot_label(r, tree)
         if lab not in tree:
             continue
-        lines.append(f"- „{r['text']}“ → [{lab}] {tree.path_titles(lab)}")
+        lines.append(f"- „{r['text']}“ → [{lab}] {tree.path_titles(lab, lang=cfg.get('node_lang', 'en'))}")
         k += 1
         if k >= n:
             break
@@ -203,6 +213,8 @@ def system_prompt(tree: Tree, cfg) -> str:
         s = s.replace("„Italienisches Restaurant“", "„Italian Restaurant“")
         s = s.replace('"Italienisches Restaurant"', '"Italian Restaurant"').replace(" The category names are German.", "")
     s += "\n" + schema_line(cfg, tree)
+    if cfg.get("mfr_line") and tree.name == "poi3":  # opt-in variant: manufacturer that also sells its products
+        s += "\n" + MFR_LINE[cfg["lang"]]
     if cfg.get("rules"):
         s += "\n\n" + cfg["rules"].strip()
     fs = fewshot_block(tree, cfg)
