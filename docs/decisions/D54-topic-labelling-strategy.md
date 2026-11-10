@@ -31,5 +31,6 @@ Reading: ens2 buys about +5 pts precision on 87-90% of hosts and labels the rest
 - **C Mixed (stand of D51 B / D52).** POI single model; WZ ens2.
 - **D Top level only.** POI 8 roots, WZ 21 sections. Cheapest prompts, but drops the detail the schemas were built for; A can still cut at L1 if a model is weak.
 
-## Answer
-(open)
+## Answer (2026-11-10)
+User: "Regarding D54, I think we already have what we want. What you describe as already settled is exactly what our strategy could and should look like. The question of one model alone or an ensemble of two models is something that we can clarify in the evaluation ... I think that D54A is most appealing because this is most straightforward to just use one model per schema. But as I said, we can go with one model per schema as the default method. But in our later comparison, we can also do an ensemble method and evaluate it, and then choose among all the options."
+Outcome: strategy = the settled points above, single model per schema as default (A); ens2 (and other combinations) are variants in the model evaluation. Spec: docs/extraction_strategy.md.

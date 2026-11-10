@@ -71,7 +71,7 @@ Only on aspe (untracked): datasets/E16/seeds (batches 0-156), datasets/gold (952
 ## Cards
 | ID | Date | Question | Outcome | Landed in |
 |---|---|---|---|---|
-| D54-topic-labelling-strategy | 2026-11-10 | E49: strategy for topics: single model or ens2, fixed or adaptive depth? (model chosen later) | (open; recommend A single, cut-off at P>=0.8) | docs/decisions/D54-topic-labelling-strategy.md |
+| D54-topic-labelling-strategy | 2026-11-10 | E49: strategy for topics: single model or ens2, fixed or adaptive depth? (model chosen later) | A as default: single model per schema, cut-off at P>=0.8; ens2 evaluated as a variant in the model evaluation (user) | docs/decisions/D54-topic-labelling-strategy.md |
 | D53-poi-model-choice | 2026-11-10 | E49: POI model for the full run: gemma, qwen or ens2? | withdrawn: model is chosen in the model evaluation after gold labelling (user) | docs/decisions/D53-poi-model-choice.md |
 | D52-wz-rules-after-heldout | 2026-11-10 | E49: WZ hint rules failed held-out check; keep or drop? | A: drop rules; WZ = ens2 plain retrieve k30 (user) | docs/decisions/D52-wz-rules-after-heldout.md |
 | D51-topic-schema-depth | 2026-11-10 | E49: level and setup per schema; gold label depth? | B: POI L2 qwen; WZ adaptive gemma+qwen; gold at finest decidable level (user) | docs/decisions/D51-topic-schema-depth.md |
