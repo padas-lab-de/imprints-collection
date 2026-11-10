@@ -26,7 +26,7 @@ Rules: section 5.1 to 5.9 of the guideline. Nothing is pre-filled here.
 
 - Type in the search field (POI: English or German name; WZ: code or German title). Each result shows its full path. Click a result to pick it.
 - Pick one **main label** per schema. Pick the finest node you can decide. An inner node is allowed when the site does not decide between its children.
-- Add 0 to 2 **extra labels**. An extra must not be the main label or an ancestor of it; the tool refuses to save it.
+- Add 0 to 2 **extra labels**. An extra must not be the main label or an ancestor of it; the tool refuses it when you pick it, and removes it with a note when you change the main label.
 - Set **confidence** (high, medium, low) for each schema. Tick **online only** for blogs, forums, portals and web services (POI only).
 - No node fits, or the site is parked or hijacked: leave the main label empty and write the reason in the note.
 - Press the x on a label to change it.
