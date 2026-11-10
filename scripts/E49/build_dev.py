@@ -136,6 +136,7 @@ def main() -> None:
     ap.add_argument("--seed", type=int, default=49)
     ap.add_argument("--out", default="datasets/E49/dev_inputs.jsonl")
     ap.add_argument("--hosts-out", default="results/E49/dev_hosts.txt")
+    ap.add_argument("--exclude", default=None, help="file with hosts to leave out of the eligible set (held-out sample)")
     a = ap.parse_args()
     gold = Path(a.gold)
     prefill = {}
@@ -145,6 +146,9 @@ def main() -> None:
                 r = json.loads(l)
                 prefill[r["host"]] = r
     recs = [r for d in sorted(gold.iterdir()) if d.is_dir() and (r := build_record(d, prefill))]
+    if a.exclude:
+        skip = {l.strip() for l in open(a.exclude) if l.strip()}
+        recs = [r for r in recs if r["host"] not in skip]
     dev = sample(recs, a.n, a.seed)
     Path(a.out).parent.mkdir(parents=True, exist_ok=True)
     Path(a.hosts_out).parent.mkdir(parents=True, exist_ok=True)
