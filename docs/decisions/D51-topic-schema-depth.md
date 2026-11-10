@@ -8,4 +8,4 @@ Evidence: results/E49/stage3/summary.md (200 dev hosts, agent references; WZ rul
 - **B** POI as A. WZ adaptive: gemma4-31b + qwen38-27b both predict, keep the deepest level they agree on (P >= .83 at every level; 79% reach unterklasse, 12% no code; 7 s/host). Gold labels: both schemas at the finest level the annotator can decide (may stop higher, rule R6).
 - **C** coarse only: POI level 1 (8 roots), WZ Abschnitt (22). Precision .94/.87, low information.
 
-Answer: (open)
+Answer (user, 2026-11-10): "D51 B." POI level 2 (qwen think, homepage+imprint); WZ adaptive ens2 (gemma + qwen, rules, keepout, deepest agreed level); gold labels both schemas at the finest level the annotator can decide.
