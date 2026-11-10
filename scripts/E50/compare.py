@@ -47,7 +47,7 @@ B = 5000
 
 
 def load_jsonl(p) -> list[dict]:
-    return [json.loads(l) for l in Path(p).read_text(encoding="utf-8").splitlines() if l.strip()]
+    return [json.loads(l) for l in Path(p).read_text(encoding="utf-8").split("\n") if l.strip()]
 
 
 def parse_tag(stem: str, schema: str | None = None) -> tuple[str, str, str]:

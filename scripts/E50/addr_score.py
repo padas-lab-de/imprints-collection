@@ -202,7 +202,7 @@ def score(refs: dict[str, dict], preds: dict[str, dict], texts: dict[str, str] |
 
 def load(path, key: str | None = None) -> dict[str, dict]:
     out = {}
-    for l in Path(path).read_text(encoding="utf-8").splitlines():
+    for l in Path(path).read_text(encoding="utf-8").split("\n"):
         if l.strip():
             row = json.loads(l)
             out[row["host"]] = to_record(row.get(key) if key else row)

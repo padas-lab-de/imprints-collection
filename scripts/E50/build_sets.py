@@ -33,7 +33,8 @@ NAME = {"dev": "dev500", "heldout": "heldout300"}
 
 
 def rows(p: Path) -> list[dict]:
-    return [json.loads(l) for l in p.read_text(encoding="utf-8").splitlines() if l.strip()]
+    with p.open(encoding="utf-8") as f:  # not splitlines(): texts can hold U+2028 and other line separators
+        return [json.loads(l) for l in f if l.strip()]
 
 
 def write(p: Path, rs: list[dict]) -> None:
