@@ -266,9 +266,9 @@ Main address rules: guideline §3.2. Other addresses: the labeller sets `multi_a
 ## 6. Use of the set in evaluation (pending D58, recommended option A)
 
 - All 1,000 items (and the top-up) are test items. There is no development split.
-- **Publish depth by cross-fitting.** Split the items into 5 folds at random, stratified by priority stratum. For each fold, choose the depth cut-off (deepest level with P >= 0.8, D54) on the other 4 folds and apply it to this fold. Report the out-of-fold numbers.
+- **Publish depth by cross-fitting.** Split the items into 5 folds at random, stratified by priority stratum (strata with fewer than 5 items are pooled into one "rare" stratum per schema, so every fold gets a fair share). For each fold, choose the depth cut-off (deepest level with P >= 0.8, D54) on the other 4 folds and apply it to this fold. Report the out-of-fold numbers.
 - **Model choice** is made on the full set. The paper reports it as such. With 3 to 5 candidates the selection effect is small.
-- Details of scoring, candidates, statistics and the decision rule: `docs/model_eval_protocol.md` (E52). That document needs updates for v0.3 (§10).
+- Details of scoring, candidates, statistics and the decision rule: `docs/model_eval_protocol.md` (E52). That document matches v0.3 since 2026-11-12 (protocol draft v0.2).
 
 Option B (fixed split: 200 items for cut-off and choice, 800 for reported numbers) is simpler but has 20% fewer test items.
 
