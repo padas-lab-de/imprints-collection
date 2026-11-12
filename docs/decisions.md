@@ -8,7 +8,8 @@ Two module leads share this record; each owns its In-flight block, cards and exp
 - Touch only your module's lines; anything that crosses modules (VM use, shared data on aspe/lorbeer, spend ledger) goes to Cards or a note in both In-flight blocks.
 
 ## In flight
-  - D47 remaining: wait for E48 end (ETA ~2026-11-11 18:30Z), copy to e35 datasets/E48, run `scripts/E31/recount.sh <pkg> <out> --r5` with E48 + E34r4 pilot added to E31_in (extract.py), upload counts/r5 + crawls/E48, update docs + PR (draft, to master). Close the guide TODO on old raw data (D48 A done).
+  - E48 STOPPED 2026-11-11T00:40Z by the D45 window rule (mispel 11/204 throttled); 81,603/96,722 hosts, imprint_found 34,572; no fetch runs. Waits for D59 (resume vs freeze). Stop noticed late by lead (2026-11-12).
+  - D47 remaining: after D59, copy to e35 datasets/E48, run `scripts/E31/recount.sh <pkg> <out> --r5` with E48 + E34r4 pilot added to E31_in (extract.py), upload counts/r5 + crawls/E48, update docs + PR (draft, to master). Close the guide TODO on old raw data (D48 A done).
   - D47 wrap-up (user, 2026-11-09): (1) inventory agent, read-only: every experiment -> list, script, crawl dir, lorbeer copy; output tmp/wrapup/inventory.md. (2) merge agent, own worktree: branch collection-release off lead-record merging all collection branches, tests, layout; then run scripts + README reproduce section; draft PR to master. (3) after both: data package on lorbeer and upload to innkube datasets/imprints/20261109/. (4) after E48 ends: recount r5 = final count, add to package. No new crawls.
   - E48-shopify-full-crawl RUNNING since 2026-11-07 10:45Z (D45): 96,722 Shopify hosts (all not fetched yet; seed 48) split into 5 parts of 19,344-19,345, 1 request per 3 s per VM to Shopify, from 5 IPs: apfel, aspe, abelie, mispel (tree imprints-collection-e41) and lorbeer (tree imprints-collection-e43); data in <tree>/shopify_e48; process groups in lorbeer ~/E48-shopify/pgids.tsv. Global watcher (detached, lorbeer ~/E48-shopify/watch.sh, log watch.log, every 5 min): if any VM's last 200 requests have >5% 429/503, it kills all 5. Check: `bash ~/E48-shopify/chk.sh <vm> <tree>`. When done: copy to lorbeer e35 datasets/E48, recount.
 ### Gold set
@@ -75,6 +76,7 @@ Only on aspe (untracked): datasets/E16/seeds (batches 0-156), datasets/gold (952
 ## Cards
 | ID | Date | Question | Outcome | Landed in |
 |---|---|---|---|---|
+| D59-e48-resume-after-window-stop | 2026-11-12 | E48 stopped by window rule 2026-11-11 00:40Z (81,603/96,722 hosts): resume at half rate, or freeze partial? | open (recommend A) | docs/decisions/D59-e48-resume-after-window-stop.md |
 | D55-gold-frame | 2026-11-12 | E53: gold frame: draw now from r4+E40r2 (3,908,045) with r5 top-up, or wait for r5? | open | docs/decisions/D55-gold-frame.md |
 | D56-gold-input-form | 2026-11-12 | E53: annotators see a same-day capture, models get same-day `ic fetch` text? | open | docs/decisions/D56-gold-input-form.md |
 | D57-gold-sampling-design | 2026-11-12 | E53: two-phase core 600 + oversample 400 (POI, WZ, address cases) vs SRS vs quotas? | open | docs/decisions/D57-gold-sampling-design.md |
@@ -149,6 +151,7 @@ Only on aspe (untracked): datasets/E16/seeds (batches 0-156), datasets/gold (952
 | D1-revision-driver | 2026-10-23 | Why revise now? | Journal extension with better evaluation + fresh (larger) data snapshot; no hard deadline | — |
 
 ## Lead actions
+- 2026-11-12: answered gold lead (E53 frame questions): E48 stopped, r5 not run, release list = E40/r2 canonical_sites_after_filter.txt (one site per line), page data = extracted main_content, no raw HTML. Issued D59.
 - 2026-11-12: user answers (no card): address scope = main address only; POI prompt = cheaper retrieve k30 (-0.027 on dev) as default, flat as E52 variant. Landed in docs/extraction_strategy.md. User asks for a new 1,000-item gold selection (address + POI + WZ) and an updated methodology: E53-gold-set-redraw.
 - 2026-11-10: E51 inputs (untracked) were lost with the worktree removal; rebuilt: dev2/heldout2 with build_sample.py --root . --main . (host lists identical), e49_inputs = E49 dev+heldout inputs in e49_hosts order (72 empty imprints, as reported); refs_validate.py OK. Lesson: copy untracked datasets/ out of an agent worktree before `git worktree remove -f -f`.
 - 2026-11-09: D48 A done, lead-verified: 55 VM-only raw dirs (E16, E19r1, E19r2, E22d1A/d1B/d2P/d2R, E25, E26, E27, E29, E34, E36; 1,123 files, 48.0 GB) copied read-only to lorbeer /home/dinzinger/imprints-raw-vm/, size-verified vs remote, gzip -t: 10 bad = the known truncated E19 last batches (manifest truncated_gz=1). E22 frontier B and depth-2 priority lists added to lists/frontiers/. Package: S3 = local 2,541 objects, 69,666,847,723 bytes, MANIFEST d820bd4e. E48 unaffected (run=up, win_thr 0). Guide TODO on old raw data to close with r5.
