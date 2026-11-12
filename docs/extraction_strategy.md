@@ -7,7 +7,7 @@ Order of work: strategy (this file) -> prompt study E50 (fixes the prompts) -> g
 ## Topics
 | | POI (topics/poi_v3.jsonl, 2 levels) | WZ 2025 (topics/wz2025.jsonl, 5 levels) |
 |---|---|---|
-| Prompt form | flat: all leaves in one prompt | retrieve: 30 candidates by embedding similarity (emb text: keywords), model picks one |
+| Prompt form | retrieve: 30 candidates by embedding similarity, model picks one (user 2026-11-12: cheaper form accepted; flat is -0.027 better on dev and stays a variant for E52) | retrieve: 30 candidates by embedding similarity (emb text: keywords), model picks one |
 | Node text | "English (Deutsch)" (`--node-lang both`) | full path |
 | Reasoning | on, short (or low, per model) | none (E50: reasoning gives no gain) |
 | Input | landing page + imprint, 6000 chars | landing page + imprint, 1500 chars per field |
@@ -23,8 +23,8 @@ Frozen in `results/E50/final_config.md`; evidence in `results/E50/heldout300/fin
 
 - One call per schema (POI, WZ, address). Joint calls lose 0.02 to 0.20.
 - Base wording, German instructions, site text first. No variant of wording, language or output format won.
-- POI: flat prompt, about 25k input tokens per host. Rejected for cost: schema first with question last (-0.053 acc@2), retrieve k30 (-0.027).
+- POI: retrieve k30 (about 0.21 of the flat cost; -0.027 acc@2 [-0.049, -0.008] on dev 500). User 2026-11-12: "the cheaper one is okay if the loss is just so little". Flat (about 25k tokens per host) stays an E52 variant to measure the loss on gold. Schema first with question last: rejected (-0.053).
 - WZ: retrieve k30, no reasoning, 1500 chars per field (non-inferior to 6000, 0.84 of the cost).
-- Address: mode main, JSON schema output, no reasoning, imprint text only. No imprint text -> no call. Mode main does not give the full address list (all-address recall about 0.80).
+- Address: main address only (user 2026-11-12: "only main address is okay"). Mode main, JSON schema output, no reasoning, imprint text only. No imprint text -> no call. Mode main does not give the full address list (all-address recall about 0.80).
 
 Held-out 300 (run once), best of three models: POI acc@2 0.760, WZ acc@3 0.765, address main_ok 0.983.
