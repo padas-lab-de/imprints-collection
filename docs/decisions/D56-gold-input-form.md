@@ -13,4 +13,4 @@ Facts: the release run extracts from crawl text (`ic fetch`: main_content of sta
 Recommend A: same input form as the release, labels and inputs from the same day, no change-over-time noise.
 
 ## Outcome
-(open)
+A (user 2026-11-12): "D56 A."

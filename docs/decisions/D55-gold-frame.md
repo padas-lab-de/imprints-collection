@@ -12,4 +12,4 @@ Facts (results/E53/facts.md): release population now = r4 + E40 r2 parking filte
 Recommend A: the top-up is exact and small, and B depends on a crawl that is stopped.
 
 ## Outcome
-(open)
+A (user 2026-11-12): "D55 A; it does not have any negative consequence, right?"
