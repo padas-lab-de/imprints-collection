@@ -1,305 +1,355 @@
-# Gold set design: a diversity-stratified gold set for German imprints
+# Gold set design: a stratified probability sample of the German imprints release
 
-Status: v0.2 (2026-10-24). v0.1 came from E8-gold-strata-pilot; v0.2 rewrites §2 and §7 for 1,000 items after the E12 screening of 10,000 hosts and records the drawn sample. Decisions it depends on: D12 (town copied as written, location scored by geocoding), D14 A (labels from the live rendered site; HTML, rendered DOM and screenshot archived), D15 C (one human labels every item from scratch; a second human independently labels about 20%; no model pre-labels; superseded by D24 B: every item starts from a model suggestion), D17 B (1,000 items, no head-to-head comparison of site groups). Points that need the user are under "Open choices".
+Status: **v0.3 draft (2026-11-12)**, experiment E53-gold-set-redraw. This version defines a NEW 1,000-item gold set. It replaces the E12 sample of v0.2. Four design cards are open (D55-D58). Every section that depends on an open card names the card and the option. The option in the text is the recommended one ("pending Dnn, recommended").
 
-The new set replaces the old 1,000-item gold set. The old set has exactly one address per item, 999 of them in Germany, and no negatives (lead record, gold audit). So it cannot measure no-address answers, AT/CH sites, multiple addresses or how pages are produced.
+Decisions this version uses: D12 A (location match by geocoding is the primary address metric), D14 A (labels from the rendered site, frozen in a capture), D15 C as amended (three labellers, about 200 double labels), D17 B (1,000 items, no head-to-head comparison of site groups), D24 B (a model suggestion on every item, addresses only), D49 (one main label + up to 2 extra labels), D51 B (topic labels at the finest decidable level), D54 A (single model per schema; publish depth from the gold set), user 2026-11-12 (main address only).
+
+## What changed from v0.2, and why
+
+| v0.2 (E12 sample) | Problem | v0.3 |
+|---|---|---|
+| Frame: the seed list `seed_hosts.txt.gz` (6.56M hosts). | The dataset is not the seed list. The release contains only sites with an imprint. Results on the seed list do not speak for the release. | Frame: the release population (r4 + E40 r2, 3,908,045 sites) minus all used hosts (§2). |
+| 420 of 1,000 items are negatives (219 no imprint, 201 not live), all from the core. | These items have no address and no topic. They are useless for extraction and topic scores. | The frame has only release sites. Negatives come only from site change and from fetch failures on the day of capture (§3). |
+| 300 items were used in E49 prompt development. E50 tuned on them. | They are not clean test items. E52 had to split 700 vs 300. | All used hosts are excluded (§2.2). All 1,000 items are clean. |
+| Topic strata use the old 11 classes (D5). | The tasks are now POI v3 (2 levels) and WZ 2025 (5 levels). | Strata: POI top-level classes, WZ sections, address hard cases (§4). |
+| Strata for site age, technology, rendering need, operator type. | They need new fetches for the whole screen. The paper does not compare site groups (D17 B). | Not strata. The capture still records them as descriptive tags (§3.3). |
+| D15 text: "no model pre-labels". | D24 B reversed this on 2026-10-26. | Model suggestions for addresses on every item; topics not pre-filled (§5). |
+| Location match within 250 m. | D12 says 100 m. | 100 m, as in D12 (§1). |
+
+## History
+
+- **v0.1** (2026-10-23, E8-gold-strata-pilot): defined diversity dimensions and unit-tested detectors (`src/ic/gold/detectors.py`). Screened a pilot of 1,000 seed-list hosts.
+- **v0.2** (2026-10-24, E12): screened 10,000 seed-list hosts and drew a 1,000-item two-phase sample (700 random core + 300 oversample, T = 30) with Horvitz-Thompson weights (`datasets/E12/gold_sample.jsonl`). E17 captured the items, E18 assigned them to three labellers, E21 made address suggestions. Only 4 tool-test labels exist (`datasets/gold/labels/L1.jsonl`).
+- The full v0.1 and v0.2 text, with the E12 screening prevalences and the quota table, is in git history (`git log -p docs/gold_set_design.md`, last v0.2 commit before E53).
+- v0.3 reuses the v0.2 sampling method (§4), the capture method (§3) and the labelling tool (§7). It changes the frame, the strata and the input form.
 
 ## Summary
 
-- **Design (D17 B)**: 1,000 hosts, a two-phase probability sample. Phase 1: a simple random sample of 10,000 hosts from the frame, screened with the detectors (E12). Phase 2: (1) a **random core** of 700 hosts, an SRS on its own, for population figures; (2) a **coverage oversample** of 300 hosts so that every diversity stratum has about 30 items where the population allows. Every item has a known inclusion probability and a Horvitz-Thompson design weight. There are no per-stratum precision targets, because the paper does not compare site groups head to head.
-- **Strata**: age, technology, rendering need, operator type, TLD (.at, .ch), imprint location, rare topics, and hard cases (imprint without an address, P.O. box, multiple addresses, obfuscation, image-only). Each has an automatic, unit-tested detector (E8).
-- **Screening E12** (10,000 hosts, seed 20261024, full seed list minus the E8 and old gold hosts): 71.4% are live, and 57.7% of the live hosts have an imprint the detectors reach. Among live .de/.at/.ch hosts, 16.3% have no imprint. WordPress is 32% of live sites and site builders 11%. 1.2% of live sites need JavaScript for the imprint. Hand-confirmed image-only addresses: 15 of 4,129 imprints (0.36%, CI 0.22-0.60%). PDF imprints: 3 of 7,137.
-- **Drawn sample**: `datasets/E12/gold_sample.jsonl`, 1,000 items (700 core + 300 oversample), with 799 live and 420 negatives from the core (219 with no imprint, 201 not live). Quotas, inclusion probabilities and achieved counts are in §2.
-- **Screenshot-required is an edge case.** It gets every confirmed case (15, cap 20) and is otherwise not built around. Screenshots are archived for every item anyway (D14 A).
+- **Population**: the sites of the German Imprints release (pending D55). The gold set evaluates the release pipeline on what it publishes.
+- **Size**: 1,000 items, plus a small r5 top-up (about 9 items, §2.3).
+- **Design** (pending D57): two-phase probability sample. Phase 1 screens a random 20,000 frame sites with the fixed E50 prompts on stored crawl text. Phase 2 draws a random core of 600 and an oversample of 400. The oversample gives each rare POI class, WZ section and address hard case about 25 items where the population allows. Every item has a known inclusion probability.
+- **Input** (pending D56): on one day per item, `ic fetch` makes the model input and a gold capture makes the labeller input.
+- **Labels**: site status, imprint found, main address, POI v3 label, WZ 2025 label. Three labellers. 50 calibration items, about 200 double-labelled items, adjudication.
+- **Use** (pending D58): all 1,000 items are test items. The publish depth is set by 5-fold cross-fitting.
 
-## 1. Diversity dimensions and their detectors
+## 1. Purpose and tasks
 
-Every dimension has an automatic detector in `src/ic/gold/detectors.py`, unit-tested in `tests/test_gold_detectors.py` on inline HTML with no network. The pilot driver `scripts/gold/e8_pilot.py` collects the inputs (static fetch, headless render, Wayback CDX, innkube LLM) and writes one record per host to `results/E8/pilot_features.jsonl`. "Source" means where a detector gets its evidence from.
+The gold set measures how well the release pipeline extracts the data that the release publishes. The unit is one site (one canonical host). The set serves four tasks.
 
-| Dimension | Values (strata) | Detector and source | Pilot precision (20 hand-checked) |
+| Task | Gold label | Primary metric | Secondary metrics |
 |---|---|---|---|
-| Age | `<2010`, `2010-2017`, `2018-2022`, `>=2023`, `no_capture` | `age_bin`: year of the host's first capture in the Wayback Machine. Source: CDX API `web.archive.org/cdx/search/cdx?url=<host>&limit=1&fl=timestamp`, at most 1 request/s, with backoff on 429. Second signal: the latest copyright year on the landing page (`copyright_years`). | not checkable by hand (the CDX answer is the ground truth for "first capture"); see caveat below |
-| Technology / CMS | `wordpress`; `site_builder` (Wix, Jimdo, IONOS MyWebsite, Strato, Squarespace, Weebly, Webflow, Duda, one.com, GoDaddy); `blog_platform` (Blogger); `cms_other` (TYPO3, Joomla, Contao, Drupal, and minor CMSs that only show a generator tag); `shop_system` (WooCommerce, Shopify, Shopware, OXID, PrestaShop); `custom_php`; `static_html` (including old desktop editors such as FrontPage and Dreamweaver); `static_generator` (Hugo, Jekyll); `spa_framework` (React, Next.js, Angular, Vue, Nuxt, Gatsby); `custom_other` (ASP.NET, Java); `unknown` | `detect_tech`: Wappalyzer-style signatures (generator meta tag, asset paths, cookies, response headers, `.php` links). It runs on the static HTML and falls back to the rendered DOM. Source: static fetch + headless render. | 20/20 |
-| Server language | `php`, `asp.net`, `java`, unknown | `detect_tech` (headers, session cookies, link extensions) | covered by the tech check |
-| Rendering need | `static_ok` (imprint and address found in static HTML), `js_required` (imprint or address found only after rendering), `js_content` (rendered text much longer, but the imprint is in static HTML too), `static_blocked` (static fetch failed with 403/429/TLS error, browser succeeded), `none` (no imprint found in either) | `rendering_need`: compares static and rendered text, and whether the imprint and an address are found in each. Source: static fetch vs. Playwright Chromium (`networkidle`). | `js_required` 7/7 checked are real (e.g. imprint link only in a JS menu config, Angular/Next.js shells); `static_blocked` 13/13 are blocked fetches, not JS |
-| Imprint modality | `text`, `image_only`, `pdf` | `screenshot_candidate`: the imprint text has no address and the page has an image whose name or alt text suggests an address. `image_only_addresses`: a vision model (gemma4-31b-it on innkube) lists every address on the tiled full-page screenshot; an address counts as image-only when both its postcode and its street are missing from the DOM text. `pdf_imprint`: the imprint link points to a PDF. | image-only: 4 flagged in the final run, 2 of them genuine (the rest are OCR slips or invented addresses), so every candidate needs a look; PDF: none in the pilot |
-| Operator type | `corporate`, `association`, `public_body`, `sole_trader`, `private_person` | (a) `operator_type_rules`: legal-form and keyword tokens (GmbH, AG, e.V., Stiftung, Gemeinde, Inhaber, ...). (b) LLM (gemma4-31b-it) on the imprint text. Source: rendered imprint text. | of 20 sampled, 13 decidable from the text: rules 6/13, LLM 12/13. Use the LLM. |
-| TLD / country | `de`, `at`, `ch`, `com`, `org`, `net`, `eu`, `other`; address country DE / AT / CH / other | `tld_class` (host name); `address_flags` (postcode pattern and country words in the found addresses) | TLD is exact; address country follows the address finder |
-| Topic | the 11 top-level classes (D5) | LLM (gemma4-31b-it) on landing + imprint text | not checked here (E7 evaluates topic models on the old gold set) |
-| Imprint location | `separate_page`, `landing_page`, `modal_or_fragment`, `other_domain`, `unlinked_probe` (no link, but `/impressum` exists), `none` | `find_imprint_links` (link text and URL patterns, scored) + `imprint_location`. Source: static and rendered landing page. | `none` 11/12 (one Shopify imprint missed); `other_domain` 8/12, all 4 errors were links to registrar placeholders or imprint generators, which are now excluded (re-run: 9 left) |
-| Negatives | `site_dead` (unreachable, http_error, parked, default page), `no_imprint`, `imprint_without_address` | `site_status` (HTTP status, error, parking and default-page phrases, redirect to another domain) + `imprint_location` + address finders (rules and LLM) | site_status 20/20 |
-| Hard cases | `multi_address`, `po_box`, `obfuscated` (e-mail or address hidden by JS, entities or images), `non_dach` | `find_addresses` (German, Austrian and Swiss street + postcode + town patterns) + `address_flags` (distinct addresses keyed by postcode, house number and street prefix); `obfuscation_signals` | multi_address 18/20 (both errors were spelling variants of one address; fixed and unit-tested); po_box 7/7 contain a P.O. box, but in only 2/7 is it the operator's (the others belong to an ombudsman or a district) |
+| Site status, imprint found | `site_status`; `imprint_present`; `imprint_url` | imprint found: recall and precision of the fetch step against `imprint_present` | `site_status` agreement |
+| Main address | the main address (street, number, postcode, town, country, P.O. box) or `no_address_reason` | location match by geocoding (D12 A): gold and prediction are geocoded with Photon; a match is the same postcode + street, or a distance of at most 100 m | field-level exact and normalised match; no-address precision and recall; false-address rate on items without an address |
+| POI topic (`topics/poi_v3.jsonl`, 2 levels, 8 top-level classes) | one main node + up to 2 extra nodes, at the finest decidable level | acc@L and P@L per level (L1, L2) | lenient score with extra labels; coverage |
+| WZ 2025 topic (`topics/wz2025.jsonl`, 5 levels, 22 sections A-V) | one main node + up to 2 extra nodes, at the finest decidable level | acc@L and P@L per level (L1-L5) | lenient score with extra labels; coverage |
 
-Notes on the detectors:
-- **Age is the age of the domain, not of the current site.** A domain first archived in 2004 counts as `<2010`, even after a 2024 redesign. That is the right notion for "old vs. new web presence". The current site's age is shown by the technology strata (e.g. desktop editors, frames, old WordPress versions) and by the copyright year. `no_capture` (3.2%) includes 14 hosts whose CDX answer could not be parsed. These should be re-queried before sampling.
-- **Detectors decide strata only.** Under D15 C no detector or model output is shown to the labellers. Detector errors therefore affect only which stratum an item is drawn from, never its label. The label also records the true stratum (modality, location, operator type), so a mis-detected item ends up in the right stratum for analysis. Only its design weight is computed from the detector's value. Section 2 says how weights handle this.
-- **Hostname-defined strata** (TLD, `*.blogspot.*`, `*.wordpress.com`, `*.jimdo*`, `*.wixsite.com`) are known for the whole 6.56M frame without fetching anything, so they can be oversampled directly with exact inclusion probabilities.
-- **Crawl artefacts.** In the pilot, 132 hosts (13%) answered HTTP 4xx/5xx. 80 of the 132 sample hosts hosted at Strato (81.169.145.x) returned 503 to the crawl VM. 58 of the 87 hosts with a 503 had an imprint in E4. This looks like an IP-level block or rate limit, possibly triggered by the parallel E6 crawl from the same VM. Wix answered 429 and Jimdo 403 to the static client but served the headless browser. A retry at 4 workers did not lift the Strato block. These are properties of the crawler, not of the sites. The gold capture should run from a different IP or more slowly, and `static_blocked` is kept as a tag, not as a sampling stratum.
+Rules:
+- **Main address only** (user 2026-11-12). The pipeline returns one address per site. The gold set scores that address. The label records other postal addresses on the imprint only as the flag `multi_address` (§5.1).
+- **Distance threshold.** D12 sets 100 m. v0.2 used 250 m. That was an error in v0.2. v0.3 uses 100 m.
+- **Finest decidable level** (D51 B). A labeller stops at an inner node when the site text does not decide the child. A host counts at level L only if its label reaches L (`docs/model_eval_protocol.md` §2.3).
+- **One main + up to 2 extra labels** per schema (D49). The strict score uses the main label. The lenient score accepts the main label or an extra label.
+- **Operator type and the old 11-class topic** are not evaluation targets in v0.3. See §7 for the tool change.
 
-## 2. Sampling frame and quotas
+## 2. Frame (pending D55, recommended option A)
 
-### Frame
+### 2.1 Population
 
-The frame is `seed_hosts.txt.gz` (6,560,119 hosts), the same list the dataset is built from, so that gold-set results speak for the dataset. E12 excludes the 2,400 hosts of the E8 pilot and of the old gold set (www variants included), so the frame is **6,557,719** hosts. It is the full frame, not DACH-only (§7.2): non-DACH hosts are real negatives the pipeline must reject. "No imprint" negatives come only from the random core (§7.2).
+The target population U is the set of sites in the release. Today U is r4 after the E40 r2 parking filter:
+- File: `/home/dinzinger/GitHub/imprints-collection-e35/datasets/E40/r2/canonical_sites_after_filter.txt`.
+- Count: 3,908,045 sites, one canonical host per line.
+- Origin: r4 has 4,020,137 sites (`.../E31/r4/E31_out/canonical_sites.txt`). E40 r2 drops 112,092 parked sites (`.../E40/r2/flagged_sites.tsv`).
 
-### Screening (E12, 10,000 random hosts)
+All these sites had an imprint at crawl time. So the frame has no "no imprint" sites by construction.
 
-Script `scripts/gold/e12_screen.py`, run by `scripts/gold/e12_run.sh` (2026-10-23 to 2026-10-24). Stages as in E8:
-- static fetch;
-- render (headless Chromium);
-- Wayback CDX (at most 1 request/s);
-- LLM text features (gemma4-31b-it on innkube, free);
-- vision, run only on image-only candidates (707 hosts).
+### 2.2 Exclusions
 
-Rate limits:
-- **at most 1 concurrent request per provider (IPv4 /24)**, with a gap between hosts of the same /24;
-- one retry of all 403/429/503 hosts (1,381) after a pause.
+A site is out of the frame if it was used before in any gold, pilot or prompt study. The match key is the canonical host, lower case, with a leading `www.` removed. Both variants (`x.de`, `www.x.de`) are excluded.
 
-Outputs: `results/E12/screening_features.jsonl` (one record per host) and `results/E12/screening_prevalence.md` (Wilson CIs, with Newcombe CIs for the difference from E8).
-
-| Count | n | % | 95% CI |
+| List | Hosts | Location | Note |
 |---|---|---|---|
-| screened | 10,000 | | |
-| DNS resolves | 9,430 | 94.3 | |
-| live | 7,137 | 71.4 | 70.5-72.2 |
-| http_error (Strato 503 block: 578) | 1,257 | 12.6 | 11.9-13.2 |
-| unreachable | 745 | 7.5 | 7.0-8.0 |
-| redirect to another domain | 690 | 6.9 | 6.4-7.4 |
-| parked / placeholder / challenge / default | 171 | 1.7 | |
-| live with an imprint the detectors reach | 4,117 | 57.7 of live | 56.5-58.8 |
-| + hand-confirmed image-only imprints the detectors missed | 12 | | |
-| no imprint, live .de/.at/.ch | 662 | 16.3 of 4,050 | 15.2-17.5 |
-| no imprint, live other TLDs | 2,358 | 76.4 | 74.9-77.8 |
-| JS-required imprint | 83 | 1.2 of live | 0.9-1.4 |
-| imprint on another domain | 87 | 1.2 of live | 1.0-1.5 |
-| P.O. box | 95 | 2.3 of imprints | 1.9-2.8 |
-| address only in an image (hand-confirmed) | 15 | 0.36 of 4,129 | 0.22-0.60 |
+| Old gold set (pre-E12) | 1,000 | `evaluation/gold_standard_data.jsonl` | in the repo |
+| E8 pilot | 1,000 | `datasets/E8/hosts.txt` | **on aspe only** |
+| E12 screened hosts | 10,000 | `datasets/E12/` | **on aspe only**; contains the E12 sample |
+| E12 gold sample | 1,000 | `datasets/gold/assignment.jsonl`, `datasets/gold/prefill.jsonl` | subset of the E12 screen |
+| E49 dev + held-out | 300 | `results/E49/dev_hosts.txt`, `results/E49/heldout/hosts.txt` | subset of the E12 sample |
+| E51 dev2 + heldout2 | 500 | `results/E51/dev2_hosts.txt`, `results/E51/heldout2_hosts.txt` | from the E16 seed crawl |
+| E50 dev 500 + held-out 300 | (800) | E49 ∪ E51 | no new hosts |
 
-The retry recovered 317 of the 1,381 blocked hosts. The Strato block did not lift (§8). Most shares agree with E8 within the CIs. Differences whose CI excludes 0 (out of about 300 comparisons, so a few are expected by chance):
-- **No imprint on live .de/.at/.ch: 16.3% vs 12.1%.**
-- **Age bins:**
-  - <2010: 42.9% vs 38.7% of all hosts.
-  - >=2023: 10.1% vs 12.3%.
-  - no Wayback capture: 1.6% vs 3.2%. The slower CDX rate gave fewer errors.
-- **Topics:**
-  - Health and Medicine: 12.1% vs 16.6% of imprints.
-  - Business and Professional Services: 36.9% vs 32.0%.
-- **Minor:** ASP.NET (2.3% vs 3.6% of live) and default pages (0.2% vs 0.8%).
-- **Vision:** `image_only_address` differs by design, because vision ran on candidates only.
+The union has at most 12,500 hosts. Many of them are not in the release, so the frame loses fewer. The frame builder reports how many hosts of each list it removes.
 
-### Design: random core + priority-stratified oversample, with design weights
+Frame: F0 = U minus the union of the lists. N0 = |F0|.
 
-Code: `src/ic/gold/sampling.py` (tests in `tests/test_gold_sampling.py`), driver `scripts/gold/e12_sample.py draw` (seed 20261025).
+### 2.3 Top-up when r5 is final
 
-1. **Memberships.** Each screened host belongs to a set of coverage strata (list below). A host that is not live belongs only to `neg:site_not_live`. A live host without a detected imprint belongs only to `neg:no_imprint`, unless it is a hand-confirmed image-only imprint. Coverage strata:
-   - age bin;
-   - technology family: WordPress, custom PHP, site builder, SPA, shop, static HTML, other CMS, custom other, Blogger; plus "PHP anywhere";
-   - JS-required;
-   - LLM operator type, used for stratification only and never shown to labellers;
-   - `.at`, `.ch`;
-   - imprint on another domain;
-   - imprint without a text address, or image-only (hand-confirmed);
-   - P.O. box;
-   - multiple addresses (rules, or LLM >= 2);
-   - obfuscation;
-   - rare topics (Event, Dining and Drinking, Landmarks and Outdoors, Nightlife Spot).
-2. **Priority stratum.** Each host's priority stratum is its rarest coverage stratum, with image-only always first. Negatives keep their negative stratum.
-3. **Core.** The core is the first n0 hosts of a seeded permutation of the 10,000, so it is an SRS of the frame.
-4. **Oversample.** Rarest stratum first, hosts are drawn at random from the not-yet-selected hosts whose priority stratum is h. Drawing stops when stratum h's marginal count in the sample (core and extras, counting every membership) reaches the target T, or when the pool is empty. Image-only is capped at 20. Negatives are never oversampled.
-5. **Choice of n0 and T.** Take the largest T in 20-30 for which some n0 in 600-700 gives n0 + oversample <= 1,000. Then take the largest such n0. Leftover budget goes to further passes at T+1, T+2, ... (rarest first). Result: **T = 30, n0 = 700**, 233 extras in the first pass and 67 in later passes up to 37.
-6. **Weights.** Within priority stratum h, the m_h selected hosts are a uniform random subset of the M_h screened hosts. So, conditional on the realized stratum sizes, the inclusion probability is **pi = (10,000 / 6,557,719) x m_h / M_h**, and the design weight is 1/pi (Horvitz-Thompson; Hajek for ratios). Each item stores `pi_phase2`, `inclusion_probability` and `design_weight`. Weights range from 656 (pi2 = 1) to 16,582. They add up to 6,555,096. The missing 2,623 belong to 4 screened hosts whose priority strata got no item (M_h <= 2, m_h = 0); their share is negligible. Report results per stratum by the label's *true* stratum, unweighted, next to the weighted population figures.
+r5 will add the E48 Shopify sites (crawl stopped at about 84% on 2026-11-11, about 34k imprint sites so far) and 88 E34r4 sites. A later filter can also drop sites. No other crawls are planned (D47).
 
-### Quota table (final, E12 draw)
+Rules:
+1. **Added sites.** F_A = sites in r5 and not in r4/E40 r2, minus the exclusion lists. N_A = |F_A|. Draw a simple random sample of n_A = round(1,000 x N_A / N0) sites from F_A (about 9 items). Each has pi = n_A / N_A. These items get no phase-1 screen and no oversample. They are labelled like all other items.
+2. **Dropped sites.** A drawn F0 site that r5 removes leaves the set. It is not replaced.
+3. **Weights stay exact.** F0 and F_A are two frame strata with known designs. Removing dropped sites is a domain restriction: it does not change any selection probability.
 
-"Screened" counts every membership among the 10,000 hosts. "Target" is the common T, or the cap. "In sample" is the marginal count among the 1,000 items. "m_h / M_h" counts hosts whose *priority* stratum is h. pi phase 2 = m_h / M_h.
+Estimator for the r5 population U5 = (F0 ∩ U5) ∪ F_A, with y_i the item's score and w_i = 1 / pi_i:
 
-| Stratum | Screened (of 10,000) | % (of screened w/ imprint; negatives: of all) | Expected in core | Target | In sample | of which core | Priority-stratum items (m_h / M_h) | pi phase 2 |
-|---|---|---|---|---|---|---|---|---|
-| modality:image_only | 15 | 0.4 | 1.1 | 20 | 15 | 2 | 15 / 15 | 1.0000 |
-| topic:Nightlife Spot | 3 | 0.1 | 0.2 | 30 | 3 | 0 | 3 / 3 | 1.0000 |
-| tech:blogger | 8 | 0.2 | 0.6 | 30 | 8 | 0 | 8 / 8 | 1.0000 |
-| topic:Landmarks and Outdoors | 13 | 0.3 | 0.9 | 30 | 13 | 2 | 13 / 13 | 1.0000 |
-| hard:imprint_without_address | 42 | 1.0 | 2.9 | 30 | 37 | 4 | 37 / 42 | 0.8810 |
-| topic:Event | 52 | 1.3 | 3.6 | 30 | 37 | 4 | 37 / 52 | 0.7115 |
-| tech:custom_other | 63 | 1.5 | 4.4 | 30 | 37 | 2 | 36 / 62 | 0.5806 |
-| op:private_person | 74 | 1.8 | 5.2 | 30 | 37 | 8 | 27 / 63 | 0.4286 |
-| render:js_required | 81 | 2.0 | 5.7 | 30 | 37 | 10 | 29 / 71 | 0.4085 |
-| loc:other_domain | 87 | 2.1 | 6.1 | 30 | 37 | 7 | 28 / 69 | 0.4058 |
-| hard:po_box | 95 | 2.3 | 6.7 | 30 | 37 | 7 | 35 / 87 | 0.4023 |
-| topic:Dining and Drinking | 144 | 3.5 | 10.1 | 30 | 37 | 12 | 34 / 137 | 0.2482 |
-| tech:spa | 168 | 4.1 | 11.8 | 30 | 37 | 14 | 16 / 125 | 0.1280 |
-| tld:ch | 201 | 4.9 | 14.1 | 30 | 37 | 15 | 23 / 169 | 0.1361 |
-| tech:static_html | 218 | 5.3 | 15.3 | 30 | 38 | 12 | 19 / 181 | 0.1050 |
-| tech:shop | 224 | 5.4 | 15.7 | 30 | 36 | 14 | 28 / 198 | 0.1414 |
-| op:public_body | 227 | 5.5 | 15.9 | 30 | 39 | 12 | 14 / 163 | 0.0859 |
-| tld:at | 262 | 6.3 | 18.3 | 30 | 41 | 21 | 16 / 189 | 0.0847 |
-| tech:custom_php | 325 | 7.9 | 22.8 | 30 | 47 | 19 | 12 / 216 | 0.0556 |
-| age:>=2023 | 529 | 12.8 | 37.0 | 30 | 85 | 37 | 27 / 296 | 0.0912 |
-| tech:site_builder | 537 | 13.0 | 37.6 | 30 | 57 | 37 | 20 / 345 | 0.0580 |
-| op:association | 573 | 13.9 | 40.1 | 30 | 90 | 40 | 19 / 295 | 0.0644 |
-| tech:cms_other | 757 | 18.3 | 53.0 | 30 | 91 | 56 | 31 / 359 | 0.0864 |
-| age:2018-2022 | 958 | 23.2 | 67.1 | 30 | 129 | 65 | 15 / 294 | 0.0510 |
-| tech:php_any | 983 | 23.8 | 68.8 | 30 | 115 | 57 | 7 / 177 | 0.0395 |
-| age:2010-2017 | 1304 | 31.6 | 91.3 | 30 | 188 | 95 | 15 / 253 | 0.0593 |
-| age:<2010 | 1321 | 32.0 | 92.5 | 30 | 171 | 81 | 16 / 243 | 0.0658 |
-| hard:multi_address | 1428 | 34.6 | 100.0 | 30 | 181 | 91 | 0 / 2 | 0.0000 |
-| hard:obfuscation | 1441 | 34.9 | 100.9 | 30 | 186 | 102 | 0 / 1 | 0.0000 |
-| tech:wordpress | 1529 | 37.0 | 107.0 | 30 | 175 | 100 | 0 / 0 | 0.0000 |
-| op:sole_trader | 1608 | 38.9 | 112.6 | 30 | 174 | 108 | 0 / 0 | 0.0000 |
-| op:corporate | 1622 | 39.3 | 113.5 | 30 | 228 | 112 | 0 / 1 | 0.0000 |
-| neg:no_imprint | 3008 | 30.1 | 210.6 | core only | 219 | 219 | 219 / 3008 | 0.0728 |
-| neg:site_not_live | 2863 | 28.6 | 200.4 | core only | 201 | 201 | 201 / 2863 | 0.0702 |
+    total(y)  =  sum over drawn i in F0 ∩ U5 of w_i y_i   +   sum over drawn i in F_A of (N_A / n_A) y_i
 
-Items per priority stratum: neg:no_imprint 219, neg:site_not_live 201, topic:Event 37, hard:imprint_without_address 37, tech:custom_other 36, hard:po_box 35, topic:Dining and Drinking 34, tech:cms_other 31, render:js_required 29, tech:shop 28, loc:other_domain 28, age:>=2023 27, op:private_person 27, tld:ch 23, tech:site_builder 20, op:association 19, tech:static_html 19, tech:spa 16, age:<2010 16, tld:at 16, age:2010-2017 15, modality:image_only 15, age:2018-2022 15, op:public_body 14, topic:Landmarks and Outdoors 13, tech:custom_php 12, tech:blogger 8, tech:php_any 7, topic:Nightlife Spot 3.
+Option B (wait for r5, then draw once) avoids the top-up but waits for a crawl that is stopped.
 
-Shortfalls (the whole screened pool is used, pi2 = 1):
-- Nightlife Spot: 3 items.
-- Blogger: 8 items.
-- Landmarks and Outdoors: 13 items.
-- Image-only: 15 items (cap 20).
+## 3. Input and capture (pending D56, recommended option A)
 
-Every other stratum reached at least 36. Common strata exceed T through the core alone.
+### 3.1 Two inputs from the same day
 
-Labelling effort (D15 C): about 3 minutes per item. That gives about 50 h for annotator A, 10 h for annotator B on 20%, plus about 5 h of calibration.
+The release pipeline extracts from `ic fetch` text: the resiliparse `main_content` of the static HTML of three pages (main, kontakt, impressum). The crawl keeps no HTML. The crawl is weeks old, and sites change.
 
-Screenshot-required: 15 hand-confirmed cases, all in the sample. The rule: the address is visible on the screenshot, sits in an `<img>`, and is missing from the extracted text. The list and the reasons for rejecting the other 18 vision flags are in `datasets/E12/image_only_confirmed.txt`. 12 of the 15 were missed by the imprint detector entirely: with no address text, the page did not look like an imprint. They enter as image-only, not as "no imprint".
+For each item, on one day:
+1. **Model input.** Run `ic fetch` (the release fetch code) from the crawl VM. The output is the model input for all tasks. It is the same input form as the release.
+2. **Labeller input.** Run the gold capture (§3.2) on the same day. Labellers label the site from the capture.
 
-## 3. Per-item archive
+Rules:
+- An item where `ic fetch` finds no imprint stays in the set. It measures the fetch step. The models get what the pipeline would get. With no imprint text, the address model is not called (E50 rule), and the prediction is "no address".
+- The labeller labels the site, not the `ic fetch` output. A site that changed since the crawl is labelled as it is on the capture day.
+- The capture runs from a different IP than the crawl VM if possible (for example a FAITH node). Reason: in E8 and E12, Strato answered 503 to the crawl VM for 578 of 642 hosts. A block of the crawl VM is a fetch failure, not a property of the site. `ic fetch` stays on the crawl VM, so that fetch failures match the release.
+- If `ic fetch` and the capture run on different days for an item, the item gets a flag `input_day_mismatch`.
 
-D14 A: the gold label describes the live site as a human sees it in a browser at labelling time. To make that reproducible, everything the labeller saw is frozen first, and the label references the frozen copy.
+Option B (stored crawl text for models, fresh capture as help for labellers) mixes two dates. Option C (rendered DOM for both, as E49) gives clean labels, but the input differs from the release.
 
-For each item, captured in one session just before labelling (one directory per host, `datasets/gold/<host>/`):
+### 3.2 Per-item archive
+
+One directory per item, `datasets/E53/gold/<host>/`, made by `scripts/gold/e17_capture.py` (adapted, §7).
 
 | Artifact | How | Why |
 |---|---|---|
-| `landing.static.html`, `imprint.static.html` + response headers | plain HTTP GET (the same client as `ic fetch`) | input of the current pipeline; static vs. render comparison |
-| `landing.dom.html`, `imprint.dom.html` | Playwright Chromium, `networkidle` + 2 s, `page.content()` | input of a rendering pipeline; the reference text the labeller sees |
-| `landing.txt`, `imprint.txt` | `document.body.innerText` of the rendered page | text the label's verbatim fields are checked against |
-| `landing.png`, `imprint.png` | full-page screenshot, 1280 px wide, up to 20,000 px tall | input of a vision pipeline; evidence for image-only addresses |
-| `imprint.pdf` | the file itself, if the imprint is a PDF | PDF modality |
-| `*.warc.gz` | Playwright requests recorded through `warcio` (a recording proxy such as `pywb`'s `wayback --record` or `warcprox` is the simpler route) | full replay; optional (see Open choices) |
-| `meta.json` | UTC timestamps of each capture, final URLs, redirect chains, HTTP status, user agent, viewport, browser version, consent-banner action taken | provenance |
+| `ic_fetch.jsonl` | `ic fetch` record of the item: main, kontakt, impressum with url, title, `main_content`, `content_language` | model input (D56 A) |
+| `landing.static.html`, `imprint.static.html`, response headers | plain HTTP GET | static vs. rendered comparison |
+| `landing.dom.html`, `imprint.dom.html` | Playwright Chromium, `networkidle` + 2 s, `page.content()` | labeller reference text |
+| `landing.txt`, `imprint.txt` | `document.body.innerText` of the rendered page | check of verbatim address fields |
+| `landing.png`, `imprint.png` | full-page screenshot, 1280 px wide, up to 20,000 px tall | labeller view; image-only addresses |
+| `imprint.pdf` | the file, if the imprint is a PDF | PDF imprints |
+| `meta.json` | UTC timestamps of the capture and of `ic fetch`, final URLs, redirect chains, HTTP status, user agent, viewport, browser version, cookie-banner action, capture IP group | provenance |
 
 Rules:
-- One capture per item, timestamped; the labeller labels from the frozen screenshot and DOM, opening the live site only to resolve something the capture lacks (and records that in `comment`).
-- Cookie banners: click a "reject"/"only necessary" button if one matches a fixed list of labels; otherwise leave the banner. Record which.
-- Release (D13 B): HTML, DOM text and screenshots are released with the gold set. WARCs are kept internally unless the user decides otherwise.
+- One capture per item, with a timestamp. The labeller labels from the screenshot and DOM text. The labeller opens the live site only when the capture lacks something, and records this (`used_live_site`, `comment`).
+- Cookie banners: the capture clicks a "reject" or "only necessary" button from a fixed list of labels. Otherwise it leaves the banner. `meta.json` records which.
+- No WARC (as E17).
+- Release (D13 B): HTML, DOM text and screenshots are released with the gold set.
 
-The pilot already stores static HTML, rendered DOM, rendered text and full-page JPEG screenshots for 1,000 hosts under `datasets/E8/{static,render}/<host>/` (no WARC).
+### 3.3 Descriptive tags
 
-## 4. Label schema, protocol and guideline
+The E8 detectors run on each capture after labelling: technology family, rendering need, imprint location, obfuscation, image-only candidate. Wayback first-capture year is added for site age. These tags describe the set. They are not strata, and they do not change weights. Error analysis can use them.
 
-### Label schema (one JSON line per item)
+## 4. Sampling design (pending D57, recommended option A)
 
-```json
-{
-  "host": "example.de",
-  "capture_id": "2026-11-05T10:12:03Z",
-  "site_status": "live | unreachable | http_error | parked | redirect_other_domain | not_a_website",
-  "imprint_present": true,
-  "imprint_url": "https://example.de/impressum",
-  "imprint_location": "separate_page | landing_page | modal | other_domain | pdf | none",
-  "addresses": [
-    {"role": "operator | operator_other_site | representative | editor | agency | host | other",
-     "street": "Hauptstr.", "number": "12a", "postcode": "94032", "town": "Passau",
-     "country": "Deutschland", "po_box": false,
-     "modality": "text | image | pdf | js_only",
-     "evidence": "verbatim text span (or 'image' for pixels)"}
-  ],
-  "main_address_index": 0,
-  "no_address_reason": null,
-  "operator_type": "corporate | association | public_body | sole_trader | private_person | unclear",
-  "topic": "one of the 11 classes",
-  "topic_ambiguous": false,
-  "flags": ["multi_address", "po_box", "obfuscated", "non_dach"],
-  "annotator": "A1",
-  "seconds_spent": 140,
-  "comment": ""
-}
-```
+### 4.1 Overview
 
-Changes from v0.1: all addresses on the imprint are listed with a role, not only the main one, so that multi-address errors (agency or hoster picked instead of operator) are visible; `modality` replaces `not_in_text` (D14 A: an address in an image is a gold address, tagged `image`); `no_address_reason` makes negatives explicit (`no_imprint`, `imprint_without_address`, `site_dead`); `operator_type` is a new label (it is also a stratum).
+| Phase | What | Size |
+|---|---|---|
+| 1 | Simple random sample S1 from F0, screened on stored crawl text | n1 = 20,000 |
+| 2a | Random core: the first 600 sites of a seeded permutation of S1 | 600 |
+| 2b | Coverage oversample: rarest stratum first, from S1 minus the core | 400 |
+| Top-up | SRS from the r5 additions (§2.3) | about 9 |
 
-### Protocol (D15 C)
+Code base: `src/ic/gold/sampling.py` (§7). Seeds are fixed and recorded before each draw.
 
-1. Freeze: capture the archive (section 3) for all items in one batch, then label within 30 days.
-2. Annotator A labels every item from scratch, with no model output in view (no pre-labels; the stratum detectors are hidden too, so that they do not prime the label).
-3. Annotator B independently labels a random 20% of items, drawn stratified by the sampling strata so that every stratum has at least 10 double-labelled items.
-4. Agreement on the double-labelled items: per-field exact match for street, number, postcode, town (as written); location agreement by geocoding (D12; within 250 m on street level, same municipality on town level); Cohen's kappa for topic, operator type, imprint_present, no_address. Report per stratum where n >= 30.
-5. Adjudication: A and B resolve all disagreements on double-labelled items; a third person decides if they cannot agree. Systematic disagreements lead to a guideline update and a re-check of the affected field on A's single-labelled items (by A, with a filter, not a full relabel).
-6. Calibration round first: both label the same 50 items (not part of the 20%), discuss, fix the guideline, then start.
-7. Tool: a small local web form that shows the screenshot and DOM text side by side, with verbatim-span selection for address fields (copy, never type). Log time per item.
+### 4.2 Phase 1: screen
 
-### Outline of the guideline
+Input: the stored crawl record of each site in S1 (`/home/dinzinger/imprints-release-20261109/crawls/<source>/<vm>/<dir>/imprints_batch*.jsonl.gz`). No new fetches. Cost: innkube only, no paid API.
 
-1. What one item is: a host, its frozen capture (screenshot + DOM text), and the live site only as a fallback.
-2. Site status and imprint presence (decision tree: is it a website? is there an imprint? where is it?).
-3. Addresses: list every postal address on the imprint with its role; mark the main one (the § 5 DDG provider; headquarters if several); copy verbatim, town as written (D12); P.O. box; non-DACH; address split over lines; address in an image (`modality=image`); address that only appears after interaction (modal, accordion) counts.
-4. Negatives: no imprint; imprint without an address (only e-mail/phone, or "address on request"); the operator's address on another site linked from the imprint (`role=operator_other_site`).
-5. Operator type: five classes with tie-breakers (GmbH & Co. KG = corporate; e.K. and freelancers = sole trader; Verein, Stiftung, Partei, Kirchengemeinde = association; Gemeinde, Schule, Hochschule, Behörde = public body; a person with no business purpose = private person).
-6. Topic: the 11 classes and tie-breakers from v0.1, judged on the homepage (D11).
-7. Flags and comments; what to do when the capture is broken.
-8. Worked examples: one per stratum, from the pilot (e.g. image-only address, multi-address with hoster, P.O. box, AT/CH, JS-rendered imprint).
+Per site:
+- **Two models with the fixed E50 prompts** (`docs/extraction_strategy.md`, `results/E50/final_config.md`): POI (retrieve k30, default since 2026-11-12), WZ (retrieve k30, 1500 chars per field), address (mode main, JSON schema). Prompts are not changed for the screen. Which two models: §9 (assumed gemma4-31b-it and qwen38-27b).
+- **Text detectors** (`src/ic/gold/detectors.py`) on the imprint text: `find_addresses` and `address_flags` (P.O. box, several addresses, AT or CH postcode and country words, no postal address).
+- **Free fields**: TLD, crawl source, `content_language`, text length.
 
-## 5. Evaluation plan
+Output per site: one record with both models' predictions, the detector flags and the free fields.
 
-The gold set evaluates the whole pipeline end to end, per host: starting from a host name, does the pipeline find the imprint, return the right main address (or correctly say "none"), and the right topic?
+### 4.3 Strata
 
-Metrics, all reported overall (weighted back to the population, section 2) and per stratum (unweighted, with 95% CIs):
-- Imprint found: recall and precision against `imprint_present`.
-- Address: on hosts with a gold address, exact match per field and full-address exact match; location match via geocoding (D12): within 250 m, same municipality. On negatives: the rate of hallucinated addresses (any address returned when the gold has none). Main-address choice on multi-address items.
-- Topic: macro-F1 on the 11 classes (D5).
-- Operator type: macro-F1 (new).
+A site in S1 is a **member** of every stratum below that it meets. One site can be a member of many strata.
 
-Comparisons:
-1. Model comparison: the same pipeline with gemma4-31b-it, qwen38-27b and the other innkube models (and a paid API model within the spend limits), per stratum.
-2. Pipeline variants: (a) static HTML text (the current `ic fetch` pipeline), (b) rendered DOM text (headless browser), (c) screenshot + vision model, (d) b with c only as fallback when b finds no address. The frozen archive makes these runs reproducible on identical input. The pilot predicts where the variants differ: (b) matters for the JS-required and blocked strata, (c) only for the image-only stratum, which is rare (section 2).
-3. Error analysis by stratum: which strata drive the errors (e.g. multi-address, old sites, site builders).
+| Group | Strata | Membership rule |
+|---|---|---|
+| POI | the 8 top-level classes of POI v3 | either model predicts the class (L1 of its path) |
+| WZ | the 22 sections A-V of WZ 2025 | either model predicts the section |
+| Address | `addr:at`, `addr:ch` | either model's main address, or a detector address, has an AT or CH postcode or country |
+| Address | `addr:po_box` | detector or either model finds a P.O. box |
+| Address | `addr:none` | imprint text present, and neither model nor detector finds a postal address |
+| Address | `addr:multi` | detector finds 2 or more distinct postal addresses |
+| Address | `lang:non_de` | `content_language` of landing page or imprint is not German |
+| Frame (as needed) | TLD (`.at`, `.ch`, other non-`.de`); crawl source | from the frame files, exact |
 
-## 6. Related work and what makes this gold set stand out
+**Union of two models.** A site is a member of a model-based stratum if either model predicts it. So no single model decides the oversample. Frame strata are added only if a source or TLD would otherwise get fewer than about 10 items.
+
+### 4.4 Phase 2: core and oversample
+
+1. **Priority stratum.** Each site gets the rarest stratum it is a member of (fewest members in S1). A site in no stratum gets `other:none`, which is never oversampled.
+2. **Core.** The first n0 = 600 sites of a seeded permutation of S1. The core is a simple random sample of F0 on its own.
+3. **Oversample.** Rarest stratum first: draw at random from the not-yet-selected sites whose priority stratum is h. Stop when the marginal count of h in the sample (core and extras, all memberships) reaches T, or when the pool is empty.
+4. **Choice of T.** Take the largest T in 20-30 for which the oversample fits into 400 items. Spend leftover items in later passes at T+1, T+2, ... (rarest first). The rule is fixed before the draw. Target: T about 25.
+5. **Shortfall.** If a stratum has fewer than T members in S1, all of them are drawn (phase-2 probability 1). The quota table records this.
+
+### 4.5 Inclusion probabilities and weights
+
+Within priority stratum h, the m_h selected sites are a uniform random subset of the M_h sites of S1 in h. Conditional on the realised M_h:
+
+    pi_i  =  (n1 / N0)  x  (m_h / M_h)          w_i  =  1 / pi_i
+
+Each item stores `priority_stratum`, `strata` (all memberships), `pi_phase1`, `pi_phase2`, `inclusion_probability`, `design_weight`, `frame_stratum` (F0 or F_A) and `in_core`.
+
+### 4.6 Estimators and reporting
+
+| Figure | Estimator | 95% CI |
+|---|---|---|
+| Population figure (share, accuracy, P@L) | Hajek ratio: theta = sum(w_i y_i) / sum(w_i z_i), z_i = 1 if the item counts for the metric | Taylor linearisation, phase-2 strata as strata, with finite population correction 1 - m_h / M_h |
+| Model difference (population) | Hajek ratio of the paired item difference | same linearisation |
+| Check on the core | plain share over the 600 core items (SRS) | Wilson |
+| Per stratum | unweighted, by the **labelled** (true) stratum; n shown | Wilson; rates only for n >= 10, counts below |
+
+Rules:
+- Population figures are the headline numbers. Per-stratum figures are descriptive.
+- The linearised variance treats the M_h as fixed. With n1 = 20,000 the phase-1 component is small for common strata. It is not small for rare strata. The paper says so.
+- Per-stratum figures use the label's true stratum (POI class, WZ section, address case). They do not use the screen prediction.
+
+### 4.7 Known biases
+
+- **Strata come from model predictions.** True members of a rare class that both screen models missed enter only through the core, with a large weight. Weighted estimates stay unbiased (every frame site has pi > 0), but their variance is high.
+- **Unweighted per-class scores favour the screen models.** In a rare class, most sample items are items that a screen model predicted as that class. So an unweighted recall for that class is biased upward for the screen models. Report per-class model comparisons weighted, or mark the screen models.
+- **Models and detectors decide strata only, never labels.** Labellers do not see strata or screen predictions. A mis-stratified item changes only its weight. Its label records its true stratum.
+- **Stale screen input.** The screen uses crawl text that is weeks old. The label uses a fresh capture. A site that changed may sit in the wrong stratum. This affects weights, not labels.
+- **Conditional probabilities.** pi is conditional on the realised M_h and on the screen outputs.
+
+## 5. Labelling protocol
+
+### 5.1 Label schema
+
+Tool schema v2 (`src/ic/gold/annotate/schema.py`). Fields used in v0.3:
+
+| Field | Values |
+|---|---|
+| `site_status` | live, unreachable, http_error, parked, redirect_other_domain, not_a_website |
+| `imprint_present`, `imprint_url`, `imprint_location` | as in `docs/annotation_guideline.md` §2 |
+| `addresses` + `main_address_index` | the main address with all fields, verbatim from the capture (town as written, D12) |
+| `no_address_reason` | site_dead, no_imprint, imprint_without_address |
+| `flags` | multi_address, po_box, obfuscated, non_dach, ... |
+| `topic_labels.poi`, `topic_labels.wz` | main node, 0-2 extra nodes, confidence, note; POI `online_only` |
+| `used_live_site`, `capture_problem`, `comment`, `seconds_spent`, `prefilled_from` | provenance |
+
+Main address rules: guideline §3.2. Other addresses: the labeller sets `multi_address` and may list them. Listing them is not required (main-address-only evaluation). The guideline needs this change (§7).
+
+### 5.2 Labellers and workload
+
+| Step | Items | Labels |
+|---|---|---|
+| Calibration: all three label the same 50 items, without talking; then discuss every difference; update the guideline | 50 | 150 |
+| Primary labels: each item has one primary labeller; load split 2:1:1 (D15 note 2026-10-24) | 950 | 950 |
+| Second labels: an independent second labeller, other than the primary | about 200 | about 200 |
+| Total | 1,000 | about 1,300 |
+
+- Calibration items are gold items. Their gold label is the consensus after discussion.
+- The double-labelled items are chosen so that every stratum with >= 10 items in the sample gets at least 10 double-labelled items where possible (set cover, `src/ic/gold/assignment.py`). The rest is spread over priority strata.
+- Each labeller sees the calibration block first, then the rest in random order.
+- Annotator names, access and dates: to be set.
+
+### 5.3 Model suggestions (D24 B)
+
+- Addresses: every item opens with a model suggestion for the main address (accept, correct or delete). Fields not found verbatim in the capture text are marked.
+- Topics (POI, WZ): not pre-filled. The labeller decides them from the capture.
+- Site status and imprint URL come from the capture, not from a model.
+- The suggestion prompt must be main-address-only (§7).
+- The suggestion model is recorded per item (`prefilled_from`). See §10 for the conflict with E52 candidates.
+
+### 5.4 Adjudication and agreement
+
+- Two labels that differ are adjudicated. The adjudicated label is the gold label. Both raw labels stay in the files.
+- Adjudicator: to be set (`docs/model_eval_protocol.md` §10 item 2).
+- Agreement on the double-labelled items: site status and `imprint_present` (Cohen's kappa); main address (location match per D12, and exact match per field); POI and WZ (share of equal path prefix per level; Krippendorff alpha on the top level).
+- Address agreement is reported as "agreement with suggestions shown". Both labellers saw the same suggestion, so the two labels are independent of each other but not of the suggestion.
+- Calibration agreement (before discussion) is reported too.
+
+## 6. Use of the set in evaluation (pending D58, recommended option A)
+
+- All 1,000 items (and the top-up) are test items. There is no development split.
+- **Publish depth by cross-fitting.** Split the items into 5 folds at random, stratified by priority stratum. For each fold, choose the depth cut-off (deepest level with P >= 0.8, D54) on the other 4 folds and apply it to this fold. Report the out-of-fold numbers.
+- **Model choice** is made on the full set. The paper reports it as such. With 3 to 5 candidates the selection effect is small.
+- Details of scoring, candidates, statistics and the decision rule: `docs/model_eval_protocol.md` (E52). That document needs updates for v0.3 (§10).
+
+Option B (fixed split: 200 items for cut-off and choice, 800 for reported numbers) is simpler but has 20% fewer test items.
+
+## 7. Reuse of tooling
+
+| Part | Status | Change for E53 |
+|---|---|---|
+| `src/ic/gold/sampling.py` (core + rarest-first oversample, HT weights, Wilson) | reuse | new `memberships()` for the §4.3 strata (POI, WZ, address, frame); union of two models; `frame_stratum` field |
+| `src/ic/gold/assignment.py`, `scripts/gold/e18_assign.py` (3 labellers, 50 calibration, about 200 double) | reuse | input from the new sample file |
+| `scripts/gold/e17_capture.py` (static HTML, DOM, text, screenshot, meta) | reuse | output `datasets/E53/gold/`; add the `ic fetch` record and its timestamp to each item; capture IP group in `meta.json` |
+| `src/ic/gold/annotate` (tool, schema v2 with POI and WZ labels) | reuse | make operator type and the 11-class topic optional (today required for live sites); hide or drop the full address list requirement |
+| `scripts/gold/e21_prefill.py` (qwen-agentworld; addresses, operator, 11-class topic) | adapt | main-address-only prompt; no topic, no operator type; model choice per §10 |
+| `docs/annotation_guideline.md` | adapt | main address only; other addresses as a flag; no 11-class topic and operator type (if dropped) |
+| `src/ic/gold/detectors.py` | reuse | address detectors on crawl text in the screen; descriptive tags on the capture |
+| E50 runner (`scripts/E50/e50_run.py`) | reuse | screen inputs from crawl records; prompts unchanged |
+
+To build:
+1. **Frame builder**: reads the release site list, the exclusion lists and the host-to-source tables (`.../E31/r4/E31_in/*.tsv`, first source wins); writes F0, N0 and a report of removed hosts per list.
+2. **Phase-1 screen on crawl text**: reads the crawl records for S1, builds E50 inputs, runs two models and the text detectors, writes one record per site.
+3. **Top-up draw**: compares r5 with r4/E40 r2, applies the exclusions, draws n_A, and marks dropped items.
+4. **Same-day fetch driver**: runs `ic fetch` for a batch of items on the crawl VM and the capture for the same batch on the same day.
+
+## 8. Steps of E53
+
+| # | Step | Output |
+|---|---|---|
+| 1 | Fact-finding (done) | `results/E53/facts.md` |
+| 2 | Settle D55-D58 | `docs/decisions/D55`-`D58` outcomes |
+| 3 | Copy the E8 and E12 host lists from aspe; record sha256 | `datasets/E53/exclude/{old_gold,e8,e12_screen,e12_sample,e49,e51}.txt`, `datasets/E53/exclude/manifest.tsv` |
+| 4 | Build the frame F0 | `datasets/E53/frame/frame.txt`, `datasets/E53/frame/host_source.tsv`, `results/E53/frame.md` (N0, removed per list) |
+| 5 | Draw S1 (n1 = 20,000, seed recorded) | `datasets/E53/phase1_hosts.txt` |
+| 6 | Screen S1 (two models, detectors, free fields) | `datasets/E53/screen/screen_features.jsonl`, `results/E53/screen_prevalence.md` (shares with Wilson CIs, model agreement) |
+| 7 | Phase-2 draw (core 600 + oversample 400) | `datasets/E53/gold_sample.jsonl`, `results/E53/quota_table.md` |
+| 8 | Lead check of the draw (counts, pi, weights sum to about N0, 0 overlap with exclusions) | entry in `docs/decisions.md` |
+| 9 | Same-day `ic fetch` + capture, in batches | `datasets/E53/gold/<host>/`, `results/E53/capture_summary.md` |
+| 10 | Address suggestions | `datasets/E53/gold/prefill.jsonl` |
+| 11 | Assignment | `datasets/E53/gold/assignment.jsonl` |
+| 12 | Calibration (50 items), guideline update | `datasets/E53/gold/labels/L{1,2,3}.jsonl`, `results/E53/calibration.md` |
+| 13 | Main labelling and second labels | `datasets/E53/gold/labels/L{1,2,3}.jsonl` |
+| 14 | Adjudication, gold file, agreement | `datasets/E53/gold/gold.jsonl`, `results/E53/agreement.md` |
+| 15 | r5 top-up (when r5 is final): draw, capture, label | `datasets/E53/topup_sample.jsonl`, `results/E53/topup.md` |
+| 16 | Hand-over to E52 | `results/E52/split.json` (5 folds) |
+
+## 9. Related work
 
 Web information extraction benchmarks:
-- **SWDE** (Hao, Cai, Pang, Zhang: "From one tree to a forest: a unified solution for structured web data extraction", SIGIR 2011, DOI 10.1145/2009916.2010020): about 124k detail pages from 80 sites in 8 verticals (e.g. book, camera, university), with attribute values labelled per vertical. Sites were picked by hand, many pages per site; the task assumes the page is already found. **Expanded SWDE** (Lockard et al.: "OpenCeres: When Open Information Extraction Meets the Semi-Structured Web", NAACL 2019, N19-1309) adds open relation labels to a subset.
-- **WebSRC** (Chen et al.: "WebSRC: A Dataset for Web-Based Structural Reading Comprehension", EMNLP 2021, 2021.emnlp-main.343): about 400k question-answer pairs over 6.4k pages, each with HTML and a screenshot.
-- **Klarna Product Page Dataset** (Hotti et al.: "The Klarna Product Page Dataset: Web Element Nomination with Graph Neural Networks and Large Language Models", arXiv 2111.02168, TMLR 2024; data: Zenodo DOI 10.5281/zenodo.12605480): 51,701 product pages from 8,175 shops, each with a rendered DOM snapshot (MHTML) and a screenshot; the task is to nominate the element holding e.g. the price.
+- **SWDE** (Hao et al., SIGIR 2011, DOI 10.1145/2009916.2010020): about 124k detail pages from 80 hand-picked sites in 8 verticals. The target page is given. **Expanded SWDE** (Lockard et al., NAACL 2019, N19-1309) adds open relation labels.
+- **WebSRC** (Chen et al., EMNLP 2021, 2021.emnlp-main.343): about 400k question-answer pairs over 6.4k pages, with HTML and screenshots.
+- **Klarna Product Page Dataset** (Hotti et al., arXiv 2111.02168, TMLR 2024; Zenodo DOI 10.5281/zenodo.12605480): 51,701 product pages from 8,175 shops, with rendered DOM snapshot and screenshot.
 
 Address extraction:
-- **Schmidt, Manschitz, Rensing, Steinmetz**: "Extraction of Address Data from Unstructured Text using Free Knowledge Resources", i-KNOW 2013, ACM, 7:1-7:8, DOI 10.1145/2494188.2494193. Extracts German postal addresses from unstructured web text using free knowledge resources such as OpenStreetMap; closest prior task to ours, but on text, with no page discovery, no negatives and no rendering or image cases.
-- **Ahmadi, Bernhard, Abdelmaksoud, Zecchini, Rabl, Abedjan**: "Clean Me If You Can: A Large Collection of Real-World Addresses for Data Cleaning Benchmarking", arXiv 2606.31983 (2026). Real-world address records for data cleaning, not extraction from web pages.
+- **Schmidt, Manschitz, Rensing, Steinmetz** (i-KNOW 2013, DOI 10.1145/2494188.2494193): German postal addresses from unstructured web text with OpenStreetMap. Text only; no page discovery, no negatives.
+- **Ahmadi et al.**: "Clean Me If You Can" (arXiv 2606.31983, 2026). Real-world address records for data cleaning, not extraction from web pages.
 
-Measuring how the web is built:
-- **HTTP Archive Web Almanac** (2024 methodology): technology detection with a fork of Wappalyzer on millions of crawled pages. Our technology detector follows the same signature approach (generator meta tag, asset paths, cookies, headers), with a small hand-written rule set.
+What this gold set adds:
+1. **A probability sample of a released dataset.** Every item has a known inclusion probability, so each metric has a population estimate with a CI for the release. The benchmarks above pick sites by hand or by vertical.
+2. **Coverage of rare topic classes and address cases** in two topic schemas (POI, WZ 2025 to 5 levels), with the sampling bias stated.
+3. **End-to-end input.** The models get the same-day output of the release fetch code, including fetch failures. The labels describe the site on the same day.
+4. **A frozen multimodal capture per item** (static HTML, rendered DOM, screenshot, timestamps).
+5. **A legally defined genre.** The imprint (§ 5 DDG in Germany, § 5 ECG and § 25 MedienG in Austria, Art. 3 para. 1 let. s UWG in Switzerland) defines the right answer: the provider's address.
+6. **Three labellers with calibration, about 200 double labels and adjudication.** Address agreement is reported with suggestions shown.
 
-What makes this gold set stand out:
-1. **Probability sample of a real crawl frame, not hand-picked sites.** Items are drawn from the 6.56M-host seed list with known inclusion probabilities, so every metric can be reported both per stratum and weighted back to the population. SWDE, WebSRC and Klarna pick sites by hand or by vertical; none supports population estimates.
-2. **Strata for how the page was produced**: site age (Wayback), technology (WordPress, site builders, Blogger, hand-written HTML, desktop editors, SPA frameworks), rendering need (static vs. JS) and modality (text, image, PDF), each with an automatic, tested detector and measured detector precision. Existing benchmarks describe sites by topic vertical only.
-3. **End-to-end task including negatives**: from a host name to "the operator's address, or none". About 40% of live German sites have no imprint the pipeline can reach, and some imprints have no address. Benchmarks above assume the target page exists and the answer is on it.
-4. **Multimodal frozen archive per item** (static HTML, rendered DOM, full-page screenshot, timestamps), so the same items compare a static, a rendering and a vision pipeline on identical input (as WebSRC and Klarna do for QA and element nomination, but here for a whole-site task).
-5. **A legally defined genre**: the imprint (§ 5 DDG in Germany, § 5 ECG and § 25 MedienG in Austria, Art. 3 para. 1 let. s UWG in Switzerland) gives a precise, checkable definition of the right answer (the provider's address), which makes labels less subjective than generic "contact address" tasks.
-6. **Independent double annotation (D15 C) with agreement per stratum**, labelled from scratch without model pre-labels, so model comparisons are not biased toward the pre-labelling model.
+## 10. Open choices
 
-## 7. Open choices (need the user)
+1. **D55 frame**: A = draw now from r4 + E40 r2 minus used hosts, with r5 top-up (recommended); B = wait for r5.
+2. **D56 input form**: A = same-day `ic fetch` for models + capture for labellers (recommended); B = stored crawl text + fresh capture as help; C = rendered DOM for both.
+3. **D57 sampling design**: A = two-phase, core 600 + oversample 400 (recommended); B = SRS of 1,000; C = equal quotas, no core.
+4. **D58 test use**: A = all items test, 5-fold cross-fitting for the depth cut-off (recommended); B = fixed 200/800 split.
 
-Settled by D17 B (1,000 items, no head-to-head comparisons) and applied in E12. The defaults below were taken as assumed choices. Each can still be overruled.
+Assumed by the lead (can be overruled):
+- Screen models: gemma4-31b-it and qwen38-27b (both E52 candidates; see doubts).
+- Main address only in the label; other addresses as the flag `multi_address`.
+- Operator type and 11-class topic are not filled (tool change).
 
-1. **Total size.** 1,000 items: 700 random core + 300 coverage oversample, about 30 per stratum where the population allows (§2). *Applied.*
-2. **Frame: everything vs. German-language/DACH only.** Full seed-list frame. "No imprint" negatives come only from the core (219 items), and non-live hosts likewise (201 items). *Applied (assumed).* Option: drop the 201 non-live core items and replace them with live core items. This would save labelling time, but the core would then no longer be an SRS of the frame (it would become an SRS of live hosts).
-3. **Operator-type detector for stratification.** The LLM (gemma4-31b-it on innkube), for stratification only. Never shown to labellers (D15 C). *Applied (assumed).*
-4. **WARC capture.** Capture WARC for internal reproducibility, but do not publish it. *Assumed.*
-5. **Image-only quota.** Cap 20; screening found 15, and all are in the sample. *Applied.*
-6. **Capture infrastructure.** The E12 screening still ran from the crawl VM, with at most 1 request per /24 and one retry. Strato kept answering 503 (578 hosts, 5.8% of the screening sample, 39 items of the `neg:site_not_live` core). *Recommendation:* capture the 1,000 gold items from a different IP (e.g. a FAITH Slurm node), and re-try blocked hosts there before they count as negatives.
+## 11. Open doubts
 
-## 8. Open doubts
-
-- **Crawl blocks bias the pilot prevalences.** The Strato 503 block makes 13% of hosts look dead. Many of them had an imprint in E4. Live-site shares are therefore biased low, and per-provider strata (Strato site builder) are undercounted.
-- **Vision is a weak detector.** gemma4-31b-it reads addresses off screenshots with OCR digit slips and occasionally invents addresses. 2 of 4 image-only flags were genuine. Every image-only candidate needs a human look before it is drawn.
-- **Age measures the domain, not the current site.** A redesign does not change the bin. The copyright year is recorded as a second signal. 14 hosts had unparsable CDX answers.
-- **Detectors are heuristic.** Spot-checks are 20 per detector (fewer for rare ones). Precision estimates have wide CIs. Recall was not measured, except indirectly against E4 for imprint discovery.
-- **Topic and operator type** from the LLM were checked only by the spot-check above (topic not at all here; E7 covers topic models on the old set).
-- **Imprint discovery misses.** `none` was wrong for 1 of 12 checked (a Shopify imprint under `/policies/legal-notice`), so the "no imprint" stratum contains some positives. The labellers decide from the live site, so labels are not affected.
-- **E12: Strato block persists.** 578 of 642 Strato-hosted hosts (/24 81.169.145.0) answered 503 even at 1 concurrent request and after the retry. They are in `neg:site_not_live`. Live and imprint shares stay biased low by about 5 pp, and Strato-hosted site builders are undercounted.
-- **E12: inclusion probabilities are conditional** on the realized screening stratum sizes and on detector outputs. A detector error changes only an item's weight, not its labelled stratum.
-- **E12: the image-only search is bounded by the vision candidate rule** (707 candidates). Image-only cases outside that rule are missed. Iframe-embedded imprints (4 seen) and pages whose rendered text is missing from the extraction (3 seen) are hard cases with no stratum of their own.
-- **E12: some flagged differences vs E8 are likely chance.** There were about 300 comparisons at 95%. The higher no-imprint share on .de/.at/.ch (16.3% vs 12.1%) is the one that matters for the design and is unexplained (E8's E4 merge only adds fields, it does not change the detector). It changes only the core's expected negatives.
-- **E12: T and n0 were chosen from the screening data** (largest T, then largest n0, that fit 1,000). This is a deterministic rule fixed before the draw, so weights stay valid.
-
+- **Stratifying with candidate models.** The screen models are likely E52 candidates. Unweighted rare-class scores favour them (§4.7). Mitigation: weighted comparisons, and the screen models marked in per-class tables. Alternative: use a non-candidate pair for the screen.
+- **Site change between crawl and capture.** Under D56 A this affects only strata and weights. Under D56 B or C it also affects the labels or the input: B must flag and drop changed sites, C changes the input form.
+- **E8 and E12 lists are on aspe only.** They must be copied before step 4. Without them the exclusion is incomplete.
+- **E48 Shopify is incomplete.** The crawl stopped at about 84%. The record still says RUNNING (other module). The top-up size depends on its final state.
+- **Prefill model vs. E52 candidates.** The suggestion model must not be an E52 candidate, or it is reported as "made the suggestion" with an upper-biased address score. qwen-agentworld-35b-a3b was the E21 model and is an E50 model.
+- **Small strata.** At T about 25, a per-stratum Wilson CI is about ±15-20 pp. Rare WZ sections (for example B, D, E, U, V) may have fewer than 25 sites in S1. Their phase-1 variance is not small.
+- **Fetch blocks.** `ic fetch` from the crawl VM can be blocked (Strato 503 in E8/E12). This is correct for the release, but it lowers model scores on blocked sites. The capture from another IP keeps the labels right.
+- **Old 11-class field.** The tool requires it today. Dropping it breaks comparison with the old gold set; the paper does not need that comparison.

@@ -7,6 +7,8 @@ Held-out (stage F) runs these configs once, for all three models; no change afte
 | schema | config | e50_run.py arguments |
 |---|---|---|
 | POI (poi3) | flat, all candidates, site_first layout, base wording, de, fmt free, 6000 chars/field, landing page + imprint; reasoning gemma short, qwen low, agentworld short | `--task topic --schema poi3 --reasoning {short\|low\|short}` |
+
+Note 2026-11-12: the user set POI **retrieve k30** as the default (cost ratio 0.21, -0.027 on dev); flat stays an E52 variant. See docs/extraction_strategy.md.
 | WZ | retrieve k30 (node text path, embedding text kw), base wording, de, fmt free, 1500 chars/field, r-none | `--task topic --schema wz --reasoning none --site-chars 1500` |
 | address | mode main, fmt json_schema, r-none, imprint input, 6000 chars | `--task address --reasoning none --mode main --fmt schema` |
 
