@@ -13,4 +13,4 @@ Facts: only cheap features exist for all 3.9M sites (TLD, crawl source, language
 Recommend A: gives population figures and per-class results with one set.
 
 ## Outcome
-(open)
+A (user 2026-11-12): "D57 A; note that if 1000 items in the evaluation dataset is too few to cover all categories in the schemas, we can also increase the number of items. It does not have to be 1000 if it renders the evaluation dataset less meaningful. I am also not sure about the depth to which we have cover the schemas in the dataset. You proposed only top-level categories / sections, is that right?" Lead: set size and coverage depth after the phase-1 screen, with real class counts (next card).

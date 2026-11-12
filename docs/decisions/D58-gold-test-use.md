@@ -10,4 +10,4 @@ Question: the gold set also sets the publish depth (P >= 0.8 per level) and pick
 Recommend A.
 
 ## Outcome
-(open)
+(open) User 2026-11-12: "What do you mean with D58?" Lead re-explained in plain words; waiting.
