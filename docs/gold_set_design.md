@@ -30,7 +30,7 @@ Decisions this version uses: D12 A (location match by geocoding is the primary a
 - **Design** (pending D57): two-phase probability sample. Phase 1 screens a random 20,000 frame sites with the fixed E50 prompts on stored crawl text. Phase 2 draws a random core of 600 and an oversample of 400. The oversample gives each rare POI class, WZ section and address hard case about 25 items where the population allows. Every item has a known inclusion probability.
 - **Input** (pending D56): on one day per item, `ic fetch` makes the model input and a gold capture makes the labeller input.
 - **Labels**: site status, imprint found, main address, POI v3 label, WZ 2025 label. Three labellers. 50 calibration items, about 200 double-labelled items, adjudication.
-- **Use** (pending D58): all 1,000 items are test items. The publish depth is set by 5-fold cross-fitting.
+- **Use** (pending D58): all 1,000 items are test items. The publish depth is set by 5-fold 5-fold cross-validation (cross-fitting).
 
 ## 1. Purpose and tasks
 
@@ -266,7 +266,7 @@ Main address rules: guideline §3.2. Other addresses: the labeller sets `multi_a
 ## 6. Use of the set in evaluation (pending D58, recommended option A)
 
 - All 1,000 items (and the top-up) are test items. There is no development split.
-- **Publish depth by cross-fitting.** Split the items into 5 folds at random, stratified by priority stratum (strata with fewer than 5 items are pooled into one "rare" stratum per schema, so every fold gets a fair share). For each fold, choose the depth cut-off (deepest level with P >= 0.8, D54) on the other 4 folds and apply it to this fold. Report the out-of-fold numbers.
+- **Publish depth by 5-fold cross-validation (cross-fitting).** Split the items into 5 folds at random, stratified by priority stratum (strata with fewer than 5 items are pooled into one "rare" stratum per schema, so every fold gets a fair share). For each fold, choose the depth cut-off (deepest level with P >= 0.8, D54) on the other 4 folds and apply it to this fold. Report the out-of-fold numbers.
 - **Model choice** is made on the full set. The paper reports it as such. With 3 to 5 candidates the selection effect is small.
 - Details of scoring, candidates, statistics and the decision rule: `docs/model_eval_protocol.md` (E52). That document matches v0.3 since 2026-11-12 (protocol draft v0.2).
 
@@ -336,7 +336,7 @@ What this gold set adds:
 1. **D55 frame**: A = draw now from r4 + E40 r2 minus used hosts, with r5 top-up (recommended); B = wait for r5.
 2. **D56 input form**: A = same-day `ic fetch` for models + capture for labellers (recommended); B = stored crawl text + fresh capture as help; C = rendered DOM for both.
 3. **D57 sampling design**: A = two-phase, core 600 + oversample 400 (recommended); B = SRS of 1,000; C = equal quotas, no core.
-4. **D58 test use**: A = all items test, 5-fold cross-fitting for the depth cut-off (recommended); B = fixed 200/800 split.
+4. **D58 test use**: A = all items test, 5-fold 5-fold cross-validation (cross-fitting) for the depth cut-off (recommended); B = fixed 200/800 split.
 
 Assumed by the lead (can be overruled):
 - Screen models: gemma4-31b-it and qwen38-27b (both E52 candidates; see doubts).

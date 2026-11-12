@@ -52,15 +52,15 @@ Agreement (report in the paper):
 
 Items that only one labeller labelled have unknown noise. Report scores on the double-labelled subset as a check. That subset is not a random sample of the set, so use its weights and label it as a check.
 
-### 2.3 Depth (D51) and depth cut-off (pending D58, recommended A)
+### 2.3 Depth (D51) and depth cut-off (D58 A, user 2026-11-12)
 Gold is the finest level the labeller can decide. Scoring against a reference of depth d:
 - For level L <= d: compare model path with reference path at L.
 - For level L > d: the item does not count at L (same as E49 "hosts whose reference reaches L").
 - A model answer that stops above d counts as not covered at the next level. A model answer deeper than d is cut to d.
 - Open: if two labellers stop at different depths, use the shallower (default, safe) or the deeper agreed prefix? Default: the longest common prefix, after adjudication.
 
-Depth cut-off and model choice (pending D58, recommended A):
-- **Cut-off by 5-fold cross-fitting.** For each fold, find the deepest level with P >= 0.8 (D54) on the other 4 folds. Apply that cut-off to this fold. Report the out-of-fold numbers. The headline numbers are out-of-fold.
+Depth cut-off and model choice (D58 A, user 2026-11-12):
+- **Cut-off by 5-fold 5-fold cross-validation (cross-fitting).** For each fold, find the deepest level with P >= 0.8 (D54) on the other 4 folds. Apply that cut-off to this fold. Report the out-of-fold numbers. The headline numbers are out-of-fold.
 - **Model choice** is made on the full set and reported as such. With 3 to 5 candidates the selection effect is small.
 - Option B (fixed split, 200 items for cut-off and choice, 800 for reported numbers) is simpler but has 20% fewer test items.
 
@@ -180,7 +180,7 @@ Run per task (POI, WZ, addresses). Steps are fixed before the labelled scores ar
 3. **Pick one point.** Best-Q candidate = B. Choose the cheapest front candidate with Q >= Q(B) - m, where m is the margin and the lower bound of the weighted paired CI of (Q - Q(B)) is not below -m. Rare-class results of the screen models do not enter Q unweighted.
 4. **Margin m.** Open: value of m. Proposal: m = 2 points (absolute) for acc@L* and location match; check against the CI width of the weighted estimate and the human-agreement noise. Alternative: m = one bootstrap standard error of B.
 5. **Single vs ens2.** ens2 enters as a candidate with its summed cost. It wins only if it passes step 3 on the primary metric. If the ens2 gain is only higher P at lower cov and acc (as E49 POI: P@2 .914 but acc@2 -3 to -5 points), compare the final product: number of hosts labelled at depth with P >= 0.8 (hosts x level) per cost. Open: which target does the lead want, high precision at lower coverage or high coverage? This decides step 5.
-6. **Publish depth (pending D58, recommended A).** For the chosen setup, L* = deepest level with P >= 0.8 by 5-fold cross-fitting: the cut-off comes from 4 folds and is applied to the 5th; report the out-of-fold numbers. Option B: cut-off and model choice on 200 items, numbers on 800.
+6. **Publish depth (D58 A, user 2026-11-12).** For the chosen setup, L* = deepest level with P >= 0.8 by 5-fold 5-fold cross-validation (cross-fitting): the cut-off comes from 4 folds and is applied to the 5th; report the out-of-fold numbers. Option B: cut-off and model choice on 200 items, numbers on 800.
 7. **Ties and shifts.** If the choice changes between the two labels of double-labelled items, between the weighted and the core-only result, or when the screen models are left out of the per-class view, report it and take the cheaper option only if the lead agrees. Open.
 
 Output of the rule is written as a new decision card (D-number by lead) and in `docs/decisions.md`.
@@ -224,7 +224,7 @@ Per `honest-current-numbers`: report only current counts; no comparison to the o
 
 ## 10. Open items (summary)
 1. Gold set size and coverage depth (card D60, after the phase-1 screen).
-2. D58: cross-fitting (A, recommended) or fixed 200/800 split (B).
+2. D58: 5-fold cross-validation (cross-fitting) (A, recommended) or fixed 200/800 split (B).
 3. Who adjudicates; adjudication scope.
 4. Depth rule when labellers stop at different levels.
 5. Does the tool log suggestion accepted/edited?

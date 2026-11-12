@@ -10,4 +10,4 @@ Question: the gold set also sets the publish depth (P >= 0.8 per level) and pick
 Recommend A.
 
 ## Outcome
-(open) User 2026-11-12: "What do you mean with D58?" Lead re-explained in plain words; waiting.
+A (user 2026-11-12): "D58 A is called five-fold cross-validation, right? I think this is what we can do." Lead: yes, 5-fold cross-validation of the depth cut-off; all items are test items, numbers are out-of-fold.
