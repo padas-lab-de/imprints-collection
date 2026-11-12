@@ -75,6 +75,10 @@ Only on aspe (untracked): datasets/E16/seeds (batches 0-156), datasets/gold (952
 ## Cards
 | ID | Date | Question | Outcome | Landed in |
 |---|---|---|---|---|
+| D55-gold-frame | 2026-11-12 | E53: gold frame: draw now from r4+E40r2 (3,908,045) with r5 top-up, or wait for r5? | open | docs/decisions/D55-gold-frame.md |
+| D56-gold-input-form | 2026-11-12 | E53: annotators see a same-day capture, models get same-day `ic fetch` text? | open | docs/decisions/D56-gold-input-form.md |
+| D57-gold-sampling-design | 2026-11-12 | E53: two-phase core 600 + oversample 400 (POI, WZ, address cases) vs SRS vs quotas? | open | docs/decisions/D57-gold-sampling-design.md |
+| D58-gold-test-use | 2026-11-12 | E53: depth cut-off and model choice on gold: cross-fitting or fixed split? | open | docs/decisions/D58-gold-test-use.md |
 | D54-topic-labelling-strategy | 2026-11-10 | E49: strategy for topics: single model or ens2, fixed or adaptive depth? (model chosen later) | A as default: single model per schema, cut-off at P>=0.8; ens2 evaluated as a variant in the model evaluation (user) | docs/decisions/D54-topic-labelling-strategy.md |
 | D53-poi-model-choice | 2026-11-10 | E49: POI model for the full run: gemma, qwen or ens2? | withdrawn: model is chosen in the model evaluation after gold labelling (user) | docs/decisions/D53-poi-model-choice.md |
 | D52-wz-rules-after-heldout | 2026-11-10 | E49: WZ hint rules failed held-out check; keep or drop? | A: drop rules; WZ = ens2 plain retrieve k30 (user) | docs/decisions/D52-wz-rules-after-heldout.md |
