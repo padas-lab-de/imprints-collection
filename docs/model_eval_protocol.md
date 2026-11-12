@@ -9,7 +9,7 @@ Place in the order of work: strategy (`docs/extraction_strategy.md`, fixed) -> p
 | Q1 | Which model gives the best topics (POI v3, WZ 2025) per cost? | model for topics |
 | Q2 | Which model gives the best addresses per cost? | model for addresses |
 | Q3 | Single model (default, D54) or ens2 per schema? | full-run setup |
-| Q4 | Down to which level is P >= 0.8 for the chosen setup (out-of-fold, pending D58)? | publish depth per schema |
+| Q4 | Down to which level is P >= 0.8 for the chosen setup (out-of-fold, D58 A)? | publish depth per schema |
 | Q5 | What does the full run cost (GPU-hours or USD per 1M hosts)? | planning, paper |
 
 Prompts, schemas and strategy are fixed before E52. E52 does not tune prompts. If a prompt changes, the run is a new run.
@@ -122,7 +122,7 @@ All population figures below are weighted Hajek ratio estimators: theta = sum(w_
 | P@L | correct / answered at L |
 | acc@L | correct / hosts whose reference reaches L |
 | cov@L | answered / hosts whose reference reaches L |
-| deepest level with P >= 0.8 | highest L where P@L >= 0.8 and the lower bound of the 95% CI at L is also reported; this is the publish depth (D54). Headline: out-of-fold cut-off (pending D58 A, section 2.3) |
+| deepest level with P >= 0.8 | highest L where P@L >= 0.8 and the lower bound of the 95% CI at L is also reported; this is the publish depth (D54). Headline: out-of-fold cut-off (D58 A A, section 2.3) |
 | rate of "no label" | hosts with empty answer |
 Levels: POI L1-L2 (L3 for ens2 depth report), WZ L1-L5. Offline hosts and online-only hosts are reported separately as in E49. Per-class tables are by true label; mark the screen models (section 6).
 Open: use point estimate P >= 0.8 (as E49) or lower CI bound >= 0.8 for the publish depth? (Default: point estimate; CI shown.)

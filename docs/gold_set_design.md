@@ -25,12 +25,12 @@ Decisions this version uses: D12 A (location match by geocoding is the primary a
 
 ## Summary
 
-- **Population**: the sites of the German Imprints release (pending D55). The gold set evaluates the release pipeline on what it publishes.
+- **Population**: the sites of the German Imprints release (D55 A). The gold set evaluates the release pipeline on what it publishes.
 - **Size**: 1,000 items, plus a small r5 top-up (about 9 items, §2.3).
-- **Design** (pending D57): two-phase probability sample. Phase 1 screens a random 20,000 frame sites with the fixed E50 prompts on stored crawl text. Phase 2 draws a random core of 600 and an oversample of 400. The oversample gives each rare POI class, WZ section and address hard case about 25 items where the population allows. Every item has a known inclusion probability.
-- **Input** (pending D56): on one day per item, `ic fetch` makes the model input and a gold capture makes the labeller input.
+- **Design** (D57 A): two-phase probability sample. Phase 1 screens a random 20,000 frame sites with the fixed E50 prompts on stored crawl text. Phase 2 draws a random core of 600 and an oversample of 400. The oversample gives each rare POI class, WZ section and address hard case about 25 items where the population allows. Every item has a known inclusion probability.
+- **Input** (D56 A): on one day per item, `ic fetch` makes the model input and a gold capture makes the labeller input.
 - **Labels**: site status, imprint found, main address, POI v3 label, WZ 2025 label. Three labellers. 50 calibration items, about 200 double-labelled items, adjudication.
-- **Use** (pending D58): all 1,000 items are test items. The publish depth is set by 5-fold 5-fold cross-validation (cross-fitting).
+- **Use** (D58 A): all 1,000 items are test items. The publish depth is set by 5-fold cross-validation (cross-fitting).
 
 ## 1. Purpose and tasks
 
@@ -50,7 +50,7 @@ Rules:
 - **One main + up to 2 extra labels** per schema (D49). The strict score uses the main label. The lenient score accepts the main label or an extra label.
 - **Operator type and the old 11-class topic** are not evaluation targets in v0.3. See §7 for the tool change.
 
-## 2. Frame (pending D55, recommended option A)
+## 2. Frame (D55 A, user 2026-11-12)
 
 ### 2.1 Population
 
@@ -94,7 +94,7 @@ Estimator for the r5 population U5 = (F0 ∩ U5) ∪ F_A, with y_i the item's sc
 
 Option B (wait for r5, then draw once) avoids the top-up but waits for a crawl that is stopped.
 
-## 3. Input and capture (pending D56, recommended option A)
+## 3. Input and capture (D56 A, user 2026-11-12)
 
 ### 3.1 Two inputs from the same day
 
@@ -136,7 +136,7 @@ Rules:
 
 The E8 detectors run on each capture after labelling: technology family, rendering need, imprint location, obfuscation, image-only candidate. Wayback first-capture year is added for site age. These tags describe the set. They are not strata, and they do not change weights. Error analysis can use them.
 
-## 4. Sampling design (pending D57, recommended option A)
+## 4. Sampling design (D57 A, user 2026-11-12)
 
 ### 4.1 Overview
 
@@ -263,7 +263,7 @@ Main address rules: guideline §3.2. Other addresses: the labeller sets `multi_a
 - Address agreement is reported as "agreement with suggestions shown". Both labellers saw the same suggestion, so the two labels are independent of each other but not of the suggestion.
 - Calibration agreement (before discussion) is reported too.
 
-## 6. Use of the set in evaluation (pending D58, recommended option A)
+## 6. Use of the set in evaluation (D58 A, user 2026-11-12)
 
 - All 1,000 items (and the top-up) are test items. There is no development split.
 - **Publish depth by 5-fold cross-validation (cross-fitting).** Split the items into 5 folds at random, stratified by priority stratum (strata with fewer than 5 items are pooled into one "rare" stratum per schema, so every fold gets a fair share). For each fold, choose the depth cut-off (deepest level with P >= 0.8, D54) on the other 4 folds and apply it to this fold. Report the out-of-fold numbers.
@@ -336,7 +336,7 @@ What this gold set adds:
 1. **D55 frame**: A = draw now from r4 + E40 r2 minus used hosts, with r5 top-up (recommended); B = wait for r5.
 2. **D56 input form**: A = same-day `ic fetch` for models + capture for labellers (recommended); B = stored crawl text + fresh capture as help; C = rendered DOM for both.
 3. **D57 sampling design**: A = two-phase, core 600 + oversample 400 (recommended); B = SRS of 1,000; C = equal quotas, no core.
-4. **D58 test use**: A = all items test, 5-fold 5-fold cross-validation (cross-fitting) for the depth cut-off (recommended); B = fixed 200/800 split.
+4. **D58 test use**: A = all items test, 5-fold cross-validation (cross-fitting) for the depth cut-off (recommended); B = fixed 200/800 split.
 
 Assumed by the lead (can be overruled):
 - Screen models: gemma4-31b-it and qwen38-27b (both E52 candidates; see doubts).
