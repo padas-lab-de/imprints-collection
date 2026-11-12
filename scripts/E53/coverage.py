@@ -199,6 +199,22 @@ def main() -> None:
                       + ". Short top-level/address classes: "
                       + (", ".join(f"{s} ({r['S1'][s]})" for s in r["short_s1"] if s in top) or "none") + ".")
     L += ["", *detail, ""]
+    if n < 20_000:
+        rng = random.Random(SEED + 2)
+        boot = []
+        for i in range(20_000):
+            r = rng.choice(recs)
+            boot.append({"host": f"{r['host']}#{i}", "strata": r["strata"]})
+        L += ["### Projection to the full S1 (n1 = 20,000)", "",
+              f"Bootstrap: 20,000 draws with replacement from the {fmt(n)} screened sites, same procedure. Classes "
+              "with 0 members in the screen stay at 0, and rare classes are noisy; a rough guide until the screen ends.",
+              "", "| target | projected items (core + extra) | projected short in S1 | projected still short in sample |",
+              "|---|---:|---:|---:|"]
+        for name, tg in scen.items():
+            r = size_for(boot, tg)
+            L.append(f"| {name} | {fmt(r['items'])} ({CORE} + {fmt(r['extra'])}) | {len(r['short_s1'])} | "
+                     f"{len(r['short_sample'])} |")
+        L.append("")
     L += ["## 3. S1 size needed per depth (union counts)", "",
           "Smallest n1 at which every class with >= 1 member in the screen reaches T (T x n / min count), and number "
           "of classes with 0 members in the screen.", "",
