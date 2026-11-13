@@ -1,8 +1,8 @@
 # Gold set design: a stratified probability sample of the German imprints release
 
-Status: **v0.3 draft (2026-11-12)**, experiment E53-gold-set-redraw. This version defines a NEW 1,000-item gold set. It replaces the E12 sample of v0.2. Four design cards are open (D55-D58). Every section that depends on an open card names the card and the option. The option in the text is the recommended one ("pending Dnn, recommended").
+Status: **v0.4 draft (2026-11-13)**, experiment E53-gold-set-redraw. This version defines a NEW gold set of 1,869 items (D60 D). It replaces the E12 sample of v0.2. Design cards D55-D58 and D60 are answered.
 
-Decisions this version uses: D12 A (location match by geocoding is the primary address metric), D14 A (labels from the rendered site, frozen in a capture), D15 C as amended (three labellers, about 200 double labels), D17 B (1,000 items, no head-to-head comparison of site groups), D24 B (a model suggestion on every item, addresses only), D49 (one main label + up to 2 extra labels), D51 B (topic labels at the finest decidable level), D54 A (single model per schema; publish depth from the gold set), user 2026-11-12 (main address only).
+Decisions this version uses: D12 A (location match by geocoding is the primary address metric), D14 A (labels from the rendered site, frozen in a capture), D15 C as amended (three labellers, about 200 double labels), D17 B (no head-to-head comparison of site groups), D24 B (a model suggestion on every item, addresses only), D49 (one main label + up to 2 extra labels), D51 B (topic labels at the finest decidable level), D54 A (single model per schema; publish depth from the gold set), user 2026-11-12 (main address only), D60 D (size 1,869, target (h)).
 
 ## What changed from v0.2, and why
 
@@ -18,6 +18,8 @@ Decisions this version uses: D12 A (location match by geocoding is the primary a
 
 ## History
 
+- **v0.4** (2026-11-13, E53 step 4): size 1,000 -> 1,869 items (D60 D, target (h): top level 25 + POI L2 5 + WZ groups 5; core 600 + oversample 1,195 + 74 stratum top-up = 1,869), drawn by `scripts/E53/draw.py` (`results/E53/phase2_draw.md`). The 400-item oversample and the search for T in 20-30 (§4.4) are replaced by the fixed target (h).
+
 - **v0.1** (2026-10-23, E8-gold-strata-pilot): defined diversity dimensions and unit-tested detectors (`src/ic/gold/detectors.py`). Screened a pilot of 1,000 seed-list hosts.
 - **v0.2** (2026-10-24, E12): screened 10,000 seed-list hosts and drew a 1,000-item two-phase sample (700 random core + 300 oversample, T = 30) with Horvitz-Thompson weights (`datasets/E12/gold_sample.jsonl`). E17 captured the items, E18 assigned them to three labellers, E21 made address suggestions. Only 4 tool-test labels exist (`datasets/gold/labels/L1.jsonl`).
 - The full v0.1 and v0.2 text, with the E12 screening prevalences and the quota table, is in git history (`git log -p docs/gold_set_design.md`, last v0.2 commit before E53).
@@ -26,11 +28,11 @@ Decisions this version uses: D12 A (location match by geocoding is the primary a
 ## Summary
 
 - **Population**: the sites of the German Imprints release (D55 A). The gold set evaluates the release pipeline on what it publishes.
-- **Size**: 1,000 items, plus a small r5 top-up (about 9 items, §2.3).
-- **Design** (D57 A): two-phase probability sample. Phase 1 screens a random 20,000 frame sites with the fixed E50 prompts on stored crawl text. Phase 2 draws a random core of 600 and an oversample of 400. The oversample gives each rare POI class, WZ section and address hard case about 25 items where the population allows. Every item has a known inclusion probability.
+- **Size**: 1,869 items (D60 D), plus a small r5 top-up (about 9 items, §2.3).
+- **Design** (D57 A): two-phase probability sample. Phase 1 screens a random 20,000 frame sites with the fixed E50 prompts on stored crawl text. Phase 2 draws a random core of 600 and an oversample of 1,195 (D60 D, target (h)). The oversample gives each POI top-level class, WZ section and address case 25 items, and each POI L2 class and WZ group 5 items, where the screen has that many members. Every item has a known inclusion probability.
 - **Input** (D56 A): on one day per item, `ic fetch` makes the model input and a gold capture makes the labeller input.
-- **Labels**: site status, imprint found, main address, POI v3 label, WZ 2025 label. Three labellers. 50 calibration items, about 200 double-labelled items, adjudication.
-- **Use** (D58 A): all 1,000 items are test items. The publish depth is set by 5-fold cross-validation (cross-fitting).
+- **Labels**: site status, imprint found, main address, POI v3 label, WZ 2025 label. Three labellers. 50 calibration items, about 360 double-labelled (20%) items, adjudication.
+- **Use** (D58 A): all 1,869 items are test items. The publish depth is set by 5-fold cross-validation (cross-fitting).
 
 ## 1. Purpose and tasks
 
@@ -144,7 +146,7 @@ The E8 detectors run on each capture after labelling: technology family, renderi
 |---|---|---|
 | 1 | Simple random sample S1 from F0, screened on stored crawl text | n1 = 20,000 |
 | 2a | Random core: the first 600 sites of a seeded permutation of S1 | 600 |
-| 2b | Coverage oversample: rarest stratum first, from S1 minus the core | 400 |
+| 2b | Coverage oversample: rarest stratum first, from S1 minus the core (target (h), D60 D) | 1,195 |
 | Top-up | SRS from the r5 additions (§2.3) | about 9 |
 
 Code base: `src/ic/gold/sampling.py` (§7). Seeds are fixed and recorded before each draw.
@@ -182,7 +184,7 @@ A site in S1 is a **member** of every stratum below that it meets. One site can 
 1. **Priority stratum.** Each site gets the rarest stratum it is a member of (fewest members in S1). A site in no stratum gets `other:none`, which is never oversampled.
 2. **Core.** The first n0 = 600 sites of a seeded permutation of S1. The core is a simple random sample of F0 on its own.
 3. **Oversample.** Rarest stratum first: draw at random from the not-yet-selected sites whose priority stratum is h. Stop when the marginal count of h in the sample (core and extras, all memberships) reaches T, or when the pool is empty.
-4. **Choice of T.** Take the largest T in 20-30 for which the oversample fits into 400 items. Spend leftover items in later passes at T+1, T+2, ... (rarest first). The rule is fixed before the draw. Target: T about 25.
+4. **Target (D60 D, target (h)).** T = 25 for each POI top-level class, WZ section and address case; T = 5 for each POI L2 class and each WZ group. There is no item budget: the size follows from the target (1,795 items on the 19,998 screened sites), plus one item for each priority stratum the draw would leave empty (74 items; no stratum has weight 0): 1,869 items. Seed 20261113 (frame seed + 1). Implementation: `scripts/E53/draw.py`.
 5. **Shortfall.** If a stratum has fewer than T members in S1, all of them are drawn (phase-2 probability 1). The quota table records this.
 
 ### 4.5 Inclusion probabilities and weights
@@ -197,7 +199,7 @@ Each item stores `priority_stratum`, `strata` (all memberships), `pi_phase1`, `p
 
 | Figure | Estimator | 95% CI |
 |---|---|---|
-| Population figure (share, accuracy, P@L) | Hajek ratio: theta = sum(w_i y_i) / sum(w_i z_i), z_i = 1 if the item counts for the metric | Taylor linearisation, phase-2 strata as strata, with finite population correction 1 - m_h / M_h |
+| Population figure (share, accuracy, P@L) | Hajek ratio: theta = sum(w_i y_i) / sum(w_i z_i), z_i = 1 if the item counts for the metric | Taylor linearisation, phase-2 strata as strata, with finite population correction 1 - m_h / M_h; strata with a single item (161 of 574) are collapsed with a neighbouring stratum of the same schema for the variance |
 | Model difference (population) | Hajek ratio of the paired item difference | same linearisation |
 | Check on the core | plain share over the 600 core items (SRS) | Wilson |
 | Per stratum | unweighted, by the **labelled** (true) stratum; n shown | Wilson; rates only for n >= 10, counts below |
@@ -238,9 +240,9 @@ Main address rules: guideline §3.2. Other addresses: the labeller sets `multi_a
 | Step | Items | Labels |
 |---|---|---|
 | Calibration: all three label the same 50 items, without talking; then discuss every difference; update the guideline | 50 | 150 |
-| Primary labels: each item has one primary labeller; load split 2:1:1 (D15 note 2026-10-24) | 950 | 950 |
-| Second labels: an independent second labeller, other than the primary | about 200 | about 200 |
-| Total | 1,000 | about 1,300 |
+| Primary labels: each item has one primary labeller; load split 2:1:1 (D15 note 2026-10-24) | 1,819 | 1,819 |
+| Second labels: an independent second labeller, other than the primary | about 375 | about 375 |
+| Total | 1,869 | about 2,340 |
 
 - Calibration items are gold items. Their gold label is the consensus after discussion.
 - The double-labelled items are chosen so that every stratum with >= 10 items in the sample gets at least 10 double-labelled items where possible (set cover, `src/ic/gold/assignment.py`). The rest is spread over priority strata.
@@ -265,7 +267,7 @@ Main address rules: guideline §3.2. Other addresses: the labeller sets `multi_a
 
 ## 6. Use of the set in evaluation (D58 A, user 2026-11-12)
 
-- All 1,000 items (and the top-up) are test items. There is no development split.
+- All 1,869 items (and the top-up) are test items. There is no development split.
 - **Publish depth by 5-fold cross-validation (cross-fitting).** Split the items into 5 folds at random, stratified by priority stratum (strata with fewer than 5 items are pooled into one "rare" stratum per schema, so every fold gets a fair share). For each fold, choose the depth cut-off (deepest level with P >= 0.8, D54) on the other 4 folds and apply it to this fold. Report the out-of-fold numbers.
 - **Model choice** is made on the full set. The paper reports it as such. With 3 to 5 candidates the selection effect is small.
 - Details of scoring, candidates, statistics and the decision rule: `docs/model_eval_protocol.md` (E52). That document matches v0.3 since 2026-11-12 (protocol draft v0.2).
