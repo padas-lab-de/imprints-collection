@@ -1,7 +1,7 @@
 # E52-model-evaluation: protocol (draft)
 
 Status: draft v0.2, 2026-11-12. Matches the gold set methodology v0.3 (`docs/gold_set_design.md`, new E53 gold set). Written before gold labelling ends. Items marked "Open:" need the lead or the user. Items marked "pending Dnn" depend on an open decision card.
-Place in the order of work: strategy (`docs/extraction_strategy.md`, fixed) -> prompt study E50 (fixes prompts) -> gold set E53 (two-phase sample of about 1,000 or more items, three labellers) -> **E52** -> full run on all imprints.
+Place in the order of work: strategy (`docs/extraction_strategy.md`, fixed) -> prompt study E50 (fixes prompts) -> gold set E53 (two-phase sample of 1,869 items, three labellers; D60 D) -> **E52** -> full run on all imprints.
 
 ## 1. Questions
 | # | Question | Answer used for |
@@ -21,8 +21,8 @@ The gold set is the new E53 set (`docs/gold_set_design.md` v0.3). It replaces th
 | Property | Value |
 |---|---|
 | Population | sites of the release (r4 + E40 r2, 3,908,045 sites, plus the r5 top-up; D55 A) |
-| Size | about 1,000 or more items. The size is set after the phase-1 screen (card D60 to come; D57 A allows more than 1,000). |
-| Design | two-phase probability sample (D57 A): phase 1 screens 20,000 random frame sites with two models; phase 2 draws a random core (600) and a coverage oversample (400) |
+| Size | 1,869 items (D60 D, target (h)): core 600 random + oversample 1,195 + stratum top-up 74 (`datasets/E53/phase2/gold_sample.jsonl`, `results/E53/phase2_draw.md`). |
+| Design | two-phase probability sample (D57 A): phase 1 screens 20,000 random frame sites with two models; phase 2 draws a random core (600), a coverage oversample (1,195) and a stratum top-up (74), D60 D |
 | Weights | every item has an inclusion probability and a design weight `w_i = 1 / pi_i` (`design_weight`, `priority_stratum`, `strata`, `in_core`) |
 | Input | same-day `ic fetch` text for models; same-day capture for labellers (D56 A) |
 
@@ -69,7 +69,7 @@ Facts:
 - D24 B: labellers see a model suggestion for the main address on every item. Topics are not pre-filled. The suggestion prompt is main-address-only.
 - The suggestion model is recorded per item (`prefilled_from`).
 - The old E21 suggestions (`e21-v1+filter1`, `datasets/gold/prefill.jsonl`) were made by **qwen-agentworld-35b-a3b** for the E12 items. That is an E50 model. The E12 items are not in the new set. The new suggestion run is step 10 of the gold design. Its model is chosen there.
-- The suggestion model must not be an E52 candidate. If it is one, its address score is reported as upward-biased ("made the suggestion"). Open: use a non-candidate model for the suggestions, or accept the mark? (`docs/gold_set_design.md` §11.)
+- The suggestion model must not be an E52 candidate. If it is one, its address score is reported as upward-biased ("made the suggestion"). Resolved (D61 A): the new suggestions come from Haiku 5.5 via OpenRouter, a non-candidate; no candidate gets the mark.
 
 Risk: anchoring. A labeller who accepts the suggestion makes the reference equal to the suggestion. This favours the suggestion model and models that make similar errors. It lowers measured differences for the address task.
 
@@ -83,12 +83,12 @@ What E52 does:
 | Rule | the suggestion model is not allowed to win on address quality alone if its lead is smaller than the lead on the "changed" stratum would imply; state this in the text. Open: use this rule or only report? (Default: only report, no rule.) |
 | Paper | limitations text: "reference labels were seeded by model X; scores of X are an upper-biased estimate" |
 
-Open: include qwen-agentworld as a candidate? (Default: yes, marked, if it made the new suggestions too; else unmarked.)
+qwen-agentworld is a candidate if innkube serves it (it is served, 2026-11-13); unmarked, because it did not make the new suggestions.
 
 ## 4. Candidates
 | Group | Models | Cost basis | Note |
 |---|---|---|---|
-| Innkube (config `MODELS` in `src/ic/config.py`) | `qwen38-27b` (reasoning_effort none via extra_body), `gemma4-31b-it`, `qwen3-next-80b-a3b-instruct` | no USD; measure s/host and tokens | endpoint `MODEL_API_ENDPOINT`; used in E49. gemma4-31b-it and qwen38-27b are also the screen models (mark them). qwen-agentworld-35b-a3b (E50 model) made the E21 suggestions (check it is served) |
+| Innkube (config `MODELS` in `src/ic/config.py`) | `qwen38-27b` (reasoning_effort none via extra_body), `gemma4-31b-it`, `qwen3-next-80b-a3b-instruct` | no USD; measure s/host and tokens | endpoint `MODEL_API_ENDPOINT`; used in E49. gemma4-31b-it and qwen38-27b are also the screen models (mark them). qwen-agentworld-35b-a3b (E50 model) made the old E21 suggestions; it is served and is a candidate. `qwen3-next-80b-a3b-instruct` is not served on innkube (`/v1/models`, 2026-11-13; A1), so E52 does not run it |
 | Open models on FAITH Slurm | Open: list (size classes, e.g. 7-14B, about 30B, 70B+; vLLM through `--extras local`) | GPU-hours (A100/H100 per node, price Open) | docs: https://faith.pages.fim.uni-passau.de/public-docs/slurm/ |
 | Paid API (optional) | Open: which models, if any | USD from token counts | limit $20 per run, $30 per UTC day |
 
@@ -228,8 +228,8 @@ Per `honest-current-numbers`: report only current counts; no comparison to the o
 3. Who adjudicates; adjudication scope.
 4. Depth rule when labellers stop at different levels.
 5. Does the tool log suggestion accepted/edited?
-6. Suggestion model: a non-candidate, or accept the "made the suggestion" mark. Report only, or add a rule.
-7. Include qwen-agentworld as a (marked) candidate.
+6. Resolved (D61 A): the address suggestion model is Haiku 5.5 via OpenRouter (`anthropic/claude-haiku-5.5`), a non-candidate, so no candidate gets the "made the suggestion" mark.
+7. Resolved: qwen-agentworld-35b-a3b is a candidate if innkube serves it (served 2026-11-13, E52 runs). It made no suggestions for the new set, so it is not marked.
 8. List of FAITH open models and GPU price.
 9. Paid API models: none, or ceiling only.
 10. ens2 pairs.
