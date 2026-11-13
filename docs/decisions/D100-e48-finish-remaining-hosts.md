@@ -1,4 +1,6 @@
-# D62-e48-finish-remaining-hosts
+# D100-e48-finish-remaining-hosts
+
+(Issued as D62; renamed 2026-11-13 because the gold lead also issued a D62. The user's answer "D62 A" refers to this card. The data-collection module uses D100 and up from now on.)
 
 Issued 2026-11-13 after the user asked "Is it possible to finalize E48?".
 
