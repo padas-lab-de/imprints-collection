@@ -78,6 +78,7 @@ Only on aspe (untracked): datasets/E16/seeds (batches 0-156), datasets/gold (952
 ## Cards
 | ID | Date | Question | Outcome | Landed in |
 |---|---|---|---|---|
+| D63-strato-remaining-66 | 2026-11-13 | 66 Strato items still landing-only: later-day slow retry (A) or label from ic fetch text (B) | open | docs/decisions/D63-strato-remaining-66.md |
 | A16-fau-llm-key-eligibility-check | 2026-11-13 | Check NHR@FAU LLM key eligibility/terms; request key if wanted | open | docs/decisions/A16-fau-llm-key-eligibility-check.md |
 | D100-e48-finish-remaining-hosts | 2026-11-13 | Finish the ~4,850 remaining E48 hosts at 10 s per request (A) or keep E48 frozen (B)? | A (user, 2026-11-13); resumed 11:47Z at 10 s | docs/decisions/D100-e48-finish-remaining-hosts.md |
 | A15-anthropic-api-key-env | 2026-11-13 | Add ANTHROPIC_API_KEY or OPENROUTER_API_KEY (user prefers OpenRouter, 2026-11-13) to .env (for D61 address suggestions, Haiku 5.5, <= ~$10) | done: OPENROUTER_API_KEY added (user 2026-11-13); anthropic/claude-haiku-5.5 listed at $0.10/$0.50 | docs/decisions/A15-anthropic-api-key-env.md |
@@ -159,6 +160,7 @@ Only on aspe (untracked): datasets/E16/seeds (batches 0-156), datasets/gold (952
 | D1-revision-driver | 2026-10-23 | Why revise now? | Journal extension with better evaluation + fresh (larger) data snapshot; no hard deadline | — |
 
 ## Lead actions
+- 2026-11-13: D62 C merged (lead-verified: 288 passed; step5_summary counts landing+imprint 1,743 / landing-only 117 / failed 9; Strato 90/66; 42 hosts from apfel with capture_akazie/ kept; manifest 2196f390...). Strato 503 on apfel from ~14:05Z; agent did not stop at first 503 (stop check watched memory only). -> D63.
 - 2026-11-13: E52 unit 1 scope set by lead: innkube candidates only (protocol default for open item 9: no paid API); FAITH candidates later as a card.
 - 2026-11-13: ID ranges agreed with data lead: data-collection D100+, gold module D<100 (their D62 renamed D100). D62 C: sonnet agent RUNNING, branch E53-strato-recapture, re-capture ~106 Strato items on apfel (<=2 workers, stop below 8 GB; E48 PGID 478458 runs there again since 11:47Z, untouched).
 - 2026-11-13: ID clash, both leads issued D62; data-collection card renamed to D100-e48-finish-remaining-hosts. Data-collection uses D100+ from now on (proposed to the gold lead).
