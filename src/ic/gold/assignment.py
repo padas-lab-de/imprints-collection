@@ -257,3 +257,122 @@ def summarise(rows, items):
     for s, n, d in sorted(short):
         lines.append(f"  short: {s}: {d} double-labelled of {n} (calibration items removed from the pool)")
     return lines
+
+
+# ---------------------------------------------------------------------------
+# E53 redraw (docs/gold_set_design.md v0.4, section 5.2): folds, core/oversample,
+# second labels spread evenly over the three unordered labeller pairs.
+# ---------------------------------------------------------------------------
+PAIRS = (("L1", "L2"), ("L1", "L3"), ("L2", "L3"))
+
+
+def _alloc(sizes, total):
+    """Largest-remainder split of ``total`` over the keys of ``sizes`` (proportional to size,
+    never above the size; ties broken by key)."""
+    keys = sorted(sizes)
+    tot = sum(sizes.values())
+    if total > tot:
+        raise ValueError(f"cannot allocate {total} from {tot}")
+    base = {k: int(total * sizes[k] // tot) for k in keys}
+    rest = total - sum(base.values())
+    order = sorted(keys, key=lambda k: (-(total * sizes[k] / tot - base[k]), k))
+    for k in order:
+        if rest <= 0:
+            break
+        if base[k] < sizes[k]:
+            base[k] += 1
+            rest -= 1
+    return base
+
+
+def _stratified_sample(pool, rng, n, cell):
+    """Draw ``n`` of ``pool`` at random, proportional over ``cell(item)``."""
+    cells = defaultdict(list)
+    for it in sorted(pool, key=lambda it: it["item"]):
+        cells[cell(it)].append(it)
+    quota = _alloc({c: len(v) for c, v in cells.items()}, n)
+    out = []
+    for c in sorted(cells):
+        out += rng.sample(cells[c], quota[c])
+    return out
+
+
+def build_assignment_folds(items, seed, n_cal=50, n_second=375):
+    """Assignment for the E53 gold set.
+
+    ``items``: dicts with ``item`` (unique int), ``host`` (directory name), ``fold``, ``core`` (bool)
+    and ``eligible`` (False: capture failed, never calibration and never second-labelled).
+
+    * Calibration: ``n_cal`` eligible items, split over folds in proportion, inside a fold over
+      core/oversample in proportion. All three labellers label them.
+    * Second labels: ``n_second`` eligible non-calibration items, proportional over fold x core.
+      They are dealt over the three unordered pairs (equal shares, proportional inside every fold),
+      and inside a pair the primary/second direction alternates.
+    * Load 2:1:1 over all labels, calibration counted in the load (as in ``build_assignment``).
+    * Order per labeller: calibration block first, then the rest, each in seeded random order.
+    """
+    rng = random.Random(seed)
+    items = sorted(items, key=lambda it: it["item"])
+    if len({it["item"] for it in items}) != len(items) or len({it["host"] for it in items}) != len(items):
+        raise ValueError("items/hosts must be unique")
+    n = len(items)
+    ok = [it for it in items if it.get("eligible", True)]
+    # calibration: even over folds first, then core/oversample inside a fold
+    fold_sizes = Counter(it["fold"] for it in ok)
+    fold_cal = _alloc(fold_sizes, n_cal)
+    cal = []
+    for f in sorted(fold_sizes):
+        cal += _stratified_sample([it for it in ok if it["fold"] == f], rng, fold_cal[f], lambda it: bool(it["core"]))
+    cal_ids = {it["item"] for it in cal}
+    pool = [it for it in items if it["item"] not in cal_ids]
+    second = _stratified_sample(
+        [it for it in pool if it.get("eligible", True)], rng, n_second, lambda it: (it["fold"], bool(it["core"]))
+    )
+    sec_ids = {it["item"] for it in second}
+    single = [it for it in pool if it["item"] not in sec_ids]
+
+    cap_sum = sum(CAPACITY.values())
+    target_total = (n - n_cal) + n_second + len(LABELLERS) * n_cal
+    load = {lab: round(target_total * CAPACITY[lab] / cap_sum) - n_cal for lab in LABELLERS}
+    load["L1"] += (n - n_cal) + n_second - sum(load.values())
+
+    def fold_order(its):
+        return sorted(its, key=lambda it: (it["fold"], rng.random()))
+
+    # pair shares, then the direction inside each pair
+    dbl_order = fold_order(second)
+    pair_quota = {p: n_second // 3 + (1 if k < n_second % 3 else 0) for k, p in enumerate(PAIRS)}
+    pair_of = _largest_deficit_deal([it["item"] for it in dbl_order], pair_quota)
+    directed = {}
+    for p in PAIRS:
+        mine = [it for it in dbl_order if pair_of[it["item"]] == p]
+        q = {p: (len(mine) + 1) // 2, p[::-1]: len(mine) // 2}
+        directed.update(_largest_deficit_deal([it["item"] for it in mine], q))
+    in_double = Counter()
+    for pr in directed.values():
+        for lab in pr:
+            in_double[lab] += 1
+    prim_single = {lab: load[lab] - in_double[lab] for lab in LABELLERS}
+    if min(prim_single.values()) < 0 or sum(prim_single.values()) != len(single):
+        raise ValueError(f"inconsistent quotas: {prim_single} for {len(single)} single items")
+    sgl_order = fold_order(single)
+    lab_of = _largest_deficit_deal([it["item"] for it in sgl_order], prim_single)
+
+    rows = []
+    for it in second:
+        p, s = directed[it["item"]]
+        rows += [(it, p, "primary"), (it, s, "second")]
+    rows += [(it, lab_of[it["item"]], "primary") for it in single]
+    rows += [(it, lab, "calibration") for it in cal for lab in LABELLERS]
+
+    out = []
+    for lab in LABELLERS:
+        mine = [(it, role) for it, l, role in rows if l == lab]
+        calib = [r for r in mine if r[1] == "calibration"]
+        rest = [r for r in mine if r[1] != "calibration"]
+        rng.shuffle(calib)
+        rng.shuffle(rest)
+        for k, (it, role) in enumerate(calib + rest, 1):
+            out.append({"item": it["item"], "host": it["host"], "labeller": lab, "role": role, "order": k})
+    info = {"pairs": pair_quota, "load_noncal": load, "prim_single": prim_single}
+    return out, info
