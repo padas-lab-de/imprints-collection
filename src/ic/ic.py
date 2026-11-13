@@ -7,8 +7,9 @@ from ic.cli.geocode import geocode
 from ic.cli.merge import merge
 from ic.cli.process_llm import process_llm
 from ic.cli.stats import stats
-from ic.cli.upload_postgresql import upload_postgresql
 from ic.cli.upload_opensearch import upload_opensearch
+from ic.cli.upload_postgresql import upload_postgresql
+from ic.eval.cli import score
 
 
 @click.group()
@@ -28,6 +29,7 @@ main.add_command(process_llm)
 main.add_command(geocode)
 main.add_command(evaluate)
 main.add_command(stats)
+main.add_command(score)
 main.add_command(upload_postgresql)
 main.add_command(upload_opensearch)
 

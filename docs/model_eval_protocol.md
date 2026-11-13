@@ -243,3 +243,20 @@ Per `honest-current-numbers`: report only current counts; no comparison to the o
 18. Precision vs coverage target (decides ens2).
 19. Tie rule at step 7.
 20. CI method per table: Taylor linearisation or weighted stratified bootstrap.
+
+## 11. How to run the scorer
+Code: `src/ic/eval/` (package `ic.eval`), command `ic score`. No model calls; it reads stored predictions only. Run from the repository root.
+
+```
+ic score --sample datasets/E53/phase2/gold_sample.jsonl \
+  --labels 'datasets/gold/labels/L*.jsonl' --assignment datasets/E53/gold/assignment.jsonl \
+  [--adjudication <adjudicated.jsonl>] [--geocodes <geocodes.jsonl>] [--texts <gold_inputs.jsonl>] \
+  --preds datasets/E52/preds/full/poi3 --preds datasets/E52/preds/full/address \
+  [--manifest <cost fields per prediction set>] [--params params.json] [--set key=value ...] [--run-id <id>]
+```
+
+- Candidates: every prediction file (E50 run format) is one candidate. Grouping is by task and schema (`poi`, `wz`, `address`). A new model needs only a new file. ens2 is built from stored single predictions (`--set ens2_pairs=all` or a list `["A+B"]`).
+- Parameters (open items): `--set` overrides one field of `ic.eval.score.Params`. The defaults are the protocol defaults: `method=taylor` (or `bootstrap`, `B=5000`, item 20); `adjudication_scope=disagreements`, `depth_rule=lcp`, `unresolved_topic=lcp` (items 3, 4); `min_precision=0.8`, `depth_criterion=point` (or `ci`, item 12); `max_fail=0.02`, `p_floor=0.7` (item 16); `margin=0.02` (or `se`, item 17); `target=acc` (or `depth`, item 18); `tie_rule=report` (or `cheaper`, `better`, item 19); `ens2_pairs=top2` (item 10); `fpc=phase2` (phase 1 fixed, as in section 6; `none` = with-replacement variance).
+- Output: `results/E52/score/<run-id>/` with `params.json`, `summary.json`, `summary.md` (decision per task), `agreement.md`, `reference/` (per-item reference and how it was built), `scores/all.csv` (all estimates with SE and CI, long format), `scores/topics_<schema>.md`, `scores/depth_<schema>.md`, `scores/addresses.md`, `scores/efficiency.md`, `scores/per_stratum.md`, `scores/pareto_<schema>.csv`, `paired.md`.
+- Before the gold labels exist: `--refs results/E49/refs/poi_v3.jsonl` (E49 reference) or `--gold <one label per host>` replaces `--labels`.
+- Estimator check: `python -m ic.eval.simulate --sample datasets/E53/phase2/gold_sample.jsonl --reps 2000 --boot-reps 300 --B 1000` (bias and CI coverage on the real design). Tests: `pytest tests/test_eval_*.py`; long simulation: `pytest -m slow`.

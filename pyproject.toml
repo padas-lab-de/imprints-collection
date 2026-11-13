@@ -55,3 +55,5 @@ ic = "ic.ic:main"
 [tool.pytest.ini_options]
 pythonpath = ["src"]
 testpaths = ["tests"]
+addopts = "-m 'not slow'"
+markers = ["slow: long Monte Carlo runs (run with -m slow)"]
