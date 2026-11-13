@@ -74,3 +74,23 @@ The adapter reads all 1,869 items. The 53 without imprint text are 18 no_imprint
   - merge_fetch now writes ASCII-escaped JSON, and `read_ic_fetch` splits on `\n` only.
   - Rerunning the merge gave identical counts and a new manifest sha (above).
   - `prefill.py` writes its own output with `ensure_ascii=False`. Consumers of that file should also split on `\n` only.
+
+## D62 C re-capture from apfel (2026-11-13)
+
+User answer D62 C: re-capture the 106 Strato items that akazie captured landing-only, from another VM.
+
+- VM: apfel (own checkout `~/GitHub/imprints-collection-e53`, own `.venv-render` with Playwright 1.64.1, Chromium libs unpacked into `.render-libs`; the shared chromium 1248 from `~/.cache/ms-playwright`). Driver `run_recapture.sh` -> `scripts/E53/capture.py --ip-group apfel --workers 2`. List: `datasets/E53/strato_recapture_hosts.txt`. Output: `datasets/E53/recapture_apfel/` (separate from the akazie output). Log: `datasets/E53/capture_logs/recapture_apfel.log`.
+- Rate: 2 workers. Test of 5 items first (no 503; 3 of 5 landing+imprint), then all 106.
+- Start / end UTC: 13:52:47Z – 14:13:16Z.
+- Result of the apfel capture: landing+imprint 40, landing_only 66, no failed. Strato answered 503 again from about 14:05Z (after about 50 items): 63 static 503 and 47 rendered 503. The run was not stopped on this 503 (the stop check watched memory only; the run ended at 14:13Z). No other VM or workaround was tried.
+- Merge (`scripts/E53/recapture_merge.py`): 42 hosts replaced (apfel capture better: 40 landing+imprint plus 2 landing_only that have imprint files where akazie had none). The akazie files of these hosts are in `<host>/capture_akazie/`; `meta.json` has `capture_ip_group` "apfel", `capture_day_utc`, and `previous_capture` (the akazie meta). 64 hosts keep the akazie capture. `ic_fetch.jsonl`, `prefill.jsonl`, `assignment.jsonl` unchanged. `input_day_mismatch`: 0 (all on 2026-11-13).
+
+| capture outcome | all before | all after | Strato before | Strato after | other before | other after |
+|---|---|---|---|---|---|---|
+| landing+imprint | 1,703 | 1,743 | 50 | 90 | 1,653 | 1,653 |
+| landing only | 157 | 117 | 106 | 66 | 51 | 51 |
+| failed | 9 | 9 | 0 | 0 | 9 | 9 |
+
+- Still blocked: 66 Strato items (landing only; most with 503). These need option B (ic fetch text, flag `capture_problem`) or a later day (option A).
+- Manifest `datasets/E53/gold/manifest.sha256` now lists files recursively (incl. `capture_akazie/`): 18,259 files, sha256 **`2196f390e57b8809104513b00d237229b84a55ef36fb6b2d2f0ad5dc38432f7b`**. Earlier manifest (akazie only, non-recursive): `f0bb63e5…` (kept as `manifest_akazie.sha256`). Summary: `datasets/E53/step5_summary_recapture.json` (old one kept as `step5_summary_akazie.json`).
+- apfel carried other jobs (E48 shopify fetch, owler services, another user's crawler); memory stayed above 20 GB available.
