@@ -156,6 +156,7 @@ Only on aspe (untracked): datasets/E16/seeds (batches 0-156), datasets/gold (952
 | D1-revision-driver | 2026-10-23 | Why revise now? | Journal extension with better evaluation + fresh (larger) data snapshot; no hard deadline | — |
 
 ## Lead actions
+- 2026-11-13: checked the 22 unclassified redirect targets offline (/home/dinzinger/r5-build/targets_check/): 19 real, 3 non-real (go.adomino.com domain_sale; page4.com, forumieren.com placeholder pages of real companies). Redirecting hosts already fold into the target site (D34), so each target affects only its own site; adding the 3 would drop 3 sites (the companies' own sites). Assumed: no change to targets_classified.tsv; note the gap in the reproduce guide.
 - 2026-11-13: r5 built on frozen E48 + E34r4 pilot, incl. offline parking scan of the new crawls: 3,943,844 sites after filter (r4 3,908,045); finalize_r2.py needs a by-name source match (patch in /home/dinzinger/r5-build/patched/). Old gap found: 22 redirect targets with >=100 hosts unclassified (e.g. go.adomino.com, ionos.de).
 - 2026-11-13: data lead: E48 frozen partial (91,867/96,722) after 429 burst 09:29-09:38Z on lorbeer; asked whether E53 Shopify fetch overlapped. Checked aralie fetch_status: 10 Shopify hosts 09:27-09:31Z, throttled 0, all imprint_found; replied.
 - 2026-11-13: E48 second window stop 09:38:59Z (lorbeer); frozen per D59 outcome; r5 starts.
