@@ -76,7 +76,7 @@ Only on aspe (untracked): datasets/E16/seeds (batches 0-156), datasets/gold (952
 ## Cards
 | ID | Date | Question | Outcome | Landed in |
 |---|---|---|---|---|
-| A15-anthropic-api-key-env | 2026-11-13 | Add ANTHROPIC_API_KEY to .env (for D61 address suggestions, Haiku 5.5, <= ~$10) | open | docs/decisions/A15-anthropic-api-key-env.md |
+| A15-anthropic-api-key-env | 2026-11-13 | Add ANTHROPIC_API_KEY or OPENROUTER_API_KEY (user prefers OpenRouter, 2026-11-13) to .env (for D61 address suggestions, Haiku 5.5, <= ~$10) | open | docs/decisions/A15-anthropic-api-key-env.md |
 | D61-address-suggestion-model | 2026-11-13 | E53: which model makes the address suggestions annotators see (paid non-candidate, innkube candidate, none)? | A: paid non-candidate, cheap; all suggestion generation below about $10 overall (user) -> claude-haiku-5-5 | docs/decisions/D61-address-suggestion-model.md |
 | D60-gold-size-depth | 2026-11-13 | E53: gold size and coverage depth: ~1,040 / ~1,470 / ~1,330 / ~1,800 items? | D: target (h), top level 25 + POI L2 5 + WZ groups 5, ~1,800 items (user) | docs/decisions/D60-gold-size-depth.md |
 | D59-e48-resume-after-window-stop | 2026-11-12 | E48 stopped by window rule 2026-11-11 00:40Z (81,603/96,722 hosts): resume at half rate, or freeze partial? | A, 5 s per request (user, 2026-11-12) | docs/decisions/D59-e48-resume-after-window-stop.md |
