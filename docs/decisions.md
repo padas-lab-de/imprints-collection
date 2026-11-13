@@ -4,7 +4,7 @@
 Two module leads share this record; each owns its In-flight block, cards and experiments.
 - **Gold set** (labelling and capture of the gold dataset; E8, E12, E17, E18, E21, D14-D17, D21, D24): lead session on lorbeer.
 - **Data collection** (crawl for the new dataset version; E16, E19, E20, D23, crawl VMs): its own lead session.
-- IDs stay one sequence per kind for the project: `git pull` before issuing a card or experiment, take the next free number, commit and push the record at once.
+- IDs stay one sequence per kind for the project: `git pull` before issuing a card or experiment, take the next free number, commit and push the record at once. Decisions (agreed by both leads 2026-11-13 after a D62 clash): gold module D<100, data collection D100 and up.
 - Touch only your module's lines; anything that crosses modules (VM use, shared data on aspe/lorbeer, spend ledger) goes to Cards or a note in both In-flight blocks.
 
 ## In flight
