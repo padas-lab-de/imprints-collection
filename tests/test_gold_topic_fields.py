@@ -144,7 +144,7 @@ def test_http_topic_search_and_save(running):
     assert http(base + "/api/topic_search?schema=poi&id=nope")[0] == 404
     assert http(base + "/api/topic_search?schema=xx&q=a")[0] == 400
     state = json.loads(http(base + "/api/state")[1])
-    assert state["enums"]["confidence"] == ["high", "medium", "low"] and state["enums"]["schema_version"] == 2
+    assert state["enums"]["confidence"] == ["high", "medium", "low"] and state["enums"]["schema_version"] == 3
     bad = v2(topic_labels=tl(poi__extra=["restaurant"]))
     code, body = http(base + "/api/label", {"label": bad, "elapsed": 1})
     assert code == 400 and any("R5" in e for e in json.loads(body)["errors"])

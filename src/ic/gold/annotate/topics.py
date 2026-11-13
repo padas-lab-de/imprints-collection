@@ -114,11 +114,11 @@ def _live(label: dict) -> bool:
 def validate_schema_labels(label: dict) -> list[str]:
     """Check ``label['topic_labels']``: ids exist, at most 2 extras, no duplicates,
     R5 (an extra is not the main and not an ancestor of the main), confidence, online_only.
-    Labels with ``schema_version`` 2 must carry both schemas when the site is live."""
-    must = label.get("schema_version") == 2 and _live(label)
+    Labels with ``schema_version`` 2 or higher must carry both schemas when the site is live."""
+    must = isinstance(label.get("schema_version"), int) and label["schema_version"] >= 2 and _live(label)
     tl = label.get("topic_labels")
     if tl is None:
-        return ["topic_labels required (schema_version 2)"] if must else []
+        return ["topic_labels required (schema_version 2 or 3)"] if must else []
     if not isinstance(tl, dict):
         return ["topic_labels must be an object"]
     errs: list[str] = []

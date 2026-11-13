@@ -50,8 +50,6 @@ def make_handler(store: Store):
                             "imprint_location": schema.IMPRINT_LOCATION,
                             "roles": schema.ROLES,
                             "modality": schema.MODALITY,
-                            "operator_type": schema.OPERATOR_TYPE,
-                            "topics": schema.TOPICS,
                             "flags": schema.FLAGS,
                             "no_address_reason": schema.NO_ADDRESS_REASON,
                             "confidence": topics.CONFIDENCE,

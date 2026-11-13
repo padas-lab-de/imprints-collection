@@ -40,9 +40,6 @@ def good(**kw):
         "addresses": [addr()],
         "main_address_index": 0,
         "no_address_reason": None,
-        "operator_type": "corporate",
-        "topic": "Retail",
-        "topic_ambiguous": False,
         "flags": [],
         "comment": "",
     }
@@ -67,8 +64,6 @@ def test_enum_values_match_design():
         {"imprint_present": None},
         {"imprint_location": "nowhere"},
         {"imprint_present": True, "imprint_location": "none"},
-        {"topic": "Cats"},
-        {"operator_type": ""},
         {"flags": ["bogus"]},
         {"main_address_index": 3},
         {"main_address_index": None},
@@ -89,15 +84,35 @@ def test_address_rules():
     assert schema.validate_label(good(addresses=[addr(modality="image", evidence="")])) == []
     # main address must not be the agency
     assert schema.validate_label(good(addresses=[addr(role="agency")]))
+    # E53: main address only, so a second address is refused
     two = good(addresses=[addr(role="agency"), addr()], main_address_index=1, flags=["multi_address"])
-    assert schema.validate_label(two) == []
+    assert any("at most one address" in e for e in schema.validate_label(two))
+    assert schema.validate_label(good(addresses=[addr(), addr()]))
+
+
+def test_no_operator_type_and_no_11_class_topic_needed():
+    lab = good()
+    assert "operator_type" not in lab and "topic" not in lab
+    assert schema.validate_label(lab) == []
+    assert schema.validate_label(good(schema_version=3)) != []  # live site: topic labels required
+    # old records that still carry the fields stay valid (their values are not checked)
+    assert schema.validate_label(good(operator_type="corporate", topic="Retail")) == []
+    assert schema.validate_label(good(operator_type="nonsense", topic="Cats")) == []
+
+
+def test_single_main_address():
+    assert schema.validate_label(good(addresses=[addr()], main_address_index=0)) == []
+    assert schema.validate_label(good(addresses=[addr()], main_address_index=None))
+    assert schema.validate_label(good(addresses=[addr()], main_address_index=1))
+    no_addr = good(addresses=[], main_address_index=None, no_address_reason="imprint_without_address")
+    assert schema.validate_label(no_addr) == []
+    assert schema.validate_label({**no_addr, "no_address_reason": None})
 
 
 def test_negatives():
     dead = good(
         site_status="unreachable", imprint_present=False, imprint_location="none",
         addresses=[], main_address_index=None, no_address_reason="site_dead",
-        operator_type=None, topic=None,
     )
     assert schema.validate_label(dead) == []
     assert schema.validate_label({**dead, "no_address_reason": "no_imprint"})
@@ -158,13 +173,12 @@ def test_save_load_roundtrip_last_wins(tmp_path):
     assert errs == [] and warns == []
     assert rec["capture_id"] == "2026-11-05T10:12:03Z"
     assert rec["annotator"] == "L1" and rec["seconds_spent"] == 100 and rec["item"] == 1
-    lab2 = good(topic="Event", comment="  changed ")
+    lab2 = good(comment="  changed ")
     rec2, errs, _ = st.save_label(lab2, elapsed=30)
     assert errs == [] and rec2["seconds_spent"] == 130  # accumulates over edits
     lines = st.labels_path.read_text().strip().splitlines()
     assert len(lines) == 2  # append-only
     loaded = Store(st.data_dir, "L1").load_labels()
-    assert loaded["example.de"]["topic"] == "Event"
     assert loaded["example.de"]["comment"] == "changed"
     assert Store(st.data_dir, "L1").listing()[1]["done"] is True
 
@@ -180,7 +194,7 @@ def test_client_cannot_set_capture_id_or_other_labeller(tmp_path):
 
 def test_invalid_label_not_written(tmp_path):
     st = make_store(tmp_path)
-    rec, errs, _ = st.save_label(good(topic="Cats"), 1)
+    rec, errs, _ = st.save_label(good(site_status="gone"), 1)
     assert rec is None and errs and not st.labels_path.exists()
 
 
@@ -193,10 +207,33 @@ def test_torn_last_line_ignored(tmp_path):
 
 
 
+def pf_rec(host, **kw):
+    """One line in the format of scripts/E53/prefill.py."""
+    rec = {
+        "host": host,
+        "source": {"model": "m", "prompt": "p1", "created": "2026-11-13T09:00:00Z"},
+        "prefilled_from": "m",
+        "label": {"addresses": [{**addr(), "check": []}], "main_address_index": 0},
+        "no_address_reason": None,
+        "error": None,
+        "usage": {"prompt_tokens": 10, "completion_tokens": 5, "cost": 0.0001},
+    }
+    rec.update(kw)
+    return rec
+
+
+def write_prefill_lines(st, *recs, raw=()):
+    with open(st.data_dir / "prefill.jsonl", "w") as f:
+        for r in recs:
+            f.write(json.dumps(r) + "\n")
+        for r in raw:
+            f.write(r + "\n")
+
+
 def write_prefill(st, *hosts):
     with open(st.data_dir / "prefill.jsonl", "w") as f:
         for h in hosts:
-            rec = {"host": h, "source": {"model": "m", "prompt": "p1"}, "label": {"site_status": "live", "addresses": [addr()]}}
+            rec = pf_rec(h)
             f.write(json.dumps(rec) + "\n")
 
 
@@ -258,7 +295,7 @@ def test_http_flow(running):
     assert http(base + "/img/example.de/landing.png")[0] == 200
     assert http(base + "/img/example.de/imprint.png")[0] == 404
     assert http(base + "/img/example.de/..%2Fmeta.json")[0] == 404
-    code, body = http(base + "/api/label", {"label": good(topic="Cats"), "elapsed": 3})
+    code, body = http(base + "/api/label", {"label": good(site_status="gone"), "elapsed": 3})
     assert code == 400 and json.loads(body)["ok"] is False
     code, body = http(base + "/api/label", {"label": good(), "elapsed": 3})
     assert code == 200 and json.loads(body)["ok"] is True
@@ -272,3 +309,68 @@ def test_redirect_site_is_labelled_in_full():
 def test_image_evidence_defaults_to_image():
     lab = schema.normalise_label(good(addresses=[addr(modality="image", evidence="")]))
     assert lab["addresses"][0]["evidence"] == "image"
+
+
+# ---- prefill file (scripts/E53/prefill.py) ------------------------------------
+def test_prefill_new_format_is_read(tmp_path):
+    st = make_store(tmp_path)
+    write_prefill_lines(st, pf_rec("example.de"))
+    pf = Store(st.data_dir, "L1").prefill("example.de")
+    assert pf["source"] == "m/p1" and pf["no_address_reason"] is None
+    a = pf["label"]["addresses"][0]
+    assert a["postcode"] == "94032" and a["check"] == [] and pf["label"]["main_address_index"] == 0
+
+
+def test_prefill_error_lines_are_ignored(tmp_path):
+    st = make_store(tmp_path)
+    bad = pf_rec("example.de", label={"addresses": []}, error="parse: JSONDecodeError: x")
+    # only an error line: no suggestion
+    write_prefill_lines(st, bad)
+    assert Store(st.data_dir, "L1").prefill("example.de") is None
+    # earlier good line, then an error line: the good line stays
+    write_prefill_lines(st, pf_rec("example.de", source={"model": "m", "prompt": "good"}), bad)
+    assert Store(st.data_dir, "L1").prefill("example.de")["source"] == "m/good"
+    # error line first, good line later: the good line wins
+    write_prefill_lines(st, bad, pf_rec("example.de", source={"model": "m", "prompt": "later"}))
+    assert Store(st.data_dir, "L1").prefill("example.de")["source"] == "m/later"
+
+
+def test_prefill_last_good_line_wins_and_broken_lines_skipped(tmp_path):
+    st = make_store(tmp_path)
+    second = pf_rec("example.de", source={"model": "m", "prompt": "p2"})
+    write_prefill_lines(st, pf_rec("example.de"), second, raw=['{"host": "exam', "[]", ""])
+    assert Store(st.data_dir, "L1").prefill("example.de")["source"] == "m/p2"
+
+
+def test_prefill_no_address_reason_is_passed_on(tmp_path):
+    st = make_store(tmp_path)
+    rec = pf_rec("example.de", label={"addresses": []}, no_address_reason="imprint_without_address")
+    write_prefill_lines(st, rec)
+    pf = Store(st.data_dir, "L1").prefill("example.de")
+    assert pf["label"]["addresses"] == [] and pf["no_address_reason"] == "imprint_without_address"
+
+
+def test_prefill_never_carries_topics_or_operator(tmp_path):
+    st = make_store(tmp_path)
+    lab = {"addresses": [], "topic": "Retail", "operator_type": "corporate", "topic_labels": {"poi": {}}}
+    write_prefill_lines(st, pf_rec("example.de", label=lab))
+    assert Store(st.data_dir, "L1").prefill("example.de")["label"] == {"addresses": []}
+
+
+def test_prefill_file_option_and_pilot_shape(tmp_path):
+    st = make_store(tmp_path)
+    other = tmp_path / "elsewhere.jsonl"
+    other.write_text(json.dumps(pf_rec("example.de")) + "\n")
+    assert Store(st.data_dir, "L1").prefill("example.de") is None  # no <data-dir>/prefill.jsonl
+    assert Store(st.data_dir, "L1", prefill_file=other).prefill("example.de")
+
+
+def test_save_with_prefill_and_no_operator_or_topic(tmp_path):
+    st = make_store(tmp_path)
+    write_prefill_lines(st, pf_rec("example.de"))
+    st = Store(st.data_dir, "L1")
+    rec, errs, _ = st.save_label(good(schema_version=3, prefilled_from=True, topic_labels=None), 1)
+    assert errs, "live site at schema 3 needs topic labels"
+    rec, errs, _ = st.save_label(good(prefilled_from=True), 1)
+    assert errs == [] and rec["prefilled_from"] == "m/p1"
+    assert "operator_type" not in rec and "topic" not in rec and len(rec["addresses"]) == 1

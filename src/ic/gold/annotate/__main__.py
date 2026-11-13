@@ -21,9 +21,10 @@ def main(argv=None) -> None:
         default="all",
         help="show suggestions from <data-dir>/prefill.jsonl for these items (D24 B: default all)",
     )
+    ap.add_argument("--prefill-file", default=None, help="default: <data-dir>/prefill.jsonl")
     a = ap.parse_args(argv)
     roles = {"primary": ("primary",), "all": ("primary", "second", "calibration"), "none": ()}[a.prefill]
-    serve(Store(a.data_dir, a.labeller, a.assignment, prefill_roles=roles), a.bind, a.port)
+    serve(Store(a.data_dir, a.labeller, a.assignment, prefill_roles=roles, prefill_file=a.prefill_file), a.bind, a.port)
 
 
 if __name__ == "__main__":

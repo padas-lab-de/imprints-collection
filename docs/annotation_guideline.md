@@ -1,6 +1,6 @@
-# Annotation guideline: imprints, addresses, operator type and topic
+# Annotation guideline: imprints, main address and topic labels
 
-Status: 2026-10-24, for E18 (1,000-item gold set, three labellers L1, L2, L3). Decisions behind it: D14 A (label the live site, from the frozen capture), D24 B (a model suggestion is shown on every item), D12 (town as written; location scored by geocoding), D11 (topic from the homepage). Examples are public company or municipality imprints from the E8/E12 pilot captures (`datasets/E8/render/<host>/`, `datasets/E12/render/<host>/`).
+Status: 2026-11-13, for E53 (new gold set, three labellers L1, L2, L3; annotator names and calibration date: to be set). This version replaces the E18 version of 2026-10-24. Changes: you label the **main address only**; there is no operator type and no 11-class topic. Decisions behind it: D14 A (label the live site, from the frozen capture), D24 B (a model suggestion is shown on every item), D12 (town as written; location scored by geocoding), D11 (topic from the homepage). Examples are public company or municipality imprints from the E8/E12 pilot captures (`datasets/E8/render/<host>/`, `datasets/E12/render/<host>/`).
 
 ## 1. What one item is
 
@@ -16,9 +16,10 @@ One host (for example `heroes-burgers.de`). You see its **frozen capture**: full
 Every item opens with a model suggestion. A banner and the pill "pre-filled" mark it. Suggested values are violet. Orange fields are "not found verbatim in the captured text: check it".
 
 - The suggestion is a draft. Check every field against the capture and accept, correct or delete it.
-- Delete spurious address rows: duplicates; banks, BaFin, chambers, ombudsman, Google; town-only rows taken from a "Sitz" or register-court line (3.1).
+- The suggestion is one main address (or none). Check that it is the right address: the operator's, not a bank, BaFin, chamber, ombudsman, Google, or a town-only "Sitz" or register-court line (3.1).
 - Known weak spots: a town-only main address, template placeholder text, a house number left in the street field, an extra country.
 - An empty suggestion does not mean there is no address. Look at the imprint yourself.
+- If the suggestion shows a main address and you find no operator address, press "no address" on the card.
 - Never accept a value you have not seen in the capture.
 - The detailed topic labels (5.1) are never pre-filled. Decide them yourself.
 
@@ -37,7 +38,7 @@ Every item opens with a model suggestion. A banner and the pill "pre-filled" mar
 
 Tie-breakers: a login page that shows a company name and an imprint link is `live`. A "coming soon" page with an imprint link is `live`. If only `unreachable` vs `http_error` is unclear, take `http_error` when you see any server answer.
 
-If the status is not `live` or `redirect_other_domain`, the form hides the rest: operator type and topic stay empty, `no_address_reason` is `site_dead`. Add a comment only if something is odd.
+If the status is not `live` or `redirect_other_domain`, the form hides the rest: the topic labels stay empty, `no_address_reason` is `site_dead`. Add a comment only if something is odd.
 
 ### 2.2 Imprint (live sites)
 
@@ -58,17 +59,19 @@ Tie-breakers:
 - Imprint link exists but the page is empty, 404, or "coming soon": `imprint_present = yes`, and if there is no address, `imprint_without_address`.
 - Several imprint links (site and shop): the one reachable from the landing page footer or menu first; if equal, the one named *Impressum*.
 
-## 3. Addresses
+## 3. Main address
 
-### 3.1 What to list
+You label **one address per site: the main address**. The pipeline returns one address per site, and the gold set scores that address. Other addresses on the imprint are not labelled. If the imprint shows other operator-side locations, tick the flag `multi_address` (section 6). Nothing else is needed for them.
 
-List every **postal address of a party named in the imprint** as one row, with a role. Only addresses on the imprint (page, section, PDF), not footer addresses elsewhere on the site. Do not list e-mail, phone, URL or map links.
+### 3.1 What counts
 
-Do **not** list addresses of third parties named only for legal information: banks, courts, supervisory authorities, chambers, arbitration boards, insurers, tax offices. Example: the imprint of `meetingorganizer.copernicus.org` (Copernicus GmbH) lists the company at *Bahnhofsallee 1e, 37081 Göttingen*. It also gives a bank with "P.O. Box 1409, 37144 Northeim". The bank's P.O. box is not listed and not `po_box` for the operator.
+The main address is the postal address of the party responsible for the site, as the imprint gives it. Take it only from the imprint (page, section, PDF), not from footer addresses elsewhere on the site. Do not label e-mail, phone, URL or map links.
 
-If the same address appears several times (provider block and "responsible for content"), list it once.
+Do **not** take the address of a third party that the imprint names only for legal information: bank, court, supervisory authority, chamber, arbitration board, insurer, tax office. Example: the imprint of `meetingorganizer.copernicus.org` (Copernicus GmbH) gives the company at *Bahnhofsallee 1e, 37081 Göttingen*. It also gives a bank with "P.O. Box 1409, 37144 Northeim". The main address is the company's. The bank's P.O. box is not used.
 
-Roles:
+Do not take the address of a web agency, a designer, a photographer or a hosting provider.
+
+Roles (the form offers these four):
 
 | Role | Meaning |
 |---|---|
@@ -76,24 +79,20 @@ Roles:
 | `operator_other_site` | The operator's address taken from an imprint on another domain that the site points to (`imprint_location = other_domain`). |
 | `representative` | A person authorised to represent the operator ("Vertreten durch") with an own address, when the operator has none. |
 | `editor` | "Verantwortlich für den Inhalt nach § 18 MStV / V.i.S.d.P." with an own address, when no operator address exists. |
-| `agency` | Web agency, designer, photographer credit. |
-| `host` | Hosting provider. |
-| `other` | A further party whose address is given as a contact (branch, sister company, local office) that is not the operator's seat. |
 
-### 3.2 The main address
+### 3.2 How to choose the main address
 
-`main_address_index` marks the address of the party responsible for the site:
+Use this order:
 1. the address in the block headed by § 5 DDG / "Angaben gemäß" / "Anbieter";
 2. if the operator has several addresses: the one marked *Sitz*, *Hauptsitz*, *registered office*, *Gesellschaftssitz*; else the postal (not P.O. box) address listed first;
-3. if the operator has no address: `representative`, then `editor`, then none (`imprint_without_address`).
+3. if the operator has no address: the `representative`, then the `editor`;
+4. if none of these exists, there is no main address: press "no address" on the card (the tool sets `imprint_without_address`).
 
-`agency`, `host` and `other` are never main. When the only addresses listed are such roles, check "none of these is the operator's" in the form (`imprint_without_address`).
-
-Example (multi-address, CH). `blogs.letemps.ch`: the imprint of Le Temps lists a seat, *Avenue du Bouchet 2, 1209 Genève*, plus editorial offices in Bern (*Bundesgasse 8-12, 3003 Berne*), Sion and Neuchâtel. List the seat as `operator` (main), the editorial offices as `other`. Flag `multi_address`.
+Example (several addresses, CH). `blogs.letemps.ch`: the imprint of Le Temps lists a seat, *Avenue du Bouchet 2, 1209 Genève*, plus editorial offices in Bern, Sion and Neuchâtel. The main address is the seat. Tick `multi_address`. Do not enter the offices.
 
 ### 3.3 Copying the fields
 
-The suggestion pre-fills the fields; your job is to correct them. Compare each field with the DOM text. To fix one, select the text in the DOM text pane and press the arrow button next to the field (copy, do not type). Address cards have buttons for main, show evidence (it is highlighted in the DOM text) and remove. Keep spelling, case and abbreviations as written. Do not correct or expand anything.
+The suggestion pre-fills the fields; your job is to correct them. Compare each field with the DOM text. To fix one, select the text in the DOM text pane and press the arrow button next to the field (copy, do not type). The address card has buttons for show evidence (it is highlighted in the DOM text) and no address. Keep spelling, case and abbreviations as written. Do not correct or expand anything.
 
 | Field | Rule |
 |---|---|
@@ -109,8 +108,8 @@ The tool's "split selection into fields" helper cuts a selected address at the p
 Address cases:
 - **Split over lines or mixed with phone numbers:** copy the address parts only; evidence is the lines you used.
 - **Partial address** (postcode and town, no street): list what is there. Example: `cardinalsbern.ch`, "Bern Cardinals / Baseball & Softball Club / 3000 Bern": postcode 3000, town Bern, street empty, role `operator`.
-- **P.O. box** (*Postfach*, *Case postale*, *P.O. Box*): tick `po_box`; street = `Postfach`, number = box number. If the operator gives both a street address and a P.O. box, list both rows (same role), make the street address main, flag `po_box` only. If only a P.O. box exists, it is the main address.
-- **Outside DACH** (e.g. a German-language site run from Thailand): list it normally and flag `non_dach`. Example: `clickthai-online.de`: *112/34 Moo 11 Soi Khao Talo, Nongprue Banglamung, Chonburi 20150, Thailand*.
+- **P.O. box** (*Postfach*, *Case postale*, *P.O. Box*): tick `po_box`; street = `Postfach`, number = box number. If the operator gives both a street address and a P.O. box, the street address is the main address; do not enter the P.O. box. If only a P.O. box exists, it is the main address.
+- **Outside DACH** (e.g. a German-language site run from Thailand): enter it normally and flag `non_dach`. Example: `clickthai-online.de`: *112/34 Moo 11 Soi Khao Talo, Nongprue Banglamung, Chonburi 20150, Thailand*.
 - **Address in an image** (`modality = image`): read it from the screenshot and type it. Leave evidence empty (the tool stores `image`). Example: `aristoteles.media` shows the publisher's address only as a picture in the imprint; the DOM text has only the e-mail address.
 - **Address in a PDF** (`modality = pdf`): type it from the PDF, evidence `pdf`.
 - **Behind an interaction** (accordion, click-to-reveal, modal; `modality = js_only`): it counts. If the DOM text lacks it, open the live site, type the fields, put the visible text in evidence, tick `used_live_site`.
@@ -123,63 +122,21 @@ Address cases:
 When the address list is empty the tool sets `no_address_reason`:
 - `site_dead`: the site is not live.
 - `no_imprint`: live, no imprint (2.2).
-- `imprint_without_address`: an imprint exists but gives no postal address for the operator (only e-mail, phone, form, "address on request", or only agency/host addresses).
+- `imprint_without_address`: an imprint exists but gives no postal address for the operator (only e-mail, phone, form, "address on request", or only agency/host addresses). Press "no address" on the card.
 
 Examples of the three negatives: `0208.cloud` (DNS failure, `unreachable`, `site_dead`); a hobby site with a contact form and no legal page (`no_imprint`); `cardinalsbern.ch`-like club pages with only "3000 Bern" are **not** negatives (partial address).
 
-## 4. Operator type
+## 4. Operator type: not labelled
 
-Legal form decides first; if none is named, look at who runs the site.
+E53 has no operator type. Skip it. (The numbering of the sections below stays, so that references to 5.1 to 5.9 stay valid.)
 
-| Value | Includes | Typical tokens |
-|---|---|---|
-| `corporate` | Companies and legal entities with a business purpose, partnerships with a company name, co-operatives, charitable companies | GmbH, UG, AG, KG, GmbH & Co. KG, OHG, GbR with a trading name, SE, Ltd., S.A., Sàrl, eG, gGmbH |
-| `association` | Clubs, associations, foundations, parties, unions, church parishes, initiatives | e.V., Verein, Verband, Stiftung, Partei, Kirchengemeinde, Förderverein |
-| `public_body` | Authorities and bodies under public law | Gemeinde, Stadt, Landkreis, Land, Schule/Hochschule (public), Behörde, Kammer, Anstalt öffentlichen Rechts |
-| `sole_trader` | A natural person acting in business or profession | Inhaber, e.K., Einzelunternehmen, freelancer, Freiberufler, single practice (doctor, lawyer), craftsperson |
-| `private_person` | A person with no business or organisational purpose | personal blog, family or hobby page |
-| `unclear` | Cannot be decided (no imprint and no hint) | |
+## 5. Topic labels
 
-Tie-breakers:
-- GmbH & Co. KG is `corporate`. A private school run by a GmbH is `corporate`; a municipal school is `public_body`.
-- A hobby site of a person who also runs a business is `sole_trader` only if the site advertises that business.
-- The named operator counts, not the agency or the hoster.
-- A volunteer fire brigade is `public_body` when the imprint names the municipality, else `association`.
-- A partnership of professionals (GbR, PartG) without a trading name: `sole_trader`. Doubtful? Choose `unclear` and comment.
+The E18 version had an 11-class topic for the whole site. E53 does not use it. Do not label it and do not tick `topic_ambiguous`. You give only the two detailed topic labels in 5.1 to 5.9.
 
-Examples: *Gemeinde Kollig, Pilliger Weg 33, 56751 Kollig* is `public_body`. *Copernicus GmbH* and *Gesundheitsforen Leipzig GmbH* are `corporate`. *Bern Cardinals, Baseball & Softball Club* is `association`.
+### 5.1 POI v3 and WZ 2025
 
-## 5. Topic
-
-One of 11 classes, for the **website as a whole**, judged on the homepage (D11) and not on the imprint's boilerplate. Pick what the site is about or offers.
-
-| Class | Typical sites |
-|---|---|
-| Arts and Entertainment | museum, gallery, cinema, theatre, zoo, amusement, music school |
-| Business and Professional Services | lawyer, tax adviser, craftsperson, agency, IT, consultancy, bank, insurance, hairdresser, trade, manufacturer without web shop |
-| Community and Government | municipality, school, university, library, church, association with public purpose, fire brigade, cemetery |
-| Dining and Drinking | restaurant, café, bakery with seating, caterer, hotel restaurant |
-| Event | a single event or a series: festival, conference, concert, fair |
-| Health and Medicine | doctor, clinic, therapy, vet, care service |
-| Landmarks and Outdoors | sights, parks, trails, campsite, playground, viewpoint |
-| Nightlife Spot | bar, club, disco, shisha lounge |
-| Retail | web shop or shop, pharmacy |
-| Sports and Recreation | sports club, gym, leisure facility |
-| Travel and Transportation | hotel, holiday flat, travel agency, taxi, airline, rail |
-
-Tie-breakers:
-- Sells goods online: `Retail`. Sells a service or its know-how: `Business and Professional Services`.
-- Clubs by purpose: sports club is `Sports and Recreation`, a choir `Arts and Entertainment`, fire brigade or municipality `Community and Government`.
-- Hotel and holiday flat: `Travel and Transportation`; restaurant: `Dining and Drinking`; a hotel site that is mostly about its restaurant is still Travel unless the homepage leads with the restaurant.
-- Conference website for one conference: `Event`; the organiser's own company site: by its business.
-- A site of a person or company with no recognisable offer (parked, empty): pick the closest and tick `topic_ambiguous`.
-- Two classes fit equally: tick `topic_ambiguous` and take the one that matches the first screen of the landing page.
-
-Example: `heroes-burgers.de` (Heroes Burgers, *Leibnizstr. 13, 60316 Frankfurt am Main*) is `Dining and Drinking`. `herxheimamberg.de` is the municipality site of Herxheim am Berg: `Community and Government`.
-
-### 5.1 Topic labels: POI v3 and WZ 2025
-
-Status: 2026-11-10 (D51 B). Rules R1 to R7 come from the E49 topic study (`results/E49/labelling_spec.md`). The 11-class topic above stays. In addition, give each live site two detailed topic labels: one from the POI v3 tree (what the site offers, 753 nodes) and one from the WZ 2025 tree (economic activity, German WZ codes). The tool shows these in sections 5a and 5b. They are **not pre-filled**. Decide them yourself, from the capture only.
+Status: 2026-11-10 (D51 B). Rules R1 to R7 come from the E49 topic study (`results/E49/labelling_spec.md`). Give each live site two topic labels: one from the POI v3 tree (what the site offers, 753 nodes) and one from the WZ 2025 tree (economic activity, German WZ codes). The tool shows these in sections 5a and 5b. They are **not pre-filled**. Decide them yourself, from the capture only.
 
 Each schema has these fields:
 
@@ -253,7 +210,7 @@ An online-only operator has no place that a visitor can visit: a blog, a forum, 
 
 ## 6. Flags and comment
 
-Flags (the form pre-ticks some; untick if wrong): `multi_address` (at least two distinct operator-side locations, not just a P.O. box next to a street), `po_box` (an operator address is a P.O. box), `obfuscated`, `non_dach` (an operator address outside DE/AT/CH), `capture_problem`, `used_live_site`.
+Flags (the form pre-ticks `po_box`; untick if wrong): `multi_address` (the imprint shows at least one more operator-side location besides the main address, not just a P.O. box next to a street; you tick it yourself), `po_box` (the main address is a P.O. box), `obfuscated`, `non_dach` (the main address is outside DE/AT/CH), `capture_problem`, `used_live_site`.
 
 `comment`: short and in English or German. Required for: `used_live_site`, `capture_problem`, any rule you had to bend, `kontakt as imprint`, "address in footer". Never paste personal data into comments.
 
@@ -275,13 +232,13 @@ Personal data: copy addresses exactly as the imprint gives them, including the h
 | Stratum (hard case) | Host | What to label |
 |---|---|---|
 | site not live | `0208.cloud` | `unreachable`; nothing else. |
-| no imprint | any hobby site with only a contact form | `live`, imprint no, `no_imprint`, operator type from content or `unclear`, topic from homepage. |
+| no imprint | any hobby site with only a contact form | `live`, imprint no, `no_imprint`, topic labels from the homepage. |
 | imprint without address | club page with imprint listing e-mail and a name only | `live`, imprint yes, no address, `imprint_without_address`. |
-| plain text address, corporate | `meetingorganizer.copernicus.org` | operator *Bahnhofsallee 1e, 37081 Göttingen*; bank P.O. box ignored; `corporate`. |
-| public body | `kollig.orts.app` (JS-rendered imprint) | *Gemeinde Kollig, Pilliger Weg 33, 56751 Kollig*; representative address is identical and listed once; `public_body`; `Community and Government`. |
-| JS-required imprint | `export.transplantations-register.de` | imprint appears only in the rendered text; operator *Gesundheitsforen Leipzig GmbH, Hainstraße 16, 04109 Leipzig*; `corporate`. |
-| multi-address, CH | `blogs.letemps.ch` | seat main, editorial offices `other`, flag `multi_address`. |
-| agency/hoster next to operator | any imprint with "Webdesign by ..." | list the agency as `agency`; main is the operator. |
+| plain text address | `meetingorganizer.copernicus.org` | main address *Bahnhofsallee 1e, 37081 Göttingen*; bank P.O. box ignored. |
+| public body | `kollig.orts.app` (JS-rendered imprint) | main address *Pilliger Weg 33, 56751 Kollig* (Gemeinde Kollig); the representative's address is identical. |
+| JS-required imprint | `export.transplantations-register.de` | imprint appears only in the rendered text; main address *Hainstraße 16, 04109 Leipzig* (Gesundheitsforen Leipzig GmbH). |
+| several addresses, CH | `blogs.letemps.ch` | the seat is the main address; flag `multi_address`; offices not entered. |
+| agency/hoster next to operator | any imprint with "Webdesign by ..." | main address is the operator's; the agency is not entered. |
 | P.O. box | operator with Postfach only | street `Postfach`, number the box, `po_box`. |
 | image-only address | `aristoteles.media` | address typed from the screenshot, `modality = image`. |
 | partial address | `cardinalsbern.ch` | postcode 3000, town Bern, street empty. |

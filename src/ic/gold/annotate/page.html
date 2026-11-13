@@ -200,6 +200,7 @@ let idx = -1;          // index in S.items
 let cap = null;        // capture of current item
 let M = null;          // model of the current form
 let PF = new Set();    // top-level keys still holding the unchanged suggestion
+let pfReason = null;   // no_address_reason of the suggestion, if any
 let pfSource = null;   // "model/prompt" when the form started from a suggestion
 let dirty = false;
 let page = "landing";  // one page shown in both panes
@@ -227,9 +228,9 @@ setInterval(() => { if (!document.hidden && document.hasFocus() && idx >= 0) act
 // ---- model --------------------------------------------------------------
 function blankModel(host) {
   return { host, site_status: "", imprint_present: null, imprint_url: "", imprint_location: "",
-           addresses: [], main_address_index: null, no_address_reason: "", operator_type: "",
-           topic: "", topic_ambiguous: false, flags: [], comment: "", prefilled_from: false,
-           schema_version: 2, topic_labels: blankTL() };
+           addresses: [], main_address_index: null, no_address_reason: "",
+           flags: [], comment: "", prefilled_from: false,
+           schema_version: 3, topic_labels: blankTL() };
 }
 // ---- topic labels (POI v3 + WZ 2025): main + up to 2 extra, no prefill ---------
 const TSCHEMAS = [["poi", "POI v3 (what the site offers)"], ["wz", "WZ 2025 (economic activity)"]];
@@ -326,38 +327,51 @@ function blankAddr() {
   return { role: "operator", street: "", number: "", postcode: "", town: "", country: "",
            po_box: false, modality: "text", evidence: "", _sugg: new Set(), _check: [] };
 }
+// only the main address is labelled (schema 3). Older records may list several addresses:
+// keep the main one, drop the rest, and tell the labeller (OLD_NOTE).
+let OLD_NOTE = "";
 function fromSaved(l) {
   const m = blankModel(l.host);
-  for (const k of Object.keys(m)) if (l[k] !== undefined && l[k] !== null) m[k] = l[k];
+  for (const k of ["site_status", "imprint_present", "imprint_url", "imprint_location", "flags", "comment", "topic_labels"])
+    if (l[k] !== undefined && l[k] !== null) m[k] = l[k];
+  m.flags = [...(m.flags || [])];
   m.prefilled_from = !!l.prefilled_from;
-  m.schema_version = 2;
+  m.schema_version = 3;
   m.topic_labels = mergeTL(l.topic_labels);   // old records without topic labels load blank
-  m.addresses = (l.addresses || []).map(a => Object.assign(blankAddr(), a, { _sugg: new Set(), _check: [] }));
-  m.main_address_index = l.main_address_index === undefined ? null : l.main_address_index;
-  m.none_op = !!(m.addresses.length && l.no_address_reason === "imprint_without_address");
+  const all = l.addresses || [];
+  let mi = Number.isInteger(l.main_address_index) ? l.main_address_index : null;
+  if (mi === null && all.length === 1 && l.no_address_reason !== "imprint_without_address") mi = 0;
+  OLD_NOTE = "";
+  if (mi !== null && all[mi]) {
+    m.addresses = [Object.assign(blankAddr(), all[mi], { _sugg: new Set(), _check: [] })];
+    if (all.length > 1) OLD_NOTE = `This old label lists ${all.length} addresses. Only the main address is shown and will be kept when you save.`;
+  } else if (all.length) OLD_NOTE = `This old label lists ${all.length} address(es), none of them the operator's. They are not shown; the label will say: no address.`;
   return m;
 }
 function fromPrefill(p) {
   const m = blankModel(cap.host), l = p.label || {};
   PF = new Set();
-  for (const k of ["site_status", "imprint_present", "imprint_url", "imprint_location", "operator_type", "topic"])
+  for (const k of ["site_status", "imprint_present", "imprint_url", "imprint_location"])
     if (l[k] !== undefined && l[k] !== null && l[k] !== "") { m[k] = l[k]; PF.add(k); }
-  m.addresses = (l.addresses || []).map(a => {
+  // the suggestion is the main address only: addresses[main_address_index]
+  const all = l.addresses || [], mi = Number.isInteger(l.main_address_index) ? l.main_address_index : null;
+  const a = mi !== null ? all[mi] : null;
+  if (a) {
     const b = Object.assign(blankAddr(), a);
+    if (!MAIN_ROLES.includes(b.role)) b.role = "operator";
     b._check = (a.check || []).filter(k => k !== "country");
     if ((a.check || []).includes("country")) b.country = "";  // country only when written
     b._sugg = new Set(["role", "street", "number", "postcode", "town", "country", "po_box", "evidence"].filter(k => a[k]));
     delete b.check;
-    return b;
-  });
-  if (Number.isInteger(l.main_address_index)) { m.main_address_index = l.main_address_index; PF.add("main"); }
-  if (m.addresses.length) PF.add("addresses");
+    m.addresses = [b];
+    PF.add("addresses");
+  }
   m.prefilled_from = true;
   return m;
 }
 const isLive = () => ["live", "redirect_other_domain"].includes(M.site_status);
 function derivedReason() {
-  if (M.addresses.length) return M.none_op ? "imprint_without_address" : "";
+  if (M.addresses.length) return "";
   if (!M.site_status) return "";
   if (!isLive()) return "site_dead";
   if (M.imprint_present === false) return "no_imprint";
@@ -365,16 +379,13 @@ function derivedReason() {
   return "";
 }
 function normalise() {
-  if (!M.addresses.length) M.none_op = false;
+  if (M.addresses.length > 1) M.addresses = M.addresses.slice(0, 1);
+  // an address needs a live site with an imprint; while status and imprint are still open (a fresh
+  // suggestion), keep it
+  if ((M.site_status && !isLive()) || M.imprint_present === false) M.addresses = [];
   M.no_address_reason = derivedReason();
-  if (!M.addresses.length) M.main_address_index = null;
-  else if (M.no_address_reason === "imprint_without_address") M.main_address_index = null;
-  else if (M.main_address_index === null || M.main_address_index >= M.addresses.length) {
-    const i = M.addresses.findIndex(a => MAIN_ROLES.includes(a.role));
-    M.main_address_index = i >= 0 ? i : 0;
-  }
+  M.main_address_index = M.addresses.length ? 0 : null;
   if (M.addresses.some(a => a.po_box) && !M.flags.includes("po_box")) M.flags.push("po_box");
-  if (M.addresses.filter(a => !a.po_box && MAIN_ROLES.includes(a.role)).length >= 2 && !M.flags.includes("multi_address")) M.flags.push("multi_address");
   if (!isLive()) { M.imprint_present = M.site_status ? false : null; M.imprint_location = M.site_status ? "none" : ""; }
 }
 function touch() { dirty = true; normalise(); renderForm(); renderText(); }
@@ -443,19 +454,18 @@ function renderForm() {
     }
     f.append(imp);
   }
-  // addresses
-  const af = el("fieldset", {}, [el("legend", {}, "3. Addresses on the imprint")]);
+  // main address: exactly one card, or none
+  const af = el("fieldset", {}, [el("legend", {}, "3. Main address (operator, from the imprint)")]);
+  if (OLD_NOTE) af.append(el("div", { class: "tpnote" }, OLD_NOTE));
   M.addresses.forEach((a, i) => {
-    const isMain = M.main_address_index === i && M.no_address_reason !== "imprint_without_address";
     const o = { sugg: a._sugg, check: a._check, retext: false };
-    const card = el("div", { class: "addr" + (isMain ? " main" : "") + (a._check.length ? " hascheck" : "") }, [
-      el("h4", {}, [`Address ${i + 1}`,
-        el("button", { type: "button", class: "chip sm main-btn" + (isMain ? " on" + (PF.has("main") ? " sugg" : "") : ""), onclick: () => { M.main_address_index = i; PF.delete("main"); dirty = true; renderForm(); renderText(); } }, isMain ? "★ main" : "☆ make main"),
+    const card = el("div", { class: "addr main" + (a._check.length ? " hascheck" : "") }, [
+      el("h4", {}, ["Main address",
         el("span", { class: "grow" }),
         el("button", { type: "button", class: "chip sm", title: "show the evidence in the text pane", onclick: () => showEvidence(i) }, "⌖ show"),
-        el("button", { type: "button", class: "chip sm", onclick: () => { M.addresses.splice(i, 1); PF.delete("main"); touch(); } }, "✕ remove")]),
+        el("button", { type: "button", class: "chip sm", onclick: () => { M.addresses = []; PF.delete("addresses"); touch(); } }, "✕ no address")]),
       ...(a._check.length ? [el("div", { class: "checknote" }, "Not found verbatim in the text: " + a._check.join(", ") + ". Check these fields.")] : []),
-      chips(E.roles, a.role, v => { a.role = v; a._sugg.delete("role"); touch(); }, { sm: true, sugg: a._sugg.has("role") }),
+      chips(MAIN_ROLES, a.role, v => { a.role = v; a._sugg.delete("role"); touch(); }, { sm: true, sugg: a._sugg.has("role") }),
       el("div", { class: "field" }, [el("button", { type: "button", class: "pick wide", title: "split the selected text into the fields below (check the result)", onclick: () => splitSelection(a) }, "◂ split selection into fields")]),
       el("div", { class: "two" }, [textField("street", a, "street", o), textField("no.", a, "number", o)]),
       el("div", { class: "two rev" }, [textField("postcode", a, "postcode", o), textField("town", a, "town", o)]),
@@ -467,17 +477,12 @@ function renderForm() {
     ]);
     af.append(card);
   });
-  af.append(el("button", { type: "button", class: "addbtn", onclick: () => { M.addresses.push(blankAddr()); touch(); } }, "+ add address"));
-  if (!M.addresses.length) af.append(el("div", { class: "mute", style: "margin-top:6px" }, "No address listed. Reason (automatic): " + (M.no_address_reason || "-")));
-  else af.append(el("div", { class: "sub" }, [toggle("none of these is the operator's (imprint without address)", !!M.none_op, v => { M.none_op = v; touch(); })]));
-  f.append(af);
-  if (isLive()) {
-    f.append(el("fieldset", {}, [el("legend", {}, "4. Operator type"),
-      chips(E.operator_type, M.operator_type, v => set("operator_type", v), { grid: "g3", sugg: PF.has("operator_type") })]));
-    f.append(el("fieldset", {}, [el("legend", {}, "5. Topic (whole site)"),
-      chips(E.topics, M.topic, v => set("topic", v), { grid: "g2", sugg: PF.has("topic") }),
-      el("div", { class: "sub" }, [toggle("topic is ambiguous", M.topic_ambiguous, v => { M.topic_ambiguous = v; dirty = true; renderForm(); })])]));
+  if (!M.addresses.length) {
+    if (isLive() && M.imprint_present === true)
+      af.append(el("button", { type: "button", class: "addbtn", onclick: () => { M.addresses.push(blankAddr()); touch(); } }, "+ enter the main address"));
+    af.append(el("div", { class: "mute", style: "margin-top:6px" }, "No address. Reason (automatic): " + (M.no_address_reason || "-")));
   }
+  f.append(af);
   if (isLive()) {
     f.append(el("div", { class: "tpnote hint" }, "Topic labels (5a, 5b): per schema one main label and up to 2 extra labels. Type to search; pick the finest node you can decide, or an inner node when the site does not decide between its children. Nothing is pre-filled."));
     for (const [sch, title] of TSCHEMAS) f.append(topicSection(sch, (sch === "poi" ? "5a. " : "5b. ") + title));
@@ -572,9 +577,9 @@ async function load(i) {
   idx = i; dirty = false; activeSeconds = 0; showErrors([]); $("#saved").textContent = ""; $("#msg").replaceChildren();
   const r = await fetch("/api/item?host=" + encodeURIComponent(S.items[i].host));
   const d = await r.json(); cap = d.capture;
-  PF = new Set(); pfSource = null;
+  PF = new Set(); pfSource = null; pfReason = null; OLD_NOTE = "";
   if (d.label) M = fromSaved(d.label);
-  else if (d.prefill) { M = fromPrefill(d.prefill); pfSource = d.prefill.source; }
+  else if (d.prefill) { M = fromPrefill(d.prefill); pfSource = d.prefill.source; pfReason = d.prefill.no_address_reason; }
   else M = blankModel(cap.host);
   if (d.label) $("#saved").textContent = "saved " + d.label.saved_at + " (" + d.label.seconds_spent + " s)";
   const b = $("#banner"); b.replaceChildren();
@@ -583,13 +588,14 @@ async function load(i) {
   if (cap.exists && !cap.capture_id) b.append(el("div", { class: "banner" }, "meta.json has no timestamp; capture_id will be empty."));
   const pb = $("#pfbanner"); pb.replaceChildren();
   if (pfSource) pb.append(el("div", { class: "banner pf" }, [el("b", {}, "Pre-filled suggestion "), `(${pfSource}). `,
-    "Violet = suggested, not yet confirmed; orange = not found verbatim in the text. Check against the text, fix what is wrong, then Save & next."]));
+    "Violet = suggested, not yet confirmed; orange = not found verbatim in the text. Check against the text, fix what is wrong, then Save & next.",
+    ...(!M.addresses.length ? [` The model found no address${pfReason ? " (" + pfReason + ")" : ""}. Look at the imprint yourself.`] : [])]));
   for (const p of ["landing", "imprint"]) document.querySelectorAll(`[data-page="${p}"]`).forEach(x => x.disabled = cap.texts[p] === undefined && !cap.images[p]);
   lastSel = ""; window.getSelection().removeAllRanges();
   tpNote = "";
   normalise(); renderHeader(); renderForm(); ensureNodes();
   // start on the page that holds the main address, else the imprint, else the landing page
-  const ev = M.addresses.length ? (evidencePage(M.main_address_index === null ? undefined : M.main_address_index) || evidencePage()) : null;
+  const ev = M.addresses.length ? (evidencePage(0) || evidencePage()) : null;
   setPage(ev || (cap.texts.imprint !== undefined || cap.images.imprint ? "imprint" : "landing"));
   if (ev) { const m = $(`#txt mark.main`) || $("#txt mark"); if (m) m.scrollIntoView({ block: "center" }); }
   $("#formbody").scrollTop = 0;

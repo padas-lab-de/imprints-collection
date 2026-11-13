@@ -8,7 +8,7 @@ Layout (docs/gold_set_design.md section 3), below ``data_dir`` (default ``datase
     <host>/imprint.png|.jpg, imprint.txt
     <host>/meta.json            provenance (capture timestamp, final URLs, ...)
     labels/<labeller>.jsonl     one JSON line per save; the last line per host wins
-    prefill.jsonl               suggested labels (scripts/gold/e21_prefill.py), optional
+    prefill.jsonl               suggested main addresses (scripts/E53/prefill.py), optional
 
 A labeller only ever reads its own labels file. Suggestions are shown only for the
 roles in ``prefill_roles``. The CLI shows them on all items (D24 B); agreement between
@@ -50,10 +50,12 @@ class Store:
         labeller: str,
         assignment: str | Path | None = None,
         prefill_roles: tuple[str, ...] = ("primary",),
+        prefill_file: str | Path | None = None,
     ):
         self.data_dir = Path(data_dir)
         self.prefill_roles = tuple(prefill_roles)
         self.labeller = labeller
+        self.prefill_path = Path(prefill_file) if prefill_file else self.data_dir / "prefill.jsonl"
         self.assignment_path = Path(assignment) if assignment else self.data_dir / "assignment.jsonl"
         self.labels_path = self.data_dir / "labels" / f"{labeller}.jsonl"
         self._lock = threading.Lock()
@@ -82,25 +84,43 @@ class Store:
         return rows
 
     def _load_prefill(self) -> dict[str, dict]:
-        p = self.data_dir / "prefill.jsonl"
+        """Read the prefill file (scripts/E53/prefill.py): per host the last line without an
+        ``error`` wins; lines with an error (or broken lines) are ignored, so an earlier good line
+        stays valid and a host with no good line has no suggestion."""
+        p = self.prefill_path
         out: dict[str, dict] = {}
         if p.exists():
             with open(p, encoding="utf-8") as f:
                 for line in f:
-                    if line.strip():
+                    if not line.strip():
+                        continue
+                    try:
                         r = json.loads(line)
-                        out[r["host"]] = r
+                    except json.JSONDecodeError:
+                        continue
+                    if not isinstance(r, dict) or not isinstance(r.get("host"), str):
+                        continue
+                    if r.get("error") or not isinstance(r.get("label"), dict):
+                        continue
+                    out[r["host"]] = r
         return out
 
     def prefill(self, host: str) -> dict | None:
-        """Suggested label for this labeller's item, or None (role not pre-filled, no suggestion)."""
+        """Suggested main address for this labeller's item, or None (role not pre-filled, no
+        usable suggestion). Only the address part is used; topics, operator type and the old
+        11-class topic are never suggested."""
         it = self._by_host.get(host)
         r = self._prefill.get(host)
         if not it or not r or it.get("role") not in self.prefill_roles:
             return None
         src = r.get("source") or {}
-        lab = {k: v for k, v in (r.get("label") or {}).items() if k != "topic_labels"}  # never anchor topics
-        return {"label": lab, "source": f"{src.get('model', '?')}/{src.get('prompt', '?')}"}
+        drop = ("topic_labels", "topic", "topic_ambiguous", "operator_type")
+        lab = {k: v for k, v in (r.get("label") or {}).items() if k not in drop}
+        return {
+            "label": lab,
+            "no_address_reason": r.get("no_address_reason"),
+            "source": f"{src.get('model', r.get('prefilled_from', '?'))}/{src.get('prompt', '?')}",
+        }
 
     def has_host(self, host: str) -> bool:
         return host in self._by_host
