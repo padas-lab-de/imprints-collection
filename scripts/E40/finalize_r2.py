@@ -73,12 +73,25 @@ def main():
         for (x, y), n in sorted(trans.items(), key=lambda t: -t[1]):
             f.write(f"{x}->{y}\t{n}\n")
     s1, s2 = by_source(r1d / "filter_by_source.tsv"), by_source(r2d / "filter_by_source.tsv")
-    assert [r["source"] for r in s1] == [r["source"] for r in s2], "source order differs"
+    # r5 patch: R2 may have sources that R1 lacks (E48, E34r4) and new_d34 of an older source can shift by a few
+    # sites (a newly crawled host becomes a redirect target). Match rows by source name; a source missing in R1
+    # gets zeros; a new_d34 mismatch is reported on stderr instead of failing.
+    import sys
+    s1 = {r["source"]: r for r in s1}
+    zero = dict(new_d34="0", sale="0", park="0", host="0", constr="0")
+    pairs = []
+    for y in s2:
+        x = s1.get(y["source"])
+        if x is None:
+            print(f"r5: source {y['source']} not in r1, r1 values = 0", file=sys.stderr)
+            x = dict(zero, source=y["source"])
+        elif x["new_d34"] != y["new_d34"]:
+            print(f"r5: {y['source']} new_d34 r1 {x['new_d34']} r2 {y['new_d34']}", file=sys.stderr)
+        pairs.append((x, y))
     cols = ["new_d34", "flagged_all", "sale", "park", "host", "constr", "new_d34_after_all"]
     with open(r2d / "delta_by_source.tsv", "w") as f:
         f.write("source\tnew_d34\tr1_after_drop\tr2_after_drop\tadded_drops\tadded_sale\tadded_park\tadded_host\tadded_constr\n")
-        for x, y in zip(s1, s2):
-            assert x["new_d34"] == y["new_d34"], x["source"]
+        for x, y in pairs:
             d = {c: int(y[c]) - int(x[c]) for c in ("sale", "park", "host", "constr")}
             r1a = int(x["new_d34"]) - int(x["sale"]) - int(x["park"]) - int(x["host"])
             r2a = int(y["new_d34"]) - int(y["sale"]) - int(y["park"]) - int(y["host"])

@@ -182,8 +182,39 @@ identical list file (check its sha256) and get a disjoint batch range. Then, for
 `sources.tsv` first), scan with `scripts/E40/scan_all.py --manifest OUT/E31_in/manifest.tsv --targets
 scripts/E40/targets_classified.tsv --out OUT/scan`, and run the quick start steps on these dirs.
 
-r5 (after E48): add E48 and the E34r4 pilot to `sources.tsv` after E47, extract them, rerun count and filter with
-`--r5` (`r2_name_for_sale` flag only; about 269 sites stay in).
+r5 (after E48): see "Rebuild the r5 count" below.
+
+## Rebuild the r5 count
+
+r5 adds E48 (5 tables) and the E34r4 pilot (1 table) to r4 and uses the r5 rule (`r2_name_for_sale` is flag only).
+The r5 build used a build directory `r5-build/` with the scripts named below (they are not in the repo, except
+where a repo command is given). Final r5 numbers: TODO(lead): add when E48 is final.
+
+1. **Pull the new tables.** Copy the E48 crawl output of each VM to the lorbeer data dir with `copy_e48.sh`
+   (rsync, read-only on the VM; then `gzip -t` and sha256). Add E48 and the E34r4 pilot to `sources.tsv` after
+   E47. Extract only the new sources with the repo command:
+   `python3 scripts/E31/pull.py --out OUT/E31_in --sources scripts/E31/sources.tsv --only-source E48,E34r4`.
+   Put the 6 new tables and their manifest rows together with the 99 r4 tables in one `E31_in`
+   (a manifest with the r4 rows first, then the new rows).
+2. **Scan the new tables.** `run_scan_new.sh` runs the repo command
+   `python3 scripts/E40/scan_all.py --manifest NEW/manifest.tsv --targets filter/E40r2/targets_classified.tsv
+   --out scan_new --local-workers 3` on the 6 new tables only (same arguments as the r4 scan).
+3. **Build the package copy.** `make_pkg2.sh` makes `pkg2` from the r4 package: all entries are links, and
+   `filter/E40r2/scan/` holds the r4 scan files plus the 6 new scan files. Do not change the r4 files.
+4. **Recount and finalize with `--r5`.**
+   `bash scripts/E31/recount.sh pkg2 out2 --r5` (the script was not changed for r5; `run_recount.sh` only wraps it
+   with a venv python and `/usr/bin/time -v`). Note: `recount.sh` reads `counts/r4/E31_in` in the package, so put
+   the r5 `E31_in` there (in `pkg2`). `finalize_r2.py` now matches sources by name, not by order. A source that
+   is missing in round 1 (E48, E34r4) gets zero values. A mismatch in `new_d34` goes to stderr and does not stop
+   the run. `finalize_patched.sh` runs step 3 of `recount.sh` alone with the patched file.
+5. **Delta.** `run_delta2.sh` calls `delta.py` to compare the r5 result with (a) the r4 data under the r5 rule,
+   (b) the r4 package, and (c) r5 without the new scans. `flagcount.py` counts flags by category.
+
+Known gap: 22 redirect targets were not classified in `filter/E40r2/targets_classified.tsv`. An offline check on
+2026-11-13 found 19 real sites and 3 that are not real: `go.adomino.com` (domain_sale), and `page4.com` and
+`forumieren.com` (placeholder pages of real companies). Under the D34 rule, redirecting hosts fold into the target
+site, so each target only affects its own site. If you add the 3 targets, the count drops by 3 sites. The table was
+not changed.
 
 ## Gaps
 
