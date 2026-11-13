@@ -81,19 +81,23 @@ def test_main_writes_items_readable_by_prefill(tmp_path, monkeypatch):
     sample.write_text("".join(json.dumps({"host": h}) + "\n" for h in ["x.de", "y.de"]))
     fd = tmp_path / "fetch"
     _write_fetch(fd, [_status("x.de", "imprint_found", T0), _status("y.de", "host_not_found", T0)],
-                 [{"host": "x.de", "main": {"url": "https://x.de", "main_content": "Home"}, "impressum": {"url": "https://x.de/impressum", "main_content": "Firma X, Musterstr. 1, 12345 Ort"}}])
+                 [{"host": "x.de", "main": {"url": "https://x.de", "main_content": "Home"}, "impressum": {"url": "https://x.de/impressum", "main_content": "Firma X,\u2028Musterstr. 1,\x85 12345 Ort"}}])
     gold = tmp_path / "gold"
     (gold / "x.de").mkdir(parents=True)
-    (gold / "x.de" / "meta.json").write_text(json.dumps({"host": "x.de", "capture_started": "2026-11-13T11:00:00Z", "outcome": "landing+imprint", "dns": {"strato": True}}))
+    (gold / "x.de" / "meta.json").write_text(json.dumps({"host": "x.de", "capture_started": "2026-11-13T11:00:00Z", "outcome": "landing+imprint", "dns": {"strato": True}, "consent_banner": [{"page": "landing", "action": "rejected"}, {"page": "imprint", "action": "none"}]}))
     monkeypatch.setattr(sys, "argv", ["m", "--sample", str(sample), "--gold", str(gold), "--fetch-dir", str(fd), "--fetch-vm", "aralie", "--fetch-tree", "t", "--summary", str(tmp_path / "sum.json")])
     M.main()
     s = json.loads((tmp_path / "sum.json").read_text())
     assert s["counts"]["fetch:imprint_found"] == 1 and s["counts"]["fetch:failed"] == 1
+    assert s["counts"]["banner:landing:rejected"] == 1 and s["counts"]["banner:imprint:none"] == 1
     assert s["counts"]["strato:capture:landing+imprint"] == 1 and s["counts"]["capture:missing"] == 1
     assert (gold / "manifest.sha256").read_text().count("\n") == s["manifest_files"] == 4
     items = PREFILL.read_ic_fetch(gold)
     assert [i["host"] for i in items] == ["x.de", "y.de"]
     assert "Musterstr" in items[0]["imprint_text"] and items[1]["imprint_text"] == ""
+    # U+2028 / U+0085 in text must not break the one-line JSONL (str.splitlines splits on them)
+    raw = (gold / "x.de" / "ic_fetch.jsonl").read_text(encoding="utf-8")
+    assert raw.isascii() and len(raw.splitlines()) == 1
 
 
 def test_capture_wrapper_meta(tmp_path):

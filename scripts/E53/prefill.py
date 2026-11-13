@@ -238,7 +238,7 @@ def read_ic_fetch(root: Path, hosts: list[str] | None = None) -> list[dict]:
                 }
             )
             continue
-        lines = [l for l in p.read_text(encoding="utf-8").splitlines() if l.strip()]
+        lines = [l for l in p.read_text(encoding="utf-8").split("\n") if l.strip()]
         r = json.loads(lines[-1]) if lines else {}
         r.setdefault("host", h)
         rec = record(r, f"{h}/ic_fetch.jsonl")

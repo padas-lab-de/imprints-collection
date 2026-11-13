@@ -130,7 +130,7 @@ def main() -> None:
         mp = d / "meta.json"
         meta = json.loads(mp.read_text(encoding="utf-8")) if mp.exists() else None
         line, m = merge_item(h, rows.get(h), recs.get(h), meta, a.fetch_vm, a.fetch_tree)
-        (d / "ic_fetch.jsonl").write_text(json.dumps(line, ensure_ascii=False) + "\n", encoding="utf-8")
+        (d / "ic_fetch.jsonl").write_text(json.dumps(line) + "\n", encoding="utf-8")
         mp.write_text(json.dumps(m, indent=1, ensure_ascii=False, default=str), encoding="utf-8")
         strato = "strato" if m.get("strato") or (m.get("dns") or {}).get("strato") else "other"
         c[f"fetch:{m['ic_fetch']['class']}"] += 1
@@ -140,6 +140,8 @@ def main() -> None:
         c[f"{strato}:capture:{m.get('outcome', 'missing')}"] += 1
         c[f"{strato}:n"] += 1
         c["input_day_mismatch"] += m["input_day_mismatch"]
+        for b in m.get("consent_banner") or []:
+            c[f"banner:{b.get('page')}:{b.get('action')}"] += 1
         c["has_record"] += m["ic_fetch"]["has_record"]
     man = manifest(gold, hosts)
     (gold / "manifest.sha256").write_text(man)
