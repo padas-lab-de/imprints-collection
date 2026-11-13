@@ -10,3 +10,5 @@ State at stop (watch.log): 81,603 of 96,722 hosts done, imprint_found 34,572. 15
 - **B** Freeze E48 as partial now: r5 uses the 81,603 crawled hosts. The 15,119 hosts not crawled are listed in the package and documented in the guide and the paper. Cost: about 6k missing sites if the imprint rate stays at 42% (about 0.16% of 3.9M).
 
 **Outcome:** A with 5 s (user, 2026-11-12: "Go ahead with D59 A with 5s instead of 3s as it was before."). Resume on all 5 VMs at one request per 5 s per provider group (run 1: 3 s), same window watcher; the window counts only requests after the restart (since.txt, chk.sh SINCE). Scripts: /home/dinzinger/E48-shopify/resume.sh, start_resume.sh; run-1 copies *_run1.*. If the watcher stops it again: freeze as in B.
+
+**Result (2026-11-13):** second GLOBAL STOP at 09:38:59Z, trigger lorbeer (11 throttled in its last 202 requests; burst 09:29-09:38Z after 6 days with none). Per the outcome, E48 is frozen as partial: 91,867 of 96,722 hosts crawled, imprint_found 39,101, 4,855 hosts not crawled. Possible cause (not verified): Shopify throttles by user agent across IPs; the gold-set ic fetch on aralie started ~09:15Z with the same UA.
