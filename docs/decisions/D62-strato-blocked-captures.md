@@ -13,4 +13,4 @@ Strato answered 503 to the gold capture on akazie from about 10:59Z. 106 of 156 
 **Recommend A, with B as fallback.** It respects the block and keeps a rendered capture for most items.
 
 ## Answer
-(open)
+C (user, 2026-11-13: "D62 C."). Re-capture from apfel, same UTC day.
