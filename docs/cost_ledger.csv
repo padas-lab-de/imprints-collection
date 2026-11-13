@@ -1,3 +1,3 @@
 date_utc,experiment,service,model,calls,input_tokens,output_tokens,usd,usd_source,output_path,note
-2026-11-13,E53-prefill,openrouter,anthropic/claude-haiku-5.5,20,49291,2273,0.006066,reported,/home/dinzinger/GitLab/fim/imprints-collection/datasets/E53/prefill_pilot/prefill.jsonl,pilot
-2026-11-13,E53-prefill,openrouter,anthropic/claude-haiku-5.5,1,3948,252,0.000521,reported,/home/dinzinger/GitLab/fim/imprints-collection/datasets/E53/prefill_pilot/prefill.jsonl,"pilot retry of 1 parse failure, max_tokens 400 to 1000"
+2026-11-13,E53-prefill,openrouter,anthropic/claude-haiku-5.5,20,49291,2273,0.006066,reported,datasets/E53/prefill_pilot/prefill.jsonl,pilot
+2026-11-13,E53-prefill,openrouter,anthropic/claude-haiku-5.5,1,3948,252,0.000521,reported,datasets/E53/prefill_pilot/prefill.jsonl,"pilot retry of 1 parse failure, max_tokens 400 to 1000"

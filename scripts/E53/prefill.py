@@ -47,6 +47,17 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
+
+
+def _rel(p):
+    """Path relative to the repo root (or cwd) for the public ledger; absolute only if outside both."""
+    p = Path(p).resolve()
+    for base in (ROOT, Path.cwd().resolve()):
+        try:
+            return str(p.relative_to(base))
+        except ValueError:
+            pass
+    return str(p)
 sys.path.insert(0, str(ROOT / "src"))
 sys.path.insert(0, str(HERE.parent / "E50"))
 sys.path.insert(0, str(HERE.parent / "E51"))
@@ -529,7 +540,7 @@ def run(
                 "output_tokens": meter.out_tok,
                 "usd": f"{meter.spent:.6f}",
                 "usd_source": meter.source,
-                "output_path": str(out),
+                "output_path": _rel(out),
                 "note": "; ".join(
                     x for x in (note, status if status != "ok" else "") if x
                 ),
