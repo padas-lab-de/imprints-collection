@@ -18,9 +18,10 @@ Target (h): POI L1 (8), WZ section (22), address cases (7) at T = 25; POI L2 (35
 |---|---:|
 | Core (SRS of the screened sites) | 600 |
 | Oversample (rarest priority stratum first) | 1,195 |
-| Total | 1,795 |
+| Stratum top-up (`--min-stratum 1`, lead 2026-11-13) | 74 |
+| Total | 1,869 |
 
-The total equals the size table of `screen_coverage.md` for (h) (600 + 1,195).
+Core + oversample equal the size table of `screen_coverage.md` for (h) (600 + 1,195). Lead decision 2026-11-13: every priority stratum with M_h > 0 gets at least one item (`--min-stratum 1`, now the default), so no part of the frame has weight 0: 1,869 items, sum of weights 3,901,330.8 = N0 x 19,998/20,000, 0 empty strata. 574 strata; 161 hold a single item and are collapsed with a neighbouring stratum for variance estimation (collapsed-strata estimator). sha256 gold_sample.jsonl fc6d45a89355f48629cf1cbb7b590475443e0c6e124f695c14c07df9e453322e; quota.tsv 06ada591519be5ab5fc93c8cdb44e937cfd56a5ff8d23ddcb1d969914982d86c. Folds: 374/374/374/374/373.
 
 ## Coverage per depth (drawn = marginal count in the sample, all memberships)
 
@@ -54,6 +55,6 @@ Classes below T: 206 (801 missing items in total), listed in `quota.tsv` (column
 ## Doubts about the probability formula
 
 - pi = (n1 / N0)(m_h / M_h) is **conditional** on the realised m_h and M_h. m_h is itself random: the oversample stops when other strata's draws already cover a class, so m_h depends on the rest of the draw. Within a stratum the selected set is a uniform random subset of size m_h (core uniform, extras uniform from the rest), so the formula is the usual stratified post-hoc one, but it is approximate as an unconditional design probability. Weighted estimates are consistent for populations of strata with items; they are not design-unbiased.
-- Strata without any item (74, 6.5% of the screen) get no weight. Population estimates by Hajek ratio then leave out that 6.5% of the frame. This needs a decision: top up every stratum (`--min-stratum`, +74 items for one item each) or collapse empty strata into a neighbour at the analysis stage.
+- Strata without any item (74, 6.5% of the screen) get no weight. Population estimates by Hajek ratio then leave out that 6.5% of the frame. Decided (lead 2026-11-13): top up every stratum to one item (applied above). Alternatives were: top up every stratum (`--min-stratum`, +74 items for one item each) or collapse empty strata into a neighbour at the analysis stage.
 - Strata with exactly one item have no within-stratum variance (the linearised CI of 4.6 needs at least two per stratum, or pooling).
 - Weights use the screen as frame: S1 sites missing from the screen file are not in M_h.

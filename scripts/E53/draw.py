@@ -168,7 +168,7 @@ def main() -> None:
     ap.add_argument("--out-dir", default=str(DATA / "phase2"))
     ap.add_argument("--seed", type=int, default=SEED)
     ap.add_argument("--core", type=int, default=CORE)
-    ap.add_argument("--min-stratum", type=int, default=0, help="top up every priority stratum to this many items (default off)")
+    ap.add_argument("--min-stratum", type=int, default=1, help="top up every priority stratum to this many items (lead 2026-11-13: default 1, no empty strata)")
     a = ap.parse_args()
     recs = [json.loads(l) for l in open(a.features, encoding="utf-8") if l.strip()]
     fr = json.load(open(a.frame))
