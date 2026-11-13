@@ -154,7 +154,7 @@ Only on aspe (untracked): datasets/E16/seeds (batches 0-156), datasets/gold (952
 | D1-revision-driver | 2026-10-23 | Why revise now? | Journal extension with better evaluation + fresh (larger) data snapshot; no hard deadline | — |
 
 ## Lead actions
-- 2026-11-13: user approved tool change ("yes, change the tool"): drop required operator_type and 11-class topic, main address only. Sonnet agent RUNNING on branch E53-annotate-tool-v2 (worktree); verify + merge on return. Prefill ledger paths made repo-relative (public repo).
+- 2026-11-13: user approved tool change ("yes, change the tool"): drop required operator_type and 11-class topic, main address only. DONE: merged E53-annotate-tool-v2 d882778 (schema_version 3, <=1 address, prefill loader skips error lines; 274 passed). Open: scripts/gold/e18_browser_check.py still posts 2 addresses (retire or update); run tool with --prefill-file datasets/E53/gold/prefill.jsonl. Prefill ledger paths made repo-relative (public repo).
 - 2026-11-13: E53 draw: added one item to each of 74 priority strata that target (h) left empty (+74 items, 1,869 total); without it 6.5% of the frame had weight 0. Single-item strata collapsed for variance.
 - 2026-11-12: answered gold lead (E53 frame questions): E48 stopped, r5 not run, release list = E40/r2 canonical_sites_after_filter.txt (one site per line), page data = extracted main_content, no raw HTML. Issued D59.
 - 2026-11-12: user answers (no card): address scope = main address only; POI prompt = cheaper retrieve k30 (-0.027 on dev) as default, flat as E52 variant. Landed in docs/extraction_strategy.md. User asks for a new 1,000-item gold selection (address + POI + WZ) and an updated methodology: E53-gold-set-redraw.
