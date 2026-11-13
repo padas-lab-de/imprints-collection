@@ -18,4 +18,4 @@ Per-class rates need about 10+ items; 3-5 items per class serve only pooled anal
 Recommend B: every reachable WZ division and POI L2 class (POI's evaluation depth) gets at least 5 items, so a pooled tail analysis has about 900 rare-class items; 40% more labels than A.
 
 ## Outcome
-(open)
+D (user, 2026-11-13): "D60 D." Target (h): top level 25 each + POI L2 5 + WZ groups 5 each; about 1,800 items.

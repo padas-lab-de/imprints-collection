@@ -9,4 +9,4 @@ Question: annotators see a model's address suggestion (D24 B). That model's addr
 - **C** No address suggestions (reverses D24 B). No bias; labelling is slower.
 
 ## Outcome
-(open)
+A (user, 2026-11-13): "D61 A; please use a relatively cheap one, so that it stays below around 10 Dollars overall for all suggestion generation." Lead choice: claude-haiku-5-5 ($0.10/$0.50 per MTok), hard cap $10 for all suggestion runs together, dry-run estimate and pilot first.
