@@ -156,6 +156,7 @@ Only on aspe (untracked): datasets/E16/seeds (batches 0-156), datasets/gold (952
 | D1-revision-driver | 2026-10-23 | Why revise now? | Journal extension with better evaluation + fresh (larger) data snapshot; no hard deadline | — |
 
 ## Lead actions
+- 2026-11-13: ID ranges agreed with data lead: data-collection D100+, gold module D<100 (their D62 renamed D100). D62 C: sonnet agent RUNNING, branch E53-strato-recapture, re-capture ~106 Strato items on apfel (<=2 workers, stop below 8 GB; E48 PGID 478458 runs there again since 11:47Z, untouched).
 - 2026-11-13: ID clash, both leads issued D62; data-collection card renamed to D100-e48-finish-remaining-hosts. Data-collection uses D100+ from now on (proposed to the gold lead).
 - 2026-11-13: checked the 22 unclassified redirect targets offline (/home/dinzinger/r5-build/targets_check/): 19 real, 3 non-real (go.adomino.com domain_sale; page4.com, forumieren.com placeholder pages of real companies). Redirecting hosts already fold into the target site (D34), so each target affects only its own site; adding the 3 would drop 3 sites (the companies' own sites). Assumed: no change to targets_classified.tsv; note the gap in the reproduce guide.
 - 2026-11-13: r5 built on frozen E48 + E34r4 pilot, incl. offline parking scan of the new crawls: 3,943,844 sites after filter (r4 3,908,045); finalize_r2.py needs a by-name source match (patch in /home/dinzinger/r5-build/patched/). Old gap found: 22 redirect targets with >=100 hosts unclassified (e.g. go.adomino.com, ionos.de).
