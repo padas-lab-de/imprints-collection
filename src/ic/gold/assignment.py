@@ -66,7 +66,9 @@ def pick_calibration(items, rng, n_cal=50, n_neg=6):
     exercised too."""
     pos, neg = defaultdict(list), defaultdict(list)
     for it in items:
-        (neg if it["priority_stratum"].startswith("neg:") else pos)[it["priority_stratum"]].append(it)
+        (neg if it["priority_stratum"].startswith("neg:") else pos)[
+            it["priority_stratum"]
+        ].append(it)
     chosen = []
 
     def round_robin(groups, n):
@@ -98,7 +100,11 @@ def pick_second(pool, rng, n_second=200, min_per=MIN_PER_STRATUM, sizes=None):
     """Choose the double-labelled items from ``pool``: greedy cover of the marginal
     strata, then fill proportionally over priority strata."""
     sizes = sizes or stratum_sizes(pool)
-    need = {s: min(min_per, n) for s, n in stratum_sizes(pool).items() if sizes.get(s, 0) >= min_per}
+    need = {
+        s: min(min_per, n)
+        for s, n in stratum_sizes(pool).items()
+        if sizes.get(s, 0) >= min_per
+    }
     have = Counter()
     chosen, chosen_ids = [], set()
 
@@ -118,13 +124,19 @@ def pick_second(pool, rng, n_second=200, min_per=MIN_PER_STRATUM, sizes=None):
         if not open_strata:
             break
         # rarest open stratum first (fewest candidates in the pool)
-        s0 = min(open_strata, key=lambda s: (sum(1 for it in cands if s in it["strata"]), s))
-        options = [it for it in cands if it["item"] not in chosen_ids and s0 in it["strata"]]
+        s0 = min(
+            open_strata, key=lambda s: (sum(1 for it in cands if s in it["strata"]), s)
+        )
+        options = [
+            it for it in cands if it["item"] not in chosen_ids and s0 in it["strata"]
+        ]
         if not options:
             need[s0] = have[s0]  # cannot be met (pool exhausted)
             continue
         # prefer the item that closes the most other open deficits
-        best = max(options, key=lambda it: sum(1 for s in set(it["strata"]) if deficit(s) > 0))
+        best = max(
+            options, key=lambda it: sum(1 for s in set(it["strata"]) if deficit(s) > 0)
+        )
         add(best)
     cover_n = len(chosen)
     # fill: equalise the sampling fraction over priority strata
@@ -133,7 +145,9 @@ def pick_second(pool, rng, n_second=200, min_per=MIN_PER_STRATUM, sizes=None):
         by_prio[it["priority_stratum"]].append(it)
     taken = Counter(it["priority_stratum"] for it in chosen)
     while len(chosen) < n_second:
-        open_p = [p for p in by_prio if any(i["item"] not in chosen_ids for i in by_prio[p])]
+        open_p = [
+            p for p in by_prio if any(i["item"] not in chosen_ids for i in by_prio[p])
+        ]
         p = min(open_p, key=lambda p: (taken[p] / len(by_prio[p]), p))
         it = rng.choice([i for i in by_prio[p] if i["item"] not in chosen_ids])
         add(it)
@@ -161,7 +175,9 @@ def build_assignment(items, seed=20261024, n_cal=50, n_second=200):
     # n_cal of those); ``load`` is what is left outside the calibration block.
     cap_sum = sum(CAPACITY.values())
     target_total = (n - n_cal) + n_second + len(LABELLERS) * n_cal
-    load = {lab: round(target_total * CAPACITY[lab] / cap_sum) - n_cal for lab in LABELLERS}
+    load = {
+        lab: round(target_total * CAPACITY[lab] / cap_sum) - n_cal for lab in LABELLERS
+    }
     load["L1"] += (n - n_cal) + n_second - sum(load.values())
     # second labels per labeller / primaries per labeller among doubles from PAIR_SHARE
     scale = n_second / sum(PAIR_SHARE.values())
@@ -176,7 +192,9 @@ def build_assignment(items, seed=20261024, n_cal=50, n_second=200):
     prim_total = {lab: load[lab] - sec_cnt[lab] for lab in LABELLERS}
     prim_single = {lab: prim_total[lab] - prim_double[lab] for lab in LABELLERS}
     if min(prim_single.values()) < 0 or sum(prim_single.values()) != len(single):
-        raise ValueError(f"inconsistent quotas: {prim_single} for {len(single)} single items")
+        raise ValueError(
+            f"inconsistent quotas: {prim_single} for {len(single)} single items"
+        )
 
     def stratified(its):
         order = sorted(its, key=lambda it: (it["priority_stratum"], rng.random()))
@@ -206,7 +224,15 @@ def build_assignment(items, seed=20261024, n_cal=50, n_second=200):
         rng.shuffle(calib)
         rng.shuffle(rest)
         for k, (it, role) in enumerate(calib + rest, 1):
-            out.append({"item": it["item"], "host": it["host"], "labeller": lab, "role": role, "order": k})
+            out.append(
+                {
+                    "item": it["item"],
+                    "host": it["host"],
+                    "labeller": lab,
+                    "role": role,
+                    "order": k,
+                }
+            )
     info = {"n_cover": cover_n, "pairs": pairs, "load_noncal": load}
     return out, info
 
@@ -220,7 +246,9 @@ def summarise(rows, items):
     lines.append("loads per labeller (primary / second / calibration / total):")
     for lab in LABELLERS:
         c = loads[lab]
-        lines.append(f"  {lab}: {c['primary']:4d} / {c['second']:4d} / {c['calibration']:3d} / {sum(c.values()):4d}")
+        lines.append(
+            f"  {lab}: {c['primary']:4d} / {c['second']:4d} / {c['calibration']:3d} / {sum(c.values()):4d}"
+        )
     lines.append(f"  all: total labels {sum(sum(c.values()) for c in loads.values())}")
     by_item = defaultdict(dict)
     for r in rows:
@@ -238,7 +266,10 @@ def summarise(rows, items):
     unordered = Counter()
     for (p, s), v in pair.items():
         unordered[tuple(sorted((p, s)))] += v
-    lines.append("  overlap per pair (either direction): " + ", ".join(f"{'/'.join(k)}={v}" for k, v in sorted(unordered.items())))
+    lines.append(
+        "  overlap per pair (either direction): "
+        + ", ".join(f"{'/'.join(k)}={v}" for k, v in sorted(unordered.items()))
+    )
     cal = [i for i, r in by_item.items() if "calibration" in r]
     lines.append(f"calibration items (all three label): {len(cal)}")
     # stratum coverage of the double-labelled set
@@ -249,13 +280,19 @@ def summarise(rows, items):
         if "second" in roles:
             for s in set(item_by_id[i].get("strata") or []):
                 dbl[s] += 1
-    short = [(s, n, dbl[s]) for s, n in sizes.items() if n >= MIN_PER_STRATUM and dbl[s] < MIN_PER_STRATUM]
+    short = [
+        (s, n, dbl[s])
+        for s, n in sizes.items()
+        if n >= MIN_PER_STRATUM and dbl[s] < MIN_PER_STRATUM
+    ]
     lines.append(
         f"strata with >= {MIN_PER_STRATUM} items: {sum(1 for n in sizes.values() if n >= MIN_PER_STRATUM)}; "
         f"with < {MIN_PER_STRATUM} double-labelled: {len(short)}"
     )
     for s, n, d in sorted(short):
-        lines.append(f"  short: {s}: {d} double-labelled of {n} (calibration items removed from the pool)")
+        lines.append(
+            f"  short: {s}: {d} double-labelled of {n} (calibration items removed from the pool)"
+        )
     return lines
 
 
@@ -313,7 +350,9 @@ def build_assignment_folds(items, seed, n_cal=50, n_second=375):
     """
     rng = random.Random(seed)
     items = sorted(items, key=lambda it: it["item"])
-    if len({it["item"] for it in items}) != len(items) or len({it["host"] for it in items}) != len(items):
+    if len({it["item"] for it in items}) != len(items) or len(
+        {it["host"] for it in items}
+    ) != len(items):
         raise ValueError("items/hosts must be unique")
     n = len(items)
     ok = [it for it in items if it.get("eligible", True)]
@@ -322,18 +361,28 @@ def build_assignment_folds(items, seed, n_cal=50, n_second=375):
     fold_cal = _alloc(fold_sizes, n_cal)
     cal = []
     for f in sorted(fold_sizes):
-        cal += _stratified_sample([it for it in ok if it["fold"] == f], rng, fold_cal[f], lambda it: bool(it["core"]))
+        cal += _stratified_sample(
+            [it for it in ok if it["fold"] == f],
+            rng,
+            fold_cal[f],
+            lambda it: bool(it["core"]),
+        )
     cal_ids = {it["item"] for it in cal}
     pool = [it for it in items if it["item"] not in cal_ids]
     second = _stratified_sample(
-        [it for it in pool if it.get("eligible", True)], rng, n_second, lambda it: (it["fold"], bool(it["core"]))
+        [it for it in pool if it.get("eligible", True)],
+        rng,
+        n_second,
+        lambda it: (it["fold"], bool(it["core"])),
     )
     sec_ids = {it["item"] for it in second}
     single = [it for it in pool if it["item"] not in sec_ids]
 
     cap_sum = sum(CAPACITY.values())
     target_total = (n - n_cal) + n_second + len(LABELLERS) * n_cal
-    load = {lab: round(target_total * CAPACITY[lab] / cap_sum) - n_cal for lab in LABELLERS}
+    load = {
+        lab: round(target_total * CAPACITY[lab] / cap_sum) - n_cal for lab in LABELLERS
+    }
     load["L1"] += (n - n_cal) + n_second - sum(load.values())
 
     def fold_order(its):
@@ -341,7 +390,9 @@ def build_assignment_folds(items, seed, n_cal=50, n_second=375):
 
     # pair shares, then the direction inside each pair
     dbl_order = fold_order(second)
-    pair_quota = {p: n_second // 3 + (1 if k < n_second % 3 else 0) for k, p in enumerate(PAIRS)}
+    pair_quota = {
+        p: n_second // 3 + (1 if k < n_second % 3 else 0) for k, p in enumerate(PAIRS)
+    }
     pair_of = _largest_deficit_deal([it["item"] for it in dbl_order], pair_quota)
     directed = {}
     for p in PAIRS:
@@ -354,7 +405,9 @@ def build_assignment_folds(items, seed, n_cal=50, n_second=375):
             in_double[lab] += 1
     prim_single = {lab: load[lab] - in_double[lab] for lab in LABELLERS}
     if min(prim_single.values()) < 0 or sum(prim_single.values()) != len(single):
-        raise ValueError(f"inconsistent quotas: {prim_single} for {len(single)} single items")
+        raise ValueError(
+            f"inconsistent quotas: {prim_single} for {len(single)} single items"
+        )
     sgl_order = fold_order(single)
     lab_of = _largest_deficit_deal([it["item"] for it in sgl_order], prim_single)
 
@@ -373,6 +426,64 @@ def build_assignment_folds(items, seed, n_cal=50, n_second=375):
         rng.shuffle(calib)
         rng.shuffle(rest)
         for k, (it, role) in enumerate(calib + rest, 1):
-            out.append({"item": it["item"], "host": it["host"], "labeller": lab, "role": role, "order": k})
+            out.append(
+                {
+                    "item": it["item"],
+                    "host": it["host"],
+                    "labeller": lab,
+                    "role": role,
+                    "order": k,
+                }
+            )
     info = {"pairs": pair_quota, "load_noncal": load, "prim_single": prim_single}
     return out, info
+
+
+def labeller_loads(rows, skip_hosts=()):
+    """Rows per labeller (all roles), leaving out the hosts in ``skip_hosts`` (e.g. items dropped from the set)."""
+    skip = set(skip_hosts)
+    load = Counter({lab: 0 for lab in LABELLERS})
+    for r in rows:
+        if r["host"] not in skip:
+            load[r["labeller"]] += 1
+    return dict(load)
+
+
+def extend_assignment(rows, new_items, seed, skip_hosts=()):
+    """Primary rows for new items (E53 r5 top-up), appended to an existing assignment.
+
+    No calibration and no second labels. Each new item goes to the labeller with the lightest load relative to
+    ``CAPACITY`` (2:1:1); the load counts all existing rows except those of ``skip_hosts`` (dropped items) plus the
+    new rows dealt so far. Ties: lower absolute load, then labeller name. The new items are dealt in seeded random
+    order; per labeller their ``order`` continues after the labeller's last existing row. ``new_items``: dicts with
+    ``item`` (int, not in ``rows``) and ``host``. Existing rows are not changed. Returns the new rows only.
+    """
+    old_items = {r["item"] for r in rows}
+    old_hosts = {r["host"] for r in rows}
+    if any(it["item"] in old_items or it["host"] in old_hosts for it in new_items):
+        raise ValueError("new items must have new item numbers and hosts")
+    if len({it["item"] for it in new_items}) != len(new_items):
+        raise ValueError("new item numbers must be unique")
+    load = labeller_loads(rows, skip_hosts)
+    last = {
+        lab: max((r["order"] for r in rows if r["labeller"] == lab), default=0)
+        for lab in LABELLERS
+    }
+    rng = random.Random(seed)
+    order = sorted(new_items, key=lambda it: it["item"])
+    rng.shuffle(order)
+    out = []
+    for it in order:
+        lab = min(LABELLERS, key=lambda lb: (load[lb] / CAPACITY[lb], load[lb], lb))
+        load[lab] += 1
+        last[lab] += 1
+        out.append(
+            {
+                "item": it["item"],
+                "host": it["host"],
+                "labeller": lab,
+                "role": "primary",
+                "order": last[lab],
+            }
+        )
+    return out

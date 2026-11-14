@@ -18,6 +18,10 @@ Decisions this version uses: D12 A (location match by geocoding is the primary a
 
 ## History
 
+- **v0.5** (2026-11-14, E53 step 15): r5 top-up.
+  - The basis of n_A is now 1,869 (it was 1,000).
+  - The top-up has 18 items and no item is dropped. The set has 1,887 items in all (§2.3).
+
 - **v0.4** (2026-11-13, E53 step 4): size 1,000 -> 1,869 items (D60 D, target (h): top level 25 + POI L2 5 + WZ groups 5; core 600 + oversample 1,195 + 74 stratum top-up = 1,869), drawn by `scripts/E53/draw.py` (`results/E53/phase2_draw.md`). The 400-item oversample and the search for T in 20-30 (§4.4) are replaced by the fixed target (h).
 
 - **v0.1** (2026-10-23, E8-gold-strata-pilot): defined diversity dimensions and unit-tested detectors (`src/ic/gold/detectors.py`). Screened a pilot of 1,000 seed-list hosts.
@@ -28,7 +32,7 @@ Decisions this version uses: D12 A (location match by geocoding is the primary a
 ## Summary
 
 - **Population**: the sites of the German Imprints release (D55 A). The gold set evaluates the release pipeline on what it publishes.
-- **Size**: 1,869 items (D60 D), plus a small r5 top-up (about 9 items, §2.3).
+- **Size**: 1,869 items (D60 D), plus the r5 top-up of 18 items (§2.3). 1,887 items in all.
 - **Design** (D57 A): two-phase probability sample. Phase 1 screens a random 20,000 frame sites with the fixed E50 prompts on stored crawl text. Phase 2 draws a random core of 600 and an oversample of 1,195 (D60 D, target (h)). The oversample gives each POI top-level class, WZ section and address case 25 items, and each POI L2 class and WZ group 5 items, where the screen has that many members. Every item has a known inclusion probability.
 - **Input** (D56 A): on one day per item, `ic fetch` makes the model input and a gold capture makes the labeller input.
 - **Labels**: site status, imprint found, main address, POI v3 label, WZ 2025 label. Three labellers. 50 calibration items, about 360 double-labelled (20%) items, adjudication.
@@ -86,8 +90,16 @@ Frame: F0 = U minus the union of the lists. N0 = |F0|.
 r5 will add the E48 Shopify sites (crawl stopped at about 84% on 2026-11-11, about 34k imprint sites so far) and 88 E34r4 sites. A later filter can also drop sites. No other crawls are planned (D47).
 
 Rules:
-1. **Added sites.** F_A = sites in r5 and not in r4/E40 r2, minus the exclusion lists. N_A = |F_A|. Draw a simple random sample of n_A = round(1,000 x N_A / N0) sites from F_A (about 9 items). Each has pi = n_A / N_A. These items get no phase-1 screen and no oversample. They are labelled like all other items.
+1. **Added sites.** F_A = sites in r5 and not in r4/E40 r2, minus the exclusion lists. N_A = |F_A|. Draw a simple random sample of n_A = round(1,869 x N_A / N0) sites from F_A. The basis is 1,869, the size of the drawn set (D60 D; the first text had 1,000, written before D60 D). So the top-up has the mean sampling fraction of the gold set. Each item has pi = n_A / N_A. These items get no phase-1 screen and no oversample. They are labelled like all other items.
 2. **Dropped sites.** A drawn F0 site that r5 removes leaves the set. It is not replaced.
+
+Result (step 15, 2026-11-14, `scripts/E53/topup.py`, `results/E53/topup.md`):
+- r5 final: 3,945,356 sites. The r5 file has sha256 `93bd4d30…`.
+- 37,338 r5 keys are not in the frame source. 27 of them are in the exclusion lists, so N_A = **37,311**.
+- n_A = round(1,869 x 37,311 / 3,901,721) = round(17.87) = **18**.
+- pi = 18 / 37,311 = 0.000482, so the weight is 2,072.8. The SRS seed is 20261114.
+- 27 frame-source keys are not in r5. None of them is a gold item, so **0 items are dropped**.
+- The 18 items are dealt to the folds with the fewest items. The fold sizes become 378, 378, 377, 377, 377 (1,887 items in all).
 3. **Weights stay exact.** F0 and F_A are two frame strata with known designs. Removing dropped sites is a domain restriction: it does not change any selection probability.
 
 Estimator for the r5 population U5 = (F0 ∩ U5) ∪ F_A, with y_i the item's score and w_i = 1 / pi_i:
@@ -147,7 +159,7 @@ The E8 detectors run on each capture after labelling: technology family, renderi
 | 1 | Simple random sample S1 from F0, screened on stored crawl text | n1 = 20,000 |
 | 2a | Random core: the first 600 sites of a seeded permutation of S1 | 600 |
 | 2b | Coverage oversample: rarest stratum first, from S1 minus the core (target (h), D60 D) | 1,195 |
-| Top-up | SRS from the r5 additions (§2.3) | about 9 |
+| Top-up | SRS from the r5 additions (§2.3) | 18 |
 
 Code base: `src/ic/gold/sampling.py` (§7). Seeds are fixed and recorded before each draw.
 
@@ -311,7 +323,7 @@ To build:
 | 12 | Calibration (50 items), guideline update | `datasets/E53/gold/labels/L{1,2,3}.jsonl`, `results/E53/calibration.md` |
 | 13 | Main labelling and second labels | `datasets/E53/gold/labels/L{1,2,3}.jsonl` |
 | 14 | Adjudication, gold file, agreement | `datasets/E53/gold/gold.jsonl`, `results/E53/agreement.md` |
-| 15 | r5 top-up (when r5 is final): draw, capture, label | `datasets/E53/topup_sample.jsonl`, `results/E53/topup.md` |
+| 15 | r5 top-up (r5 final, 2026-11-14): draw 18 items, 0 dropped; same-day `ic fetch` (aralie) and capture (akazie); prefill; primary-only assignment; E52 runs (done 2026-11-14) | `datasets/E53/topup_sample.jsonl`, `datasets/E53/dropped_r5.jsonl`, `datasets/E53/gold/prefill_topup.jsonl`, `datasets/E53/gold/assignment.jsonl`, `results/E53/topup.md`, `results/E52/runs.md` (top-up section) |
 | 16 | Hand-over to E52 | `results/E52/split.json` (5 folds) |
 
 ## 9. Related work
@@ -350,7 +362,7 @@ Assumed by the lead (can be overruled):
 - **Stratifying with candidate models.** The screen models are likely E52 candidates. Unweighted rare-class scores favour them (§4.7). Mitigation: weighted comparisons, and the screen models marked in per-class tables. Alternative: use a non-candidate pair for the screen.
 - **Site change between crawl and capture.** Under D56 A this affects only strata and weights. Under D56 B or C it also affects the labels or the input: B must flag and drop changed sites, C changes the input form.
 - **E8 and E12 lists are on aspe only.** They must be copied before step 4. Without them the exclusion is incomplete.
-- **E48 Shopify is incomplete.** The crawl stopped at about 84%. The record still says RUNNING (other module). The top-up size depends on its final state.
+- **E48 Shopify is incomplete.** The crawl stopped at about 84%. The r5 used for the top-up (step 15) is the final r5. Its E48 part is what the crawl reached (D100). Shopify sites that E48 did not reach are outside U5. The top-up does not cover them.
 - **Prefill model vs. E52 candidates.** The suggestion model must not be an E52 candidate, or it is reported as "made the suggestion" with an upper-biased address score. qwen-agentworld-35b-a3b was the E21 model and is an E50 model.
 - **Small strata.** At T about 25, a per-stratum Wilson CI is about ±15-20 pp. Rare WZ sections (for example B, D, E, U, V) may have fewer than 25 sites in S1. Their phase-1 variance is not small.
 - **Fetch blocks.** `ic fetch` from the crawl VM can be blocked (Strato 503 in E8/E12). This is correct for the release, but it lowers model scores on blocked sites. The capture from another IP keeps the labels right.

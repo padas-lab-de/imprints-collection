@@ -9,6 +9,7 @@ Layout (docs/gold_set_design.md section 3), below ``data_dir`` (default ``datase
     <host>/meta.json            provenance (capture timestamp, final URLs, ...)
     labels/<labeller>.jsonl     one JSON line per save; the last line per host wins
     prefill.jsonl               suggested main addresses (scripts/E53/prefill.py), optional
+    prefill_topup.jsonl         the same for the E53 r5 top-up items (read after prefill.jsonl), optional
 
 A labeller only ever reads its own labels file. Suggestions are shown only for the
 roles in ``prefill_roles``. The CLI shows them on all items (D24 B); agreement between
@@ -28,6 +29,10 @@ from .schema import normalise_label, text_warnings, validate_label
 PAGES = ("landing", "imprint")
 IMAGE_EXT = (".png", ".jpg", ".jpeg", ".webp")
 MAX_TEXT_CHARS = 400_000  # cap what is sent to the browser
+PREFILL_FILES = (
+    "prefill.jsonl",
+    "prefill_topup.jsonl",
+)  # default, in read order (later wins)
 _HOST_RE = re.compile(r"^[A-Za-z0-9._-]+$")
 _META_TIME_KEYS = (
     "capture_id",
@@ -55,8 +60,16 @@ class Store:
         self.data_dir = Path(data_dir)
         self.prefill_roles = tuple(prefill_roles)
         self.labeller = labeller
-        self.prefill_path = Path(prefill_file) if prefill_file else self.data_dir / "prefill.jsonl"
-        self.assignment_path = Path(assignment) if assignment else self.data_dir / "assignment.jsonl"
+        if not prefill_file:
+            self.prefill_paths = [self.data_dir / f for f in PREFILL_FILES]
+        elif isinstance(prefill_file, (str, Path)):
+            self.prefill_paths = [Path(prefill_file)]
+        else:
+            self.prefill_paths = [Path(p) for p in prefill_file]
+        self.prefill_path = self.prefill_paths[0]
+        self.assignment_path = (
+            Path(assignment) if assignment else self.data_dir / "assignment.jsonl"
+        )
         self.labels_path = self.data_dir / "labels" / f"{labeller}.jsonl"
         self._lock = threading.Lock()
         self.items = self._load_assignment()
@@ -84,12 +97,14 @@ class Store:
         return rows
 
     def _load_prefill(self) -> dict[str, dict]:
-        """Read the prefill file (scripts/E53/prefill.py): per host the last line without an
-        ``error`` wins; lines with an error (or broken lines) are ignored, so an earlier good line
-        stays valid and a host with no good line has no suggestion."""
-        p = self.prefill_path
+        """Read the prefill files (scripts/E53/prefill.py) in order: per host the last line without
+        an ``error`` wins (a later file wins over an earlier one); lines with an error (or broken
+        lines) are ignored, so an earlier good line stays valid and a host with no good line has
+        no suggestion. Missing files are skipped."""
         out: dict[str, dict] = {}
-        if p.exists():
+        for p in self.prefill_paths:
+            if not p.exists():
+                continue
             with open(p, encoding="utf-8") as f:
                 for line in f:
                     if not line.strip():
@@ -142,7 +157,9 @@ class Store:
                     out[r["host"]] = r
         return out
 
-    def save_label(self, label: dict, elapsed: float = 0.0) -> tuple[dict | None, list[str], list[str]]:
+    def save_label(
+        self, label: dict, elapsed: float = 0.0
+    ) -> tuple[dict | None, list[str], list[str]]:
         """Validate and append. Returns (saved_record, errors, warnings)."""
         host = (label or {}).get("host", "")
         if not self.has_host(host):
@@ -157,13 +174,21 @@ class Store:
         with self._lock:
             prev = self.load_labels().get(host)
             prior = float(prev.get("seconds_spent", 0)) if prev else 0.0
-            rec = {k: v for k, v in label.items() if k not in ("seconds_spent", "capture_id", "prefilled_from")}
+            rec = {
+                k: v
+                for k, v in label.items()
+                if k not in ("seconds_spent", "capture_id", "prefilled_from")
+            }
             rec["item"] = self._by_host[host].get("item")
             pf = self.prefill(host)
             # which suggestion the labeller saw (None = labelled from scratch)
-            rec["prefilled_from"] = pf["source"] if pf and label.get("prefilled_from") else None
+            rec["prefilled_from"] = (
+                pf["source"] if pf and label.get("prefilled_from") else None
+            )
             rec["capture_id"] = cap["capture_id"]
-            rec["seconds_spent"] = int(round(prior + max(0.0, min(float(elapsed or 0), 3600.0))))
+            rec["seconds_spent"] = int(
+                round(prior + max(0.0, min(float(elapsed or 0), 3600.0)))
+            )
             rec["saved_at"] = now_utc()
             self.labels_path.parent.mkdir(parents=True, exist_ok=True)
             with open(self.labels_path, "a", encoding="utf-8") as f:
@@ -200,7 +225,9 @@ class Store:
         for p in PAGES:
             tp = d / f"{p}.txt"
             if tp.is_file():
-                texts[p] = tp.read_text(encoding="utf-8", errors="replace")[:MAX_TEXT_CHARS]
+                texts[p] = tp.read_text(encoding="utf-8", errors="replace")[
+                    :MAX_TEXT_CHARS
+                ]
             images[p] = self.find_image(host, p)
         return {
             "host": host,
