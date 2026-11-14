@@ -23,7 +23,9 @@ PREFILL = _load("prefill")
 
 
 def _status(host, status, end, secs="2.0"):
-    return "\t".join([host, status, "", "v4:1.2.3", "1", "3", "0", secs, str(end)]) + "\n"
+    return (
+        "\t".join([host, status, "", "v4:1.2.3", "1", "3", "0", secs, str(end)]) + "\n"
+    )
 
 
 def _write_fetch(d: Path, rows, recs, batch=0):
@@ -48,8 +50,18 @@ def test_iso_and_fetch_class():
 
 def test_last_row_and_record_win_across_dirs(tmp_path):
     a, b = tmp_path / "main", tmp_path / "shop"
-    _write_fetch(a, [_status("s.de", "skipped_provider", T0), _status("x.de", "imprint_found", T0), "cut\tline"], [{"host": "x.de", "v": 1}])
-    _write_fetch(b, [_status("s.de", "imprint_found", T0 + 60)], [{"host": "s.de", "v": 2}])
+    _write_fetch(
+        a,
+        [
+            _status("s.de", "skipped_provider", T0),
+            _status("x.de", "imprint_found", T0),
+            "cut\tline",
+        ],
+        [{"host": "x.de", "v": 1}],
+    )
+    _write_fetch(
+        b, [_status("s.de", "imprint_found", T0 + 60)], [{"host": "s.de", "v": 2}]
+    )
     rows, recs = M.read_status([a, b]), M.read_records([a, b])
     assert rows["s.de"]["status"] == "imprint_found"
     assert set(rows) == {"s.de", "x.de"}
@@ -57,20 +69,71 @@ def test_last_row_and_record_win_across_dirs(tmp_path):
 
 
 def test_merge_item_same_day_and_mismatch():
-    row = {"status": "imprint_found", "detail": "", "seconds": "5.0", "end_time": str(T0)}
-    rec = {"host": "x.de", "main": {"main_content": "a"}, "impressum": {"main_content": "Musterstr. 1"}}
-    line, m = M.merge_item("x.de", row, rec, {"host": "x.de", "capture_started": "2026-11-13T10:00:00Z", "outcome": "landing+imprint"}, "aralie", "88b162a")
-    assert line["fetch_status"] == "imprint_found" and line["fetched_at"] == "2026-11-13T09:00:00Z" and line["impressum"]
-    assert m["ic_fetch"]["started_utc"] == "2026-11-13T08:59:55Z" and m["ic_fetch"]["has_record"]
+    row = {
+        "status": "imprint_found",
+        "detail": "",
+        "seconds": "5.0",
+        "end_time": str(T0),
+    }
+    rec = {
+        "host": "x.de",
+        "main": {"main_content": "a"},
+        "impressum": {"main_content": "Musterstr. 1"},
+    }
+    line, m = M.merge_item(
+        "x.de",
+        row,
+        rec,
+        {
+            "host": "x.de",
+            "capture_started": "2026-11-13T10:00:00Z",
+            "outcome": "landing+imprint",
+        },
+        "aralie",
+        "88b162a",
+    )
+    assert (
+        line["fetch_status"] == "imprint_found"
+        and line["fetched_at"] == "2026-11-13T09:00:00Z"
+        and line["impressum"]
+    )
+    assert (
+        m["ic_fetch"]["started_utc"] == "2026-11-13T08:59:55Z"
+        and m["ic_fetch"]["has_record"]
+    )
     assert m["input_day_mismatch"] is False
-    _, m2 = M.merge_item("x.de", row, rec, {"capture_started": "2026-11-14T00:01:00Z"}, "aralie", "t")
+    _, m2 = M.merge_item(
+        "x.de", row, rec, {"capture_started": "2026-11-14T00:01:00Z"}, "aralie", "t"
+    )
     assert m2["input_day_mismatch"] is True
 
 
 def test_merge_item_no_record_no_capture():
-    line, m = M.merge_item("y.de", {"status": "host_not_found", "detail": "https:dns", "seconds": "1", "end_time": str(T0)}, None, None, "aralie", "t")
-    assert line == {"host": "y.de", "fetch_status": "host_not_found", "fetch_detail": "https:dns", "fetched_at": "2026-11-13T09:00:00Z", "fetch_vm": "aralie"}
-    assert m["capture_missing"] and m["ic_fetch"]["class"] == "failed" and not m["ic_fetch"]["has_record"]
+    line, m = M.merge_item(
+        "y.de",
+        {
+            "status": "host_not_found",
+            "detail": "https:dns",
+            "seconds": "1",
+            "end_time": str(T0),
+        },
+        None,
+        None,
+        "aralie",
+        "t",
+    )
+    assert line == {
+        "host": "y.de",
+        "fetch_status": "host_not_found",
+        "fetch_detail": "https:dns",
+        "fetched_at": "2026-11-13T09:00:00Z",
+        "fetch_vm": "aralie",
+    }
+    assert (
+        m["capture_missing"]
+        and m["ic_fetch"]["class"] == "failed"
+        and not m["ic_fetch"]["has_record"]
+    )
     assert m["input_day_mismatch"] is False
     _, m3 = M.merge_item("z.de", None, None, None, "aralie", "t")
     assert m3["ic_fetch"]["status"] == "not_fetched"
@@ -80,18 +143,69 @@ def test_main_writes_items_readable_by_prefill(tmp_path, monkeypatch):
     sample = tmp_path / "s.jsonl"
     sample.write_text("".join(json.dumps({"host": h}) + "\n" for h in ["x.de", "y.de"]))
     fd = tmp_path / "fetch"
-    _write_fetch(fd, [_status("x.de", "imprint_found", T0), _status("y.de", "host_not_found", T0)],
-                 [{"host": "x.de", "main": {"url": "https://x.de", "main_content": "Home"}, "impressum": {"url": "https://x.de/impressum", "main_content": "Firma X,\u2028Musterstr. 1,\x85 12345 Ort"}}])
+    _write_fetch(
+        fd,
+        [_status("x.de", "imprint_found", T0), _status("y.de", "host_not_found", T0)],
+        [
+            {
+                "host": "x.de",
+                "main": {"url": "https://x.de", "main_content": "Home"},
+                "impressum": {
+                    "url": "https://x.de/impressum",
+                    "main_content": "Firma X,\u2028Musterstr. 1,\x85 12345 Ort",
+                },
+            }
+        ],
+    )
     gold = tmp_path / "gold"
     (gold / "x.de").mkdir(parents=True)
-    (gold / "x.de" / "meta.json").write_text(json.dumps({"host": "x.de", "capture_started": "2026-11-13T11:00:00Z", "outcome": "landing+imprint", "dns": {"strato": True}, "consent_banner": [{"page": "landing", "action": "rejected"}, {"page": "imprint", "action": "none"}]}))
-    monkeypatch.setattr(sys, "argv", ["m", "--sample", str(sample), "--gold", str(gold), "--fetch-dir", str(fd), "--fetch-vm", "aralie", "--fetch-tree", "t", "--summary", str(tmp_path / "sum.json")])
+    (gold / "x.de" / "meta.json").write_text(
+        json.dumps(
+            {
+                "host": "x.de",
+                "capture_started": "2026-11-13T11:00:00Z",
+                "outcome": "landing+imprint",
+                "dns": {"strato": True},
+                "consent_banner": [
+                    {"page": "landing", "action": "rejected"},
+                    {"page": "imprint", "action": "none"},
+                ],
+            }
+        )
+    )
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "m",
+            "--sample",
+            str(sample),
+            "--gold",
+            str(gold),
+            "--fetch-dir",
+            str(fd),
+            "--fetch-vm",
+            "aralie",
+            "--fetch-tree",
+            "t",
+            "--summary",
+            str(tmp_path / "sum.json"),
+        ],
+    )
     M.main()
     s = json.loads((tmp_path / "sum.json").read_text())
     assert s["counts"]["fetch:imprint_found"] == 1 and s["counts"]["fetch:failed"] == 1
-    assert s["counts"]["banner:landing:rejected"] == 1 and s["counts"]["banner:imprint:none"] == 1
-    assert s["counts"]["strato:capture:landing+imprint"] == 1 and s["counts"]["capture:missing"] == 1
-    assert (gold / "manifest.sha256").read_text().count("\n") == s["manifest_files"] == 4
+    assert (
+        s["counts"]["banner:landing:rejected"] == 1
+        and s["counts"]["banner:imprint:none"] == 1
+    )
+    assert (
+        s["counts"]["strato:capture:landing+imprint"] == 1
+        and s["counts"]["capture:missing"] == 1
+    )
+    assert (
+        (gold / "manifest.sha256").read_text().count("\n") == s["manifest_files"] == 4
+    )
     items = PREFILL.read_ic_fetch(gold)
     assert [i["host"] for i in items] == ["x.de", "y.de"]
     assert "Musterstr" in items[0]["imprint_text"] and items[1]["imprint_text"] == ""
@@ -102,9 +216,99 @@ def test_main_writes_items_readable_by_prefill(tmp_path, monkeypatch):
 
 def test_capture_wrapper_meta(tmp_path):
     p = tmp_path / "s.jsonl"
-    p.write_text(json.dumps({"host": "a.de", "core": True, "stratum": "x", "fold": 2, "weight": 3.5, "pi": 0.1}) + "\n")
+    p.write_text(
+        json.dumps(
+            {
+                "host": "a.de",
+                "core": True,
+                "stratum": "x",
+                "fold": 2,
+                "weight": 3.5,
+                "pi": 0.1,
+            }
+        )
+        + "\n"
+    )
     items = CAP.load_sample(p)
-    assert items == [{"item": None, "host": "a.de", "e53": {"core": True, "stratum": "x", "fold": 2, "weight": 3.5}}]
-    rec = CAP.add_e53_meta({"capture_started": "2026-11-13T09:25:11Z", "dns": {"strato": True}}, items[0], "akazie")
-    assert rec["capture_ip_group"] == "akazie" and rec["capture_day_utc"] == "2026-11-13" and rec["strato"] is True
+    assert items == [
+        {
+            "item": None,
+            "host": "a.de",
+            "e53": {"core": True, "stratum": "x", "fold": 2, "weight": 3.5},
+        }
+    ]
+    rec = CAP.add_e53_meta(
+        {"capture_started": "2026-11-13T09:25:11Z", "dns": {"strato": True}},
+        items[0],
+        "akazie",
+    )
+    assert (
+        rec["capture_ip_group"] == "akazie"
+        and rec["capture_day_utc"] == "2026-11-13"
+        and rec["strato"] is True
+    )
     assert rec["e53_sample"]["weight"] == 3.5
+
+
+def test_blocked_statuses_finds_nested_503_and_429():
+    rec = {
+        "landing": {
+            "static": {"status": 200, "redirects": [{"url": "u", "status": 301}]},
+            "render_status": 503,
+        },
+        "imprint_static": {
+            "status": 200,
+            "tried": [
+                {"url": "a", "status": 429},
+                {"url": "b", "status": "ConnectTimeout"},
+            ],
+        },
+        "site_status_at_capture": "http_error",
+        "flag": True,
+    }
+    assert CAP.blocked_statuses(rec) == [
+        ("landing.render_status", 503),
+        ("imprint_static.tried[0].status", 429),
+    ]
+    assert (
+        CAP.blocked_statuses(
+            {"landing": {"static": {"status": 200}}, "imprint": {"status": 404}}
+        )
+        == []
+    )
+
+
+def test_capture_wrapper_stops_after_block(tmp_path, monkeypatch):
+    import asyncio
+
+    monkeypatch.setattr(CAP.C, "host_dir", lambda h, root: Path(root) / h)
+    calls = []
+
+    async def fake(browser, item, dns, out_root, versions):
+        calls.append(item["host"])
+        (Path(out_root) / item["host"]).mkdir(parents=True, exist_ok=True)
+        code = 503 if item["host"] == "b.de" else 200
+        return {
+            "capture_started": "2026-11-14T05:00:00Z",
+            "landing": {"static": {"status": code}},
+        }
+
+    def run(cap, h, root):
+        return asyncio.run(cap(None, {"host": h}, {}, root, {}))
+
+    state = {}
+    cap = CAP.wrap_capture_one(fake, "akazie", stop_on_block=True, state=state)
+    run(cap, "a.de", tmp_path)
+    run(cap, "b.de", tmp_path)
+    assert state["stop"]["host"] == "b.de" and (tmp_path / CAP.STOP_FILE).exists()
+    try:
+        run(cap, "c.de", tmp_path)
+        raise AssertionError("no stop")
+    except CAP.StopCapture:
+        pass
+    assert calls == ["a.de", "b.de"]
+    # without the flag the capture goes on
+    cap2 = CAP.wrap_capture_one(fake, "akazie")
+    run(cap2, "b.de", tmp_path / "x")
+    run(cap2, "c.de", tmp_path / "x")
+    assert calls[-2:] == ["b.de", "c.de"]

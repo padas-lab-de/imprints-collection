@@ -3,6 +3,7 @@
 #
 #   bash scripts/E52/runs.sh <stage> <lane> [<lane> ...]
 #     stage  pilot (hosts in $E52/pilot_hosts.txt) | full (all items of $E52/gold_inputs.jsonl)
+#            | topup (all items of $E52/topup_inputs.jsonl, the E53 r5 top-up; output preds/topup)
 #     lane   comma list of <model>:<run>, run = address | poi_k30 | poi_flat | wz; runs of one lane go one after
 #            the other, lanes run at the same time (at most 2 lanes).
 #   E52=datasets/E52 (default). Run from the repository root.
@@ -13,10 +14,12 @@ E52=${E52:-datasets/E52}
 stage=$1
 shift
 [ "$#" -le 2 ] || { echo "at most 2 lanes" >&2; exit 2; }
+inputs=$E52/gold_inputs.jsonl
 case $stage in
   pilot) sel=(--hosts "$E52/pilot_hosts.txt") ;;
   full) sel=() ;;
-  *) echo "stage: pilot | full" >&2; exit 2 ;;
+  topup) sel=(); inputs=$E52/topup_inputs.jsonl ;;
+  *) echo "stage: pilot | full | topup" >&2; exit 2 ;;
 esac
 out=$E52/preds/$stage
 logs=$E52/logs/$stage
@@ -49,7 +52,7 @@ lane() {
     r=${item#*:}
     args=$(run_args "$m" "$r") || continue
     cmd="python3 -I scripts/E52/run.py --http-log $logs/${m}_$r.http.log -- \
---dev $E52/gold_inputs.jsonl ${sel[*]} --out-dir $out --cache $E52/cache --model $m --workers 6 $args"
+--dev $inputs ${sel[*]} --out-dir $out --cache $E52/cache --model $m --workers 6 $args"
     echo "$(date -u +%FT%TZ) $cmd" >> "$logs/commands.txt"
     $cmd >> "$logs/${m}_$r.log" 2>&1
     rc=$?

@@ -11,7 +11,7 @@ Input (one of):
   --ic-fetch-dir datasets/E53/gold per-item dir <host>/ic_fetch.jsonl (the same-day `ic fetch` record, design
                                    3.2; the last line wins), turned into the model input by scripts/E51
                                    build_sample.record (clean_text, 6000 chars). --hosts F.txt limits/orders hosts.
-Output: <out-dir>/prefill.jsonl, one line per host in the e21_prefill format
+Output: <out-dir>/<out-file> (default prefill.jsonl; the E53 top-up writes prefill_topup.jsonl), one line per host in the e21_prefill format
   {"host", "source": {"model", "prompt", "created"}, "prefilled_from", "label": {"addresses": [...],
    "main_address_index"}, "no_address_reason", "error"}.
   The labelling tool shows source as "<model>/<prompt>". Fields not found verbatim in the item's text carry
@@ -57,7 +57,13 @@ def _rel(p):
             return str(p.relative_to(base))
         except ValueError:
             pass
+    if (
+        "datasets" in p.parts
+    ):  # another checkout (e.g. a worktree writing to the main checkout's datasets/)
+        return str(Path(*p.parts[p.parts.index("datasets") :]))
     return str(p)
+
+
 sys.path.insert(0, str(ROOT / "src"))
 sys.path.insert(0, str(HERE.parent / "E50"))
 sys.path.insert(0, str(HERE.parent / "E51"))
@@ -576,6 +582,11 @@ def main() -> None:
         "--hosts", help="host list (one per line); with --input: filter and order"
     )
     ap.add_argument("--out-dir", required=True)
+    ap.add_argument(
+        "--out-file",
+        default="prefill.jsonl",
+        help="file name in --out-dir (E53 top-up: prefill_topup.jsonl)",
+    )
     ap.add_argument("--limit", type=int, default=0, help="first N items of the input")
     ap.add_argument("--workers", type=int, default=4)
     ap.add_argument(
@@ -607,7 +618,7 @@ def main() -> None:
         if hosts is not None:
             by = {it["host"]: it for it in items}
             items = [by[h] for h in hosts if h in by]
-    out = Path(a.out_dir) / "prefill.jsonl"
+    out = Path(a.out_dir) / a.out_file
     items = [it for it in items if it["host"] not in done_hosts(out)]
     if a.limit:
         items = items[: a.limit]

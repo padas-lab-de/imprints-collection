@@ -2,7 +2,7 @@
 
     python3 -I scripts/E52/runs_table.py --e52 datasets/E52 --stage full --out results/E52/runs_full.md
 
-Reads <e52>/gold_inputs.jsonl, <e52>/preds/<stage>/{address,poi3,wz}/<tag>.jsonl, <e52>/logs/<stage>/commands.txt,
+Reads <e52>/gold_inputs.jsonl (stage topup: <e52>/topup_inputs.jsonl, the E53 r5 top-up items), <e52>/preds/<stage>/{address,poi3,wz}/<tag>.jsonl, <e52>/logs/<stage>/commands.txt,
 *.log (start_utc / end_utc lines) and *.http.log (HTTP errors per attempt, scripts/E52/run.py). No reference labels.
 
 Per run (one prediction file):
@@ -285,14 +285,16 @@ def agreement(runs: list[tuple[str, tuple[str, str], Path]]) -> list[str]:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--e52", required=True)
-    ap.add_argument("--stage", default="full", choices=["pilot", "full"])
+    ap.add_argument("--stage", default="full", choices=["pilot", "full", "topup"])
     ap.add_argument("--out", required=True)
     a = ap.parse_args()
     e52 = Path(a.e52)
     rel = lambda f: "datasets/E52/" + str(
         Path(f).resolve().relative_to(e52.resolve())
     )  # noqa: E731
-    inputs = load(e52 / "gold_inputs.jsonl")
+    inputs = load(
+        e52 / ("topup_inputs.jsonl" if a.stage == "topup" else "gold_inputs.jsonl")
+    )
     if a.stage == "pilot":
         want = {l.strip() for l in (e52 / "pilot_hosts.txt").open() if l.strip()}
         inputs = [r for r in inputs if r["host"] in want]

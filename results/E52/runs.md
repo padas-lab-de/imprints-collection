@@ -171,3 +171,81 @@ Agreement between candidates, **no reference** (share of items with the same ans
 | POI k30 vs flat | qwen k30 | qwen flat | 19 | 1.000 (16) | 0.938 (16) | 0.800 (5) |
 | POI k30 vs flat | gemma k30 | gemma flat | 20 | 1.000 (19) | 1.000 (19) | 0.750 (8) |
 | POI k30 vs flat | agentworld k30 | agentworld flat | 20 | 0.789 (19) | 0.667 (18) | 0.667 (3) |
+
+## Top-up (18 items, E53 step 15, 2026-11-14)
+
+The 18 r5 top-up items are `datasets/E53/topup_sample.jsonl`, items 1869-1886 (see `results/E53/topup.md`).
+- Inputs: `datasets/E52/topup_inputs.jsonl` (sha256 727b60ae...), built like `gold_inputs.jsonl`.
+- Runs: the same 12 runs with the same settings as the full runs, 6 workers per run, through `scripts/E52/runs.sh topup`. Two lanes, each running 6 runs one after another.
+- Logs: `datasets/E52/logs/topup/`.
+- HTTP errors: 0. `run.py` writes a `.http.log` only on an error, and no run wrote one, so there was no 429 or 503.
+- No reference scores.
+
+Stage topup: 18 items; 0 without imprint text (0 of them without an ic_fetch.jsonl): address makes no call for them (prediction no_imprint), topics run on the landing page.
+
+| candidate | run | items | done | no call | failed (empty/malformed/truncated/timeout/other) | per 1,000 | cut | abstain | tok in mean / p95 | tok out mean / p95 | s/item median / p95 | window UTC | HTTP errors |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| qwen38-27b (screen) | address | 18 | 18 | 0 | 0 (0/0/0/0/0) | 0.0 | 0 | - | 667 / 1052 | 71 / 76 | 8.48 / 24.49 | 11-14T04:32-04:33 | 0 |
+| qwen38-27b (screen) | POI k30 | 18 | 18 | 0 | 0 (0/0/0/0/0) | 0.0 | 0 | 0 | 2521 / 3807 | 469 / 684 | 43.74 / 68.18 | 11-14T04:33-04:35 | 0 |
+| qwen38-27b (screen) | POI flat | 18 | 18 | 0 | 0 (0/0/0/0/0) | 0.0 | 0 | 0 | 24125 / 25338 | 490 / 801 | 52.13 / 84.97 | 11-14T04:35-04:38 | 0 |
+| qwen38-27b (screen) | WZ k30 | 18 | 18 | 0 | 0 (0/0/0/0/0) | 0.0 | 0 | 0 | 3025 / 3528 | 24 / 25 | 8.11 / 13.59 | 11-14T04:38-04:39 | 0 |
+| gemma4-31b-it (screen) | address | 18 | 18 | 0 | 0 (0/0/0/0/0) | 0.0 | 0 | - | 704 / 1151 | 53 / 56 | 1.40 / 1.48 | 11-14T04:39-04:39 | 0 |
+| gemma4-31b-it (screen) | POI k30 | 18 | 18 | 0 | 0 (0/0/0/0/0) | 0.0 | 0 | 0 | 2538 / 3744 | 65 / 82 | 3.24 / 7.25 | 11-14T04:39-04:39 | 0 |
+| gemma4-31b-it (screen) | POI flat | 18 | 18 | 0 | 0 (0/0/0/0/0) | 0.0 | 0 | 0 | 24304 / 25521 | 66 / 76 | 11.67 / 16.66 | 11-14T04:32-04:32 | 0 |
+| gemma4-31b-it (screen) | WZ k30 | 18 | 18 | 0 | 0 (0/0/0/0/0) | 0.0 | 0 | 0 | 3096 / 3624 | 29 / 29 | 5.08 / 10.29 | 11-14T04:32-04:33 | 0 |
+| qwen-agentworld-35b-a3b | address | 18 | 18 | 0 | 0 (0/0/0/0/0) | 0.0 | 0 | - | 667 / 1052 | 51 / 53 | 0.67 / 0.70 | 11-14T04:33-04:33 | 0 |
+| qwen-agentworld-35b-a3b | POI k30 | 18 | 18 | 0 | 0 (0/0/0/0/0) | 0.0 | 0 | 0 | 2512 / 3798 | 79 / 98 | 2.80 / 5.18 | 11-14T04:33-04:33 | 0 |
+| qwen-agentworld-35b-a3b | POI flat | 18 | 18 | 0 | 0 (0/0/0/0/0) | 0.0 | 0 | 0 | 24116 / 25329 | 72 / 90 | 3.12 / 3.26 | 11-14T04:33-04:33 | 0 |
+| qwen-agentworld-35b-a3b | WZ k30 | 18 | 18 | 0 | 0 (0/0/0/0/0) | 0.0 | 0 | 0 | 3025 / 3528 | 23 / 24 | 3.88 / 9.09 | 11-14T04:33-04:33 | 0 |
+
+Prediction files (sha256):
+
+| candidate | run | file | sha256 | calls | cached calls |
+|---|---|---|---|---|---|
+| qwen38-27b | address | `datasets/E52/preds/topup/address/address__qwen__r-none__f-schema__mode-main.jsonl` | `8e2af3e1ac2f860a0b4a7bc242f59908b5c131f964812ef5e3e5bc61fb580270` | 18 | 0 |
+| qwen38-27b | POI k30 | `datasets/E52/preds/topup/poi3/retrieve__qwen__r-low.jsonl` | `15d0aaa33e89fbd521a2bfabd1a965a6ed2d5961ce219902aa57811ee8bf9f99` | 18 | 0 |
+| qwen38-27b | POI flat | `datasets/E52/preds/topup/poi3/flat__qwen__r-low.jsonl` | `86ac5797f94e9d3a450d97bea3d9e67601c6ee1550ebc5ea8c9676b5b8b491fa` | 18 | 0 |
+| qwen38-27b | WZ k30 | `datasets/E52/preds/topup/wz/retrieve__qwen__r-none__c1500.jsonl` | `5a4c144dd80358c3bf8ca98900f236d40e78429f33f9a0966714eb5f2550d9af` | 18 | 0 |
+| gemma4-31b-it | address | `datasets/E52/preds/topup/address/address__gemma__r-none__f-schema__mode-main.jsonl` | `6c972c2718809d82fc4712055549931db8b115c214806bac6ff700ebc12cdf0d` | 18 | 0 |
+| gemma4-31b-it | POI k30 | `datasets/E52/preds/topup/poi3/retrieve__gemma__r-short.jsonl` | `f16190e1dc36db0d4dbba9c24e5a7d452663db1978d4030471e0f83c1b744f59` | 18 | 0 |
+| gemma4-31b-it | POI flat | `datasets/E52/preds/topup/poi3/flat__gemma__r-short.jsonl` | `b8f27201f907ace2620411652ec7792e091163bb74553feb3846d2f2ef1fe6d3` | 18 | 0 |
+| gemma4-31b-it | WZ k30 | `datasets/E52/preds/topup/wz/retrieve__gemma__r-none__c1500.jsonl` | `c127540326323c1c2c0b3c0f6e21d69f61be65dddf1d9084f1e498ce14f5810e` | 18 | 0 |
+| qwen-agentworld-35b-a3b | address | `datasets/E52/preds/topup/address/address__agentworld__r-none__f-schema__mode-main.jsonl` | `6d467ea5611b6b0662b595d479bef3b5ae2c88359f94a63b86bfc94ed1564459` | 18 | 0 |
+| qwen-agentworld-35b-a3b | POI k30 | `datasets/E52/preds/topup/poi3/retrieve__agentworld__r-short.jsonl` | `ce1f9df6b2b5a8145c93248491cc8d5c08fef5bcb10346e0cf4a437bdd93e545` | 18 | 0 |
+| qwen-agentworld-35b-a3b | POI flat | `datasets/E52/preds/topup/poi3/flat__agentworld__r-short.jsonl` | `532e4761859a41b082fc267710f11e852669a2831ca3d8698cbb6e10e6dff318` | 18 | 0 |
+| qwen-agentworld-35b-a3b | WZ k30 | `datasets/E52/preds/topup/wz/retrieve__agentworld__r-none__c1500.jsonl` | `0adc9a8e26151d81d893f356613be3a7291ac7bc0253aa9508e0531285de1ec9` | 18 | 0 |
+
+Commands (exact, as run from the repository root; E52 = datasets/E52):
+
+- qwen38-27b address: `python3 -I scripts/E52/run.py --http-log $E52/logs/topup/qwen38-27b_address.http.log -- --dev $E52/topup_inputs.jsonl  --out-dir $E52/preds/topup --cache $E52/cache --model qwen38-27b --workers 6 --task address --reasoning none --mode main --fmt schema`
+- qwen38-27b POI k30: `python3 -I scripts/E52/run.py --http-log $E52/logs/topup/qwen38-27b_poi_k30.http.log -- --dev $E52/topup_inputs.jsonl  --out-dir $E52/preds/topup --cache $E52/cache --model qwen38-27b --workers 6 --task topic --schema poi3 --strategy retrieve --k 30 --reasoning low`
+- qwen38-27b POI flat: `python3 -I scripts/E52/run.py --http-log $E52/logs/topup/qwen38-27b_poi_flat.http.log -- --dev $E52/topup_inputs.jsonl  --out-dir $E52/preds/topup --cache $E52/cache --model qwen38-27b --workers 6 --task topic --schema poi3 --strategy flat --reasoning low`
+- qwen38-27b WZ k30: `python3 -I scripts/E52/run.py --http-log $E52/logs/topup/qwen38-27b_wz.http.log -- --dev $E52/topup_inputs.jsonl  --out-dir $E52/preds/topup --cache $E52/cache --model qwen38-27b --workers 6 --task topic --schema wz --reasoning none --site-chars 1500`
+- gemma4-31b-it address: `python3 -I scripts/E52/run.py --http-log $E52/logs/topup/gemma4-31b-it_address.http.log -- --dev $E52/topup_inputs.jsonl  --out-dir $E52/preds/topup --cache $E52/cache --model gemma4-31b-it --workers 6 --task address --reasoning none --mode main --fmt schema`
+- gemma4-31b-it POI k30: `python3 -I scripts/E52/run.py --http-log $E52/logs/topup/gemma4-31b-it_poi_k30.http.log -- --dev $E52/topup_inputs.jsonl  --out-dir $E52/preds/topup --cache $E52/cache --model gemma4-31b-it --workers 6 --task topic --schema poi3 --strategy retrieve --k 30 --reasoning short`
+- gemma4-31b-it POI flat: `python3 -I scripts/E52/run.py --http-log $E52/logs/topup/gemma4-31b-it_poi_flat.http.log -- --dev $E52/topup_inputs.jsonl  --out-dir $E52/preds/topup --cache $E52/cache --model gemma4-31b-it --workers 6 --task topic --schema poi3 --strategy flat --reasoning short`
+- gemma4-31b-it WZ k30: `python3 -I scripts/E52/run.py --http-log $E52/logs/topup/gemma4-31b-it_wz.http.log -- --dev $E52/topup_inputs.jsonl  --out-dir $E52/preds/topup --cache $E52/cache --model gemma4-31b-it --workers 6 --task topic --schema wz --reasoning none --site-chars 1500`
+- qwen-agentworld-35b-a3b address: `python3 -I scripts/E52/run.py --http-log $E52/logs/topup/qwen-agentworld-35b-a3b_address.http.log -- --dev $E52/topup_inputs.jsonl  --out-dir $E52/preds/topup --cache $E52/cache --model qwen-agentworld-35b-a3b --workers 6 --task address --reasoning none --mode main --fmt schema`
+- qwen-agentworld-35b-a3b POI k30: `python3 -I scripts/E52/run.py --http-log $E52/logs/topup/qwen-agentworld-35b-a3b_poi_k30.http.log -- --dev $E52/topup_inputs.jsonl  --out-dir $E52/preds/topup --cache $E52/cache --model qwen-agentworld-35b-a3b --workers 6 --task topic --schema poi3 --strategy retrieve --k 30 --reasoning short`
+- qwen-agentworld-35b-a3b POI flat: `python3 -I scripts/E52/run.py --http-log $E52/logs/topup/qwen-agentworld-35b-a3b_poi_flat.http.log -- --dev $E52/topup_inputs.jsonl  --out-dir $E52/preds/topup --cache $E52/cache --model qwen-agentworld-35b-a3b --workers 6 --task topic --schema poi3 --strategy flat --reasoning short`
+- qwen-agentworld-35b-a3b WZ k30: `python3 -I scripts/E52/run.py --http-log $E52/logs/topup/qwen-agentworld-35b-a3b_wz.http.log -- --dev $E52/topup_inputs.jsonl  --out-dir $E52/preds/topup --cache $E52/cache --model qwen-agentworld-35b-a3b --workers 6 --task topic --schema wz --reasoning none --site-chars 1500`
+
+Agreement between candidates, **no reference** (share of items with the same answer; n in brackets = items where both reach the level):
+
+| run | x | y | n | agree L1 | agree L2 | agree L3 |
+|---|---|---|---|---|---|---|
+| address | qwen | gemma | 18 | 0.944 (main address) | | |
+| address | qwen | agentworld | 18 | 0.889 (main address) | | |
+| address | gemma | agentworld | 18 | 0.944 (main address) | | |
+| POI k30 | qwen | gemma | 18 | 1.000 (18) | 0.889 (18) | 1.000 (4) |
+| POI k30 | qwen | agentworld | 18 | 1.000 (18) | 0.778 (18) | 1.000 (4) |
+| POI k30 | gemma | agentworld | 18 | 1.000 (18) | 0.889 (18) | 1.000 (4) |
+| POI flat | qwen | gemma | 18 | 1.000 (18) | 0.882 (17) | 1.000 (4) |
+| POI flat | qwen | agentworld | 18 | 0.944 (18) | 0.765 (17) | 1.000 (3) |
+| POI flat | gemma | agentworld | 18 | 0.944 (18) | 0.765 (17) | 1.000 (3) |
+| WZ k30 | qwen | gemma | 18 | 0.944 (18) | 0.944 (18) | 0.611 (18) |
+| WZ k30 | qwen | agentworld | 18 | 1.000 (18) | 1.000 (17) | 0.588 (17) |
+| WZ k30 | gemma | agentworld | 18 | 0.944 (18) | 0.941 (17) | 0.706 (17) |
+| POI k30 vs flat | qwen k30 | qwen flat | 18 | 1.000 (18) | 0.882 (17) | 1.000 (4) |
+| POI k30 vs flat | gemma k30 | gemma flat | 18 | 1.000 (18) | 1.000 (18) | 1.000 (4) |
+| POI k30 vs flat | agentworld k30 | agentworld flat | 18 | 0.944 (18) | 0.824 (17) | 1.000 (3) |

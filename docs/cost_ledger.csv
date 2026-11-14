@@ -2,3 +2,4 @@ date_utc,experiment,service,model,calls,input_tokens,output_tokens,usd,usd_sourc
 2026-11-13,E53-prefill,openrouter,anthropic/claude-haiku-5.5,20,49291,2273,0.006066,reported,datasets/E53/prefill_pilot/prefill.jsonl,pilot
 2026-11-13,E53-prefill,openrouter,anthropic/claude-haiku-5.5,1,3948,252,0.000521,reported,datasets/E53/prefill_pilot/prefill.jsonl,"pilot retry of 1 parse failure, max_tokens 400 to 1000"
 2026-11-13,E53-prefill,openrouter,anthropic/claude-haiku-5.5,1816,3947947,189552,0.489571,reported,datasets/E53/gold/prefill.jsonl,"full run 1,869 items"
+2026-11-14,E53-prefill,openrouter,anthropic/claude-haiku-5.5,18,30460,1445,0.003769,reported,datasets/E53/gold/prefill_topup.jsonl,"E53 step 15 r5 top-up, 18 items (output_path made repo-relative by hand)"

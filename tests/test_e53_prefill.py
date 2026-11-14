@@ -277,3 +277,16 @@ def test_ic_fetch_adapter(tmp_path):
         and by["y.de"]["imprint_text"] == ""
     )
     assert P.estimate(items)["calls"] == 1
+
+
+def test_rel_path_outside_repo_keeps_datasets_part(tmp_path):
+    p = (
+        tmp_path
+        / "other-checkout"
+        / "datasets"
+        / "E53"
+        / "gold"
+        / "prefill_topup.jsonl"
+    )
+    assert P._rel(p) == "datasets/E53/gold/prefill_topup.jsonl"
+    assert P._rel(P.ROOT / "docs" / "x.csv") == "docs/x.csv"
