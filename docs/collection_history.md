@@ -1,24 +1,30 @@
 # Collection history: German Imprints Dataset
 
-State: 2026-11-08. Compact history of the whole data collection for the new snapshot.
+State: 2026-11-14 (final count r5). Compact history of the whole data collection for the new snapshot.
 It is ordered by what we collected (seeds, link rounds, re-crawls), not by experiment number.
 Source of truth: [decisions.md](decisions.md) and [status.md](status.md). The appendix maps IDs to sections.
 Terms: "found" = host with status `imprint_found` (an imprint page was fetched; it is not yet a checked address).
-"New" = new D34 sites, counted in order, first source wins (see section 1 and 7). All "new sites" values are from recount r4 (2026-11-08, `release_count.tsv`, branch E31-recount-r4); they sum to 4,020,137.
+"New" = new D34 sites, counted in order, first source wins (see section 1 and 7). All "new sites" values are from recount r4 (2026-11-08, `release_count.tsv`, branch E31-recount-r4); they sum to 4,020,137. The final count is recount r5 (section 1); r5 keeps the r4 values except E41L1 (79,176, -1) and adds E48 and the E34r4 pilot.
 
 ## 1. Count now
 
 | Count | Value | Date | Rule |
 |---|---|---|---|
-| Sites after D34 dedup | **4,020,137** | 2026-11-08 (recount r4, lead-verified) | One site per `www.x` / `x` pair. |
-| Sites after parking filter | **3,908,045** | 2026-11-09 (E40 round 2, lead-verified) | Drop sale, parking and host-default pages. |
+| Sites after D34 dedup (final) | **4,057,186** | 2026-11-14 (recount r5, lead-verified) | One site per `www.x` / `x` pair. |
+| Sites after parking filter (final) | **3,945,356** | 2026-11-14 (E40 round 2, r5 rule) | Drop sale, parking and host-default pages. |
+| History: recount r4 | 4,020,137 / 3,908,045 after the filter | 2026-11-08/09 | Same rules; without E48 and the E34r4 pilot. |
+
+- Recount r5 (final): r4 sources + E48 (36,990 new sites) + E34 round 4 pilot (60 new sites). The filter drops 111,830 sites (sale 70,715, parking 38,807, host default 2,308) and keeps 18,520 under-construction sites and 269 `sale_flag` sites (r5 rule: the weak rule "name for sale" only flags). Other views: 4,885,204 www-collapsed; 5,316,950 exact hosts. sha256 of the D34 site list 24a13bc8…, of the filtered list 93bd4d30…. Data and scripts: package `counts/r5/`; reproduce with `scripts/E31/recount.sh PKG OUT --final` (branch collection-release).
+- E48 was frozen for good on 2026-11-14 03:49:16Z (D100): 96,000 of 96,722 Shopify hosts crawled, 40,898 found, 722 not crawled.
+
+The rest of this section describes recount r4 (history).
 
 - D34 rule: `www.x` and `x` count as one site. Keep the redirect target if it is a crawled host, else the non-www form.
 - Parking filter (E40 round 2): drop a site when all its found hosts are domain-sale (70,982), parking (38,802) or host-default pages (2,308). Keep under-construction pages (18,455). That drops 112,092 sites. Output on lorbeer: e35 `datasets/E40/r2`; branch E40-parking-filter-r2 e65d59f, not merged.
 - Other views of the same data (2026-11-08): 4,844,209 www-collapsed only; 5,275,955 exact hosts.
 - Recount r4: branch E31-recount-r4, sha 181589e, made off E31-recount-r3, not merged. Output on lorbeer: e35 `datasets/E31/r4`. sha256 of the D34 site list: e4645f32…; of the filtered list: 85e12846….
 - r4 adds 155,287 new sites from the sources E41L1-L4, E43, E44 and E45-E47. 4,113 r3 sites fold into new r4 sites (their redirect target is now crawled). The old sources fall from 3,865,119 to 3,864,850. Check: 3,864,850 + 155,287 = 4,020,137.
-- Not in r4: E48 (Shopify full crawl of 96,722 hosts, running), the E34 round 4 pilot, and E42 (100-host Shopify pilot, no data copy).
+- Not in r4: E48 (Shopify full crawl), the E34 round 4 pilot (both in r5), and E42 (100-host Shopify pilot, no data copy; not counted in r5 either).
 - Both counts are sites with a found imprint page. The D16 address filter and the LLM extraction are not applied yet. Not every found page has an address (section 6).
 - The releases and the paper report only these current counts.
 
@@ -105,7 +111,7 @@ Frontier = hosts linked from pages of the new sources (section 2), minus all kno
 | Round 2 (2026-11-04) | 247,928 | 247,928 (pilot 5,000 + 242,928) | 21,071 (pilot 421 + full 20,650; 8.5%) | 11,880 | None. 6,992 non-DACH finds need a DACH address at merge. |
 | Round 3, DACH TLDs (2026-11-05) | 33,257 | 33,257 (pilot 5,000 + 28,257) | 11,721 (1,807 + 9,914; 35.1% on the full part) | 6,101 (after filter: 5,959) | Other TLDs: next row. |
 | Round 3, other TLDs (E41L3; all but .de/.at/.ch/.li; done 2026-11-08) | 572,749 (dropped by the round-3 TLD filter; 565,218 left after later exclusions) | 565,218 | 9,057 (1.6%) | 5,451 (after filter: 5,426) | None known. |
-| Round 4 (2026-11-08, all TLDs, pilot only) | 701,697 | 5,000 (pilot) | 97 (1.94%) | 88 | Below the D33 bar (10%). D46 C (user, 2026-11-09): stop after the pilot; the rest is not crawled. Outlink rounds end here. Not in recount r4. |
+| Round 4 (2026-11-08, all TLDs, pilot only) | 701,697 | 5,000 (pilot) | 97 (1.94%) | 88 | Below the D33 bar (10%). D46 C (user, 2026-11-09): stop after the pilot; the rest is not crawled. Outlink rounds end here. Not in recount r4; 60 new sites in recount r5 (it comes after E48 in the order). |
 
 - Round 2 by TLD group: DACH 13,658 / 38,375 = 35.6%; generic 5,618 / 145,446 = 3.9%; other ccTLDs 1,374 / 59,107 = 2.3%.
 - The pilot of round 2 was below the 10% rule (8.4%). The user chose the full crawl including generic TLDs (D38 B).
@@ -154,7 +160,8 @@ All Shopify shops share one provider group (`v4:23.227.38`).
 | 2026-11-03 11:02 | D32 A: the pilot stops after 3 hosts in 2 h 42 min (2 found). Every request got 429 even at about 1 per minute. Quiet period of 72 h starts. |
 | 2026-11-03 onward | All new crawls skip the group (new `--skip-provider-group`, status `skipped_provider`, no request sent). |
 | 2026-11-06 11:02 | Re-pilot starts (E42): 100 hosts from the unfetched Shopify list, 1 request per 60 s, one VM (not the host's first VM). It has no data copy and is not counted. |
-| 2026-11-08 | Rate tests E45, E46, E47 are in recount r4 (table below). E48, the full Shopify crawl of 96,722 hosts, is running and not counted yet. |
+| 2026-11-08 | Rate tests E45, E46, E47 are in recount r4 (table below). |
+| 2026-11-07 to 11-14 | E48, the full Shopify crawl of 96,722 hosts (5 VMs, 1 request per 3 s per VM). Frozen for good on 2026-11-14 03:49:16Z after the throttle watcher stopped it (D100): 96,000 crawled, 40,898 found, 722 not crawled. In recount r5. |
 
 Rate tests in recount r4:
 
@@ -164,6 +171,7 @@ Rate tests in recount r4:
 | E46 | 100 | 50 (50.0%) | 49 |
 | E47 | 100 | 39 (39.0%) | 37 |
 | Together | 337 | 143 | 138 (after filter: 138) |
+| E48 (recount r5) | 96,000 of 96,722 | 40,898 | 36,990 (after filter: 36,983) |
 
 - Decision rule for the re-pilot (E42): if fewer than 50% of requests get 429, run the other 36,477 hosts at that rate on free VMs. Otherwise drop Shopify from the recovery and record the hosts as throttled.
 - The pilot also counts all Shopify hosts skipped in all sources (E42 goal). That count is not in the docs yet.
@@ -214,16 +222,16 @@ All numbers are on random samples of seed hosts unless marked.
 
 | Rule or variant | Result | Status |
 |---|---|---|
-| D34: www-collapse, keep redirect target if crawled, else non-www | 4,020,137 sites (2026-11-08) | Adopted (user, 2026-11-03). |
+| D34: www-collapse, keep redirect target if crawled, else non-www | 4,057,186 sites (r5, 2026-11-14); 4,020,137 (r4) | Adopted (user, 2026-11-03). |
 | Order of sources: first source wins | New sites per source depend on the order. | Adopted. |
-| Exact host count | 5,275,955 | Not used as headline. |
-| www-collapse only, no redirect fold | 4,844,209 | Not used as headline. |
+| Exact host count | 5,316,950 (r5); 5,275,955 (r4) | Not used as headline. |
+| www-collapse only, no redirect fold | 4,885,204 (r5); 4,844,209 (r4) | Not used as headline. |
 | Variant: fold only into redirect targets that are themselves found | 4,073,897 (on the 4,020,137 base) | Rejected. At the 2026-11-05 count, 45,541 of the 57,655 hosts it kept apart went to the parking target ts.domainname.de. |
-| Parking filter round 2: drop sale + park + host-default | 3,908,045 (sale 70,982, park 38,802, host 2,308) | Adopted as the assumed release count (2026-11-09); branch not merged. |
+| Parking filter round 2: drop sale + park + host-default | r5 (r5 rule): 3,945,356 (sale 70,715, park 38,807, host 2,308; 269 sale_flag kept). r4: 3,908,045 (sale 70,982, park 38,802, host 2,308) | Adopted; r5 is the release count (2026-11-14); branch collection-release, not merged. |
 | Parking filter round 1 | 3,992,804 (sale 19,898, park 6,276, host 1,159) | Replaced by round 2. |
 | Parking filter variant: also drop under-construction pages | not applied | Rejected: only 30% precision. |
 
-- History of the count: 3,069,472 D34 sites on a partial snapshot (2026-11-04 01:30 UTC); 3,859,210 at the final count (2026-11-05, all crawls finished); 3,865,119 at recount r3 (2026-11-06, with round 3 of the outlinks); 4,020,137 at recount r4 (2026-11-08, with the E41, E43, E44 and Shopify-test crawls).
+- History of the count: 3,069,472 D34 sites on a partial snapshot (2026-11-04 01:30 UTC); 3,859,210 at the final count (2026-11-05, all crawls finished); 3,865,119 at recount r3 (2026-11-06, with round 3 of the outlinks); 4,020,137 at recount r4 (2026-11-08, with the E41, E43, E44 and Shopify-test crawls); 4,057,186 at recount r5 (2026-11-14, final, with E48 and the E34 round 4 pilot).
 - Why exact hosts overcount: 423,017 sites were found under both `www.x` and `x` in the seed crawl alone.
 - Pilots stay in the count. The test dirs of the dry runs, the recovery pilots and the 403 pilot stay out.
 - The count is not final for the paper: the D16 address filter and the LLM extraction come first (section 9).
@@ -253,6 +261,8 @@ All numbers are on random samples of seed hosts unless marked.
 | 2026-11-03 to 11-05 | Depth-2 rest, new-source pilots and full crawls, recall patch, re-check, outlink rounds 1-3. |
 | 2026-11-06 to 11-08 | Other-TLD parity crawls (E41), HPLT rest (E43), dialect configs (E44), Shopify tests (E42, E45-E47), recount r4. |
 | 2026-11-08 | E34 round 4: frontier built, pilot of 5,000 done. E48 (Shopify full crawl) running. |
+| 2026-11-09 | Parking filter round 2; data package `innkube/datasets/imprints/20261109/` (D47); old raw crawl dirs copied off the VMs (D48). |
+| 2026-11-14 | E48 frozen (D100). Recount r5 = final count: 4,057,186 D34 sites, 3,945,356 after the filter. Package updated with `counts/r5/`, `crawls/E48`, `crawls/E34r4`. |
 
 ### 8.3 Incidents
 
@@ -275,16 +285,15 @@ All numbers are on random samples of seed hosts unless marked.
 
 ### 9.1 Running
 
-| Job | What | Note |
-|---|---|---|
-| E48 Shopify full crawl | 96,722 hosts | Not in recount r4. Counts follow when it ends. |
+No collection job runs. E48 is frozen (D100, 2026-11-14) and in recount r5.
 
 The 2026-11-06 parity crawls (E41L1-L4) are done and in recount r4 (sections 2, 3.2, 4.2).
 
 ### 9.2 Not run (by decision or by threshold)
 
 - 403 hosts (270,624): pilot 0.75%.
-- 36,577 Shopify hosts of recovery round 2: now part of the Shopify work (E48 runs 96,722 hosts).
+- 36,577 Shopify hosts of recovery round 2: now part of the Shopify work (E48 ran 96,722 hosts).
+- The 722 E48 hosts that were not crawled at the freeze (D100).
 - E34 round 4: closed after the pilot (D46 C, 2026-11-09); the rest of 696,697 hosts is not crawled.
 - Depth 3 of the seed outlinks and depth 2 of frontier B.
 - The other 25 host-index crawls.
@@ -295,7 +304,7 @@ The 2026-11-06 parity crawls (E41L1-L4) are done and in recount r4 (sections 2, 
 
 - LLM extraction of the snapshot waits for the gold-set model comparison. The user wants one model for addresses and topics.
 - D16 address filter at merge: link-expansion finds need a DACH postal address. This affects the 6,992 non-DACH finds of outlink round 2 and similar finds elsewhere.
-- Merge of the branches: counts (E31 final, r3 and r4), parking filter (E40), recall patch (E35) and User-Agent (D39) are not merged to the main branch.
+- Merge of the branches: branch collection-release (counts r3-r5, parking filter E40, recall patch E35, User-Agent D39) has a draft PR to master; it is not merged.
 - Per-pool split of the 1,365,261-host crawl (DACH pool vs other-TLD pool) is still to do.
 - Open user proposals: the docs list only the gold-set proposals (time per item; the 11 hosts whose main address the filter removed) and D21. See Doubts.
 
@@ -369,7 +378,7 @@ Numbers I could not trace to a doc (the text avoids them or marks them):
 | E40 | Parking filter | 1, 6, 7 |
 | E41 | Other-TLD parity crawls (E41L1-L4) | 2, 3.2, 4.2 |
 | E43, E44 | HPLT rest, FineWeb-2 dialect configs | 2 |
-| E42, E45-E48 | Shopify re-pilot, rate tests, full crawl (E48 running) | 4.3, 9.1 |
+| E42, E45-E48 | Shopify re-pilot, rate tests, full crawl (E48 frozen, in r5) | 1, 4.3, 9.1 |
 | D2 | LLM access, spend limits | 8.4 |
 | D10, D11, D12, D13, D14, D15, D17, D21, D24 | Venue, gold and evaluation choices | 10 |
 | D16, D19 | Link-expansion scope and depth | 3 |

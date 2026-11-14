@@ -1,6 +1,10 @@
 # Reproduce the data collection
 
-State: 2026-11-09 (D47 wrap-up, recount r4, parking filter round 2). Data package: `innkube/datasets/imprints/20261109/`.
+State: 2026-11-14 (D47 wrap-up; final count = recount r5 with the parking filter round 2, r5 rule). Data package:
+`innkube/datasets/imprints/20261109/`.
+
+**Final count (r5): 3,945,356 sites after the parking filter** (4,057,186 D34 sites before the filter). Recount r4
+(4,020,137 / 3,908,045) is history; the package keeps it unchanged.
 
 ## Quick start: recompute the count from the package (no crawling)
 
@@ -9,33 +13,44 @@ mc cp --recursive innkube/datasets/imprints/20261109/ ./package/
 git clone -b collection-release https://github.com/padas-lab-de/imprints-collection ic && cd ic
 scripts/E31/recount.sh ../package ../out    # stdlib only; PY=python3 by default; no pip install needed
 cat ../out/compare.tsv                      # every row must say "match"
+scripts/E31/recount.sh ../package ../out5 --final   # the final count r5 (see below)
 ```
 
 Offline: `package/code/collection-release.bundle` holds the branch as ref `refs/remotes/origin/collection-release`
 (`git clone package/code/collection-release.bundle ic && cd ic && git checkout -b cr origin/collection-release`).
-TODO(lead): the bundle of 2026-11-09 is at edc3d83, before `scripts/E31/recount.sh` was added; rebuild it from the
-pushed branch. For a crawl (not for the recount) also run `python3 -m venv .venv && .venv/bin/pip install -e .`.
+`package/code/collection-release.sha` gives the commit of the bundle (rebuilt from the pushed branch on 2026-11-14).
+For a crawl (not for the recount) also run `python3 -m venv .venv && .venv/bin/pip install -e .`.
 
 `recount.sh` runs `release_count.py` (E31, D34 rule), `parking_filter.py apply` (E40 round 2) and `finalize_r2.py`, then
 compares every output with the sha256 values in the package. It exits 1 on a mismatch. Expected result:
 
-| File | Lines | sha256 |
-|---|---|---|
-| `out/E31_out/canonical_sites.txt` | 4,020,137 sites (D34) | `e4645f32babe1fa3b7cdb22a976f11e7c3c3182129ef6081379cf50f12911f11` |
-| `out/E40r2/canonical_sites_after_filter.txt` | 3,908,045 sites | `748f70f44517f62e627997e7697d910956b477fb560b025db1cab1b3c1e717a2` |
+| Run | File | Lines | sha256 |
+|---|---|---|---|
+| r4 (no flag) | `out/E31_out/canonical_sites.txt` | 4,020,137 sites (D34) | `e4645f32babe1fa3b7cdb22a976f11e7c3c3182129ef6081379cf50f12911f11` |
+| r4 (no flag) | `out/E40r2/canonical_sites_after_filter.txt` | 3,908,045 sites | `748f70f44517f62e627997e7697d910956b477fb560b025db1cab1b3c1e717a2` |
+| r5 (`--final`) | `out5/E31_out/canonical_sites.txt` | 4,057,186 sites (D34) | `24a13bc8a9e08bda05ed037f48d6ae9588eb6c611bbe329cf8b416e75a675909` |
+| r5 (`--final`) | `out5/E40r2/canonical_sites_after_filter.txt` | **3,945,356 sites (final)** | `93bd4d30dcc4d290a63953d5df98b2e64d8e0bef413a68653ed1b58d3cf0c461` |
+
+`--final` reads `counts/r5/E31_in` (105 tables: the 99 r4 tables, 5 E48 tables, 1 E34r4 table) and
+`counts/r5/E40r2_scan` (the 99 r4 scan files and the 6 new scan files), applies the r5 rule (see `--r5` below), and
+compares with `counts/r5/SHA256SUMS.txt` and `counts/r5/E40r2/SHA256SUMS.txt`. The round-1 input `--r1` stays
+`counts/r4/E40_out`.
+Test run on the package staging (2026-11-14, lorbeer): all 13 rows "match" (`delta_by_category.tsv`: order of ties
+differs), 7 min 29 s, 5.1 GB.
 
 Test run on lorbeer (2026-11-09, 16 cores, input = the e35 datasets the package was built from): 7 min 44 s wall
 time, 5.1 GB peak RSS (in the parking filter step). 12 of the 13 compared files match byte for byte.
 `delta_by_category.tsv` has the same lines, but tied rows of its transition table come out in a different order:
 `finalize_r2.py` orders ties by set iteration, which depends on the Python hash seed. `recount.sh` then compares
-the sorted lines and reports "match (same lines, order of ties differs)". The package download is about 1.15 GB if
-you take only `counts/` and `filter/E40r2/` (the whole package is 21.7 GB, mostly raw crawl output).
+the sorted lines and reports "match (same lines, order of ties differs)". For the recount you need only `counts/`
+and `filter/` (about 2.7 GB); the whole package is about 70 GB, mostly raw crawl output.
 
 `--r5` as third argument makes `r2_name_for_sale` flag only (`parking_filter.py apply --name-for-sale-flag-only`, the
 r5 rule): those sites stay in `flagged_sites.tsv` with category `sale_flag` but are not dropped. The after-filter
 files then differ from the package; `compare.tsv` marks this as expected. On the r4 data, `--r5` gives 3,908,315
 sites after the filter (+270: 269 sites become `sale_flag`, 1 site becomes `constr` because it also has an
-under-construction host; 7 min 46 s, 5.1 GB). This is a preview of the rule only, not the r5 count.
+under-construction host; 7 min 46 s, 5.1 GB). This is a preview of the rule only, not the r5 count. For the final
+count use `--final`.
 
 Integrity of the whole package: `cd package && sha256sum -c MANIFEST.sha256`.
 
@@ -59,9 +74,11 @@ page, looks for an Impressum page and writes one status row per host. The steps 
    (`filter/E40r2/scan/`); `parking_filter.py apply` drops sites whose found hosts are all domain-sale, parking or
    hosting-default pages; `finalize_r2.py` writes the after-filter list.
 
-Current counts (recount r4, filter round 2): 4,020,137 D34 sites, 3,908,045 after the filter. The final count is
-recount r5 (after E48; see `docs/decisions/D47-collection-wrap-up.md`).
-TODO(lead): put the r5 numbers here when r5 is done.
+Final count (recount r5, 2026-11-14; filter round 2 with the r5 rule): **4,057,186 D34 sites, 3,945,356 after the
+filter**. The filter drops 111,830 sites (domain sale 70,715, parking 38,807, host default 2,308) and keeps 18,520
+under-construction sites and 269 `sale_flag` sites. Other views of the r5 data: 4,885,204 www-collapsed hosts,
+5,316,950 exact found hosts. r5 = r4 sources + E48 (36,990 new D34 sites) + E34r4 pilot (60), in this order. Recount
+r4 (4,020,137 / 3,908,045) is history (see `docs/decisions/D47-collection-wrap-up.md`).
 
 Step by step without `recount.sh` (same commands, `PKG` = package dir):
 
@@ -73,13 +90,18 @@ python3 scripts/E40/parking_filter.py apply --in PKG/counts/r4/E31_in \
 python3 scripts/E40/finalize_r2.py --sites out/E31_out/canonical_sites.txt --r1 PKG/counts/r4/E40_out --r2 out/E40r2
 ```
 
+For r5 use `PKG/counts/r5/E31_in` in both `--in` arguments, `$(ls PKG/counts/r5/E40r2_scan/*.scan.tsv | LC_ALL=C sort)`
+for `--scan`, and `--name-for-sale-flag-only`.
+
 The scan files must be given in sorted order (a later file wins for a host that is in two files), as in
 `filter/E40r2/apply.log`.
 
 ## Data package
 
 S3 instance `innkube` (mc alias, https://share.innkube.fim.uni-passau.de), bucket `datasets`, prefix
-`imprints/20261109/`. 1,413 files, 21,670,409,443 bytes. Built 2026-11-09 on lorbeer.
+`imprints/20261109/`. Built 2026-11-09 on lorbeer; old raw crawl dirs added 2026-11-09 (D48); r5, E48 and the
+E34r4 pilot added 2026-11-14. About 2,850 files, about 70.4 GB (the exact numbers are in `MANIFEST.sha256` and in
+the S3 listing).
 
 | Path | Content |
 |---|---|
@@ -90,18 +112,19 @@ S3 instance `innkube` (mc alias, https://share.innkube.fim.uni-passau.de), bucke
 | `counts/r4/E31_out/` | `canonical_sites.txt`, `canonical_sites_found_only.txt`, `redirect_cases.tsv`, `release_count.tsv`, `release_stats.tsv` |
 | `counts/r4/E40_out/` | parking filter round 1 output (input of `finalize_r2.py --r1`) |
 | `counts/r4/` other | `E40_scan_new/`, `compare/` (r3 vs r4), `SHA256SUMS.txt`, `pull.log`, `release_count.tsv`, `sources.tsv` (absolute lorbeer paths) |
+| `counts/r5/` | final count: `E31_in/` (`manifest.tsv` + 105 tables), `E31_out/`, `E40r2/` (filter output with `SHA256SUMS.txt`, `finalize.log`), `E40r2_scan/` (all 105 scan files of the r5 count), `E40r2_scan_new/` (the 6 new scan files + coverage), `delta/` (vs r4 data under the r5 rule, vs the r4 package, vs the interim r5), `scripts/` (r5 build scripts and the `finalize_r2.py` used), `logs/`, `sources_r5_final.tsv`, `release_count.tsv`, `SHA256SUMS.txt` |
 | `filter/E40r2/` | `scan/` (99 `*.scan.tsv` + `coverage.tsv`), `targets_classified.tsv`, `apply.log`, `scan_all.log`, outputs (`flagged_sites.tsv`, `filter_by_source.tsv`, `flagged_site_hosts.tsv`, `sample_found_hosts.tsv`, `canonical_sites_after_filter.txt`, `delta_by_*.tsv`, `release_count_after_filter.tsv`), `SHA256SUMS.txt`, evidence (`discovery/`, `labels/`, `r1_check/`, `r1_view.scan.tsv`) |
 | `filter/E40r3/` | evidence for the under-construction labels (round 3) |
-| `crawls/` | raw crawl output (status tables, `imprints_*.jsonl.gz`): E28 (p1, p2), E30 (`full_lorbeer_batches0-27`, `full_aspe_batches28-54`), E33 (abelie, apfel, aspe, mispel), E33p (q1-q4), E34r2, E34r3, E37 (4 VMs), E39 (audit evidence only), E41 (4 VMs), E43, E44, E45 (A, B), E46, E47 |
-| `lists/` | every host list with `.sha256`: `seed_hosts.txt.gz`, `E16/`, `E19/` (round 1 recovery input and reshard, round 2, 2b, 2c, 2d), `frontiers/` (E22 depth-1 A and depth-2 rest, E34 r1-r4), one folder per crawl E25-E47 and E42 |
+| `crawls/` | raw crawl output (status tables, `imprints_*.jsonl.gz`) of every counted source: E16, E19r1, E19r2, E22d1A, E22d1B, E22d2P, E22d2R, E25, E26, E27, E29, E34, E36 (`crawls/<source>/<vm>/<dir>/`, copied off the VMs by D48), E28 (p1, p2), E30 (`full_lorbeer_batches0-27`, `full_aspe_batches28-54`), E33 (abelie, apfel, aspe, mispel), E33p (q1-q4), E34r2, E34r3, E37 (4 VMs), E39 (audit evidence only), E41 (4 VMs), E43, E44, E45 (A, B), E46, E47, E48 (`<vm>/datasets/E48/out` for 5 VMs, `lists/`, `not_crawled.txt`, `SHA256SUMS.txt`, `gzip_test.tsv`), E34r4 (`pilot/`) |
+| `lists/` | every host list with `.sha256`: `seed_hosts.txt.gz`, `E16/`, `E19/` (round 1 recovery input and reshard, round 2, 2b, 2c, 2d), `frontiers/` (E22 depth-1 A and B, depth-2 priority and rest, E34 r1-r4), one folder per crawl E25-E48, E34r4 and E42 |
 
-Not in the package: raw output of E16, E19, E22, E25-E27, E29, E34, E36 (on the crawl VMs only); E48 and the E34r4
-pilot (come with r5); `counts/r5/`; the build inputs `E41/e41.duckdb` and the E24 parquets. See "Gaps".
+Not in the package: the build inputs `E41/e41.duckdb` and the E24 parquets. See "Gaps".
 
 ## Per experiment: list, script, code tree
 
-Order = order of sources in the count (`counts/r4/E31_in/manifest.tsv`, `scripts/E31/sources.tsv`). "New sites" =
-new D34 sites in r4 (`counts/r4/E31_out/release_count.tsv`). List sha256 = first 8 hex digits, the full value is in
+Order = order of sources in the count (`counts/r5/E31_in/manifest.tsv`, `scripts/E31/sources.tsv`). "New sites" =
+new D34 sites in r4 (`counts/r4/E31_out/release_count.tsv`); for E48 and E34r4 in r5 (`counts/r5/release_count.tsv`).
+In r5 the r4 sources keep their values except E41L1 (79,176, -1). List sha256 = first 8 hex digits, the full value is in
 the `.sha256` file next to the list. Tree = commit of the checkout the fetcher ran from (the fetcher code differs
 between trees; see "User-Agent and fetcher versions"). Scripts that are not in `scripts/E<n>/` of the source's own
 number are in the folder named in the table; all were moved into git by D47 (see `scripts/README.md`).
@@ -112,8 +135,8 @@ number are in the folder named in the table; all were moved into git by D47 (see
 | E19r1 | 8,740 | `lists/E19/round1_recovery_input.txt` (f3ff5258), `round1_reshard/` | `scripts/E19/collect.py`, `reshard.py` | `scripts/E19/run.sh`; `scripts/E19r1/d25_*.sh` | 69c5c6b |
 | E19r2 | 37,375 | `lists/E19/round2/` (8b458240), `round2b/`, `round2c/`, `round2d/` | `scripts/E19/collect.py`, `reshard.py`; 2c/2d: `scripts/E19r2/plan_d30.py`, `plan_d31.py` | `scripts/E19/run.sh`; `scripts/E19r2/launch_*.sh`, `deploy_d30.sh`, `deploy_d31.sh` | s0/s1 e22 tree; 2b main/e22; 2c/2d 321db96 |
 | E22d1A | 156,638 | `lists/frontiers/E22_round1_frontier_A.txt` (dcd5f325) | `scripts/E22/frontier.py` | `scripts/E22/run.sh`; `scripts/E19r1/e22_start.sh`, `e22all.sh` | 69c5c6b |
-| E22d1B | 3,272 | not in package (VM only, 48631fd0) | `scripts/E22/frontier.py --known A` | `scripts/E22/run.sh` | 69c5c6b |
-| E22d2P | 14,841 | not in package (VM only, 91e9c10e) | `scripts/E22/frontier.py` | `scripts/E22/run.sh` | 69c5c6b |
+| E22d1B | 3,272 | `lists/frontiers/E22_round1_frontier_B.txt` (48631fd0) | `scripts/E22/frontier.py --known A` | `scripts/E22/run.sh` | 69c5c6b |
+| E22d2P | 14,841 | `lists/frontiers/E22_round2_frontier_priority.txt` (91e9c10e) | `scripts/E22/frontier.py` | `scripts/E22/run.sh` | 69c5c6b |
 | E22d2R | 11,987 | `lists/frontiers/E22_round2_frontier_rest.txt` (e67ee0b9) | `scripts/E22/frontier.py` | `scripts/E22/run.sh`; `scripts/E22d2R/deploy.sh`, `launch_all.sh` | f9da3ad (d29) |
 | E25 | 9,775 | `lists/E25/pilot20k.txt` (aa268740) | `scripts/E25/build.py` (+ `scripts/E23/cc_candidates.py`) | `scripts/E22/run.sh` | f9da3ad |
 | E26 | 290,897 | `lists/E26/cc43_dach_rest.txt` (5eb0021e) | `scripts/E25/build.py` | `scripts/E26/e26_launch.sh` | f9da3ad |
@@ -137,8 +160,8 @@ number are in the folder named in the table; all were moved into git by D47 (see
 | E45 | 52 | `lists/E45/listA.txt` (bd5ce3d6), `listB.txt` (51cd02ba) | `scripts/E45/draw.py` (seed 45) | `scripts/E45/launch.sh` -> `scripts/E19/run.sh` | 3a23d5d |
 | E46 | 49 | `lists/E46/list.txt` (7dd6ecc0) | `scripts/E46/draw.py` (seed 46) | `scripts/E46/start.sh`, `launch.sh` | 3a23d5d |
 | E47 | 37 | `lists/E47/list.txt` (9707c84f) | `scripts/E47/draw.py` | `scripts/E47/start.sh`, `launch.sh` | 3a23d5d |
-| E48 (r5) | r5 | not in package (c75a07f8, 96,722 hosts) | `scripts/E48/draw.py` (seed 48) from `scripts/E42/s1.py`, `s1b.py` | `scripts/E48/start.sh`, `launch.sh` -> `scripts/E19/run.sh` | 3a23d5d |
-| E34r4 pilot (r5) | r5 | not in package (64bda38a); frontier `lists/frontiers/E34_r4_frontier_r4.txt` (d18a36f1) | `scripts/E34/round4/build_r4.py` | `scripts/E34/round4/launch_r4.sh`, `go_pilot.sh` | 3a23d5d |
+| E48 (r5) | 36,990 (r5) | `lists/E48/list_all.txt` (c75a07f8, 96,722 hosts), `list_<vm>.txt` | `scripts/E48/draw.py` (seed 48) from `scripts/E42/s1.py`, `s1b.py` | `scripts/E48/start.sh`, `launch.sh` -> `scripts/E19/run.sh` | 3a23d5d |
+| E34r4 pilot (r5) | 60 (r5) | `lists/E34r4/pilot_r4.txt` (64bda38a); frontier `lists/frontiers/E34_r4_frontier_r4.txt` (d18a36f1) | `scripts/E34/round4/build_r4.py` | `scripts/E34/round4/launch_r4.sh`, `go_pilot.sh` | 3a23d5d |
 | E42 (not counted) | — | `lists/E42/pilot100.txt` (6e6d1915) | `scripts/E42/s2.py` | `scripts/E42/launch.sh` | 3a23d5d |
 
 Tree commits: 90a97f1 and 69c5c6b = main tree (before and after E20); 321db96 = d30 tree; f9da3ad = d29 tree;
@@ -187,28 +210,44 @@ r5 (after E48): see "Rebuild the r5 count" below.
 ## Rebuild the r5 count
 
 r5 adds E48 (5 tables) and the E34r4 pilot (1 table) to r4 and uses the r5 rule (`r2_name_for_sale` is flag only).
-The r5 build used a build directory `r5-build/` with the scripts named below (they are not in the repo, except
-where a repo command is given). Final r5 numbers: TODO(lead): add when E48 is final.
+The r5 build used a build directory `r5-build/` with the scripts named below. They are not in the repo (except
+where a repo command is given); the package has them in `counts/r5/scripts/` and their logs in `counts/r5/logs/`.
+The final run uses the files with `_final` or `3` in the name (`pkg3`, `out3`, `delta3`); the files without it
+are from an interim r5 on the E48 data of 2026-11-13 and are kept as history.
 
-1. **Pull the new tables.** Copy the E48 crawl output of each VM to the lorbeer data dir with `copy_e48.sh`
-   (rsync, read-only on the VM; then `gzip -t` and sha256). Add E48 and the E34r4 pilot to `sources.tsv` after
+Final r5 numbers (2026-11-14, lead-verified): **4,057,186 D34 sites** (sha256 24a13bc8...), **3,945,356 after the
+filter** (sha256 93bd4d30...), 130,619 flagged sites (sale 70,715, park 38,807, host 2,308, constr 18,520,
+sale_flag 269). E48 was frozen on 2026-11-14 03:49:16Z (D100): 96,000 of 96,722 hosts crawled, 40,898 imprints
+found, 722 hosts not crawled (`crawls/E48/not_crawled.txt`, per VM in `not_crawled_per_vm.tsv`). Deltas of the
+after-filter list (`counts/r5/delta/`): vs the r4 data under the r5 rule +37,068 / -27 (E48 +36,983, E34r4 +85;
+the 27 removed sites are not in the r5 D34 list); vs the r4 package +37,338 / -27 (also 269 sites `sale` ->
+`sale_flag` and 1 site `sale` -> `constr`); vs the interim r5 +1,512 (all E48).
+
+1. **Pull the new tables.** Copy the E48 crawl output of each VM to the lorbeer data dir with `copy_e48_final.sh`
+   (rsync, read-only on the VM; then `gzip -t` and sha256; `verify_remote_sha_final.sh` compares with the VMs). Add E48 and the E34r4 pilot to `sources.tsv` after
    E47. Extract only the new sources with the repo command:
    `python3 scripts/E31/pull.py --out OUT/E31_in --sources scripts/E31/sources.tsv --only-source E48,E34r4`.
-   Put the 6 new tables and their manifest rows together with the 99 r4 tables in one `E31_in`
-   (a manifest with the r4 rows first, then the new rows).
-2. **Scan the new tables.** `run_scan_new.sh` runs the repo command
+   (`run_pull_final.sh`). Put the 6 new tables and their manifest rows together with the 99 r4 tables in one
+   `E31_in` (a manifest with the r4 rows first, then E48, then E34r4; `make_e31_in_final.sh`). Result:
+   `counts/r5/E31_in`.
+2. **Scan the new tables.** `run_scan_new_final.sh` runs the repo command
    `python3 scripts/E40/scan_all.py --manifest NEW/manifest.tsv --targets filter/E40r2/targets_classified.tsv
-   --out scan_new --local-workers 3` on the 6 new tables only (same arguments as the r4 scan).
-3. **Build the package copy.** `make_pkg2.sh` makes `pkg2` from the r4 package: all entries are links, and
-   `filter/E40r2/scan/` holds the r4 scan files plus the 6 new scan files. Do not change the r4 files.
+   --out scan_new --local-workers 3` on the 5 E48 tables (same arguments as the r4 scan) and reuses the E34r4 scan
+   file of the interim run. Result: `counts/r5/E40r2_scan_new`.
+3. **Build the package copy.** `make_pkg3.sh` makes `pkg3` from the r4 package: all entries are links, and
+   `filter/E40r2/scan/` holds the r4 scan files plus the 6 new scan files (= `counts/r5/E40r2_scan`). Do not change
+   the r4 files.
 4. **Recount and finalize with `--r5`.**
-   `bash scripts/E31/recount.sh pkg2 out2 --r5` (the script was not changed for r5; `run_recount.sh` only wraps it
-   with a venv python and `/usr/bin/time -v`). Note: `recount.sh` reads `counts/r4/E31_in` in the package, so put
-   the r5 `E31_in` there (in `pkg2`). `finalize_r2.py` now matches sources by name, not by order. A source that
-   is missing in round 1 (E48, E34r4) gets zero values. A mismatch in `new_d34` goes to stderr and does not stop
-   the run. `finalize_patched.sh` runs step 3 of `recount.sh` alone with the patched file.
-5. **Delta.** `run_delta2.sh` calls `delta.py` to compare the r5 result with (a) the r4 data under the r5 rule,
-   (b) the r4 package, and (c) r5 without the new scans. `flagcount.py` counts flags by category.
+   `bash scripts/E31/recount.sh pkg3 out3 --r5` (`run_recount_final.sh` only wraps it with a venv python and
+   `/usr/bin/time -v`). `recount.sh --r5` reads `counts/r4/E31_in` in the package, so the r5 `E31_in` was put there
+   in `pkg3`. With the final package use `recount.sh PKG OUT --final` instead: it reads `counts/r5/` directly.
+   `finalize_r2.py` now matches sources by name, not by order. A source that is missing in round 1 (E48, E34r4)
+   gets zero values. A mismatch in `new_d34` goes to stderr and does not stop the run (r5: E41L1 79,177 in round 1,
+   79,176 in r5). In the r5 build, step 3 ran alone with the patched file (`finalize_patched_final.sh`, because
+   the branch then had the old file); the patched file is now `scripts/E40/finalize_r2.py` on the branch.
+5. **Delta.** `run_delta3.sh` calls `delta.py` to compare the r5 result with (a) the r4 data under the r5 rule,
+   (b) the r4 package, and (c) the interim r5 (`out2`). `flagcount.py` counts flags by category. Output:
+   `counts/r5/delta/` and `delta3.log`.
 
 Known gap: 22 redirect targets were not classified in `filter/E40r2/targets_classified.tsv`. An offline check on
 2026-11-13 found 19 real sites and 3 that are not real: `go.adomino.com` (domain_sale), and `page4.com` and
@@ -218,11 +257,12 @@ not changed.
 
 ## Gaps
 
-1. **Raw crawl output of the old sources is not in the package.** E16, E19r1/r2, E22 (all), E25-E27, E29, E34 and
-   E36 exist only on the crawl VMs (aspe, apfel, mispel, abelie, lorbeer; E16 about 31 GB). The count is safe:
-   `counts/r4/E31_in` holds the compact table of every dir, and `filter/E40r2/scan` the scan result.
-   TODO(lead): decide whether the raw data of these old sources is to be copied off the VMs and archived.
-2. **akazie and aralie hold the only raw copy** of E19r2 s0/s1/2b/2d and parts of E22d1A/d2R.
+1. **Raw crawl output of the old sources (closed by D48 A, 2026-11-09).** The raw dirs of E16, E19r1/r2, E22 (all),
+   E25-E27, E29, E34 and E36 (55 dirs, 1,123 files, 48.0 GB) were copied read-only from the crawl VMs (apfel,
+   aspe, abelie, mispel, akazie, aralie, lorbeer) to lorbeer and are in the package under
+   `crawls/<source>/<vm>/<dir>/`. Each copy was checked against the remote file list and sizes, and with `gzip -t`.
+2. **The VMs are no longer the only copy.** akazie and aralie held the only raw copy of E19r2 s0/s1/2b/2d and parts
+   of E22d1A/d2R; these dirs are now in the package (gap 1).
 3. **The original seed list has no build recipe.** `seed_hosts.txt.gz` (6,560,119 hosts, c6b507d4) comes from the
    paper (Open Web Index, Common Crawl, Curlie).
 4. **List builders are not deterministic from the web and need inputs that are not in the package.**
@@ -233,10 +273,13 @@ not changed.
    recorded. The E22 depth-1 B and depth-2 priority lists are only on the VMs.
 6. **The r4 recount was run by hand.** `scripts/E31/recount.sh` reproduces it from the package (added by D47).
    `counts/r4/sources.tsv` holds absolute lorbeer paths for E33, E34r2, E34r3, E37, E41, E43-E47.
-7. **E48 and the E34r4 pilot are not in r4 or in the package; E42 is not counted.**
+7. **E48 is not complete; E42 is not counted.** E48 was frozen for good on 2026-11-14 03:49:16Z after the throttle
+   watcher stopped it (D100): 722 of 96,722 Shopify hosts were not crawled (`crawls/E48/not_crawled.txt`). E48 and
+   the E34r4 pilot are in r5, not in r4. E42 (100-host Shopify pilot) has no data copy and is not counted.
 8. **Corrupt or truncated data.** `crawls/E45/B/datasets/E45/out/imprints_batch000000.jsonl.gz` is truncated
-   (`gzip -t` fails; stored as is). 10 E19 dirs have `truncated_gz=1` in `counts/r4/E31_in/manifest.tsv`. Neither
-   changes the count.
+   (`gzip -t` fails; stored as is). 10 E19 dirs have `truncated_gz=1` in `counts/r4/E31_in/manifest.tsv`. 4 of the
+   5 E48 page-text files (apfel, aspe, lorbeer, mispel `imprints_batch000000.jsonl.gz`) are cut at the tail
+   because the run was stopped (`crawls/E48/gzip_test.tsv`); no status row is lost. None of these changes the count.
 9. **Environments are not captured.** VM venvs, Python versions and `pip freeze` were not recorded;
    `pyproject.toml` is the only pin.
 
@@ -251,7 +294,10 @@ not changed.
   `HuggingFaceFW/fineweb-2`, `HPLT/HPLT2.0_cleaned`, `commoncrawl/host-index-testing-v2` (crawl CC-MAIN-2025-18).
   Common Crawl: `scripts/E23/cc_candidates.py` takes the latest 8 crawls from `collinfo.json` at run time (up to
   CC-MAIN-2026-43); `scripts/E33/q3_load.py` uses CC-MAIN-2024-46, 2024-51, 2025-05, 2025-08, 2025-13.
-  TODO(lead): record the Hugging Face dataset revisions (commit hashes) that were current on the build dates, if
-  they can still be found.
+  The last commit on `main` of each dataset is older than the build dates (2026-11-03 to 2026-11-05), so `main`
+  then was this revision (Hugging Face API commit list, read 2026-11-14): `HuggingFaceFW/fineweb-2`
+  `af9c13333eb981300149d5ca60a8e9d659b276b9` (2025-10-27), `HPLT/HPLT2.0_cleaned`
+  `d1324a5283f762ee62c2a5c81de08fc6450ea540` (2026-06-11), `commoncrawl/host-index-testing-v2`
+  `ab05c643a13baaa433544001df180491b1ff841e` (2026-09-15). Pass one as `revision` to pin a re-run.
 - **Shuffles.** `ic fetch` uses `random.seed(42)`; `scripts/E16/shuffle.py` uses seed 20261024. Batch contents
   are reproducible only from the identical input file.

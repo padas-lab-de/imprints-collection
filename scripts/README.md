@@ -42,8 +42,9 @@ crawl VMs (`/home/dinzinger/...`, `~/.claude/jobs/.../tmp`); see "Known non-repr
 
 `E41/hplt_shard.py` and `E43/hplt_shard.py` (and the two `run_hplt.sh`) differ only in their output folder; both are kept as the record of each run.
 
-`E31/recount.sh PKG OUT [--r5]` runs the whole no-crawl chain on the data package (release count, parking
-filter, finalize, sha256 compare); see [`docs/reproduce_collection.md`](../docs/reproduce_collection.md).
+`E31/recount.sh PKG OUT [--r5|--final]` runs the whole no-crawl chain on the data package (release count, parking
+filter, finalize, sha256 compare). `--final` gives the final count r5 from `counts/r5/`; see
+[`docs/reproduce_collection.md`](../docs/reproduce_collection.md).
 `E40/parking_filter.py apply --name-for-sale-flag-only` keeps sites flagged only by `r2_name_for_sale` (r5 rule).
 
 ### Imported run scripts (D47)

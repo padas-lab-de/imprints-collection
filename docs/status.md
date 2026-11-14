@@ -1,6 +1,6 @@
 # Status — German Imprints Collection, journal extension
 
-Updated 2026-10-26. Decisions and in-flight work: [decisions.md](decisions.md).
+Updated 2026-11-14 (final count r5). Decisions and in-flight work: [decisions.md](decisions.md).
 
 ## Goal
 Target: Scientific Data, Data Descriptor (D10-journal-venue).
@@ -53,7 +53,7 @@ Assumed: pilots stay in (E27, E28, E33p); E13/E15 test dirs and E19 pilot + r403
 Frontier 701,697 outlink hosts, all TLDs (outlinks of E34r3, E41, E43, E44, E45-E47 minus 20.8M crawled/known/planned hosts; com 352,065, .de 9,123); pilot 5,000 (seed 344). imprint_found 97 (1.94%, Wilson 95% 1.6-2.4), host_not_found 1,251 (25.0%), 88 new D34 sites (1.76%). DACH TLDs 28/94 (about 30%), other TLDs 69/4,906 (about 1.4%). Below the D33 bar (>10%). D46 C (user, 2026-11-09): round 4 stops after the pilot; the rest (696,697) is not crawled; outlink snowballing ends. Pilot goes into recount r5. Lead-verified.
 
 ### E48-shopify-full-crawl (since 2026-11-07 10:45Z; D45; scripts lorbeer ~/E48-shopify)
-Recrawl of all 96,722 Shopify hosts not fetched yet, 5 VMs with own IPs (apfel .89, aspe .90, abelie .86, mispel .87, lorbeer .88 in 193.175.2.80/28), 1 request per 3 s per VM to Shopify group v4:23.227.38, D39 B User-Agent, RESTARTS 5. Global window stop rule (>5% 429/503 in the last 200 requests on any VM stops all). Runs next to E41/E43 on the same VMs. RUNNING.
+Recrawl of all 96,722 Shopify hosts not fetched yet, 5 VMs with own IPs (apfel .89, aspe .90, abelie .86, mispel .87, lorbeer .88 in 193.175.2.80/28), 1 request per 3 s per VM to Shopify group v4:23.227.38, D39 B User-Agent, RESTARTS 5. Global window stop rule (>5% 429/503 in the last 200 requests on any VM stops all). Runs next to E41/E43 on the same VMs. FROZEN for good on 2026-11-14 03:49:16Z after the throttle watcher stopped it (D100): 96,000 of 96,722 hosts crawled, imprint_found 40,898, 722 hosts not crawled (package `crawls/E48/not_crawled.txt`). 36,990 new D34 sites in recount r5. Lead-verified.
 
 ### E47-shopify-rate-2s-test (2026-11-07; D44 C; scratch tmp/E47; results lorbeer e35 datasets/E47)
 mispel, 1 request per 2 s to Shopify group v4:23.227.38, D39 B User-Agent, 100 new hosts (seed 47), 08:43-09:03 UTC. Lead-verified.
@@ -86,7 +86,10 @@ All TLDs, minus all crawled hosts and the E41 lists; 5,000-host pilots on lorbee
 - E44, FineWeb-2 dialect configs: pool 10,687. Pilot 116 found (2.32%), 80 new D34 sites.
 - Both below the D33 10% rule. Full crawl: card D41.
 
-### Current count (recount r4, 2026-11-08; branch E31-recount-r4 181589e, off E31-recount-r3, not merged; lorbeer e35 tree datasets/E31/r4)
+### Final count (recount r5, 2026-11-14; branch collection-release; package `counts/r5/`)
+r4 sources + E48 (5 tables) + E34r4 pilot (1 table), parking filter round 2 with the r5 rule (`r2_name_for_sale` flag only). **4,057,186 D34 sites** (sha256 24a13bc8...); 4,885,204 www-collapsed; 5,316,950 exact. **After the filter: 3,945,356 (final)** (sha256 93bd4d30...; drop 111,830: sale 70,715, park 38,807, host 2,308; kept: constr 18,520, sale_flag 269). New D34 sites: E48 36,990, E34r4 60; E41L1 79,176 (-1 vs r4). Reproduce: `scripts/E31/recount.sh PKG OUT --final` (docs/reproduce_collection.md). Not counted: E42 (no data copy, 100 hosts). Lead-verified.
+
+### Recount r4 (history; 2026-11-08; branch E31-recount-r4 181589e, off E31-recount-r3, not merged; lorbeer e35 tree datasets/E31/r4)
 All sources up to E47, lead-verified (SHA256SUMS ok, line counts, set difference to r3, E43 pilot share): **4,020,137 D34 sites** (sha256 e4645f32...); 4,844,209 www-collapsed; 5,275,955 exact. **After E40 round-2 filter (drop sale + park + host): 3,908,045** (sale 70,982, park 38,802, host 2,308; constr 18,455 kept; drop 112,092; lorbeer e35 datasets/E40/r2; see E40-parking-filter-r2). Round-1 filter gave 3,992,804 (sha 85e12846...). New D34 sites per new source (first source wins): E41L4 6,234; E41L3 5,451; E41L1 79,177; E41L2 18,679; E43 (pilot + full) 45,449; E44 159; E45 52; E46 49; E47 37 (sum 155,287). 4,113 r3 sites fold into new sites (their redirect target is now crawled); every r3 site is in r4 or in compare/removed_sites.tsv. E40 home-page flags rerun read-only on the 24 new dirs. Not counted: E48 (running), E42 (no data copy, 100 hosts), E34 round-4 pilot (88 new sites).
 
 ### E40-parking-filter-r2 (done 2026-11-09; branch E40-parking-filter-r2 e65d59f off E31-recount-r4, not merged; lorbeer e35 tree datasets/E40/r2)
