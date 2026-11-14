@@ -25,3 +25,5 @@ Finish the about 4,850 remaining E48 hosts, or keep E48 frozen as partial?
 User 2026-11-13: "D62 A."
 
 Started 2026-11-13 11:47:53Z on all 5 VMs at RATE=10 (`RATE=10 bash /home/dinzinger/E48-shopify/start_resume.sh`); watcher restarted with a new window; D59 run state kept in pgids_run2.tsv / since_run2.txt. If the watcher stops it again: freeze for good.
+
+2026-11-14: abelie finished all hosts at 02:31Z. The watcher stopped the run at 03:49:16Z (lorbeer: 15 throttled requests in one window). Per the answer, E48 is frozen for good: 96,000 of 96,722 hosts done, 40,898 imprints, 722 hosts not crawled.
