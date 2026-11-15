@@ -1,17 +1,20 @@
 """Storage for the labelling tool: assignment, captures, labels.
 
-Layout below ``data_dir`` (default ``datasets/gold``):
+Layout (docs/gold_set_design.md section 3), below ``data_dir`` (default ``datasets/goldset/gold``):
 
     assignment.jsonl            item, host, labeller, role, order
-    <host>/landing.png|.jpg     screenshots (pilot captures use .jpg)
+    <host>/landing.png|.jpg     screenshots (older captures use .jpg)
     <host>/landing.txt          rendered body text
     <host>/imprint.png|.jpg, imprint.txt
     <host>/meta.json            provenance (capture timestamp, final URLs, ...)
+    <host>/ic_fetch.jsonl       last `ic fetch` record (impressum.main_content), read only for items with
+                                meta.json "capture_problem": true (fallback, see Store.capture)
     labels/<labeller>.jsonl     one JSON line per save; the last line per host wins
-    prefill.jsonl               suggested labels, optional
+    prefill.jsonl               suggested main addresses (goldset/prefill.py), optional
+    prefill_topup.jsonl         the same for the top-up items (read after prefill.jsonl), optional
 
 A labeller only ever reads its own labels file. Suggestions are shown only for the
-roles in ``prefill_roles``. The CLI shows them on all items; agreement between
+roles in ``prefill_roles``. The CLI shows them on all items by default; agreement between
 labellers therefore includes anchoring on the shared suggestion.
 """
 
@@ -28,6 +31,10 @@ from .schema import normalise_label, text_warnings, validate_label
 PAGES = ("landing", "imprint")
 IMAGE_EXT = (".png", ".jpg", ".jpeg", ".webp")
 MAX_TEXT_CHARS = 400_000  # cap what is sent to the browser
+PREFILL_FILES = (
+    "prefill.jsonl",
+    "prefill_topup.jsonl",
+)  # default, in read order (later wins)
 _HOST_RE = re.compile(r"^[A-Za-z0-9._-]+$")
 _META_TIME_KEYS = (
     "capture_id",
@@ -37,6 +44,24 @@ _META_TIME_KEYS = (
     "timestamp",
     "rendered_at",
 )
+
+
+def read_ic_imprint(d: Path) -> str:
+    """impressum.main_content of the last line of <d>/ic_fetch.jsonl ("" if missing). Lines split on \\n only
+    (page text can hold U+2028 and U+0085)."""
+    p = d / "ic_fetch.jsonl"
+    if not p.is_file():
+        return ""
+    try:
+        lines = [l for l in p.read_text(encoding="utf-8").split("\n") if l.strip()]
+        r = json.loads(lines[-1]) if lines else {}
+    except (OSError, json.JSONDecodeError):
+        return ""
+    return (
+        ((r.get("impressum") or {}).get("main_content") or "")
+        if isinstance(r, dict)
+        else ""
+    )
 
 
 def now_utc() -> str:
@@ -50,11 +75,21 @@ class Store:
         labeller: str,
         assignment: str | Path | None = None,
         prefill_roles: tuple[str, ...] = ("primary",),
+        prefill_file: str | Path | None = None,
     ):
         self.data_dir = Path(data_dir)
         self.prefill_roles = tuple(prefill_roles)
         self.labeller = labeller
-        self.assignment_path = Path(assignment) if assignment else self.data_dir / "assignment.jsonl"
+        if not prefill_file:
+            self.prefill_paths = [self.data_dir / f for f in PREFILL_FILES]
+        elif isinstance(prefill_file, (str, Path)):
+            self.prefill_paths = [Path(prefill_file)]
+        else:
+            self.prefill_paths = [Path(p) for p in prefill_file]
+        self.prefill_path = self.prefill_paths[0]
+        self.assignment_path = (
+            Path(assignment) if assignment else self.data_dir / "assignment.jsonl"
+        )
         self.labels_path = self.data_dir / "labels" / f"{labeller}.jsonl"
         self._lock = threading.Lock()
         self.items = self._load_assignment()
@@ -65,7 +100,7 @@ class Store:
     def _load_assignment(self) -> list[dict]:
         if not self.assignment_path.exists():
             raise FileNotFoundError(
-                f"{self.assignment_path} not found; write it with ic.gold.assignment first"
+                f"{self.assignment_path} not found; run goldset/assign.py first"
             )
         rows = []
         with open(self.assignment_path, encoding="utf-8") as f:
@@ -82,24 +117,45 @@ class Store:
         return rows
 
     def _load_prefill(self) -> dict[str, dict]:
-        p = self.data_dir / "prefill.jsonl"
+        """Read the prefill files (goldset/prefill.py) in order: per host the last line without
+        an ``error`` wins (a later file wins over an earlier one); lines with an error (or broken
+        lines) are ignored, so an earlier good line stays valid and a host with no good line has
+        no suggestion. Missing files are skipped."""
         out: dict[str, dict] = {}
-        if p.exists():
+        for p in self.prefill_paths:
+            if not p.exists():
+                continue
             with open(p, encoding="utf-8") as f:
                 for line in f:
-                    if line.strip():
+                    if not line.strip():
+                        continue
+                    try:
                         r = json.loads(line)
-                        out[r["host"]] = r
+                    except json.JSONDecodeError:
+                        continue
+                    if not isinstance(r, dict) or not isinstance(r.get("host"), str):
+                        continue
+                    if r.get("error") or not isinstance(r.get("label"), dict):
+                        continue
+                    out[r["host"]] = r
         return out
 
     def prefill(self, host: str) -> dict | None:
-        """Suggested label for this labeller's item, or None (role not pre-filled, no suggestion)."""
+        """Suggested main address for this labeller's item, or None (role not pre-filled, no
+        usable suggestion). Only the address part is used; topics, operator type and the old
+        11-class topic are never suggested."""
         it = self._by_host.get(host)
         r = self._prefill.get(host)
         if not it or not r or it.get("role") not in self.prefill_roles:
             return None
         src = r.get("source") or {}
-        return {"label": r.get("label") or {}, "source": f"{src.get('model', '?')}/{src.get('prompt', '?')}"}
+        drop = ("topic_labels", "topic", "topic_ambiguous", "operator_type")
+        lab = {k: v for k, v in (r.get("label") or {}).items() if k not in drop}
+        return {
+            "label": lab,
+            "no_address_reason": r.get("no_address_reason"),
+            "source": f"{src.get('model', r.get('prefilled_from', '?'))}/{src.get('prompt', '?')}",
+        }
 
     def has_host(self, host: str) -> bool:
         return host in self._by_host
@@ -121,7 +177,9 @@ class Store:
                     out[r["host"]] = r
         return out
 
-    def save_label(self, label: dict, elapsed: float = 0.0) -> tuple[dict | None, list[str], list[str]]:
+    def save_label(
+        self, label: dict, elapsed: float = 0.0
+    ) -> tuple[dict | None, list[str], list[str]]:
         """Validate and append. Returns (saved_record, errors, warnings)."""
         host = (label or {}).get("host", "")
         if not self.has_host(host):
@@ -136,13 +194,21 @@ class Store:
         with self._lock:
             prev = self.load_labels().get(host)
             prior = float(prev.get("seconds_spent", 0)) if prev else 0.0
-            rec = {k: v for k, v in label.items() if k not in ("seconds_spent", "capture_id", "prefilled_from")}
+            rec = {
+                k: v
+                for k, v in label.items()
+                if k not in ("seconds_spent", "capture_id", "prefilled_from")
+            }
             rec["item"] = self._by_host[host].get("item")
             pf = self.prefill(host)
             # which suggestion the labeller saw (None = labelled from scratch)
-            rec["prefilled_from"] = pf["source"] if pf and label.get("prefilled_from") else None
+            rec["prefilled_from"] = (
+                pf["source"] if pf and label.get("prefilled_from") else None
+            )
             rec["capture_id"] = cap["capture_id"]
-            rec["seconds_spent"] = int(round(prior + max(0.0, min(float(elapsed or 0), 3600.0))))
+            rec["seconds_spent"] = int(
+                round(prior + max(0.0, min(float(elapsed or 0), 3600.0)))
+            )
             rec["saved_at"] = now_utc()
             self.labels_path.parent.mkdir(parents=True, exist_ok=True)
             with open(self.labels_path, "a", encoding="utf-8") as f:
@@ -179,9 +245,11 @@ class Store:
         for p in PAGES:
             tp = d / f"{p}.txt"
             if tp.is_file():
-                texts[p] = tp.read_text(encoding="utf-8", errors="replace")[:MAX_TEXT_CHARS]
+                texts[p] = tp.read_text(encoding="utf-8", errors="replace")[
+                    :MAX_TEXT_CHARS
+                ]
             images[p] = self.find_image(host, p)
-        return {
+        cap = {
             "host": host,
             "exists": d.is_dir(),
             "capture_id": capture_id,
@@ -189,6 +257,20 @@ class Store:
             "texts": texts,
             "images": images,
         }
+        if meta.get("capture_problem") is True:
+            # Fallback: no usable imprint capture. The imprint pane shows the ic fetch imprint text
+            # (read only, same text the prefill model saw) and no screenshot.
+            ic = read_ic_imprint(d)[:MAX_TEXT_CHARS]
+            day = (((meta.get("ic_fetch") or {}).get("finished_utc")) or "")[:10]
+            if ic.strip():
+                cap["texts"] = {**texts, "imprint": ic}
+                cap["images"] = {**images, "imprint": None}
+            cap["capture_problem"] = {
+                "reason": meta.get("capture_problem_reason") or "",
+                "ic_text": bool(ic.strip()),
+                "label": f"ic fetch text, {day or 'date unknown'}, no screenshot",
+            }
+        return cap
 
     def image_path(self, host: str, name: str) -> Path | None:
         """Resolve an image request safely (assigned host, known file name only)."""

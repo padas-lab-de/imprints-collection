@@ -1,4 +1,4 @@
-"""Label schema and validation.
+"""Label schema (docs/gold_set_design.md section 4) and validation.
 
 Pure functions, no I/O. ``validate_label`` returns a list of error strings
 (empty list = valid); ``normalise_label`` returns a cleaned copy.
@@ -7,6 +7,8 @@ Pure functions, no I/O. ``validate_label`` returns a list of error strings
 from __future__ import annotations
 
 import re
+
+from . import topics
 
 SITE_STATUS = (
     "live",
@@ -66,6 +68,11 @@ FLAGS = (
     "capture_problem",  # capture broken or incomplete
     "used_live_site",  # had to open the live site (say why in comment)
 )
+# 1 = original records (11-class topic only); 2 = adds ``topic_labels`` (POI v3 and WZ 2025,
+# topic trees); 3 = main address only (at most one address), no ``operator_type``, no 11-class
+# ``topic`` (the OPERATOR_TYPE and TOPICS lists below are kept for old records and old scripts).
+# Records without ``schema_version`` are version 1 and stay valid when they are loaded.
+SCHEMA_VERSION = 3
 LABELLERS = ("L1", "L2", "L3")
 # statuses labelled in full (a real website is shown; redirect: label the site you land on)
 LIVE_LIKE = ("live", "redirect_other_domain")
@@ -111,6 +118,8 @@ def normalise_label(label: dict) -> dict:
     out["comment"] = _s(label.get("comment"))
     out["imprint_url"] = _s(label.get("imprint_url")) or None
     out["flags"] = list(label.get("flags") or [])
+    if "topic_labels" in label:
+        out["topic_labels"] = topics.normalise_schema_labels(label["topic_labels"])
     return out
 
 
@@ -146,6 +155,8 @@ def validate_label(label: dict) -> list[str]:
     if not isinstance(addrs, list):
         errs.append("addresses must be a list")
         addrs = []
+    if len(addrs) > 1:
+        errs.append("only the main address is labelled: list at most one address")
     for i, a in enumerate(addrs):
         pre = f"address {i + 1}: "
         if not isinstance(a, dict):
@@ -199,18 +210,10 @@ def validate_label(label: dict) -> list[str]:
         elif live and present is True and reason != "imprint_without_address":
             errs.append("imprint present without address: use imprint_without_address")
 
-    if live:
-        if label.get("operator_type") not in OPERATOR_TYPE:
-            errs.append(f"operator_type must be one of {OPERATOR_TYPE}")
-        if label.get("topic") not in TOPICS:
-            errs.append("topic must be one of the 11 classes")
-    else:
-        if label.get("operator_type") not in (None, "") + OPERATOR_TYPE:
-            errs.append("operator_type invalid")
-        if label.get("topic") not in (None, "") + TOPICS:
-            errs.append("topic invalid")
     if not isinstance(label.get("topic_ambiguous", False), bool):
         errs.append("topic_ambiguous must be true or false")
+
+    errs.extend(topics.validate_schema_labels(label))
 
     flags = label.get("flags", [])
     if not isinstance(flags, list) or any(f not in FLAGS for f in flags):

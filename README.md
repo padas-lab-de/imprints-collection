@@ -17,6 +17,10 @@ The dataset can be used for regional web analysis, web curation and selective we
 | `geojson/` | boundaries of European countries and German states, counties and districts (used by `ic merge`) |
 | `evaluation/gold_standard_data.jsonl` | 1,000 manually annotated pages |
 | `collection/` | scripts that compute the published site count from the crawl output |
+| `goldset/` | scripts that build the gold set (frame, screen, draw, top-up, capture, assignment, prefill) |
+| `evaluation/` (scripts) | model runs of the candidates on the gold inputs |
+| `src/ic/gold/`, `src/ic/eval/` | gold-set library and labelling tool; scorer (`python3 -m ic.eval`) |
+| `docs/` | reproduction guides, gold-set design, model evaluation protocol, annotation guideline |
 | `seed_hosts.txt.gz` | seed list, 6.56 million hosts (filtered for spam, adult content, crawler traps and redirects to large platforms) |
 | `small_sample_seed_hosts.txt` | 1,000 hosts to test the pipeline |
 | `tests/` | unit tests (no network needed) |
@@ -101,6 +105,22 @@ collection/reproduce_final_count.sh data/collection out
 The script prints the line count and the sha256 of the final site list and compares every output
 with the published checksums. See [docs/reproduce_collection.md](docs/reproduce_collection.md) for
 the steps and for how to build the crawl tables from your own `ic fetch` output.
+
+## Gold set and model evaluation
+
+The gold set is a two-phase probability sample of the released sites: 1,869 items, plus 18 items
+from the sites added in the final list. Every item has a known inclusion probability, so each score
+is a population estimate with a confidence interval for the release. Three labellers (L1, L2, L3)
+label the site status, the imprint, the main address and two topics (POI v3, WZ 2025) from a frozen
+browser capture. The candidate models get the same-day `ic fetch` text as input.
+
+- Method: [docs/gold_set_design.md](docs/gold_set_design.md)
+- Scoring and decision rule: [docs/model_eval_protocol.md](docs/model_eval_protocol.md)
+- Labelling: [docs/annotation_guideline.md](docs/annotation_guideline.md), [docs/annotation_howto.md](docs/annotation_howto.md)
+- Commands, one per step: [docs/reproduce_goldset.md](docs/reproduce_goldset.md)
+
+The gold data (captures, labels) and the predictions are not part of the repository. Annotator
+names and the labelling dates are to be set.
 
 ## Data location
 

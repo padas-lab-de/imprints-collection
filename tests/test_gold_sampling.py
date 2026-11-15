@@ -1,4 +1,4 @@
-"""Unit tests for src/ic/gold/sampling.py (gold-sample design)."""
+"""Unit tests for src/ic/gold/sampling.py (stratified gold-sample design)."""
 
 import random
 
@@ -32,7 +32,7 @@ def rec(host, **kw):
 
 def test_wilson_known_values():
     lo, hi = wilson(694, 1000)
-    assert round(lo * 100, 1) == 66.5 and round(hi * 100, 1) == 72.2  # pilot 'live'
+    assert round(lo * 100, 1) == 66.5 and round(hi * 100, 1) == 72.2  # pilot share 'live'
     assert wilson(0, 0) == (0.0, 1.0)
     lo, hi = wilson(0, 50)
     assert lo == 0.0 and 0.06 < hi < 0.08

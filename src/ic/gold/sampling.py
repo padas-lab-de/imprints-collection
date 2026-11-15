@@ -2,7 +2,7 @@
 
 Two-phase design:
   phase 1  simple random sample S of n_screen hosts from the frame (N hosts);
-           every host in S is screened with the gold-set detectors;
+           every host in S is screened with the offline detectors;
   phase 2  (a) random core: the first n_core hosts of a seeded permutation of S
            (an SRS of the frame on its own);
            (b) coverage oversample: every screened host gets a *priority

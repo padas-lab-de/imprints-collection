@@ -1,7 +1,7 @@
-"""Offline detectors for the gold-set diversity strata.
+"""Offline detectors for the gold-set diversity strata (docs/gold_set_design.md).
 
 Every function here is pure: it takes HTML, text, headers or timestamps that were
-fetched elsewhere and returns a label plus the evidence
+fetched elsewhere (goldset/capture_lib.py) and returns a label plus the evidence
 that produced it, so each label can be audited by hand. No network access.
 """
 
@@ -785,7 +785,7 @@ def obfuscation_signals(html: str) -> List[str]:
 
 
 # Imprint links to these hosts are not the operator's imprint: registrar or
-# hoster placeholder pages and imprint generators (seen in the pilot sample).
+# hoster placeholder pages and imprint generators (seen in a pilot capture).
 _FOREIGN_IMPRINT_HOSTS = re.compile(
     r"(^|\.)(e-recht24\.de|united-domains\.de|ionos\.(de|com)|1und1\.de|strato\.de|hosteurope\.de|"
     r"df\.eu|checkdomain\.de|all-inkl\.com|netcup\.de|hetzner\.(de|com)|godaddy\.com|"

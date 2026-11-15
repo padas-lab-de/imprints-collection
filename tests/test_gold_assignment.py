@@ -1,4 +1,4 @@
-"""Assignment invariants on a synthetic sample shaped like the gold sample (gold_sample.jsonl)."""
+"""Assignment invariants on a synthetic sample shaped like a stratified gold sample."""
 
 import random
 from collections import Counter, defaultdict
