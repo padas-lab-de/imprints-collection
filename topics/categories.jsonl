@@ -1,0 +1,796 @@
+{"name": "Kunst und Unterhaltung", "parent": null}
+{"name": "Vergn\u00fcgungspark", "parent": "Kunst und Unterhaltung"}
+{"name": "Attraktion", "parent": "Vergn\u00fcgungspark"}
+{"name": "Aquarium", "parent": "Kunst und Unterhaltung"}
+{"name": "Kunstgalerie", "parent": "Kunst und Unterhaltung"}
+{"name": "Bingo-Center", "parent": "Kunst und Unterhaltung"}
+{"name": "Kegelbahn", "parent": "Kunst und Unterhaltung"}
+{"name": "Karneval", "parent": "Kunst und Unterhaltung"}
+{"name": "Kasino", "parent": "Kunst und Unterhaltung"}
+{"name": "Zirkus", "parent": "Kunst und Unterhaltung"}
+{"name": "Comedy-Club", "parent": "Kunst und Unterhaltung"}
+{"name": "Country Club", "parent": "Kunst und Unterhaltung"}
+{"name": "Tanzsaal", "parent": "Kunst und Unterhaltung"}
+{"name": "Gaming-Caf\u00e9", "parent": "Kunst und Unterhaltung"}
+{"name": "Allgemeine Unterhaltung", "parent": "Kunst und Unterhaltung"}
+{"name": "Go-Kart-Bahn", "parent": "Kunst und Unterhaltung"}
+{"name": "Internetcaf\u00e9", "parent": "Kunst und Unterhaltung"}
+{"name": "Karaoke-Bar", "parent": "Kunst und Unterhaltung"}
+{"name": "Laser-Tag-Center", "parent": "Kunst und Unterhaltung"}
+{"name": "Minigolfplatz", "parent": "Kunst und Unterhaltung"}
+{"name": "Kino", "parent": "Kunst und Unterhaltung"}
+{"name": "Autokino", "parent": "Kino"}
+{"name": "Museum", "parent": "Kunst und Unterhaltung"}
+{"name": "Kunstmuseum", "parent": "Museum"}
+{"name": "Geschichtsmuseum", "parent": "Museum"}
+{"name": "Wissenschaftsmuseum", "parent": "Museum"}
+{"name": "Nachtclub", "parent": "Kunst und Unterhaltung"}
+{"name": "Veranstaltungsort f\u00fcr darstellende K\u00fcnste", "parent": "Kunst und Unterhaltung"}
+{"name": "Amphitheater", "parent": "Veranstaltungsort f\u00fcr darstellende K\u00fcnste"}
+{"name": "Konzertsaal", "parent": "Veranstaltungsort f\u00fcr darstellende K\u00fcnste"}
+{"name": "Musikveranstaltungsort", "parent": "Veranstaltungsort f\u00fcr darstellende K\u00fcnste"}
+{"name": "Rockclub", "parent": "Musikveranstaltungsort"}
+{"name": "Opernhaus", "parent": "Veranstaltungsort f\u00fcr darstellende K\u00fcnste"}
+{"name": "Theater", "parent": "Veranstaltungsort f\u00fcr darstellende K\u00fcnste"}
+{"name": "Planetarium", "parent": "Kunst und Unterhaltung"}
+{"name": "Billardhalle", "parent": "Kunst und Unterhaltung"}
+{"name": "Ticketverkauf", "parent": "Kunst und Unterhaltung"}
+{"name": "Wasserpark", "parent": "Kunst und Unterhaltung"}
+{"name": "Zoo", "parent": "Kunst und Unterhaltung"}
+{"name": "Gesch\u00e4fts- und professionelle Dienstleistungen", "parent": null}
+{"name": "Werbeagentur", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Land- und Forstwirtschaftsdienst", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Gutachter", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Architekturb\u00fcro", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Kunstrestaurierungsdienst", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Kunstatelier", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Auditorium", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Automobilservice", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Kfz-Reparaturwerkstatt", "parent": "Automobilservice"}
+{"name": "Autow\u00e4sche und Politur", "parent": "Automobilservice"}
+{"name": "Motorrad-Reparaturwerkstatt", "parent": "Automobilservice"}
+{"name": "Abschleppdienst", "parent": "Automobilservice"}
+{"name": "Fahrzeuginspektionsstation", "parent": "Automobilservice"}
+{"name": "Ballsaal", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Gesch\u00e4ftszentrum", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Unternehmensdienst", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Karriereberater", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Hersteller von Chemikalien und Gasen", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Kinderbetreuungsdienst", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Kindertagesst\u00e4tte", "parent": "Kinderbetreuungsdienst"}
+{"name": "Computer-Reparaturservice", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Kongresszentrum", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Kreativservice", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Designstudio", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Direktmailing- und E-Mail-Marketing-Service", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Vertriebszentrum", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Lieferant von Elektroger\u00e4ten", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Agentur f\u00fcr Arbeit", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Ingenieur", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Unterhaltungsagentur", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Ausr\u00fcstungsverleih", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Veranstaltungsservice", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Fabrik", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Filmstudio", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Finanzdienstleistung", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Buchhaltungs- und Buchhaltungsservice", "parent": "Finanzdienstleistung"}
+{"name": "Bank- und Finanzwesen", "parent": "Finanzdienstleistung"}
+{"name": "Geldautomat", "parent": "Bank- und Finanzwesen"}
+{"name": "Bank", "parent": "Bank- und Finanzwesen"}
+{"name": "Kreditgenossenschaft", "parent": "Bank- und Finanzwesen"}
+{"name": "Gesch\u00e4ftsmakler", "parent": "Finanzdienstleistung"}
+{"name": "Scheckeinl\u00f6sungsservice", "parent": "Finanzdienstleistung"}
+{"name": "Inkassodienst", "parent": "Finanzdienstleistung"}
+{"name": "Kreditberatung und Insolvenzservice", "parent": "Finanzdienstleistung"}
+{"name": "Geldwechsel", "parent": "Finanzdienstleistung"}
+{"name": "Finanzplaner", "parent": "Finanzdienstleistung"}
+{"name": "Kreditagentur", "parent": "Finanzdienstleistung"}
+{"name": "B\u00f6rsenmakler", "parent": "Finanzdienstleistung"}
+{"name": "Lebensmittel- und Getr\u00e4nkeservice", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Caterer", "parent": "Lebensmittel- und Getr\u00e4nkeservice"}
+{"name": "Lebensmittelverteilungszentrum", "parent": "Lebensmittel- und Getr\u00e4nkeservice"}
+{"name": "Bestattungsunternehmen", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Geologischer Dienst", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Gesundheits- und Sch\u00f6nheitsservice", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Friseurladen", "parent": "Gesundheits- und Sch\u00f6nheitsservice"}
+{"name": "Badehaus", "parent": "Gesundheits- und Sch\u00f6nheitsservice"}
+{"name": "K\u00f6rperpiercing-Shop", "parent": "Gesundheits- und Sch\u00f6nheitsservice"}
+{"name": "Trockenreiniger", "parent": "Gesundheits- und Sch\u00f6nheitsservice"}
+{"name": "Haarentfernungsservice", "parent": "Gesundheits- und Sch\u00f6nheitsservice"}
+{"name": "Friseursalon", "parent": "Gesundheits- und Sch\u00f6nheitsservice"}
+{"name": "Massageklinik", "parent": "Gesundheits- und Sch\u00f6nheitsservice"}
+{"name": "Nagelstudio", "parent": "Gesundheits- und Sch\u00f6nheitsservice"}
+{"name": "Hautpflegeklinik", "parent": "Gesundheits- und Sch\u00f6nheitsservice"}
+{"name": "Spa", "parent": "Gesundheits- und Sch\u00f6nheitsservice"}
+{"name": "Sonnenstudio", "parent": "Gesundheits- und Sch\u00f6nheitsservice"}
+{"name": "Tattoo-Studio", "parent": "Gesundheits- und Sch\u00f6nheitsservice"}
+{"name": "Heimwerkerservice", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Badezimmerunternehmer", "parent": "Heimwerkerservice"}
+{"name": "Tischler", "parent": "Heimwerkerservice"}
+{"name": "Teppich- und Bodenleger", "parent": "Heimwerkerservice"}
+{"name": "Schornsteinfeger", "parent": "Heimwerkerservice"}
+{"name": "Deck- und Terrassenunternehmer", "parent": "Heimwerkerservice"}
+{"name": "Auftragnehmer f\u00fcr T\u00fcren und Fenster", "parent": "Heimwerkerservice"}
+{"name": "Elektriker", "parent": "Heimwerkerservice"}
+{"name": "Zaunbauer", "parent": "Heimwerkerservice"}
+{"name": "Garagentorlieferant", "parent": "Heimwerkerservice"}
+{"name": "Generalunternehmer", "parent": "Heimwerkerservice"}
+{"name": "Heizungs-, L\u00fcftungs- und Klimaanlageninstallateur", "parent": "Heimwerkerservice"}
+{"name": "Hausinspektion", "parent": "Heimwerkerservice"}
+{"name": "Heimservice", "parent": "Heimwerkerservice"}
+{"name": "Innenarchitekt", "parent": "Heimwerkerservice"}
+{"name": "K\u00fcchenumgestalter", "parent": "Heimwerkerservice"}
+{"name": "Landschaftsg\u00e4rtner und G\u00e4rtner", "parent": "Heimwerkerservice"}
+{"name": "Umzugsunternehmen", "parent": "Heimwerkerservice"}
+{"name": "Maler", "parent": "Heimwerkerservice"}
+{"name": "Sch\u00e4dlingsbek\u00e4mpfungsdienst", "parent": "Heimwerkerservice"}
+{"name": "Klempner", "parent": "Heimwerkerservice"}
+{"name": "Professioneller Reinigungsservice", "parent": "Heimwerkerservice"}
+{"name": "Dachdecker", "parent": "Heimwerkerservice"}
+{"name": "Kanalisationsunternehmer", "parent": "Heimwerkerservice"}
+{"name": "Wartung und Service von Schwimmb\u00e4dern", "parent": "Heimwerkerservice"}
+{"name": "Baumservice", "parent": "Heimwerkerservice"}
+{"name": "Polsterservice", "parent": "Heimwerkerservice"}
+{"name": "Personalagentur", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Import- und Exportservice", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Lieferant von Industrieausr\u00fcstung", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Industriegebiet", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Versicherungsagentur", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Labor", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Waschsalon", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "W\u00e4scheservice", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Lederlieferant", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Juristischer Dienst", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Anwalt f\u00fcr Einwanderungsfragen", "parent": "Juristischer Dienst"}
+{"name": "Anwaltskanzlei", "parent": "Juristischer Dienst"}
+{"name": "Notar", "parent": "Juristischer Dienst"}
+{"name": "Schlosser", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Protokollierungsdienst", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Lotterieh\u00e4ndler", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Maschinenwerkstatt", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Unternehmensberater", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Hersteller", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Marktforschungs- und Beratungsdienst", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Medienagentur", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Metalllieferant", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Mobilfunkunternehmen", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "B\u00fcro", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "B\u00fcro f\u00fcr Unternehmens- und Strategieberatung", "parent": "B\u00fcro"}
+{"name": "Wahlkampfb\u00fcro", "parent": "B\u00fcro"}
+{"name": "Firmenannehmlichkeit", "parent": "B\u00fcro"}
+{"name": "Firmenkantine", "parent": "B\u00fcro"}
+{"name": "Firmencaf\u00e9", "parent": "B\u00fcro"}
+{"name": "Agentur f\u00fcr Unternehmenswohnungen", "parent": "B\u00fcro"}
+{"name": "Coworking Space", "parent": "B\u00fcro"}
+{"name": "Besprechungsraum", "parent": "B\u00fcro"}
+{"name": "B\u00fcrogeb\u00e4ude", "parent": "B\u00fcro"}
+{"name": "Tech-Startup", "parent": "B\u00fcro"}
+{"name": "Online-Werbedienst", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Veranstaltungsraum im Freien", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Papierlieferant", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Haustierservice", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Haustierpflegeservice", "parent": "Haustierservice"}
+{"name": "Tierbetreuung und Tierpension", "parent": "Haustierservice"}
+{"name": "Erd\u00f6llieferant", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Fotoservice", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Fotograf", "parent": "Fotoservice"}
+{"name": "Fotolabor", "parent": "Fotoservice"}
+{"name": "Fotostudio", "parent": "Fotoservice"}
+{"name": "Kunststofflieferant", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Kraftwerk", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Print-, TV-, Radio- und Au\u00dfenwerbedienst", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Werbeartikel-Service", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "PR-Firma", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Herausgeber", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Radiosender", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Immobilienservice", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Bau- und Landvermesser", "parent": "Immobilienservice"}
+{"name": "Gewerbeimmobilienentwickler", "parent": "Immobilienservice"}
+{"name": "Immobilienverwaltungsb\u00fcro", "parent": "Immobilienservice"}
+{"name": "Immobilienagentur", "parent": "Immobilienservice"}
+{"name": "Immobiliengutachter", "parent": "Immobilienservice"}
+{"name": "Immobilienentwicklungs- und Titelunternehmen", "parent": "Immobilienservice"}
+{"name": "Aufnahmestudio", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Recyclinganlage", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "K\u00fchl- und Eislieferant", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Service f\u00fcr erneuerbare Energien", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Mietservice", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Reparaturservice", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Forschungslabor", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Forschungsstation", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Gummilieferant", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Schrottplatz", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Lieferant wissenschaftlicher Ausr\u00fcstung", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Suchmaschinenmarketing- und Optimierungsservice", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Sicherheit und Schutz", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Versand-, Fracht- und Materialtransportservice", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Schuhreparaturservice", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Lagereinrichtung", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Fernsehsender", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Schneider", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Technologiegesch\u00e4ft", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "IT-Service", "parent": "Technologiegesch\u00e4ft"}
+{"name": "Softwareunternehmen", "parent": "Technologiegesch\u00e4ft"}
+{"name": "Website-Designer", "parent": "Technologiegesch\u00e4ft"}
+{"name": "Telekommunikationsdienst", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "\u00dcbersetzungsdienst", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Nachhilfeservice", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Lager", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Abfallentsorgungsdienst", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Wasseraufbereitungsservice", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Hochzeitssaal", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Schwei\u00dfservice", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Gro\u00dfh\u00e4ndler", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Text-, Text- und technischer Schreibservice", "parent": "Gesch\u00e4fts- und professionelle Dienstleistungen"}
+{"name": "Gemeinschaft und Regierung", "parent": null}
+{"name": "Suchtbehandlungszentrum", "parent": "Gemeinschaft und Regierung"}
+{"name": "Tierheim", "parent": "Gemeinschaft und Regierung"}
+{"name": "Betreutes Wohnen", "parent": "Gemeinschaft und Regierung"}
+{"name": "Friedhof", "parent": "Gemeinschaft und Regierung"}
+{"name": "Gemeindezentrum", "parent": "Gemeinschaft und Regierung"}
+{"name": "Kulturzentrum", "parent": "Gemeinschaft und Regierung"}
+{"name": "Behindertendienst", "parent": "Gemeinschaft und Regierung"}
+{"name": "Behandlungszentrum f\u00fcr h\u00e4uslichen Missbrauch", "parent": "Gemeinschaft und Regierung"}
+{"name": "Entsorgen", "parent": "Gemeinschaft und Regierung"}
+{"name": "Ausbildung", "parent": "Gemeinschaft und Regierung"}
+{"name": "Erwachsenenbildung", "parent": "Ausbildung"}
+{"name": "Kunstschule", "parent": "Ausbildung"}
+{"name": "Zirkusschule", "parent": "Ausbildung"}
+{"name": "Hochschule und Universit\u00e4t", "parent": "Ausbildung"}
+{"name": "Verwaltungsgeb\u00e4ude der Hochschule", "parent": "Hochschule und Universit\u00e4t"}
+{"name": "Hochschullabor", "parent": "Hochschule und Universit\u00e4t"}
+{"name": "Universit\u00e4tsbibliothek", "parent": "Hochschule und Universit\u00e4t"}
+{"name": "Studentenwohnheim", "parent": "Hochschule und Universit\u00e4t"}
+{"name": "Hochschultheater", "parent": "Hochschule und Universit\u00e4t"}
+{"name": "Volkshochschule", "parent": "Hochschule und Universit\u00e4t"}
+{"name": "Verbindungshaus", "parent": "Hochschule und Universit\u00e4t"}
+{"name": "Allgemeine Hochschule und Universit\u00e4t", "parent": "Hochschule und Universit\u00e4t"}
+{"name": "Juristische Fakult\u00e4t", "parent": "Hochschule und Universit\u00e4t"}
+{"name": "Medizinische Fakult\u00e4t", "parent": "Hochschule und Universit\u00e4t"}
+{"name": "Schwesternschaftshaus", "parent": "Hochschule und Universit\u00e4t"}
+{"name": "Studentenzentrum", "parent": "Hochschule und Universit\u00e4t"}
+{"name": "Universit\u00e4t", "parent": "Hochschule und Universit\u00e4t"}
+{"name": "Computerschule", "parent": "Ausbildung"}
+{"name": "Kochschule", "parent": "Ausbildung"}
+{"name": "Fahrschule", "parent": "Ausbildung"}
+{"name": "Flugschule", "parent": "Ausbildung"}
+{"name": "Sprachschule", "parent": "Ausbildung"}
+{"name": "Musikschule", "parent": "Ausbildung"}
+{"name": "Kindergarten", "parent": "Ausbildung"}
+{"name": "Vorschule", "parent": "Ausbildung"}
+{"name": "Grund- und weiterf\u00fchrende Schule", "parent": "Ausbildung"}
+{"name": "Grundschule", "parent": "Grund- und weiterf\u00fchrende Schule"}
+{"name": "Gymnasium", "parent": "Grund- und weiterf\u00fchrende Schule"}
+{"name": "Mittelschule", "parent": "Grund- und weiterf\u00fchrende Schule"}
+{"name": "Privatschule", "parent": "Ausbildung"}
+{"name": "Religi\u00f6se Schule", "parent": "Ausbildung"}
+{"name": "Handelsschule", "parent": "Ausbildung"}
+{"name": "Regierungsgeb\u00e4ude", "parent": "Gemeinschaft und Regierung"}
+{"name": "Kapitolgeb\u00e4ude", "parent": "Regierungsgeb\u00e4ude"}
+{"name": "Rathaus", "parent": "Regierungsgeb\u00e4ude"}
+{"name": "Gerichtsgeb\u00e4ude", "parent": "Regierungsgeb\u00e4ude"}
+{"name": "Botschaft oder Konsulat", "parent": "Regierungsgeb\u00e4ude"}
+{"name": "Regierungsabteilung", "parent": "Regierungsgeb\u00e4ude"}
+{"name": "Strafverfolgung und \u00f6ffentliche Sicherheit", "parent": "Regierungsgeb\u00e4ude"}
+{"name": "Feuerwache", "parent": "Strafverfolgung und \u00f6ffentliche Sicherheit"}
+{"name": "Polizeistation", "parent": "Strafverfolgung und \u00f6ffentliche Sicherheit"}
+{"name": "Bew\u00e4hrungshilfe", "parent": "Strafverfolgung und \u00f6ffentliche Sicherheit"}
+{"name": "Rettungsdienst", "parent": "Strafverfolgung und \u00f6ffentliche Sicherheit"}
+{"name": "Milit\u00e4r", "parent": "Regierungsgeb\u00e4ude"}
+{"name": "Milit\u00e4rbasis", "parent": "Milit\u00e4r"}
+{"name": "Postamt", "parent": "Regierungsgeb\u00e4ude"}
+{"name": "Regierungslobbyist", "parent": "Gemeinschaft und Regierung"}
+{"name": "Obdachlosenheim", "parent": "Gemeinschaft und Regierung"}
+{"name": "Wohnungsbeh\u00f6rde", "parent": "Gemeinschaft und Regierung"}
+{"name": "Wohnsiedlung", "parent": "Gemeinschaft und Regierung"}
+{"name": "Bibliothek", "parent": "Gemeinschaft und Regierung"}
+{"name": "Observatorium", "parent": "Gemeinschaft und Regierung"}
+{"name": "Organisation", "parent": "Gemeinschaft und Regierung"}
+{"name": "Wohlt\u00e4tigkeit", "parent": "Organisation"}
+{"name": "Clubhaus", "parent": "Organisation"}
+{"name": "Umweltorganisation", "parent": "Organisation"}
+{"name": "LGBTQ-Organisation", "parent": "Organisation"}
+{"name": "Gewerkschaft", "parent": "Organisation"}
+{"name": "Gemeinn\u00fctzige Organisation", "parent": "Organisation"}
+{"name": "Organisation f\u00fcr soziale Dienste", "parent": "Organisation"}
+{"name": "Veteranenorganisation", "parent": "Organisation"}
+{"name": "Jugendorganisation", "parent": "Organisation"}
+{"name": "Wahllokal", "parent": "Gemeinschaft und Regierung"}
+{"name": "Gef\u00e4ngnis", "parent": "Gemeinschaft und Regierung"}
+{"name": "\u00d6ffentliches Badezimmer", "parent": "Gemeinschaft und Regierung"}
+{"name": "\u00d6ffentlicher und sozialer Dienst", "parent": "Gemeinschaft und Regierung"}
+{"name": "Rehabilitationszentrum", "parent": "Gemeinschaft und Regierung"}
+{"name": "Wohnhaus", "parent": "Gemeinschaft und Regierung"}
+{"name": "Wohnung oder Eigentumswohnung", "parent": "Wohnhaus"}
+{"name": "Altersheim", "parent": "Gemeinschaft und Regierung"}
+{"name": "Seniorenservice", "parent": "Gemeinschaft und Regierung"}
+{"name": "Sozial-Club", "parent": "Gemeinschaft und Regierung"}
+{"name": "Spirituelles Zentrum", "parent": "Gemeinschaft und Regierung"}
+{"name": "Buddhistischer Tempel", "parent": "Spirituelles Zentrum"}
+{"name": "Cemevi", "parent": "Spirituelles Zentrum"}
+{"name": "Kirche", "parent": "Spirituelles Zentrum"}
+{"name": "Konfuzianischer Tempel", "parent": "Spirituelles Zentrum"}
+{"name": "Hindu-Tempel", "parent": "Spirituelles Zentrum"}
+{"name": "K\u00f6nigreichssaal", "parent": "Spirituelles Zentrum"}
+{"name": "Kloster", "parent": "Spirituelles Zentrum"}
+{"name": "Moschee", "parent": "Spirituelles Zentrum"}
+{"name": "Gebetsraum", "parent": "Spirituelles Zentrum"}
+{"name": "Schrein", "parent": "Spirituelles Zentrum"}
+{"name": "Sikh-Tempel", "parent": "Spirituelles Zentrum"}
+{"name": "Synagoge", "parent": "Spirituelles Zentrum"}
+{"name": "Tempel", "parent": "Spirituelles Zentrum"}
+{"name": "Terreiro", "parent": "Spirituelles Zentrum"}
+{"name": "Sommercamp", "parent": "Gemeinschaft und Regierung"}
+{"name": "Rathaus", "parent": "Gemeinschaft und Regierung"}
+{"name": "Wohnwagenpark", "parent": "Gemeinschaft und Regierung"}
+{"name": "Versorgungsunternehmen", "parent": "Gemeinschaft und Regierung"}
+{"name": "Essen und Trinken", "parent": null}
+{"name": "Bagel-Laden", "parent": "Essen und Trinken"}
+{"name": "B\u00e4ckerei", "parent": "Essen und Trinken"}
+{"name": "Bar", "parent": "Essen und Trinken"}
+{"name": "Apr\u00e8s-Ski-Bar", "parent": "Bar"}
+{"name": "Strandbar", "parent": "Bar"}
+{"name": "Bierbar", "parent": "Bar"}
+{"name": "Biergarten", "parent": "Bar"}
+{"name": "Champagner-Bar", "parent": "Bar"}
+{"name": "Cocktailbar", "parent": "Bar"}
+{"name": "Kneipe", "parent": "Bar"}
+{"name": "Shisha-Bar", "parent": "Bar"}
+{"name": "Hotelbar", "parent": "Bar"}
+{"name": "Irish Pub", "parent": "Bar"}
+{"name": "Karaoke-Bar", "parent": "Bar"}
+{"name": "Lounge", "parent": "Bar"}
+{"name": "Pianobar", "parent": "Bar"}
+{"name": "Bar auf dem Dach", "parent": "Bar"}
+{"name": "Sake-Bar", "parent": "Bar"}
+{"name": "Sportbar", "parent": "Bar"}
+{"name": "Tiki-Bar", "parent": "Bar"}
+{"name": "Whisky-Bar", "parent": "Bar"}
+{"name": "Weinbar", "parent": "Bar"}
+{"name": "Fr\u00fchst\u00fccksplatz", "parent": "Essen und Trinken"}
+{"name": "Brauerei", "parent": "Essen und Trinken"}
+{"name": "Caf\u00e9, Kaffee- und Teehaus", "parent": "Essen und Trinken"}
+{"name": "Bubble Tea Shop", "parent": "Caf\u00e9, Kaffee- und Teehaus"}
+{"name": "Caf\u00e9", "parent": "Caf\u00e9, Kaffee- und Teehaus"}
+{"name": "Haustiercaf\u00e9", "parent": "Caf\u00e9, Kaffee- und Teehaus"}
+{"name": "Teestube", "parent": "Caf\u00e9, Kaffee- und Teehaus"}
+{"name": "Cafeteria", "parent": "Essen und Trinken"}
+{"name": "Apfelwein", "parent": "Essen und Trinken"}
+{"name": "Cr\u00eaperie", "parent": "Essen und Trinken"}
+{"name": "Dessertladen", "parent": "Essen und Trinken"}
+{"name": "Cupcake-Laden", "parent": "Dessertladen"}
+{"name": "Frozen-Yogurt-Shop", "parent": "Dessertladen"}
+{"name": "Gelato-Shop", "parent": "Dessertladen"}
+{"name": "Eisdiele", "parent": "Dessertladen"}
+{"name": "Konditorei", "parent": "Dessertladen"}
+{"name": "Kuchenladen", "parent": "Dessertladen"}
+{"name": "Waffelladen", "parent": "Dessertladen"}
+{"name": "Brennerei", "parent": "Essen und Trinken"}
+{"name": "Donut-Shop", "parent": "Essen und Trinken"}
+{"name": "Food-Court", "parent": "Essen und Trinken"}
+{"name": "Essensstand", "parent": "Essen und Trinken"}
+{"name": "Imbisswagen", "parent": "Essen und Trinken"}
+{"name": "Saftbar", "parent": "Essen und Trinken"}
+{"name": "Nachtmarkt", "parent": "Essen und Trinken"}
+{"name": "Restaurant", "parent": "Essen und Trinken"}
+{"name": "Afrikanisches Restaurant", "parent": "Restaurant"}
+{"name": "Asiatisches Restaurant", "parent": "Restaurant"}
+{"name": "Chinesisches Restaurant", "parent": "Asiatisches Restaurant"}
+{"name": "Indonesisches Restaurant", "parent": "Asiatisches Restaurant"}
+{"name": "Japanisches Restaurant", "parent": "Asiatisches Restaurant"}
+{"name": "Koreanisches Restaurant", "parent": "Asiatisches Restaurant"}
+{"name": "Nudelrestaurant", "parent": "Asiatisches Restaurant"}
+{"name": "Thail\u00e4ndisches Restaurant", "parent": "Asiatisches Restaurant"}
+{"name": "Vietnamesisches Restaurant", "parent": "Asiatisches Restaurant"}
+{"name": "Bistro", "parent": "Restaurant"}
+{"name": "B\u00fcfett", "parent": "Restaurant"}
+{"name": "Burgerlokal", "parent": "Restaurant"}
+{"name": "Kn\u00f6delrestaurant", "parent": "Restaurant"}
+{"name": "Fast-Food-Restaurant", "parent": "Restaurant"}
+{"name": "Fish and Chips-Laden", "parent": "Restaurant"}
+{"name": "Fondue-Restaurant", "parent": "Restaurant"}
+{"name": "Franz\u00f6sisches Restaurant", "parent": "Restaurant"}
+{"name": "Friterie", "parent": "Restaurant"}
+{"name": "Gastropub", "parent": "Restaurant"}
+{"name": "Deutsches Restaurant", "parent": "Restaurant"}
+{"name": "Griechisches Restaurant", "parent": "Restaurant"}
+{"name": "Halal-Restaurant", "parent": "Restaurant"}
+{"name": "Hawaiianisches Restaurant", "parent": "Restaurant"}
+{"name": "Hot-Dog-Laden", "parent": "Restaurant"}
+{"name": "Indisches Restaurant", "parent": "Restaurant"}
+{"name": "Italienisches Restaurant", "parent": "Restaurant"}
+{"name": "J\u00fcdisches Restaurant", "parent": "Restaurant"}
+{"name": "Kebab-Restaurant", "parent": "Restaurant"}
+{"name": "Lateinamerikanisches Restaurant", "parent": "Restaurant"}
+{"name": "Brasilianisches Restaurant", "parent": "Lateinamerikanisches Restaurant"}
+{"name": "Mediterranes Restaurant", "parent": "Restaurant"}
+{"name": "Mexikanisches Restaurant", "parent": "Restaurant"}
+{"name": "Nah\u00f6stliches Restaurant", "parent": "Restaurant"}
+{"name": "\u00c4gyptisches Restaurant", "parent": "Nah\u00f6stliches Restaurant"}
+{"name": "Persisches Restaurant", "parent": "Nah\u00f6stliches Restaurant"}
+{"name": "Modernes europ\u00e4isches Restaurant", "parent": "Restaurant"}
+{"name": "Restaurant f\u00fcr Molekulargastronomie", "parent": "Restaurant"}
+{"name": "Pizzeria", "parent": "Restaurant"}
+{"name": "Russisches Restaurant", "parent": "Restaurant"}
+{"name": "Salatrestaurant", "parent": "Restaurant"}
+{"name": "Sandwich-Spot", "parent": "Restaurant"}
+{"name": "Skandinavisches Restaurant", "parent": "Restaurant"}
+{"name": "Schottisches Restaurant", "parent": "Restaurant"}
+{"name": "Fischrestaurant", "parent": "Restaurant"}
+{"name": "Suppenlokal", "parent": "Restaurant"}
+{"name": "S\u00fcdl\u00e4ndisches Food-Restaurant", "parent": "Restaurant"}
+{"name": "Spanisches Restaurant", "parent": "Restaurant"}
+{"name": "Paella-Restaurant", "parent": "Spanisches Restaurant"}
+{"name": "Tapas-Restaurant", "parent": "Spanisches Restaurant"}
+{"name": "Steakhaus", "parent": "Restaurant"}
+{"name": "Schweizer Restaurant", "parent": "Restaurant"}
+{"name": "Themenrestaurant", "parent": "Restaurant"}
+{"name": "T\u00fcrkisches Restaurant", "parent": "Restaurant"}
+{"name": "Veganes und vegetarisches Restaurant", "parent": "Restaurant"}
+{"name": "Smoothie-Shop", "parent": "Essen und Trinken"}
+{"name": "Weinberg", "parent": "Essen und Trinken"}
+{"name": "Weingut", "parent": "Essen und Trinken"}
+{"name": "Ereignis", "parent": null}
+{"name": "Konferenz", "parent": "Ereignis"}
+{"name": "Konvention", "parent": "Ereignis"}
+{"name": "Unterhaltungsveranstaltung", "parent": "Ereignis"}
+{"name": "Festival", "parent": "Unterhaltungsveranstaltung"}
+{"name": "Bierfest", "parent": "Festival"}
+{"name": "Musikfestival", "parent": "Unterhaltungsveranstaltung"}
+{"name": "Parade", "parent": "Unterhaltungsveranstaltung"}
+{"name": "Sportveranstaltung", "parent": "Unterhaltungsveranstaltung"}
+{"name": "Marktplatz", "parent": "Ereignis"}
+{"name": "Weihnachtsmarkt", "parent": "Marktplatz"}
+{"name": "Stra\u00dfenfest", "parent": "Marktplatz"}
+{"name": "Streetfood-Treffen", "parent": "Marktplatz"}
+{"name": "Messe", "parent": "Marktplatz"}
+{"name": "Anderes Ereignis", "parent": "Ereignis"}
+{"name": "Gesundheit und Medizin", "parent": null}
+{"name": "AIDS-Ressource", "parent": "Gesundheit und Medizin"}
+{"name": "Akupunkturklinik", "parent": "Gesundheit und Medizin"}
+{"name": "Klinik f\u00fcr Alternativmedizin", "parent": "Gesundheit und Medizin"}
+{"name": "Service f\u00fcr betreutes Wohnen", "parent": "Gesundheit und Medizin"}
+{"name": "Blutbank", "parent": "Gesundheit und Medizin"}
+{"name": "Chiropraktiker", "parent": "Gesundheit und Medizin"}
+{"name": "Zahnarzt", "parent": "Gesundheit und Medizin"}
+{"name": "Notdienst", "parent": "Gesundheit und Medizin"}
+{"name": "Rettungsdienst", "parent": "Notdienst"}
+{"name": "Notaufnahme", "parent": "Notdienst"}
+{"name": "Gesundheitsklinik", "parent": "Gesundheit und Medizin"}
+{"name": "H\u00e4uslicher Gesundheitsdienst", "parent": "Gesundheit und Medizin"}
+{"name": "Hospiz", "parent": "Gesundheit und Medizin"}
+{"name": "Krankenhaus", "parent": "Gesundheit und Medizin"}
+{"name": "Kinderkrankenhaus", "parent": "Krankenhaus"}
+{"name": "Krankenhauseinheit", "parent": "Krankenhaus"}
+{"name": "Entbindungsklinik", "parent": "Gesundheit und Medizin"}
+{"name": "Medizinisches Zentrum", "parent": "Gesundheit und Medizin"}
+{"name": "Medizinisches Labor", "parent": "Gesundheit und Medizin"}
+{"name": "Psychiatrischer Dienst", "parent": "Gesundheit und Medizin"}
+{"name": "Klinik f\u00fcr psychische Gesundheit", "parent": "Psychiatrischer Dienst"}
+{"name": "Psychologe", "parent": "Psychiatrischer Dienst"}
+{"name": "Krankenschwester", "parent": "Gesundheit und Medizin"}
+{"name": "Pflegeheim", "parent": "Gesundheit und Medizin"}
+{"name": "Ern\u00e4hrungsberater", "parent": "Gesundheit und Medizin"}
+{"name": "Optiker", "parent": "Gesundheit und Medizin"}
+{"name": "Andere medizinische Fachkr\u00e4fte", "parent": "Gesundheit und Medizin"}
+{"name": "Klinik f\u00fcr Physiotherapie", "parent": "Gesundheit und Medizin"}
+{"name": "Arzt", "parent": "Gesundheit und Medizin"}
+{"name": "An\u00e4sthesist", "parent": "Arzt"}
+{"name": "Kardiologe", "parent": "Arzt"}
+{"name": "Dermatologe", "parent": "Arzt"}
+{"name": "Arztpraxis", "parent": "Arzt"}
+{"name": "Hals-Nasen-Ohren-Arzt", "parent": "Arzt"}
+{"name": "Arzt f\u00fcr Familienmedizin", "parent": "Arzt"}
+{"name": "Gastroenterologe", "parent": "Arzt"}
+{"name": "Allgemeinchirurg", "parent": "Arzt"}
+{"name": "Geriatrischer Arzt", "parent": "Arzt"}
+{"name": "Arzt f\u00fcr Innere Medizin", "parent": "Arzt"}
+{"name": "Neurologe", "parent": "Arzt"}
+{"name": "Geburtshelfer Gyn\u00e4kologe (Ob-gyn)", "parent": "Arzt"}
+{"name": "Onkologe", "parent": "Arzt"}
+{"name": "Augenarzt", "parent": "Arzt"}
+{"name": "Oralchirurg", "parent": "Arzt"}
+{"name": "Orthop\u00e4discher Chirurg", "parent": "Arzt"}
+{"name": "Pathologe", "parent": "Arzt"}
+{"name": "Kinderarzt", "parent": "Arzt"}
+{"name": "Plastischer Chirurg", "parent": "Arzt"}
+{"name": "Psychiater", "parent": "Arzt"}
+{"name": "Radiologe", "parent": "Arzt"}
+{"name": "Atemwegsarzt", "parent": "Arzt"}
+{"name": "Urologe", "parent": "Arzt"}
+{"name": "Podologe", "parent": "Gesundheit und Medizin"}
+{"name": "Sportmedizinische Klinik", "parent": "Gesundheit und Medizin"}
+{"name": "Notfallzentrum", "parent": "Gesundheit und Medizin"}
+{"name": "Tierarzt", "parent": "Gesundheit und Medizin"}
+{"name": "Zentrum zur Gewichtsreduktion", "parent": "Gesundheit und Medizin"}
+{"name": "Klinik f\u00fcr Frauengesundheit", "parent": "Gesundheit und Medizin"}
+{"name": "Sehensw\u00fcrdigkeiten und im Freien", "parent": null}
+{"name": "Badebereich", "parent": "Sehensw\u00fcrdigkeiten und im Freien"}
+{"name": "Bucht", "parent": "Sehensw\u00fcrdigkeiten und im Freien"}
+{"name": "Strand", "parent": "Sehensw\u00fcrdigkeiten und im Freien"}
+{"name": "Radweg", "parent": "Sehensw\u00fcrdigkeiten und im Freien"}
+{"name": "Bootsanleger", "parent": "Sehensw\u00fcrdigkeiten und im Freien"}
+{"name": "Botanischer Garten", "parent": "Sehensw\u00fcrdigkeiten und im Freien"}
+{"name": "Br\u00fccke", "parent": "Sehensw\u00fcrdigkeiten und im Freien"}
+{"name": "Campingplatz", "parent": "Sehensw\u00fcrdigkeiten und im Freien"}
+{"name": "Kanal", "parent": "Sehensw\u00fcrdigkeiten und im Freien"}
+{"name": "Kanalschleuse", "parent": "Sehensw\u00fcrdigkeiten und im Freien"}
+{"name": "Schloss", "parent": "Sehensw\u00fcrdigkeiten und im Freien"}
+{"name": "H\u00f6hle", "parent": "Sehensw\u00fcrdigkeiten und im Freien"}
+{"name": "Damm", "parent": "Sehensw\u00fcrdigkeiten und im Freien"}
+{"name": "Tauchplatz", "parent": "Sehensw\u00fcrdigkeiten und im Freien"}
+{"name": "Bauernhof", "parent": "Sehensw\u00fcrdigkeiten und im Freien"}
+{"name": "Feld", "parent": "Sehensw\u00fcrdigkeiten und im Freien"}
+{"name": "Wald", "parent": "Sehensw\u00fcrdigkeiten und im Freien"}
+{"name": "Brunnen", "parent": "Sehensw\u00fcrdigkeiten und im Freien"}
+{"name": "Garten", "parent": "Sehensw\u00fcrdigkeiten und im Freien"}
+{"name": "Hafen oder Marina", "parent": "Sehensw\u00fcrdigkeiten und im Freien"}
+{"name": "Wanderweg", "parent": "Sehensw\u00fcrdigkeiten und im Freien"}
+{"name": "H\u00fcgel", "parent": "Sehensw\u00fcrdigkeiten und im Freien"}
+{"name": "Historische und gesch\u00fctzte St\u00e4tte", "parent": "Sehensw\u00fcrdigkeiten und im Freien"}
+{"name": "Hei\u00dfe Quelle", "parent": "Sehensw\u00fcrdigkeiten und im Freien"}
+{"name": "Insel", "parent": "Sehensw\u00fcrdigkeiten und im Freien"}
+{"name": "See", "parent": "Sehensw\u00fcrdigkeiten und im Freien"}
+{"name": "Leuchtturm", "parent": "Sehensw\u00fcrdigkeiten und im Freien"}
+{"name": "Gedenkst\u00e4tte", "parent": "Sehensw\u00fcrdigkeiten und im Freien"}
+{"name": "Monument", "parent": "Sehensw\u00fcrdigkeiten und im Freien"}
+{"name": "Berg", "parent": "Sehensw\u00fcrdigkeiten und im Freien"}
+{"name": "Bergh\u00fctte", "parent": "Sehensw\u00fcrdigkeiten und im Freien"}
+{"name": "Naturschutzgebiet", "parent": "Sehensw\u00fcrdigkeiten und im Freien"}
+{"name": "FKK-Strand", "parent": "Sehensw\u00fcrdigkeiten und im Freien"}
+{"name": "Andere tolle Naturerlebnisse", "parent": "Sehensw\u00fcrdigkeiten und im Freien"}
+{"name": "Palast", "parent": "Sehensw\u00fcrdigkeiten und im Freien"}
+{"name": "Park", "parent": "Sehensw\u00fcrdigkeiten und im Freien"}
+{"name": "Hundepark", "parent": "Park"}
+{"name": "Nationalpark", "parent": "Park"}
+{"name": "Naturpark", "parent": "Park"}
+{"name": "Picknickplatz", "parent": "Park"}
+{"name": "Spielplatz", "parent": "Park"}
+{"name": "Staats- oder Provinzpark", "parent": "Park"}
+{"name": "Stadtpark", "parent": "Park"}
+{"name": "Fu\u00dfg\u00e4ngerzone", "parent": "Sehensw\u00fcrdigkeiten und im Freien"}
+{"name": "Picknick-Unterstand", "parent": "Sehensw\u00fcrdigkeiten und im Freien"}
+{"name": "Plaza", "parent": "Sehensw\u00fcrdigkeiten und im Freien"}
+{"name": "Reservoir", "parent": "Sehensw\u00fcrdigkeiten und im Freien"}
+{"name": "Fluss", "parent": "Sehensw\u00fcrdigkeiten und im Freien"}
+{"name": "Kletterplatz", "parent": "Sehensw\u00fcrdigkeiten und im Freien"}
+{"name": "Dachterrasse", "parent": "Sehensw\u00fcrdigkeiten und im Freien"}
+{"name": "Malerischer Aussichtspunkt", "parent": "Sehensw\u00fcrdigkeiten und im Freien"}
+{"name": "Skulpturengarten", "parent": "Sehensw\u00fcrdigkeiten und im Freien"}
+{"name": "Surfspot", "parent": "Sehensw\u00fcrdigkeiten und im Freien"}
+{"name": "Baum", "parent": "Sehensw\u00fcrdigkeiten und im Freien"}
+{"name": "Tunnel", "parent": "Sehensw\u00fcrdigkeiten und im Freien"}
+{"name": "Vulkan", "parent": "Sehensw\u00fcrdigkeiten und im Freien"}
+{"name": "Wasserfall", "parent": "Sehensw\u00fcrdigkeiten und im Freien"}
+{"name": "Uferpromenade", "parent": "Sehensw\u00fcrdigkeiten und im Freien"}
+{"name": "Windm\u00fchle", "parent": "Sehensw\u00fcrdigkeiten und im Freien"}
+{"name": "Nachtleben-Spot", "parent": null}
+{"name": "Anderes Nachtleben", "parent": "Nachtleben-Spot"}
+{"name": "Einzelhandel", "parent": null}
+{"name": "Erotikladen", "parent": "Einzelhandel"}
+{"name": "Antiquit\u00e4tenladen", "parent": "Einzelhandel"}
+{"name": "Kunst- und Handwerksladen", "parent": "Einzelhandel"}
+{"name": "Auktionshaus", "parent": "Einzelhandel"}
+{"name": "Autowerkstatt", "parent": "Einzelhandel"}
+{"name": "Automobileinzelhandel", "parent": "Einzelhandel"}
+{"name": "Autohaus", "parent": "Automobileinzelhandel"}
+{"name": "Oldtimer-H\u00e4ndler", "parent": "Autohaus"}
+{"name": "Neuwagenh\u00e4ndler", "parent": "Autohaus"}
+{"name": "Wohnmobil- und Wohnmobilh\u00e4ndler", "parent": "Autohaus"}
+{"name": "Gebrauchtwagenh\u00e4ndler", "parent": "Autohaus"}
+{"name": "Autoteile und Zubeh\u00f6r", "parent": "Automobileinzelhandel"}
+{"name": "Moped-H\u00e4ndler", "parent": "Automobileinzelhandel"}
+{"name": "Motorroller-H\u00e4ndler", "parent": "Automobileinzelhandel"}
+{"name": "Motorradh\u00e4ndler", "parent": "Automobileinzelhandel"}
+{"name": "Motorsport-Shop", "parent": "Automobileinzelhandel"}
+{"name": "Automobilgesch\u00e4ft", "parent": "Einzelhandel"}
+{"name": "Babyladen", "parent": "Einzelhandel"}
+{"name": "Wettb\u00fcro", "parent": "Einzelhandel"}
+{"name": "Gro\u00dfer Laden", "parent": "Einzelhandel"}
+{"name": "Brettladen", "parent": "Einzelhandel"}
+{"name": "Buchhandlung", "parent": "Einzelhandel"}
+{"name": "Gebrauchtbuchhandlung", "parent": "Buchhandlung"}
+{"name": "Boutique", "parent": "Einzelhandel"}
+{"name": "Cannabisladen", "parent": "Einzelhandel"}
+{"name": "Comicbuchladen", "parent": "Einzelhandel"}
+{"name": "Computer- und Elektronikeinzelhandel", "parent": "Einzelhandel"}
+{"name": "Fotogesch\u00e4ft", "parent": "Computer- und Elektronikeinzelhandel"}
+{"name": "Elektronikladen", "parent": "Computer- und Elektronikeinzelhandel"}
+{"name": "Handyladen", "parent": "Computer- und Elektronikeinzelhandel"}
+{"name": "Videospielladen", "parent": "Computer- und Elektronikeinzelhandel"}
+{"name": "Baubedarfsgesch\u00e4ft", "parent": "Einzelhandel"}
+{"name": "Convenience-Store", "parent": "Einzelhandel"}
+{"name": "Kosmetikgesch\u00e4ft", "parent": "Einzelhandel"}
+{"name": "Kost\u00fcmladen", "parent": "Einzelhandel"}
+{"name": "Tanzladen", "parent": "Einzelhandel"}
+{"name": "Kaufhaus", "parent": "Einzelhandel"}
+{"name": "Discounter", "parent": "Einzelhandel"}
+{"name": "Drogerie", "parent": "Einzelhandel"}
+{"name": "Duty-free-Shop", "parent": "Einzelhandel"}
+{"name": "Augenpflegegesch\u00e4ft", "parent": "Einzelhandel"}
+{"name": "Modeeinzelhandel", "parent": "Einzelhandel"}
+{"name": "Batik-Shop", "parent": "Modeeinzelhandel"}
+{"name": "Brautmodengesch\u00e4ft", "parent": "Modeeinzelhandel"}
+{"name": "Kinderbekleidungsgesch\u00e4ft", "parent": "Modeeinzelhandel"}
+{"name": "Bekleidungsgesch\u00e4ft", "parent": "Modeeinzelhandel"}
+{"name": "Gesch\u00e4ft f\u00fcr Modeaccessoires", "parent": "Modeeinzelhandel"}
+{"name": "Juweliergesch\u00e4ft", "parent": "Modeeinzelhandel"}
+{"name": "Dessousgesch\u00e4ft", "parent": "Modeeinzelhandel"}
+{"name": "Herrengesch\u00e4ft", "parent": "Modeeinzelhandel"}
+{"name": "Schuhgesch\u00e4ft", "parent": "Modeeinzelhandel"}
+{"name": "Sonnenbrillengesch\u00e4ft", "parent": "Modeeinzelhandel"}
+{"name": "Bademodengesch\u00e4ft", "parent": "Modeeinzelhandel"}
+{"name": "Uhrenladen", "parent": "Modeeinzelhandel"}
+{"name": "Damengesch\u00e4ft", "parent": "Modeeinzelhandel"}
+{"name": "Finanz- oder Rechtsdienstleistung", "parent": "Einzelhandel"}
+{"name": "Feuerwerksladen", "parent": "Einzelhandel"}
+{"name": "Flohmarkt", "parent": "Einzelhandel"}
+{"name": "Schwimmender Markt", "parent": "Einzelhandel"}
+{"name": "Blumenladen", "parent": "Einzelhandel"}
+{"name": "Lebensmittel- und Getr\u00e4nkeeinzelhandel", "parent": "Einzelhandel"}
+{"name": "Bierladen", "parent": "Lebensmittel- und Getr\u00e4nkeeinzelhandel"}
+{"name": "Metzger", "parent": "Lebensmittel- und Getr\u00e4nkeeinzelhandel"}
+{"name": "S\u00fc\u00dfwarengesch\u00e4ft", "parent": "Lebensmittel- und Getr\u00e4nkeeinzelhandel"}
+{"name": "K\u00e4seladen", "parent": "Lebensmittel- und Getr\u00e4nkeeinzelhandel"}
+{"name": "Schokoladenladen", "parent": "Lebensmittel- und Getr\u00e4nkeeinzelhandel"}
+{"name": "Kaffeer\u00f6ster", "parent": "Lebensmittel- und Getr\u00e4nkeeinzelhandel"}
+{"name": "Milchladen", "parent": "Lebensmittel- und Getr\u00e4nkeeinzelhandel"}
+{"name": "Bauernmarkt", "parent": "Lebensmittel- und Getr\u00e4nkeeinzelhandel"}
+{"name": "Fischmarkt", "parent": "Lebensmittel- und Getr\u00e4nkeeinzelhandel"}
+{"name": "Obst- und Gem\u00fcseladen", "parent": "Lebensmittel- und Getr\u00e4nkeeinzelhandel"}
+{"name": "Gourmet-Laden", "parent": "Lebensmittel- und Getr\u00e4nkeeinzelhandel"}
+{"name": "Lebensmittelgesch\u00e4ft", "parent": "Lebensmittel- und Getr\u00e4nkeeinzelhandel"}
+{"name": "Bio-Lebensmittel", "parent": "Lebensmittelgesch\u00e4ft"}
+{"name": "Reformhaus", "parent": "Lebensmittel- und Getr\u00e4nkeeinzelhandel"}
+{"name": "Kr\u00e4uter- und Gew\u00fcrzladen", "parent": "Lebensmittel- und Getr\u00e4nkeeinzelhandel"}
+{"name": "Importierter Lebensmittelladen", "parent": "Lebensmittel- und Getr\u00e4nkeeinzelhandel"}
+{"name": "Koscherer Laden", "parent": "Lebensmittel- und Getr\u00e4nkeeinzelhandel"}
+{"name": "Kuruyemi\u015f\u00e7i-Shop", "parent": "Lebensmittel- und Getr\u00e4nkeeinzelhandel"}
+{"name": "Spirituosengesch\u00e4ft", "parent": "Lebensmittel- und Getr\u00e4nkeeinzelhandel"}
+{"name": "Fleisch- und Meeresfr\u00fcchteladen", "parent": "Lebensmittel- und Getr\u00e4nkeeinzelhandel"}
+{"name": "Wurstladen", "parent": "Lebensmittel- und Getr\u00e4nkeeinzelhandel"}
+{"name": "Supermarkt", "parent": "Lebensmittel- und Getr\u00e4nkeeinzelhandel"}
+{"name": "Tur\u015fucu-Shop", "parent": "Lebensmittel- und Getr\u00e4nkeeinzelhandel"}
+{"name": "Weinladen", "parent": "Lebensmittel- und Getr\u00e4nkeeinzelhandel"}
+{"name": "Einrahmungsgesch\u00e4ft", "parent": "Einzelhandel"}
+{"name": "M\u00f6bel- und Einrichtungsgesch\u00e4ft", "parent": "Einzelhandel"}
+{"name": "Teppichgesch\u00e4ft", "parent": "M\u00f6bel- und Einrichtungsgesch\u00e4ft"}
+{"name": "Haushaltsger\u00e4tegesch\u00e4ft", "parent": "M\u00f6bel- und Einrichtungsgesch\u00e4ft"}
+{"name": "Haushaltswarengesch\u00e4ft", "parent": "M\u00f6bel- und Einrichtungsgesch\u00e4ft"}
+{"name": "Gesch\u00e4ft f\u00fcr K\u00fcchenbedarf", "parent": "M\u00f6bel- und Einrichtungsgesch\u00e4ft"}
+{"name": "Beleuchtungsgesch\u00e4ft", "parent": "M\u00f6bel- und Einrichtungsgesch\u00e4ft"}
+{"name": "Matratzengesch\u00e4ft", "parent": "M\u00f6bel- und Einrichtungsgesch\u00e4ft"}
+{"name": "Gartencenter", "parent": "Einzelhandel"}
+{"name": "Geschenkeladen", "parent": "Einzelhandel"}
+{"name": "Baumarkt", "parent": "Einzelhandel"}
+{"name": "Hobbyladen", "parent": "Einzelhandel"}
+{"name": "Strickgesch\u00e4ft", "parent": "Einzelhandel"}
+{"name": "Lederwarengesch\u00e4ft", "parent": "Einzelhandel"}
+{"name": "Gep\u00e4ckaufbewahrung", "parent": "Einzelhandel"}
+{"name": "Marihuana-Apotheke", "parent": "Einzelhandel"}
+{"name": "Markt", "parent": "Einzelhandel"}
+{"name": "Sanit\u00e4tshaus", "parent": "Einzelhandel"}
+{"name": "Sonstiges Gesch\u00e4ft", "parent": "Einzelhandel"}
+{"name": "Mobilit\u00e4tsladen", "parent": "Einzelhandel"}
+{"name": "Musikladen", "parent": "Einzelhandel"}
+{"name": "Zeitungsh\u00e4ndler", "parent": "Einzelhandel"}
+{"name": "Zeitungsstand", "parent": "Einzelhandel"}
+{"name": "Gesch\u00e4ft f\u00fcr B\u00fcrobedarf", "parent": "Einzelhandel"}
+{"name": "Outdoor-Bedarfsgesch\u00e4ft", "parent": "Einzelhandel"}
+{"name": "Outlet-Mall", "parent": "Einzelhandel"}
+{"name": "Outlet-Store", "parent": "Einzelhandel"}
+{"name": "Verpackungsbedarfsgesch\u00e4ft", "parent": "Einzelhandel"}
+{"name": "Gesch\u00e4ft f\u00fcr Partybedarf", "parent": "Einzelhandel"}
+{"name": "Pfandhaus", "parent": "Einzelhandel"}
+{"name": "Parf\u00fcmerie", "parent": "Einzelhandel"}
+{"name": "Gesch\u00e4ft f\u00fcr Heimtierbedarf", "parent": "Einzelhandel"}
+{"name": "Apotheke", "parent": "Einzelhandel"}
+{"name": "Pop-Up-Store", "parent": "Einzelhandel"}
+{"name": "Druckshop", "parent": "Einzelhandel"}
+{"name": "Plattenladen", "parent": "Einzelhandel"}
+{"name": "Einkaufszentrum", "parent": "Einzelhandel"}
+{"name": "Einkaufsplatz", "parent": "Einzelhandel"}
+{"name": "Raucherladen", "parent": "Einzelhandel"}
+{"name": "Souvenirladen", "parent": "Einzelhandel"}
+{"name": "Sportartikeleinzelhandel", "parent": "Einzelhandel"}
+{"name": "Baseball-Laden", "parent": "Sportartikeleinzelhandel"}
+{"name": "Fahrradladen", "parent": "Sportartikeleinzelhandel"}
+{"name": "Tauchshop", "parent": "Sportartikeleinzelhandel"}
+{"name": "Angelgesch\u00e4ft", "parent": "Sportartikeleinzelhandel"}
+{"name": "Golfladen", "parent": "Sportartikeleinzelhandel"}
+{"name": "Waffenladen", "parent": "Sportartikeleinzelhandel"}
+{"name": "Jagdbedarfsgesch\u00e4ft", "parent": "Sportartikeleinzelhandel"}
+{"name": "Laufgesch\u00e4ft", "parent": "Sportartikeleinzelhandel"}
+{"name": "Skateshop", "parent": "Sportartikeleinzelhandel"}
+{"name": "Skigesch\u00e4ft", "parent": "Sportartikeleinzelhandel"}
+{"name": "Fu\u00dfballladen", "parent": "Sportartikeleinzelhandel"}
+{"name": "Surfshop", "parent": "Sportartikeleinzelhandel"}
+{"name": "Tennisladen", "parent": "Sportartikeleinzelhandel"}
+{"name": "Schreibwarenladen", "parent": "Einzelhandel"}
+{"name": "Erg\u00e4nzungsladen", "parent": "Einzelhandel"}
+{"name": "Schwimmbadbedarfsgesch\u00e4ft", "parent": "Einzelhandel"}
+{"name": "Textilgesch\u00e4ft", "parent": "Einzelhandel"}
+{"name": "Tabakladen", "parent": "Einzelhandel"}
+{"name": "Spielzeugladen", "parent": "Einzelhandel"}
+{"name": "Vape-Shop", "parent": "Einzelhandel"}
+{"name": "Videothek", "parent": "Einzelhandel"}
+{"name": "Vintage- und Gebrauchtwarenladen", "parent": "Einzelhandel"}
+{"name": "Lager oder Gro\u00dfhandel", "parent": "Einzelhandel"}
+{"name": "Sport und Freizeit", "parent": null}
+{"name": "Sportplatz", "parent": "Sport und Freizeit"}
+{"name": "Baseballverein", "parent": "Sport und Freizeit"}
+{"name": "Basketballverein", "parent": "Sport und Freizeit"}
+{"name": "Bowling Green", "parent": "Sport und Freizeit"}
+{"name": "Cricketplatz", "parent": "Sport und Freizeit"}
+{"name": "Eisstockschie\u00dfen", "parent": "Sport und Freizeit"}
+{"name": "Reitanlage", "parent": "Sport und Freizeit"}
+{"name": "Angelgebiet", "parent": "Sport und Freizeit"}
+{"name": "Fu\u00dfballverein", "parent": "Sport und Freizeit"}
+{"name": "Golfclub", "parent": "Sport und Freizeit"}
+{"name": "Schie\u00dfstand", "parent": "Sport und Freizeit"}
+{"name": "Fitnessstudio", "parent": "Sport und Freizeit"}
+{"name": "Boxhalle", "parent": "Fitnessstudio"}
+{"name": "Kletterhalle", "parent": "Fitnessstudio"}
+{"name": "Tanzstudio", "parent": "Fitnessstudio"}
+{"name": "Eishockeystadion", "parent": "Sport und Freizeit"}
+{"name": "Rennstrecke", "parent": "Sport und Freizeit"}
+{"name": "Erholungszentrum", "parent": "Sport und Freizeit"}
+{"name": "Leichtathletikverein", "parent": "Sport und Freizeit"}
+{"name": "Sauna", "parent": "Sport und Freizeit"}
+{"name": "Fallschirmsprungzentrum", "parent": "Sport und Freizeit"}
+{"name": "Sportverein", "parent": "Sport und Freizeit"}
+{"name": "Kanu- und Kajakverleih", "parent": "Sport und Freizeit"}
+{"name": "Segelverein", "parent": "Sport und Freizeit"}
+{"name": "Schwimmverein", "parent": "Sport und Freizeit"}
+{"name": "Schwimmbad", "parent": "Sport und Freizeit"}
+{"name": "Reisen und Transport", "parent": null}
+{"name": "Gep\u00e4ckschlie\u00dffach", "parent": "Reisen und Transport"}
+{"name": "Fahrradverleih", "parent": "Reisen und Transport"}
+{"name": "Bootsverleih", "parent": "Reisen und Transport"}
+{"name": "Boot oder F\u00e4hre", "parent": "Reisen und Transport"}
+{"name": "Grenz\u00fcbergang", "parent": "Reisen und Transport"}
+{"name": "Seilbahn", "parent": "Reisen und Transport"}
+{"name": "Kreuzfahrt", "parent": "Reisen und Transport"}
+{"name": "Ladestation f\u00fcr Elektrofahrzeuge", "parent": "Reisen und Transport"}
+{"name": "Tankstelle", "parent": "Reisen und Transport"}
+{"name": "Agentur f\u00fcr Hei\u00dfluftballontouren", "parent": "Reisen und Transport"}
+{"name": "Unterkunft", "parent": "Reisen und Transport"}
+{"name": "\u00dcbernachtung mit Fr\u00fchst\u00fcck", "parent": "Unterkunft"}
+{"name": "Pension", "parent": "Unterkunft"}
+{"name": "Herberge", "parent": "Unterkunft"}
+{"name": "Hotel", "parent": "Unterkunft"}
+{"name": "Gasthof", "parent": "Unterkunft"}
+{"name": "H\u00fctte", "parent": "Unterkunft"}
+{"name": "Motel", "parent": "Unterkunft"}
+{"name": "Resort", "parent": "Unterkunft"}
+{"name": "Ferienwohnung", "parent": "Unterkunft"}
+{"name": "Parken", "parent": "Reisen und Transport"}
+{"name": "Pier", "parent": "Reisen und Transport"}
+{"name": "Hafen", "parent": "Reisen und Transport"}
+{"name": "Wohnmobilpark", "parent": "Reisen und Transport"}
+{"name": "Rastplatz", "parent": "Reisen und Transport"}
+{"name": "Mautstelle", "parent": "Reisen und Transport"}
+{"name": "Touristische Informationen und Service", "parent": "Reisen und Transport"}
+{"name": "Reiseanbieter", "parent": "Touristische Informationen und Service"}
+{"name": "Verkehrsknotenpunkt", "parent": "Reisen und Transport"}
+{"name": "Flughafen", "parent": "Verkehrsknotenpunkt"}
+{"name": "Flugplatz", "parent": "Flughafen"}
+{"name": "Busbahnhof", "parent": "Verkehrsknotenpunkt"}
+{"name": "Bushaltestelle", "parent": "Verkehrsknotenpunkt"}
+{"name": "Hubschrauberlandeplatz", "parent": "Verkehrsknotenpunkt"}
+{"name": "Stadtbahnstation", "parent": "Verkehrsknotenpunkt"}
+{"name": "Marineterminal", "parent": "Verkehrsknotenpunkt"}
+{"name": "U-Bahn-Station", "parent": "Verkehrsknotenpunkt"}
+{"name": "Bahnhof", "parent": "Verkehrsknotenpunkt"}
+{"name": "Standort des Mietwagens", "parent": "Verkehrsknotenpunkt"}
+{"name": "Taxistand", "parent": "Verkehrsknotenpunkt"}
+{"name": "Stra\u00dfenbahnhaltestelle", "parent": "Verkehrsknotenpunkt"}
+{"name": "Transportdienst", "parent": "Reisen und Transport"}
+{"name": "Charterbus", "parent": "Transportdienst"}
+{"name": "Limousinenservice", "parent": "Transportdienst"}
+{"name": "\u00d6ffentliche Verkehrsmittel", "parent": "Transportdienst"}
+{"name": "Buslinie", "parent": "\u00d6ffentliche Verkehrsmittel"}
+{"name": "Taxi", "parent": "Transportdienst"}
+{"name": "Reiseb\u00fcro", "parent": "Reisen und Transport"}
+{"name": "Reiselounge", "parent": "Reisen und Transport"}
+{"name": "Truck Stop", "parent": "Reisen und Transport"}

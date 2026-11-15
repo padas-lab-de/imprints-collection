@@ -1,0 +1,7 @@
+# Example input for build_crawl_tables.py. One row per `ic fetch` output dir.
+# source: free label for the crawl (appears in the count tables); dir: relative to --crawl-root.
+# Row order matters: count_sites.py processes the sources in this order.
+source	dir
+seed_list	seed_crawl/part1
+seed_list	seed_crawl/part2
+discovered_hosts	discovered_crawl
