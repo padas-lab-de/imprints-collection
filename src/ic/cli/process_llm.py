@@ -12,7 +12,12 @@ from transformers import AutoTokenizer
 from ic.config import *
 from ic.utils.model_run_service import call_api
 from ic.utils.parsing_utils import parse_llm_response_content
-from ic.utils.prompt_utils import format_message, load_prompt
+from ic.utils.prompt_utils import (
+    build_address_message,
+    build_topic_message,
+    load_prompt,
+    prepare_content,
+)
 
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
@@ -21,22 +26,6 @@ logging.getLogger("httpx").setLevel(logging.WARNING)
 
 BATCH_SIZE = 1_000
 MAX_CONCURRENT_API_CALLS = 10
-
-
-def truncate_text(text, tokenizer, max_tokens=30_000):
-    """
-    Smart text truncation to fit within max token limits.
-    """
-    tokens = tokenizer(text)["input_ids"]
-
-    if len(tokens) <= max_tokens:
-        return text
-
-    # Truncate the rear part of the text
-    truncated_tokens = tokens[:max_tokens]
-    truncated_text = tokenizer.decode(truncated_tokens, skip_special_tokens=True)
-
-    return truncated_text + "\n[TEXT TRUNCATED]"
 
 
 def generate_output(prompts: str | List[str], sampling_params, llm):
@@ -61,6 +50,7 @@ async def call_api_async(
     api_key: str,
     temperature: float = 0.0,
     max_tokens: int = 2_000,
+    extra_body: dict | None = None,
 ):
     loop = asyncio.get_running_loop()
     return await loop.run_in_executor(
@@ -74,6 +64,7 @@ async def call_api_async(
         api_key,
         temperature,
         max_tokens,
+        extra_body,
     )
 
 
@@ -160,41 +151,31 @@ async def process_llm_async(model: str, language: str, prompt_type: str, topic: 
                     "impressum" in document
                     and document["impressum"]["main_content"].strip() != ""
                 ):
-                    main_content = document["impressum"]["main_content"]
-
-                    # Remove newlines from main_content
-                    main_content = main_content.replace("\n", "")
-
-                    # Truncate if necessary
-                    main_content = truncate_text(
-                        main_content, tokenizer, max_tokens=MODELS[model]["max_tokens"]
+                    main_content = prepare_content(
+                        document["impressum"]["main_content"],
+                        tokenizer,
+                        MODELS[model]["max_tokens"],
                     )
 
-                    message_address = format_message(
-                        system_prompt_address,
-                        prompt_address.format(plain_text=main_content),
+                    message_address = build_address_message(
+                        system_prompt_address, prompt_address, main_content
                     )
                     messages_address[index] = message_address
 
             if topic and document["main"]["main_content"].strip() != "":
-                main_content = document["main"]["main_content"]
-
-                # Remove newlines from main_content
-                main_content = main_content.replace("\n", "")
-
-                # Truncate if necessary
-                main_content = truncate_text(
-                    main_content, tokenizer, max_tokens=MODELS[model]["max_tokens"]
+                main_content = prepare_content(
+                    document["main"]["main_content"],
+                    tokenizer,
+                    MODELS[model]["max_tokens"],
                 )
 
-                message_topic = format_message(
+                message_topic = build_topic_message(
                     system_prompt_topic,
-                    prompt_topic.format(
-                        url=document["main"]["url"],
-                        title=document["main"]["title"],
-                        description=document["main"]["description"],
-                        plain_text=main_content,
-                    ),
+                    prompt_topic,
+                    url=document["main"]["url"],
+                    title=document["main"]["title"],
+                    description=document["main"]["description"],
+                    content=main_content,
                 )
                 messages_topic[index] = message_topic
 
@@ -224,7 +205,12 @@ async def process_llm_async(model: str, language: str, prompt_type: str, topic: 
         async def process_one(message, batch_index, task_type):
             async with semaphore:
                 response = await call_api_async(
-                    MODELS[model]["remote"], message, task_type, MODEL_API_ENDPOINT, MODEL_API_KEY
+                    MODELS[model]["remote"],
+                    message,
+                    task_type,
+                    MODEL_API_ENDPOINT,
+                    MODEL_API_KEY,
+                    extra_body=MODELS[model].get("extra_body"),
                 )
                 if not response:
                     return batch_index, None

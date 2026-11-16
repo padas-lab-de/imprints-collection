@@ -1,534 +1,137 @@
 # German Imprints Collection
 
-This repository contains the data collection and automated annotation pipeline used to build the **German Imprints Dataset**, which forms the foundation of the WebKurator.de platform.
+This repository holds the pipeline behind the **German Imprints Dataset**, the base of the
+WebKurator.de platform. The pipeline fetches German websites and their legal imprint pages
+(*Impressum*), extracts the postal address and the topic of each site with a Large Language Model
+(LLM), geocodes the addresses and merges everything into one dataset.
 
-The project enables large-scale extraction of postal addresses from legal imprint pages (*Impressum*) and automated topic classification using Large Language Models (LLMs), followed by geocoding of extracted addresses.
+The dataset can be used for regional web analysis, web curation and selective web archiving.
 
-The resulting dataset can be used for regional web analysis, web curation, and selective web archiving.
+## Repository layout
 
----
+| Path | Content |
+| --- | --- |
+| `src/ic/` | the `ic` command line tool (one module per command in `src/ic/cli/`) |
+| `prompts/` | prompts for address extraction and topic classification |
+| `topics/` | topic taxonomy |
+| `geojson/` | boundaries of European countries and German states, counties and districts (used by `ic merge`) |
+| `evaluation/gold_standard_data.jsonl` | 1,000 manually annotated pages |
+| `collection/` | scripts that compute the published site count from the crawl output |
+| `goldset/` | scripts that build the gold set (frame, screen, draw, top-up, capture, assignment, prefill) |
+| `evaluation/` (scripts) | model runs of the candidates on the gold inputs |
+| `src/ic/gold/`, `src/ic/eval/` | gold-set library and labelling tool; scorer (`python3 -m ic.eval`) |
+| `docs/` | reproduction guides, gold-set design, model evaluation protocol, annotation guideline |
+| `seed_hosts.txt.gz` | seed list, 6.56 million hosts (filtered for spam, adult content, crawler traps and redirects to large platforms) |
+| `small_sample_seed_hosts.txt` | 1,000 hosts to test the pipeline |
+| `tests/` | unit tests (no network needed) |
 
-## Repository Structure
+`ic` writes its outputs to `datasets/` and `results/`. Both folders are created on demand and are
+not part of the repository.
 
-* `datasets/seed_hosts.txt.gz`  
-  Large list of seed hosts used for the collection (compressed due to large file size). Contains 6.56 million hosts.
+## Install
 
-* `datasets/small_sample_seed_hosts.txt`  
-  Smaller sample (1,000 hosts) for testing the full pipeline.
+Python 3.10 to 3.12.
 
-<details>
-<summary>Excerpt of <code>small_sample_seed_hosts.txt</code></summary>
-
-```
-www.rodeneggerhof.com
-www.rodener-geschichtskreis.de
-www.rodeneza.com
-www.rodenhaeuser-kollegen.de
-www.rodenhausen-electronic.de
-www.rodenhausen.ch
-www.rodenhausen.de
-www.rodenhiser.com
-www.rodenhouse-inc.com
-www.rodenkirchen-aero.de
-www.rodenkirchen-immobilien.de
-www.rodenkirchen-steuerberater.de
-www.rodenkirchen-werbetechnik.de
-www.rodenkirchener-unternehmerinnen.de
-www.rodenkirchenerpartyservice.de
-www.rodenleather.com
-www.rodenrothmotors.com
-www.rodenstein-apotheke-weinheim.de
-www.rodenstein-apotheke.de
-www.rodenstein-cup.de
-www.rodenstein-parfuemerie.de
-www.rodensteiner-knappen.de
-www.rodensteiner.ch
-www.rodensteinerfashionmarkt.de
-www.rodensteinerhof.de
-www.rodensteinmuseum.de
-www.rodensteinrecords.de
-www.rodensteinschule-fraenkisch-crumbach.de
-www.rodenstock-gfu.de
-www.rodenstock-instruments.de
-```
-
-</details>
-
-The seed list is pre-filtered to remove:
-
-* spam and adult content
-* crawler traps and problematic streaming pages
-* redirects to major platforms (e.g., Facebook, YouTube, Instagram)
-
----
-
-## Install Dependencies
-
-There are two ways to install the dependencies and run the code.
-
-### Using Poetry (recommended)
-
-If you have the [Poetry](https://python-poetry.org/) package manager for Python installed already, you can simply set up everything with:
+With [Poetry](https://python-poetry.org/):
 
 ```console
 poetry install
-source $(poetry env info --path)/bin/activate
+poetry run ic --help
 ```
 
-After the installation of all dependencies, you will end up in a new shell with a loaded venv. In this shell, you can run the main `ic` command. You can exit the shell at any time with `exit`.
+With pip:
 
 ```console
-ic --help
+python3 -m venv .venv
+.venv/bin/pip install -e . pytest
+.venv/bin/ic --help
 ```
 
-To install new dependencies in an existing poetry environment, you can run the following commands with the shell environment being activated:
+`vllm` is only needed for local inference and is an optional extra (`poetry install --extras local`).
+
+Copy `.env.template` to `.env` and fill in the LLM endpoint (`MODEL_API_ENDPOINT`, `MODEL_API_KEY`,
+any OpenAI-compatible API) and the geocoding endpoint (`GEOCODING_API_ENDPOINT`, for example a local
+[Photon](https://github.com/komoot/photon) instance). Do not commit `.env`.
+
+Run `ic` from the repository root: it reads `prompts/` and `topics/` with relative paths.
+
+Tests: `pytest`. Formatting: `isort . && black .`.
+
+## Run the pipeline
 
 ```console
-poetry lock
-poetry install
-```
-
-### Using Pip (alternative)
-
-You can also create a venv yourself and use `pip` to install dependencies:
-
-```console
-python3 -m venv venv
-source venv/bin/activate
-pip install .
-```
-
----
-
-## Development
-
-### Run Code Formatting
-
-To run the code formatting, you can use the following command:
-
-```console
-isort .
-black .
-```
-
-The order of the commands is important. `isort` will sort the imports in the files, and `black` will format the code.
-
----
-
-## Environment Configuration
-
-Create a `.env` file based on `.env.template`.
-
-You must define:
-
-* LLM API endpoint and API key
-* Geocoding API endpoint (e.g., Photon)
-
-Example for a local LLM deployment:
-
-```env
-MODEL_API_ENDPOINT = "https://llms.innkube.fim.uni-passau.de"
-MODEL_API_KEY      = "sk-****"
-```
-
-Example for a local Photon instance:
-
-```env
-GEOCODING_API_ENDPOINT = "http://localhost:2322/api"
-```
-
----
-
-## Prompts and Annotation Code
-
-* Topic classification prompts:
-  `prompts/topic_classification/`
-
-* Address extraction prompts:
-  `prompts/address_extraction/`
-
-* LLM processing implementation:
-  `src/ic/cli/process_llm.py`
-
----
-
-# Run the Pipeline
-
-The pipeline consists of five main steps:
-
-1. Fetch websites
-2. Run LLM processing (topic + address extraction)
-3. Geocode addresses
-4. Merge results
-5. Generate statistics
-
----
-
-## 1. Fetch Imprints
-
-To test the pipeline with the small sample:
-
-```console
+# 1. fetch the home page, imprint, privacy and contact page of each host
 ic fetch small_sample_seed_hosts.txt
-```
-
----
-
-## 2. Run LLM Processing
-
-This step performs:
-
-* Topic classification
-* Address extraction from imprint pages
-
-```console
+# 2. extract addresses (and topics with --topic) with an LLM
 ic process-llm MODEL --topic
-```
-
-Replace `MODEL` with the name of your model. The `src/ic/config.py` file contains a dictionary of supported models, currently this is `Qwen3-Next`. You can add new models there if needed.
-
-LLM results are stored in a subfolder named after the model.
-This allows easy comparison of different models (e.g., ablation studies or prompt variations).
-
----
-
-## 3. Geocode Extracted Addresses
-
-After LLM processing:
-
-```console
+# 3. geocode the addresses
 ic geocode MODEL
-```
-
-The `MODEL` argument is required because geocoding operates on the model-specific output directory.
-
-We recommend running a local [Photon](https://photon.komoot.io/) instance to avoid dependency on proprietary services. Find instructions for setting up Photon in the [GitHub repository](https://github.com/komoot/photon).
-
----
-
-## 4. Merge Results
-
-This merges:
-
-* LLM topic classification
-* Extracted addresses
-* Geocoded information
-
-```console
+# 4. merge the LLM output and the coordinates
 ic merge MODEL
+# 5. compute statistics
+ic stats MODEL
+# 6. score address extraction and topic classification against the gold standard
+ic evaluate MODEL
 ```
 
----
+- `ic fetch HOSTS [BATCH_SIZE START_BATCH END_BATCH NUM_WORKERS]` reads an uncompressed host list
+  (one host per line) and writes `datasets/imprints_batchN.jsonl.gz` and
+  `datasets/fetch_status_batchN.tsv`. A second run resumes. `--output-dir` sets another folder;
+  `ic fetch --help` lists the politeness options. For the full seed list:
+  `zcat seed_hosts.txt.gz > datasets/seed_hosts.txt`, then optionally
+  `ic clean-hosts datasets/seed_hosts.txt`, then `ic fetch` on the result.
+- `MODEL` is a key of `MODELS` in `src/ic/config.py`. The optional arguments `LANGUAGE`
+  (`german` or `english`) and `PROMPT_TYPE` (`simple` or `expert`) follow `MODEL` in steps 2 to 6.
+- The final dataset is in `results/MODEL/LANGUAGE/PROMPT_TYPE/final/*.jsonl.gz`, one JSON object per
+  host with the fetched pages, the topic, the address and the coordinates.
+- `ic evaluate` writes `predictions.jsonl`, `metrics.json` and `errors.jsonl` to
+  `results/MODEL/LANGUAGE/PROMPT_TYPE/eval/`. `--score-only` re-scores stored predictions.
+- `ic upload-postgresql` and `ic upload-opensearch` load the final dataset into a database (connection
+  settings in `.env`).
 
-## 5. Generate Statistics
+## Reproduce the site count
 
-To compute dataset statistics:
+The 2026 snapshot has **3,945,356** canonical sites with an imprint. A canonical site is a host
+without `www.`, after redirects to another crawled host are followed; parked domains, domains for
+sale and hoster placeholder pages are removed.
+
+The count can be reproduced from the published crawl tables in about 10 minutes, with no crawling:
 
 ```console
-ic stats MODEL
+collection/download_release_data.sh data/collection
+collection/reproduce_final_count.sh data/collection out
 ```
 
-This produces statistics such as:
+The script prints the line count and the sha256 of the final site list and compares every output
+with the published checksums. See [docs/reproduce_collection.md](docs/reproduce_collection.md) for
+the steps and for how to build the crawl tables from your own `ic fetch` output.
 
-* Number of imprints with extracted addresses
-* Number of successfully geocoded addresses
-* Topic distribution
+## Gold set and model evaluation
 
----
+The gold set is a two-phase probability sample of the released sites: 1,869 items, plus 18 items
+from the sites added in the final list. Every item has a known inclusion probability, so each score
+is a population estimate with a confidence interval for the release. Three labellers (L1, L2, L3)
+label the site status, the imprint, the main address and two topics (POI v3, WZ 2025) from a frozen
+browser capture. The candidate models get the same-day `ic fetch` text as input.
 
-# Output Format
+- Method: [docs/gold_set_design.md](docs/gold_set_design.md)
+- Scoring and decision rule: [docs/model_eval_protocol.md](docs/model_eval_protocol.md)
+- Labelling: [docs/annotation_guideline.md](docs/annotation_guideline.md), [docs/annotation_howto.md](docs/annotation_howto.md)
+- Commands, one per step: [docs/reproduce_goldset.md](docs/reproduce_goldset.md)
 
-The final output file is located under:
+The gold data (captures, labels) and the predictions are not part of the repository. Annotator
+names and the labelling dates are to be set.
 
-```
-results/MODEL/PROMPT_LANGUAGE/PROMPT_TYPE/final/*.jsonl.gz
-```
+## Data location
 
-Example:
-
-```
-results/Qwen3-Next/german/simple/final/*.jsonl.gz
-```
-
-Each line in the compressed JSONL file has the following structure:
-
-<details>
-<summary>Exemplary entry in the final dataset (JSON)</summary>
-
-```json
-{
-  "host":"www.villa-butterblume.de",
-  "main":{
-    "url":"https://www.villa-butterblume.de",
-    "title":"Butterblume - Willkommen",
-    "description":"Butterblume, Bielefeld, Kita, Kindergarten, Elterninitiative, vegetarisch, zuckerfrei, Montessori",
-    "keywords":"Gemeinn\u00fctziger, Verein, sozialer, Verein, Wohlt\u00e4tigkeit, Benefiz, gemeinn\u00fctzig, sozial, Veranstaltungen",
-    "author":null,
-    "main_content":"Die Kindertagesst\u00e4tte \"Villa Butterblume\" hat ihre T\u00fcren ge\u00f6ffnet.\n\nDie \"Butterblume\" ist eine Elterninitiative - gemeinsam arbeiten wir daran, einen besonderen Lern- und Lebensort f\u00fcr Kinder zu gestalten.\n\n\u00a0\n\nHierbei sind uns eine an die Montessorip\u00e4dagogik angelehnte Arbeit, Naturn\u00e4he sowie eine gesundheitsf\u00f6rderliche Ern\u00e4hrung der Kinder wichtig.\n\n\u00a0\n\nSo erreichen Sie uns:\n\n\u00a0\n\nVilla Butterblume\n\nSudbrackstra\u00dfe 43\n\n33611 Bielefeld\n\n\u00a0\n\nTelefon: 0521 39952874\n\nleitung@villa-butterblume.de\n\nUnser Laternenfest\n\nEndlich hie\u00df es wieder Laterne, Laterne... Bei sch\u00f6nstem Herbstwetter sind wir in diesem Jahr mit unseren Gespenster- und Raupenlaternen durch den Nordpark spaziert und haben an verschiedenen Kerzenstationen unsere Laternenlieder gesungen. Es war ein sch\u00f6ner Abend, den wir bei Suppe und hei\u00dfen Getr\u00e4nken an der Kita ausklingen lie\u00dfen.\u00a0\n\nNaturerlebnistag\n\nIn diesem Jahr ging unser Kitaausflug zum Naturgel\u00e4nde Primelgr\u00fcn. Ein bisschen nass war der Tag, aber im Gr\u00fcnen gab es viel zu entdecken und matschen. Wir konnten schnitzen, Holzzauberst\u00e4be herstellen, Feuer machen und picknicken. Wir freuen uns schon auf den n\u00e4chsten Ausflug, der uns sicher wieder in \"ein gr\u00fcnes Klassenzimmer\" f\u00fchren wird.\n\nDankesch\u00f6n an Firma Wolff f\u00fcr eine tolle Weihnachts\u00fcberraschung\n\nEin gro\u00dfes Dankesch\u00f6n an Firma Wolff aus unserer Nachbarschaft, die uns mit einer wunderbaren Weihnachts\u00fcberraschung erfreut hat. Wir durften unsere W\u00fcnsche wie B\u00fccher, Kreativmaterialien oder Spiele f\u00fcr die Raupen- und die Grash\u00fcpfergruppe an den weihnachtlichen Wunschbaum der Firma h\u00e4ngen, und wenig sp\u00e4ter erreichte uns eine prall gef\u00fcllte, liebevoll verpackte Geschenkkiste mit all den erf\u00fcllten W\u00fcnschen. Viel Spa\u00df hatten die Kinder in der Kita\u00a0 dann am letzten Tag vor Weihnachten beim Auspacken und Bespielen der neuen Sch\u00e4tze.\n\nBuntes Miteinander am Gartentag\n\n\u00a0\n\n\u00a0\nAm Samstag, den 21. September 2024 fand bei strahlendem Sonnenschein unser traditioneller Gartentag in der Kita Villa Butterblume statt. Rund 15 Eltern und ebenso viele Kinder packten gemeinsam an, um den Garten der Kita auf Vordermann zu bringen. Es wurden Hecken und B\u00e4ume zur\u00fcckgeschnitten, Unkraut gej\u00e4tet und kleinere Reparaturen durchgef\u00fchrt \u2013 jeder brachte sich tatkr\u00e4ftig ein.\n\u00a0\nNat\u00fcrlich blieb neben all der Arbeit auch genug Zeit, um sich auszutauschen und miteinander zu quatschen. Beim gemeinsamen Mittagessen wurden die mitgebrachten Salate genossen, und es wurde flei\u00dfig gegrillt. So wurde der Gartentag nicht nur ein produktiver, sondern auch ein geselliger Tag f\u00fcr Gro\u00df und Klein.\n\u00a0\nDer Gartentag ist ein wichtiger Teil unseres Kita-Lebens und findet zweimal im Jahr statt. Die Teilnahme an mindestens einem der beiden Tage ist f\u00fcr alle Familien verpflichtend, die keine gesonderten Aufgaben im Verein der Kita \u00fcbernehmen. So tragen alle zum Erhalt der Kita bei und leisten pro Familie 20 Arbeitsstunden im Jahr.\n\u00a0\n\nEin herzliches Dankesch\u00f6n an alle, die am Samstag mit dabei waren! Gemeinsam sorgen wir daf\u00fcr, dass unsere Kita ein sch\u00f6ner und sicherer Ort f\u00fcr unsere Kinder bleibt.\n\n10 Jahre Villa Butterblume. Das war uns ein rauschendes Fest wert.....\n\nAm 13.08.2022 haben wir unser 10j\u00e4hriges Jubil\u00e4um gefeiert.\n\n\nEs war ein sch\u00f6ner Tag mit vielen Menschen, die die Butterblume begleitet haben und aktuell begleiten, vielen tollen Attraktionen, sonnigem Wetter und guter Laune im sch\u00f6nen Bauernhausmuseum Bielefeld.\n\n\nDanke sagen wir allen Eltern der Kita, die dieses Fest auf die Beine gestellt haben.\n\n\nWir danken Arminia Bielefeld, Thalia, Firma Halfar, den Stadtwerken Bielefeld und Playmobil f\u00fcr das Erm\u00f6glichen unserer Tombola, welche sehr viele Kinderherzen hat h\u00f6her schlagen lassen.\n\n\nWeitere Eindr\u00fccke des Tages k\u00f6nnen Sie auf unserer Homepage unter \"Kita-Leben\" finden.\n\nDruckversion | Sitemap\n\u00a9 Butterblume\nLogin\n\nWebansichtMobile-Ansicht\n\nLogout | Seite bearbeiten",
-    "content_length":3852,
-    "content_language":"deu",
-    "address":[
-      
-    ],
-    "coords":[
-      
-    ]
-  },
-  "impressum":{
-    "url":"https://www.villa-butterblume.de/impressum-datenschutz/",
-    "title":"Butterblume - Impressum & Datenschutz",
-    "description":"Butterblume, Bielefeld",
-    "keywords":"Impressum",
-    "author":null,
-    "main_content":"Impressum\n\nKindertagesst\u00e4tte \"Villa Butterblume\"\nSudbrackstr. 43\n33613 Bielefeld\n\u00a0\n\nVerein: Butterblume e.V.\nSitz: Bielefeld\n\u00a0\n\nTelefon: 0521 39952874\nE-mail: leitung@villa-butterblume.de\nInternet: www.villa-butterblume.de\n\n\u00a0\n\nRegistergericht: Amtsgericht Bielefeld\nVereinsregisternummer: 4201\n\nSteuernummer: 305/5972/1414\n\u00a0\n\nVertretungsberechtige Vorstandsmitglieder:\n\nSalome Brand\n\nKim Mercedes Wollschl\u00e4ger\n\n\u00a0\n\nHaftungsausschluss:\n\nTrotz sorgf\u00e4ltiger inhaltlicher Kontrolle \u00fcbernehmen wir keine Haftung f\u00fcr den Inhalt von verlinkten Seiten. Daf\u00fcr sind ausschlie\u00dflich deren Betreiber verantwortlich.\n\n\u00a0\n\nHaftungsanspr\u00fcche, die sich auf Sch\u00e4den materieller oder ideeller Art beziehen, die durch die Nutzung oder Nichtnutzung der dargebotenen Informationen verursacht wurden, sind grunds\u00e4tzlich ausgeschlossen.\n\nDruckversion | Sitemap\n\u00a9 Butterblume\nLogin\n\nWebansichtMobile-Ansicht\n\nLogout | Seite bearbeiten",
-    "content_length":907,
-    "content_language":"deu",
-    "address":[
-      
-    ],
-    "coords":[
-      
-    ]
-  },
-  "datenschutz":{
-    "url":"https://www.villa-butterblume.de/impressum-datenschutz/",
-    "title":"Butterblume - Impressum & Datenschutz",
-    "description":"Butterblume, Bielefeld",
-    "keywords":"Impressum",
-    "author":null,
-    "main_content":"Impressum\n\nKindertagesst\u00e4tte \"Villa Butterblume\"\nSudbrackstr. 43\n33613 Bielefeld\n\u00a0\n\nVerein: Butterblume e.V.\nSitz: Bielefeld\n\u00a0\n\nTelefon: 0521 39952874\nE-mail: leitung@villa-butterblume.de\nInternet: www.villa-butterblume.de\n\n\u00a0\n\nRegistergericht: Amtsgericht Bielefeld\nVereinsregisternummer: 4201\n\nSteuernummer: 305/5972/1414\n\u00a0\n\nVertretungsberechtige Vorstandsmitglieder:\n\nSalome Brand\n\nKim Mercedes Wollschl\u00e4ger\n\n\u00a0\n\nHaftungsausschluss:\n\nTrotz sorgf\u00e4ltiger inhaltlicher Kontrolle \u00fcbernehmen wir keine Haftung f\u00fcr den Inhalt von verlinkten Seiten. Daf\u00fcr sind ausschlie\u00dflich deren Betreiber verantwortlich.\n\n\u00a0\n\nHaftungsanspr\u00fcche, die sich auf Sch\u00e4den materieller oder ideeller Art beziehen, die durch die Nutzung oder Nichtnutzung der dargebotenen Informationen verursacht wurden, sind grunds\u00e4tzlich ausgeschlossen.\n\nDruckversion | Sitemap\n\u00a9 Butterblume\nLogin\n\nWebansichtMobile-Ansicht\n\nLogout | Seite bearbeiten",
-    "content_length":907,
-    "content_language":"deu",
-    "address":[
-      
-    ],
-    "coords":[
-      
-    ]
-  },
-  "kontakt":{
-    "url":"https://www.villa-butterblume.de/impressum-datenschutz/kontakt/",
-    "title":"Butterblume - Kontakt",
-    "description":"Butterblume, Bielefeld",
-    "keywords":"Kontakt",
-    "author":null,
-    "main_content":"Kontakt\n\nKindertagesst\u00e4tte \"Villa Butterblume\"\nSudbrackstra\u00dfe 43\n33611 Bielefeld\n\nTel: 0521 39952874\n\n\nAngela Kronshage\nLeitung\nleitung@villa-butterblume.de\n\nDruckversion | Sitemap\n\u00a9 Butterblume\nLogin\n\nWebansichtMobile-Ansicht\n\nLogout | Seite bearbeiten",
-    "content_length":253,
-    "content_language":"deu",
-    "address":[
-      
-    ],
-    "coords":[
-      
-    ]
-  },
-  "topic":"Kindertagesst\u00e4tte",
-  "address":{
-    "country":"Deutschland",
-    "town":"Bielefeld",
-    "postalcode":"33613",
-    "streetname":"Sudbrackstr.",
-    "housenumber":"43"
-  },
-  "coords":{
-    "longitude":8.53288698709467,
-    "latitude":52.041731353304684,
-    "num_features":6,
-    "features":[
-      {
-        "type":"Feature",
-        "properties":{
-          "osm_type":"W",
-          "osm_id":27329466,
-          "osm_key":"highway",
-          "osm_value":"residential",
-          "type":"street",
-          "postcode":"33611",
-          "countrycode":"DE",
-          "name":"Sudbrackstra\u00dfe",
-          "country":"Deutschland",
-          "city":"Bielefeld",
-          "district":"Schildesche",
-          "locality":"Sudbrack",
-          "state":"Nordrhein-Westfalen",
-          "extent":[
-            8.5322363,
-            52.0418853,
-            8.5331321,
-            52.0410848
-          ]
-        },
-        "geometry":{
-          "type":"Point",
-          "coordinates":[
-            8.53288698709467,
-            52.041731353304684
-          ]
-        }
-      },
-      {
-        "type":"Feature",
-        "properties":{
-          "osm_type":"W",
-          "osm_id":438000545,
-          "osm_key":"highway",
-          "osm_value":"tertiary",
-          "type":"street",
-          "postcode":"33611",
-          "countrycode":"DE",
-          "name":"Sudbrackstra\u00dfe",
-          "country":"Deutschland",
-          "city":"Bielefeld",
-          "district":"Mitte",
-          "state":"Nordrhein-Westfalen",
-          "extent":[
-            8.5352852,
-            52.037243,
-            8.5386869,
-            52.0360543
-          ]
-        },
-        "geometry":{
-          "type":"Point",
-          "coordinates":[
-            8.536964099789769,
-            52.036581594653924
-          ]
-        }
-      },
-      {
-        "type":"Feature",
-        "properties":{
-          "osm_type":"W",
-          "osm_id":469353408,
-          "osm_key":"highway",
-          "osm_value":"tertiary",
-          "type":"street",
-          "postcode":"33613",
-          "countrycode":"DE",
-          "name":"Sudbrackstra\u00dfe",
-          "country":"Deutschland",
-          "city":"Bielefeld",
-          "district":"Schildesche",
-          "locality":"Sudbrack",
-          "state":"Nordrhein-Westfalen",
-          "extent":[
-            8.527596,
-            52.0471868,
-            8.5277936,
-            52.0468322
-          ]
-        },
-        "geometry":{
-          "type":"Point",
-          "coordinates":[
-            8.527682057285471,
-            52.04700236732422
-          ]
-        }
-      },
-      {
-        "type":"Feature",
-        "properties":{
-          "osm_type":"N",
-          "osm_id":645407062,
-          "osm_key":"highway",
-          "osm_value":"bus_stop",
-          "type":"house",
-          "postcode":"33611",
-          "countrycode":"DE",
-          "name":"Sudbrackstra\u00dfe",
-          "country":"Deutschland",
-          "city":"Bielefeld",
-          "district":"Mitte",
-          "street":"Sudbrackstra\u00dfe",
-          "state":"Nordrhein-Westfalen"
-        },
-        "geometry":{
-          "type":"Point",
-          "coordinates":[
-            8.538076,
-            52.0362603
-          ]
-        }
-      },
-      {
-        "type":"Feature",
-        "properties":{
-          "osm_type":"W",
-          "osm_id":130433827,
-          "osm_key":"building",
-          "osm_value":"kindergarten",
-          "type":"house",
-          "postcode":"33611",
-          "housenumber":"43",
-          "countrycode":"DE",
-          "country":"Deutschland",
-          "city":"Bielefeld",
-          "district":"Mitte",
-          "street":"Sudbrackstra\u00dfe",
-          "state":"Nordrhein-Westfalen",
-          "extent":[
-            8.5323298,
-            52.0382809,
-            8.5326347,
-            52.0381655
-          ]
-        },
-        "geometry":{
-          "type":"Point",
-          "coordinates":[
-            8.532479053753754,
-            52.0382247
-          ]
-        }
-      },
-      {
-        "type":"Feature",
-        "properties":{
-          "osm_type":"W",
-          "osm_id":164365118,
-          "osm_key":"railway",
-          "osm_value":"platform",
-          "type":"house",
-          "postcode":"33611",
-          "countrycode":"DE",
-          "name":"Sudbrackstra\u00dfe",
-          "country":"Deutschland",
-          "city":"Bielefeld",
-          "district":"Mitte",
-          "street":"Schildescher Stra\u00dfe",
-          "state":"Nordrhein-Westfalen",
-          "extent":[
-            8.5389829,
-            52.0366014,
-            8.5391445,
-            52.0360089
-          ]
-        },
-        "geometry":{
-          "type":"Point",
-          "coordinates":[
-            8.539086874908559,
-            52.036328049999995
-          ]
-        }
-      }
-    ]
-  },
-  "region":{
-    "country":"Germany",
-    "state":"Nordrhein-Westfalen",
-    "district":"Detmold",
-    "county":"Bielefeld"
-  }
-}
-```
-
-</details>
-
----
+The data package of the 2026 snapshot is on the Uni Passau innkube S3 storage
+(`https://share.innkube.fim.uni-passau.de`, bucket `datasets`, prefix `imprints/20261116/`).
+It holds the crawl output (`crawls/`), the host lists that went into each crawl (`lists/`), the inputs
+and outputs of the site count (`count/`), the manual label samples of the filters (`evidence/`), a git
+bundle of this repository (`code/`) and the checksums of all files (`MANIFEST.sha256`). Its `README.md`
+describes the layout.
+Ask the maintainers for a read key.
 
 ## License
 
-This repository is licensed under the MIT License. See the LICENSE file for details.
+MIT, see `LICENSE`.

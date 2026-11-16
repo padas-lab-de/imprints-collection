@@ -1,0 +1,211 @@
+"""Added filter rules: positive and negative examples per added label; the first rule set is unchanged."""
+
+import importlib.util
+from pathlib import Path
+
+import pytest
+
+_root = Path(__file__).resolve().parents[1] / "collection"
+spec = importlib.util.spec_from_file_location("filter_parking_domains_added", _root / "filter_parking_domains.py")
+pf = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(pf)
+
+LONG = " Wir sind ein Handwerksbetrieb aus Passau und bieten Service rund um Haus und Garten." * 25  # > WEAK_MAX
+
+
+def hit(title, content, desc="", patterns=None):
+    return pf.detect(title, desc, content, None, patterns)
+
+
+# (expected category, expected added label, title, description, content)
+POSITIVE = [
+    # sale
+    ("sale", "added_sale_template", "", "", "Domain abc.de kaufen? Wir ziehen mit dem Projekt um. Sind Sie am Kauf der Domain abc.de interessiert? domain@kv-gmbh.de"),
+    ("sale", "added_sale_template", "", "Sie können die Domain abc.de aktuell kaufen und sofort übernehmen.", ""),
+    ("sale", "added_sale_template", "", "", "abc.de wird zum Kauf angeboten! Provisionsfrei."),
+    ("sale", "added_sale_template", "", "", "Diese Domain können Sie käuflich erwerben. Kontakt: info@x.de"),
+    ("sale", "added_sale_template", "Our domain names for sale", "", "Browse our list."),
+    ("sale", "added_sale_template", "", "", "Listed on NamePros. Contact the owner."),
+    ("sale", "added_sale_template", "301Domains", "", "Inquiry form"),
+    ("sale", "added_sale_template", "", "", "Are you interested in this domain? Contact us."),
+    ("sale", "added_sale_template", "", "", "Interesse an einer unserer TOP-Domains? nonstop-domains"),
+    ("sale", "added_sale_template", "", "", "abc.de ist eine Domain der FIRSTMEDIA. Kooperation zum Ausbau der Domain gesucht."),
+    ("sale", "added_sale_template", "domain 'abc.de' zu verkaufen | lemmynet", "", ""),
+    ("sale", "added_sale_template", "", "", "abc.de zu verkaufen weitere Domains anzeigen"),
+    ("sale", "added_sale_template", "", "", "Domain info. Weitere Domains, die zum Verkauf stehen."),
+    ("sale", "added_name_for_sale", "", "", "abc.de steht zum Verkauf. Unterbreiten Sie uns ein Angebot."),
+    ("sale", "added_name_for_sale", "", "", "Die Domain „abc-xyz.de“ steht ab sofort zum Verkauf. Falls Sie Interesse haben"),
+    ("sale", "added_name_for_sale", "", "", "Diese Domain, , ist zum Verkauf."),
+    ("sale", "added_name_for_sale", "abc.de zu verkaufen", "", "Kontakt"),
+    ("sale", "added_name_for_sale", "", "", "Diese Domain ist frei, schreiben Sie uns, um sie zu erwerben."),
+    # park
+    ("park", "added_park_template", "Domain im Kundenauftrag registriert", "", "Diese neue Domain wurde im Kundenauftrag registriert."),
+    ("park", "added_park_template", "", "", "Diese Domain ist bereits registriert Diese Domain ist bereits bei IONOS registriert." + LONG),
+    ("park", "added_park_template", "DENIC eG: TRANSIT-Informationsseite", "", "Die aufgerufene Domain ist derzeit nicht erreichbar Der Domaininhaber ist bereits informiert."),
+    ("park", "added_park_template", "Registered - BrandShelter", "", "This domain has been registered on behalf of a client."),
+    ("park", "added_park_template", "", "", "Diese Domain ist als Mail Domain registriert. freenet"),
+    ("park", "added_park_template", "", "", "This domain is used for email purposes only."),
+    ("park", "added_park_template", "", "", "Als Kunde von Muster Hosting GmbH können Sie diese Domain in Ihrem Kundenmenü selbst konfigurieren."),
+    ("park", "added_park_template", "Kundendomain", "", "Für diese Domain ist noch kein Inhalt hinterlegt."),
+    ("park", "added_park_template", "", "", "Die Domain abc.co.de kann noch registriert werden."),
+    ("park", "added_park_phrase", "", "", "Diese Domain wurde für einen unserer Kunden registriert."),
+    ("park", "added_park_phrase", "", "", "Die Domain wurde erfolgreich registriert. Sharkness"),
+    ("park", "added_park_phrase", "", "", "Diese Domain ist registriert, derzeit steht jedoch noch keine Website bereit."),
+    ("park", "added_park_phrase", "", "", "Diese Domain ist reserviert."),
+    ("park", "added_park_phrase", "", "", "Reserviert für Familie Maier"),
+    ("park", "added_park_phrase", "", "", "Diese Domain ist inaktiv."),
+    ("park", "added_park_phrase", "", "", "Diese Domain wird derzeit nicht für eine Website genutzt."),
+    ("park", "added_park_phrase", "", "", "Domain aktiv - technische Bereitstellung durch flosing"),
+    # host
+    ("host", "added_host_template", "EUserv", "", "Domain, Homepage, Webspace oder Server nicht gefunden. Es wird deshalb dieser Platzhalter von EUserv angezeigt." + LONG),
+    ("host", "added_host_template", "", "", "Diese Domain ist keiner aktiven Website zugeordnet."),
+    ("host", "added_host_template", "", "", "DIESER WEBHOST WURDE NEU EINGERICHTET"),
+    ("host", "added_host_template", "", "", "Dieser Hinweis erscheint, weil auf diesem Account noch keine Daten hinterlegt sind."),
+    ("host", "added_host_template", "", "", "Für die Adresse wurde auf unserem Server (noch) kein Inhalt hinterlegt."),
+    ("host", "added_host_template", "", "", "Derzeit wurde noch kein Webseiteninhalt hinterlegt oder sie wurde gesperrt."),
+    ("host", "added_host_template", "tralios", "", "Für diese Domain ist keine Webseite verfügbar."),
+    ("host", "added_host_template", "", "", "Diese Domain zeigt erfolgreich auf den Server von Muster."),
+    ("host", "added_host_template", "", "", "Die Domain ist auf diesem Knotenpunkt nicht konfiguriert."),
+    ("host", "added_host_template", "", "", "Your custom domain abc.de is now connected."),
+    ("host", "added_host_phrase", "", "", "Sie haben den Webserver von Advantic erreicht."),
+    ("host", "added_host_phrase", "page4", "", "Die angegebene Homepage kann leider nicht aufgerufen werden."),
+    ("host", "added_host_phrase", "", "", "Webseite aktuell nicht erreichbar"),
+    ("host", "added_host_phrase", "", "", "Diese Seite ist lediglich ein Platzhalter."),
+    ("host", "added_host_phrase", "", "", "Domains & Hosting von helloly. In 3 Minuten zur eigenen Domain."),
+    ("host", "added_host_phrase", "", "", "Diese Domain wird bei Muster Hosting gehostet."),
+    # constr
+    ("constr", "added_under_construction", "", "", "Hier entsteht in Kürze eine neue Webseite."),
+    ("constr", "added_under_construction", "", "", "Unsere Seite befindet sich zur Zeit im Umbau."),
+    ("constr", "added_under_construction", "", "", "Mehr Informationen folgt in Kürze."),
+    ("constr", "added_under_construction", "", "", "Die Website ist in Erstellung."),
+    ("constr", "added_under_construction", "Website folgt", "", ""),
+    ("constr", "added_under_construction", "", "", "Strona w przygotowaniu"),
+    ("constr", "added_under_construction", "", "", "This site is currently being migrated."),
+]
+
+# texts that must stay unflagged (no match in either rule set)
+NEGATIVE = [
+    ("Autohaus", "", "Gebrauchtwagen: Der Golf steht zum Verkauf. Rufen Sie uns an."),
+    ("Kauf", "", "Wir beraten Sie beim Kauf der richtigen Heizung."),
+    ("Shop", "", "Die Artikel sind sofort lieferbar und zum Kauf in unserem Laden."),
+    ("Hosting", "", "Unsere Kunden werden bei uns persönlich betreut. Domain und Webspace inklusive."),
+    ("Praxis", "", "Termine nur nach Vereinbarung. Für unsere Kunden reservieren wir Parkplätze."),
+    ("Hotel", "", "Zimmer können für Sie reserviert werden. Rufen Sie uns an."),
+    ("Verein", "", "Unser Vereinsheim befindet sich in der Hauptstraße 3."),
+    ("Blog", "", "Fortsetzung folgt. Bilder vom Sommerfest sind online."),
+    ("Agentur", "", "Wir erstellen Websites und betreuen Ihre Domain, Ihren Webserver und Ihr E-Mail-Postfach."),
+    ("Immobilien", "", "Das Haus in Passau ist zu verkaufen. Interesse? Schreiben Sie uns."),
+    ("Kanzlei", "", "Für Mandanten ist ein Login-Bereich eingerichtet."),
+    ("Bäckerei", "", "Brot, Brezen und Kuchen. Mail: info@baeckerei.de"),
+]
+
+
+@pytest.mark.parametrize("cat,label,title,desc,content", POSITIVE)
+def test_added_positive(cat, label, title, desc, content):
+    r = hit(title, content, desc)
+    assert r is not None and r[0] == cat, (r, content)
+    # the added label decides when no first-set pattern of the same or a more severe category matches
+    first = hit(title, content, desc, pf.PATTERNS_FIRST)
+    if first is None or pf.CAT_ORDER[first[0]] > pf.CAT_ORDER[cat]:
+        assert r[1] == label, (r, content)
+
+
+@pytest.mark.parametrize("title,desc,content", NEGATIVE)
+def test_added_negative(title, desc, content):
+    assert hit(title, content, desc) is None
+
+
+@pytest.mark.parametrize("title,desc,content", NEGATIVE)
+def test_added_negative_long_page(title, desc, content):
+    assert hit(title, content + LONG, desc) is None
+
+
+def test_weak_added_patterns_need_short_pages():
+    assert hit("", "Diese Domain ist reserviert." + LONG) is None
+    assert hit("", "abc.de steht zum Verkauf." + LONG) is None
+    assert hit("", "Webseite aktuell nicht erreichbar." + LONG) is None
+
+
+def test_strong_added_patterns_on_long_pages():
+    assert hit("", "Sind Sie am Kauf der Domain abc.de interessiert?" + LONG)[0] == "sale"
+    assert hit("", "Diese neue Domain wurde im Kundenauftrag registriert." + LONG)[0] == "park"
+
+
+def test_first_rule_set_unchanged():
+    # misses of the first set: flagged with both sets, not with PATTERNS_FIRST
+    for t in ("Our domain names for sale", "Strona w przygotowaniu", "Website folgt"):
+        assert hit(t, "") is not None
+        assert hit(t, "", patterns=pf.PATTERNS_FIRST) is None
+    # first-set results stay the same where the first set matches with the most severe category
+    assert hit("", "Diese Domain steht zum Verkauf.", patterns=pf.PATTERNS_FIRST)[1] == "domain_zum_verkauf"
+    assert hit("", "Diese Domain steht zum Verkauf.")[1] == "domain_zum_verkauf"
+    assert all(not lab.startswith("added_") for _, lab, *_ in pf.PATTERNS_FIRST)
+    assert all(lab.startswith("added_") for _, lab, *_ in pf.PATTERNS_ADDED)
+    assert pf.PATTERNS == pf.PATTERNS_FIRST + pf.PATTERNS_ADDED
+
+
+def test_scan_added_rows_carry_first_result_and_text(tmp_path):
+    import gzip
+    import io
+    import json
+    from collections import Counter
+
+    def rec(h, title, content):
+        return json.dumps({"host": h, "main": {"url": f"https://{h}", "title": title, "main_content": content}}) + "\n"
+
+    with gzip.open(tmp_path / "imprints_batch000000.jsonl.gz", "wt") as f:
+        f.write(rec("a.de", "", "Diese Domain steht zum Verkauf."))  # decided by the first set
+        f.write(rec("b.de", "Domain im Kundenauftrag registriert", "Hier entsteht eine neue Website."))  # added park over first-set constr
+    buf = io.StringIO()
+    pf.scan_dir(str(tmp_path), set(), buf, Counter())
+    rows = {r[0]: r for r in (l.split("\t") for l in buf.getvalue().splitlines()) if r[1] == "F"}
+    assert len(rows["a.de"]) == 7 and rows["a.de"][3] == "domain_zum_verkauf"
+    b = rows["b.de"]
+    assert b[2:4] == ["park", "added_park_template"] and b[7:9] == ["constr", "under_construction"]
+    assert b[10] == str(len("Hier entsteht eine neue Website.")) and b[11].startswith("Hier entsteht")
+    p = tmp_path / "scan.tsv"
+    p.write_text(buf.getvalue())
+    fl, _, _ = pf.load_scan([p])
+    assert fl["b.de"][:2] == ("park", "added_park_template")
+
+
+def _apply_inputs(tmp_path):
+    """x.de: only found host flagged by added_name_for_sale; y.de: flagged park; z.de: not flagged."""
+    ind = tmp_path / "in"
+    ind.mkdir()
+    (ind / "a.tsv").write_text("x.de\timprint_found\t\ny.de\timprint_found\t\nz.de\timprint_found\t\n")
+    (ind / "manifest.tsv").write_text("source\tdir\tfile\trows\tsha256\tstats\nS1\td\ta.tsv\t0\t0\t\n")
+    scan = tmp_path / "scan.tsv"
+    scan.write_text(
+        "x.de\tF\tsale\tadded_name_for_sale\thttps://x.de/\tt\tx.de steht zum Verkauf\n"
+        "y.de\tF\tpark\tadded_park_phrase\thttps://y.de/\tt\tDiese Domain ist reserviert.\n"
+    )
+    targets = tmp_path / "targets.tsv"
+    targets.write_text("target\tclass\n")
+    return ind, scan, targets
+
+
+def _finalize(tmp_path, filter_dir):
+    import subprocess
+    import sys
+
+    sites = tmp_path / "canonical_sites.txt"
+    sites.write_text("x.de\ny.de\nz.de\n")
+    cmd = [sys.executable, str(_root / "write_final_site_list.py"), "--sites", str(sites), "--earlier", str(filter_dir), "--filter", str(filter_dir)]
+    subprocess.run(cmd, check=True, capture_output=True)
+    return (filter_dir / "canonical_sites_after_filter.txt").read_text().split()
+
+
+@pytest.mark.parametrize("flag_only", [False, True])
+def test_name_for_sale_flag_only(tmp_path, flag_only):
+    ind, scan, targets = _apply_inputs(tmp_path)
+    out = tmp_path / "out"
+    args = ["apply", "--in", str(ind), "--scan", str(scan), "--targets", str(targets), "--out", str(out)]
+    pf.main(args + (["--name-for-sale-flag-only"] if flag_only else []))
+    rows = [l.split("\t")[:2] for l in (out / "flagged_sites.tsv").read_text().splitlines()[1:]]
+    # x.de is listed in both modes; only its category changes
+    assert dict(rows) == {"x.de": "sale_flag" if flag_only else "sale", "y.de": "park"}
+    # write_final_site_list.py needs no option: sale_flag is kept, sale is dropped
+    assert _finalize(tmp_path, out) == (["x.de", "z.de"] if flag_only else ["z.de"])
+    rc = (out / "release_count_after_filter.tsv").read_text()
+    assert ("flagged_sale_flag_kept\t1" in rc) == flag_only

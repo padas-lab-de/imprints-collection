@@ -1,6 +1,10 @@
-.vscode/
+.env
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+*.egg-info/
 datasets/
 results/
-poetry.lock
-*.pyc
-.env
+data/

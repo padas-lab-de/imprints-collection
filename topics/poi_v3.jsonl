@@ -1,0 +1,753 @@
+{"id": "arts-entertainment-and-events", "name": "Arts, Entertainment and Events", "parent": "arts-entertainment-and-events", "fsq_ids": ["4d4b7104d754a06370d81259", "4d4b7105d754a06373d81259"], "de": "Kunst und Unterhaltung"}
+{"id": "amusement-park", "name": "Amusement Park", "parent": "arts-entertainment-and-events", "fsq_ids": ["4bf58dd8d48988d182941735"], "de": "Vergnügungspark"}
+{"id": "attraction", "name": "Attraction", "parent": "arts-entertainment-and-events", "fsq_ids": ["5109983191d435c0d71c2bb1"], "de": "Attraktion"}
+{"id": "aquarium", "name": "Aquarium", "parent": "arts-entertainment-and-events", "fsq_ids": ["4fceea171983d5d06c3e9823"], "de": "Aquarium"}
+{"id": "art-gallery", "name": "Art Gallery", "parent": "arts-entertainment-and-events", "fsq_ids": ["4bf58dd8d48988d1e2931735"], "de": "Kunstgalerie"}
+{"id": "bingo-center", "name": "Bingo Center", "parent": "arts-entertainment-and-events", "fsq_ids": ["63be6904847c3692a84b9b20"], "de": "Bingo-Center"}
+{"id": "bowling-alley", "name": "Bowling Alley", "parent": "arts-entertainment-and-events", "fsq_ids": ["4bf58dd8d48988d1e4931735"], "de": "Kegelbahn"}
+{"id": "carnival", "name": "Carnival", "parent": "arts-entertainment-and-events", "fsq_ids": ["63be6904847c3692a84b9b21"], "de": "Karneval"}
+{"id": "casino", "name": "Casino", "parent": "arts-entertainment-and-events", "fsq_ids": ["4bf58dd8d48988d17c941735"], "de": "Kasino"}
+{"id": "circus", "name": "Circus", "parent": "arts-entertainment-and-events", "fsq_ids": ["52e81612bcbc57f1066b79e7"], "de": "Zirkus"}
+{"id": "comedy-club", "name": "Comedy Club", "parent": "arts-entertainment-and-events", "fsq_ids": ["4bf58dd8d48988d18e941735"], "de": "Comedy-Club"}
+{"id": "country-club", "name": "Country Club", "parent": "arts-entertainment-and-events", "fsq_ids": ["63be6904847c3692a84b9b22"], "de": "Country Club"}
+{"id": "dance-hall", "name": "Dance Hall", "parent": "arts-entertainment-and-events", "fsq_ids": ["63be6904847c3692a84b9b23"], "de": "Tanzsaal"}
+{"id": "gaming-cafe", "name": "Gaming Cafe", "parent": "arts-entertainment-and-events", "fsq_ids": ["4bf58dd8d48988d18d941735"], "de": "Gaming-Café"}
+{"id": "general-entertainment", "name": "General Entertainment", "parent": "arts-entertainment-and-events", "fsq_ids": ["4bf58dd8d48988d1f1931735"], "de": "Allgemeine Unterhaltung"}
+{"id": "go-kart-track", "name": "Go Kart Track", "parent": "arts-entertainment-and-events", "fsq_ids": ["52e81612bcbc57f1066b79ea"], "de": "Go-Kart-Bahn"}
+{"id": "internet-cafe", "name": "Internet Cafe", "parent": "arts-entertainment-and-events", "fsq_ids": ["4bf58dd8d48988d1f0941735"], "de": "Internetcafé"}
+{"id": "laser-tag-center", "name": "Laser Tag Center", "parent": "arts-entertainment-and-events", "fsq_ids": ["52e81612bcbc57f1066b79e6"], "de": "Laser-Tag-Center"}
+{"id": "mini-golf-course", "name": "Mini Golf Course", "parent": "arts-entertainment-and-events", "fsq_ids": ["52e81612bcbc57f1066b79eb"], "de": "Minigolfplatz"}
+{"id": "movie-theater", "name": "Movie Theater", "parent": "arts-entertainment-and-events", "fsq_ids": ["4bf58dd8d48988d17f941735"], "de": "Kino"}
+{"id": "drive-in-theater", "name": "Drive-in Theater", "parent": "movie-theater", "fsq_ids": ["56aa371be4b08b9a8d5734de"], "de": "Autokino"}
+{"id": "museum", "name": "Museum", "parent": "arts-entertainment-and-events", "fsq_ids": ["4bf58dd8d48988d181941735"], "de": "Museum"}
+{"id": "art-museum", "name": "Art Museum", "parent": "museum", "fsq_ids": ["4bf58dd8d48988d18f941735"], "de": "Kunstmuseum"}
+{"id": "history-museum", "name": "History Museum", "parent": "museum", "fsq_ids": ["4bf58dd8d48988d190941735"], "de": "Geschichtsmuseum"}
+{"id": "science-museum", "name": "Science Museum", "parent": "museum", "fsq_ids": ["4bf58dd8d48988d191941735"], "de": "Wissenschaftsmuseum"}
+{"id": "night-club", "name": "Night Club", "parent": "arts-entertainment-and-events", "fsq_ids": ["4bf58dd8d48988d11f941735"], "de": "Nachtclub"}
+{"id": "performing-arts-venue", "name": "Performing Arts Venue", "parent": "arts-entertainment-and-events", "fsq_ids": ["4bf58dd8d48988d1f2931735"], "de": "Veranstaltungsort für darstellende Künste"}
+{"id": "amphitheater", "name": "Amphitheater", "parent": "performing-arts-venue", "fsq_ids": ["56aa371be4b08b9a8d5734db"], "de": "Amphitheater"}
+{"id": "concert-hall", "name": "Concert Hall", "parent": "performing-arts-venue", "fsq_ids": ["5032792091d4c4b30a586d5c"], "de": "Konzertsaal"}
+{"id": "music-venue", "name": "Music Venue", "parent": "performing-arts-venue", "fsq_ids": ["4bf58dd8d48988d1e5931735"], "de": "Musikveranstaltungsort"}
+{"id": "rock-club", "name": "Rock Club", "parent": "performing-arts-venue", "fsq_ids": ["4bf58dd8d48988d1e9931735"], "de": "Rockclub"}
+{"id": "opera-house", "name": "Opera House", "parent": "performing-arts-venue", "fsq_ids": ["4bf58dd8d48988d136941735"], "de": "Opernhaus"}
+{"id": "theater", "name": "Theater", "parent": "performing-arts-venue", "fsq_ids": ["4bf58dd8d48988d137941735"], "de": "Theater"}
+{"id": "planetarium", "name": "Planetarium", "parent": "arts-entertainment-and-events", "fsq_ids": ["4bf58dd8d48988d192941735"], "de": "Planetarium"}
+{"id": "pool-hall", "name": "Pool Hall", "parent": "arts-entertainment-and-events", "fsq_ids": ["4bf58dd8d48988d1e3931735"], "de": "Billardhalle"}
+{"id": "ticket-seller", "name": "Ticket Seller", "parent": "arts-entertainment-and-events", "fsq_ids": ["63be6904847c3692a84b9b25"], "de": "Ticketverkauf"}
+{"id": "water-park", "name": "Water Park", "parent": "arts-entertainment-and-events", "fsq_ids": ["4bf58dd8d48988d193941735"], "de": "Wasserpark"}
+{"id": "zoo", "name": "Zoo", "parent": "arts-entertainment-and-events", "fsq_ids": ["4bf58dd8d48988d17b941735"], "de": "Zoo"}
+{"id": "conference", "name": "Conference", "parent": "arts-entertainment-and-events", "fsq_ids": ["5267e4d9e4b0ec79466e48c6"], "de": "Konferenz"}
+{"id": "convention", "name": "Convention", "parent": "arts-entertainment-and-events", "fsq_ids": ["5267e4d9e4b0ec79466e48c9"], "de": "Konvention"}
+{"id": "entertainment-event", "name": "Entertainment Event", "parent": "arts-entertainment-and-events", "fsq_ids": ["63be6904847c3692a84b9bb7"], "de": "Unterhaltungsveranstaltung"}
+{"id": "festival", "name": "Festival", "parent": "entertainment-event", "fsq_ids": ["5267e4d9e4b0ec79466e48c7"], "de": "Festival"}
+{"id": "beer-festival", "name": "Beer Festival", "parent": "entertainment-event", "fsq_ids": ["62d587aeda6648532de2b88c"], "de": "Bierfest"}
+{"id": "music-festival", "name": "Music Festival", "parent": "entertainment-event", "fsq_ids": ["5267e4d9e4b0ec79466e48d1"], "de": "Musikfestival"}
+{"id": "parade", "name": "Parade", "parent": "entertainment-event", "fsq_ids": ["52741d85e4b0d5d1e3c6a6d9"], "de": "Parade"}
+{"id": "sporting-event", "name": "Sporting Event", "parent": "entertainment-event", "fsq_ids": ["5bae9231bedf3950379f89c5"], "de": "Sportveranstaltung"}
+{"id": "market-or-fair-event", "name": "Market or Fair Event", "parent": "arts-entertainment-and-events", "fsq_ids": ["63be6904847c3692a84b9bb8"], "de": "Marktplatz"}
+{"id": "christmas-market", "name": "Christmas Market", "parent": "market-or-fair-event", "fsq_ids": ["52f2ab2ebcbc57f1066b8b3b"], "de": "Weihnachtsmarkt"}
+{"id": "street-fair", "name": "Street Fair", "parent": "market-or-fair-event", "fsq_ids": ["5267e4d8e4b0ec79466e48c5"], "de": "Straßenfest"}
+{"id": "street-food-gathering", "name": "Street Food Gathering", "parent": "market-or-fair-event", "fsq_ids": ["53e0feef498e5aac066fd8a9"], "de": "Streetfood-Treffen"}
+{"id": "trade-fair", "name": "Trade Fair", "parent": "market-or-fair-event", "fsq_ids": ["5bae9231bedf3950379f89c3"], "de": "Messe"}
+{"id": "other-event", "name": "Other Event", "parent": "arts-entertainment-and-events", "fsq_ids": ["5267e4d9e4b0ec79466e48c8"], "de": "Anderes Ereignis"}
+{"id": "nightlife-spot", "name": "Nightlife Spot", "parent": "arts-entertainment-and-events", "fsq_ids": ["4d4b7105d754a06376d81259"], "de": "Nachtleben-Spot"}
+{"id": "business-and-professional-services", "name": "Business and Professional Services", "parent": "business-and-professional-services", "fsq_ids": ["4d4b7105d754a06375d81259"], "de": "Geschäfts- und professionelle Dienstleistungen"}
+{"id": "advertising-agency", "name": "Advertising Agency", "parent": "business-and-professional-services", "fsq_ids": ["52e81612bcbc57f1066b7a3d"], "de": "Werbeagentur"}
+{"id": "agriculture-and-forestry-service", "name": "Agriculture and Forestry Service", "parent": "business-and-professional-services", "fsq_ids": ["63be6904847c3692a84b9b26"], "de": "Land- und Forstwirtschaftsdienst"}
+{"id": "appraiser", "name": "Appraiser", "parent": "business-and-professional-services", "fsq_ids": ["63be6904847c3692a84b9b27"], "de": "Gutachter"}
+{"id": "architecture-firm", "name": "Architecture Firm", "parent": "business-and-professional-services", "fsq_ids": ["5fac002599ce226e27fe72e5"], "de": "Architekturbüro"}
+{"id": "art-restoration-service", "name": "Art Restoration Service", "parent": "business-and-professional-services", "fsq_ids": ["63be6904847c3692a84b9b28"], "de": "Kunstrestaurierungsdienst"}
+{"id": "art-studio", "name": "Art Studio", "parent": "business-and-professional-services", "fsq_ids": ["58daa1558bbb0b01f18ec1d6"], "de": "Kunstatelier"}
+{"id": "event-space", "name": "Event Space", "parent": "business-and-professional-services", "fsq_ids": ["4bf58dd8d48988d171941735"], "de": null}
+{"id": "auditorium", "name": "Auditorium", "parent": "event-space", "fsq_ids": ["4bf58dd8d48988d173941735"], "de": "Auditorium"}
+{"id": "ballroom", "name": "Ballroom", "parent": "event-space", "fsq_ids": ["56aa371be4b08b9a8d5734cf"], "de": "Ballsaal"}
+{"id": "convention-center", "name": "Convention Center", "parent": "event-space", "fsq_ids": ["4bf58dd8d48988d1ff931735"], "de": "Kongresszentrum"}
+{"id": "outdoor-event-space", "name": "Outdoor Event Space", "parent": "event-space", "fsq_ids": ["56aa371be4b08b9a8d57356a"], "de": "Veranstaltungsraum im Freien"}
+{"id": "wedding-hall", "name": "Wedding Hall", "parent": "event-space", "fsq_ids": ["56aa371be4b08b9a8d5734c5"], "de": "Hochzeitssaal"}
+{"id": "automotive-service", "name": "Automotive Service", "parent": "business-and-professional-services", "fsq_ids": ["63be6904847c3692a84b9b2b"], "de": "Automobilservice"}
+{"id": "automotive-repair-shop", "name": "Automotive Repair Shop", "parent": "automotive-service", "fsq_ids": ["52f2ab2ebcbc57f1066b8b44"], "de": "Kfz-Reparaturwerkstatt"}
+{"id": "car-wash-and-detail", "name": "Car Wash and Detail", "parent": "automotive-service", "fsq_ids": ["4f04ae1f2fb6e1c99f3db0ba"], "de": "Autowäsche und Politur"}
+{"id": "motorcycle-repair-shop", "name": "Motorcycle Repair Shop", "parent": "automotive-service", "fsq_ids": ["63be6904847c3692a84b9b2c"], "de": "Motorrad-Reparaturwerkstatt"}
+{"id": "towing-service", "name": "Towing Service", "parent": "automotive-service", "fsq_ids": ["63be6904847c3692a84b9b30"], "de": "Abschleppdienst"}
+{"id": "vehicle-inspection-station", "name": "Vehicle Inspection Station", "parent": "automotive-service", "fsq_ids": ["5f2c1e0db6d05514c70436d4"], "de": "Fahrzeuginspektionsstation"}
+{"id": "business-center", "name": "Business Center", "parent": "business-and-professional-services", "fsq_ids": ["56aa371be4b08b9a8d573517"], "de": "Geschäftszentrum"}
+{"id": "business-service", "name": "Business Service", "parent": "business-and-professional-services", "fsq_ids": ["5453de49498eade8af355881"], "de": "Unternehmensdienst"}
+{"id": "career-counselor", "name": "Career Counselor", "parent": "business-and-professional-services", "fsq_ids": ["63be6904847c3692a84b9b33"], "de": "Karriereberater"}
+{"id": "child-care-service", "name": "Child Care Service", "parent": "business-and-professional-services", "fsq_ids": ["5744ccdfe4b0c0459246b4c7"], "de": "Kinderbetreuungsdienst"}
+{"id": "computer-repair-service", "name": "Computer Repair Service", "parent": "business-and-professional-services", "fsq_ids": ["63be6904847c3692a84b9b35"], "de": "Computer-Reparaturservice"}
+{"id": "creative-service", "name": "Creative Service", "parent": "business-and-professional-services", "fsq_ids": ["63be6904847c3692a84b9b37"], "de": "Kreativservice"}
+{"id": "design-studio", "name": "Design Studio", "parent": "business-and-professional-services", "fsq_ids": ["4bf58dd8d48988d1f4941735"], "de": "Designstudio"}
+{"id": "direct-mail-and-email-marketing-service", "name": "Direct Mail and Email Marketing Service", "parent": "business-and-professional-services", "fsq_ids": ["63be6904847c3692a84b9b38"], "de": "Direktmailing- und E-Mail-Marketing-Service"}
+{"id": "distribution-center", "name": "Distribution Center", "parent": "business-and-professional-services", "fsq_ids": ["52e81612bcbc57f1066b7a37"], "de": "Vertriebszentrum"}
+{"id": "electrical-equipment-supplier", "name": "Electrical Equipment Supplier", "parent": "business-and-professional-services", "fsq_ids": ["63be6904847c3692a84b9b39"], "de": "Lieferant von Elektrogeräten"}
+{"id": "employment-agency", "name": "Employment Agency", "parent": "business-and-professional-services", "fsq_ids": ["52f2ab2ebcbc57f1066b8b57"], "de": "Agentur für Arbeit"}
+{"id": "engineer", "name": "Engineer", "parent": "business-and-professional-services", "fsq_ids": ["63be6904847c3692a84b9b3a"], "de": "Ingenieur"}
+{"id": "entertainment-agency", "name": "Entertainment Agency", "parent": "business-and-professional-services", "fsq_ids": ["63be6904847c3692a84b9b3b"], "de": "Unterhaltungsagentur"}
+{"id": "equipment-rental-service", "name": "Equipment Rental Service", "parent": "business-and-professional-services", "fsq_ids": ["63be6904847c3692a84b9b3c"], "de": "Ausrüstungsverleih"}
+{"id": "event-service", "name": "Event Service", "parent": "business-and-professional-services", "fsq_ids": ["5454152e498ef71e2b9132c6"], "de": "Veranstaltungsservice"}
+{"id": "film-studio", "name": "Film Studio", "parent": "business-and-professional-services", "fsq_ids": ["56aa371be4b08b9a8d573523"], "de": "Filmstudio"}
+{"id": "financial-service", "name": "Financial Service", "parent": "business-and-professional-services", "fsq_ids": ["63be6904847c3692a84b9b3d"], "de": "Finanzdienstleistung"}
+{"id": "accounting-and-bookkeeping-service", "name": "Accounting and Bookkeeping Service", "parent": "financial-service", "fsq_ids": ["63be6904847c3692a84b9b3e"], "de": "Buchhaltungsservice"}
+{"id": "banking-and-finance", "name": "Banking and Finance", "parent": "financial-service", "fsq_ids": ["63be6904847c3692a84b9b3f"], "de": "Bank- und Finanzwesen"}
+{"id": "atm", "name": "ATM", "parent": "financial-service", "fsq_ids": ["52f2ab2ebcbc57f1066b8b56"], "de": "Geldautomat"}
+{"id": "bank", "name": "Bank", "parent": "financial-service", "fsq_ids": ["4bf58dd8d48988d10a951735"], "de": "Bank"}
+{"id": "credit-union", "name": "Credit Union", "parent": "financial-service", "fsq_ids": ["5032850891d4c4b30a586d62"], "de": "Kreditgenossenschaft"}
+{"id": "business-broker", "name": "Business Broker", "parent": "financial-service", "fsq_ids": ["63be6904847c3692a84b9b40"], "de": "Geschäftsmakler"}
+{"id": "check-cashing-service", "name": "Check Cashing Service", "parent": "financial-service", "fsq_ids": ["52f2ab2ebcbc57f1066b8b2d"], "de": "Scheckeinlösungsservice"}
+{"id": "collections-service", "name": "Collections Service", "parent": "financial-service", "fsq_ids": ["63be6904847c3692a84b9b41"], "de": "Inkassodienst"}
+{"id": "credit-counseling-and-bankruptcy-service", "name": "Credit Counseling and Bankruptcy Service", "parent": "financial-service", "fsq_ids": ["63be6904847c3692a84b9b42"], "de": "Kreditberatung und Insolvenzservice"}
+{"id": "currency-exchange", "name": "Currency Exchange", "parent": "financial-service", "fsq_ids": ["5744ccdfe4b0c0459246b4be"], "de": "Geldwechsel"}
+{"id": "financial-planner", "name": "Financial Planner", "parent": "financial-service", "fsq_ids": ["63be6904847c3692a84b9b43"], "de": "Finanzplaner"}
+{"id": "loan-agency", "name": "Loan Agency", "parent": "financial-service", "fsq_ids": ["63be6904847c3692a84b9b44"], "de": "Kreditagentur"}
+{"id": "stock-broker", "name": "Stock Broker", "parent": "financial-service", "fsq_ids": ["63be6904847c3692a84b9b45"], "de": "Börsenmakler"}
+{"id": "insurance-agency", "name": "Insurance Agency", "parent": "financial-service", "fsq_ids": ["58daa1558bbb0b01f18ec1f1"], "de": "Versicherungsagentur"}
+{"id": "food-and-beverage-service", "name": "Food and Beverage Service", "parent": "business-and-professional-services", "fsq_ids": ["56aa371be4b08b9a8d573550"], "de": "Lebensmittel- und Getränkeservice"}
+{"id": "caterer", "name": "Caterer", "parent": "food-and-beverage-service", "fsq_ids": ["63be6904847c3692a84b9b46"], "de": "Caterer"}
+{"id": "food-distribution-center", "name": "Food Distribution Center", "parent": "food-and-beverage-service", "fsq_ids": ["63be6904847c3692a84b9b47"], "de": "Lebensmittelverteilungszentrum"}
+{"id": "funeral-home", "name": "Funeral Home", "parent": "business-and-professional-services", "fsq_ids": ["4f4534884b9074f6e4fb0174"], "de": "Bestattungsunternehmen"}
+{"id": "geological-service", "name": "Geological Service", "parent": "business-and-professional-services", "fsq_ids": ["63be6904847c3692a84b9b48"], "de": "Geologischer Dienst"}
+{"id": "health-and-beauty-service", "name": "Health and Beauty Service", "parent": "business-and-professional-services", "fsq_ids": ["54541900498ea6ccd0202697"], "de": "Gesundheits- und Schönheitsservice"}
+{"id": "bath-house", "name": "Bath House", "parent": "health-and-beauty-service", "fsq_ids": ["52e81612bcbc57f1066b7a27"], "de": "Badehaus"}
+{"id": "body-piercing-shop", "name": "Body Piercing Shop", "parent": "health-and-beauty-service", "fsq_ids": ["52f2ab2ebcbc57f1066b8b20"], "de": "Körperpiercing-Shop"}
+{"id": "hair-removal-service", "name": "Hair Removal Service", "parent": "health-and-beauty-service", "fsq_ids": ["63be6904847c3692a84b9b4a"], "de": "Haarentfernungsservice"}
+{"id": "hair-salon", "name": "Hair Salon", "parent": "health-and-beauty-service", "fsq_ids": ["4bf58dd8d48988d110951735"], "de": "Friseursalon"}
+{"id": "massage-clinic", "name": "Massage Clinic", "parent": "health-and-beauty-service", "fsq_ids": ["52f2ab2ebcbc57f1066b8b3c"], "de": "Massageklinik"}
+{"id": "nail-salon", "name": "Nail Salon", "parent": "health-and-beauty-service", "fsq_ids": ["4f04aa0c2fb6e1c99f3db0b8"], "de": "Nagelstudio"}
+{"id": "skin-care-clinic", "name": "Skin Care Clinic", "parent": "health-and-beauty-service", "fsq_ids": ["63be6904847c3692a84b9b4b"], "de": "Hautpflegeklinik"}
+{"id": "spa", "name": "Spa", "parent": "health-and-beauty-service", "fsq_ids": ["4bf58dd8d48988d1ed941735"], "de": "Spa"}
+{"id": "tanning-salon", "name": "Tanning Salon", "parent": "health-and-beauty-service", "fsq_ids": ["4d1cf8421a97d635ce361c31"], "de": "Sonnenstudio"}
+{"id": "tattoo-parlor", "name": "Tattoo Parlor", "parent": "health-and-beauty-service", "fsq_ids": ["4bf58dd8d48988d1de931735"], "de": "Tattoo-Studio"}
+{"id": "dry-cleaner", "name": "Dry Cleaner", "parent": "business-and-professional-services", "fsq_ids": ["52f2ab2ebcbc57f1066b8b1d"], "de": "Trockenreiniger"}
+{"id": "home-improvement-service", "name": "Home Improvement Service", "parent": "business-and-professional-services", "fsq_ids": ["63be6904847c3692a84b9b58"], "de": "Heimwerkerservice"}
+{"id": "bathroom-contractor", "name": "Bathroom Contractor", "parent": "home-improvement-service", "fsq_ids": ["63be6904847c3692a84b9b4c"], "de": "Badezimmerunternehmer"}
+{"id": "carpenter", "name": "Carpenter", "parent": "home-improvement-service", "fsq_ids": ["63be6904847c3692a84b9b4d"], "de": "Tischler"}
+{"id": "carpet-and-flooring-contractor", "name": "Carpet and Flooring Contractor", "parent": "home-improvement-service", "fsq_ids": ["63be6904847c3692a84b9b4e"], "de": "Teppich- und Bodenleger"}
+{"id": "chimney-sweep", "name": "Chimney Sweep", "parent": "home-improvement-service", "fsq_ids": ["63be6904847c3692a84b9b4f"], "de": "Schornsteinfeger"}
+{"id": "deck-and-patio-contractor", "name": "Deck and Patio Contractor", "parent": "home-improvement-service", "fsq_ids": ["63be6904847c3692a84b9b50"], "de": "Deck- und Terrassenunternehmer"}
+{"id": "doors-and-windows-contractor", "name": "Doors and Windows Contractor", "parent": "home-improvement-service", "fsq_ids": ["63be6904847c3692a84b9b51"], "de": "Auftragnehmer für Türen und Fenster"}
+{"id": "electrician", "name": "Electrician", "parent": "home-improvement-service", "fsq_ids": ["63be6904847c3692a84b9b52"], "de": "Elektriker"}
+{"id": "fence-contractor", "name": "Fence Contractor", "parent": "home-improvement-service", "fsq_ids": ["63be6904847c3692a84b9b53"], "de": "Zaunbauer"}
+{"id": "garage-door-supplier", "name": "Garage Door Supplier", "parent": "home-improvement-service", "fsq_ids": ["63be6904847c3692a84b9b54"], "de": "Garagentorlieferant"}
+{"id": "general-contractor", "name": "General Contractor", "parent": "home-improvement-service", "fsq_ids": ["63be6904847c3692a84b9b55"], "de": "Generalunternehmer"}
+{"id": "heating-ventilating-and-air-conditioning-contractor", "name": "Heating, Ventilating and Air Conditioning Contractor", "parent": "home-improvement-service", "fsq_ids": ["63be6904847c3692a84b9b56"], "de": "Heizungs-, Lüftungs- und Klimaanlageninstallateur"}
+{"id": "home-inspection", "name": "Home Inspection", "parent": "home-improvement-service", "fsq_ids": ["63be6904847c3692a84b9b57"], "de": "Hausinspektion"}
+{"id": "home-service", "name": "Home Service", "parent": "home-improvement-service", "fsq_ids": ["545419b1498ea6ccd0202f58"], "de": "Heimservice"}
+{"id": "interior-designer", "name": "Interior Designer", "parent": "home-improvement-service", "fsq_ids": ["63be6904847c3692a84b9b59"], "de": "Innenarchitekt"}
+{"id": "kitchen-remodeler", "name": "Kitchen Remodeler", "parent": "home-improvement-service", "fsq_ids": ["63be6904847c3692a84b9b5a"], "de": "Küchenumgestalter"}
+{"id": "landscaper-and-gardener", "name": "Landscaper and Gardener", "parent": "home-improvement-service", "fsq_ids": ["63be6904847c3692a84b9b5b"], "de": "Landschaftsgärtner und Gärtner"}
+{"id": "mover", "name": "Mover", "parent": "home-improvement-service", "fsq_ids": ["63be6904847c3692a84b9b5c"], "de": "Umzugsunternehmen"}
+{"id": "painter", "name": "Painter", "parent": "home-improvement-service", "fsq_ids": ["63be6904847c3692a84b9b5d"], "de": "Maler"}
+{"id": "pest-control-service", "name": "Pest Control Service", "parent": "home-improvement-service", "fsq_ids": ["63be6904847c3692a84b9b5e"], "de": "Schädlingsbekämpfungsdienst"}
+{"id": "plumber", "name": "Plumber", "parent": "home-improvement-service", "fsq_ids": ["63be6904847c3692a84b9b5f"], "de": "Klempner"}
+{"id": "professional-cleaning-service", "name": "Professional Cleaning Service", "parent": "home-improvement-service", "fsq_ids": ["63be6904847c3692a84b9b60"], "de": "Professioneller Reinigungsservice"}
+{"id": "roofer", "name": "Roofer", "parent": "home-improvement-service", "fsq_ids": ["63be6904847c3692a84b9b61"], "de": "Dachdecker"}
+{"id": "sewer-contractor", "name": "Sewer Contractor", "parent": "home-improvement-service", "fsq_ids": ["63be6904847c3692a84b9b62"], "de": "Kanalisationsunternehmer"}
+{"id": "swimming-pool-maintenance-and-service", "name": "Swimming Pool Maintenance and Service", "parent": "home-improvement-service", "fsq_ids": ["63be6904847c3692a84b9b63"], "de": "Wartung und Service von Schwimmbädern"}
+{"id": "tree-service", "name": "Tree Service", "parent": "home-improvement-service", "fsq_ids": ["63be6904847c3692a84b9b64"], "de": "Baumservice"}
+{"id": "upholstery-service", "name": "Upholstery Service", "parent": "home-improvement-service", "fsq_ids": ["63be6904847c3692a84b9b65"], "de": "Polsterservice"}
+{"id": "human-resources-agency", "name": "Human Resources Agency", "parent": "business-and-professional-services", "fsq_ids": ["63be6904847c3692a84b9b66"], "de": "Personalagentur"}
+{"id": "import-and-export-service", "name": "Import and Export Service", "parent": "business-and-professional-services", "fsq_ids": ["63be6904847c3692a84b9b67"], "de": "Import- und Exportservice"}
+{"id": "industrial-equipment-supplier", "name": "Industrial Equipment Supplier", "parent": "business-and-professional-services", "fsq_ids": ["63be6904847c3692a84b9b68"], "de": "Lieferant von Industrieausrüstung"}
+{"id": "industrial-estate", "name": "Industrial Estate", "parent": "business-and-professional-services", "fsq_ids": ["56aa371be4b08b9a8d5734d7"], "de": "Industriegebiet"}
+{"id": "laboratory", "name": "Laboratory", "parent": "business-and-professional-services", "fsq_ids": ["63be6904847c3692a84b9b69", "5744ccdfe4b0c0459246b4d6"], "de": ["Labor", "Forschungslabor"]}
+{"id": "laundromat", "name": "Laundromat", "parent": "business-and-professional-services", "fsq_ids": ["52f2ab2ebcbc57f1066b8b33"], "de": "Waschsalon"}
+{"id": "laundry-service", "name": "Laundry Service", "parent": "business-and-professional-services", "fsq_ids": ["4bf58dd8d48988d1fc941735"], "de": "Wäscheservice"}
+{"id": "leather-supplier", "name": "Leather Supplier", "parent": "business-and-professional-services", "fsq_ids": ["63be6904847c3692a84b9b6a"], "de": "Lederlieferant"}
+{"id": "legal-service", "name": "Legal Service", "parent": "business-and-professional-services", "fsq_ids": ["63be6904847c3692a84b9b6b"], "de": "Juristischer Dienst"}
+{"id": "immigration-attorney", "name": "Immigration Attorney", "parent": "legal-service", "fsq_ids": ["63be6904847c3692a84b9b6c"], "de": "Anwalt für Einwanderungsfragen"}
+{"id": "law-office", "name": "Law Office", "parent": "legal-service", "fsq_ids": ["52f2ab2ebcbc57f1066b8b3f"], "de": "Anwaltskanzlei"}
+{"id": "notary", "name": "Notary", "parent": "legal-service", "fsq_ids": ["5ae95d208a6f17002ce792b2"], "de": "Notar"}
+{"id": "locksmith", "name": "Locksmith", "parent": "business-and-professional-services", "fsq_ids": ["52f2ab2ebcbc57f1066b8b1e"], "de": "Schlosser"}
+{"id": "logging-service", "name": "Logging Service", "parent": "business-and-professional-services", "fsq_ids": ["63be6904847c3692a84b9b6d"], "de": "Holzeinschlagsunternehmen"}
+{"id": "machine-shop", "name": "Machine Shop", "parent": "business-and-professional-services", "fsq_ids": ["63be6904847c3692a84b9b6e"], "de": "Maschinenwerkstatt"}
+{"id": "management-consultant", "name": "Management Consultant", "parent": "business-and-professional-services", "fsq_ids": ["63be6904847c3692a84b9b6f"], "de": "Unternehmensberater"}
+{"id": "manufacturer-or-factory", "name": "Manufacturer or Factory", "parent": "business-and-professional-services", "fsq_ids": ["63be6904847c3692a84b9b70", "4eb1bea83b7b6f98df247e06"], "de": ["Hersteller", "Fabrik"]}
+{"id": "chemicals-and-gasses-manufacturer", "name": "Chemicals and Gasses Manufacturer", "parent": "manufacturer-or-factory", "fsq_ids": ["63be6904847c3692a84b9b34"], "de": "Hersteller von Chemikalien und Gasen"}
+{"id": "market-research-and-consulting-service", "name": "Market Research and Consulting Service", "parent": "business-and-professional-services", "fsq_ids": ["63be6904847c3692a84b9b71"], "de": "Marktforschungs- und Beratungsdienst"}
+{"id": "media-agency", "name": "Media Agency", "parent": "business-and-professional-services", "fsq_ids": ["63be6904847c3692a84b9b72"], "de": "Medienagentur"}
+{"id": "metals-supplier", "name": "Metals Supplier", "parent": "business-and-professional-services", "fsq_ids": ["63be6904847c3692a84b9b73"], "de": "Metalllieferant"}
+{"id": "office", "name": "Office", "parent": "business-and-professional-services", "fsq_ids": ["4bf58dd8d48988d124941735"], "de": "Büro"}
+{"id": "campaign-office", "name": "Campaign Office", "parent": "office", "fsq_ids": ["5032764e91d4c4b30a586d5a"], "de": "Wahlkampfbüro"}
+{"id": "company-canteen-or-amenity", "name": "Company Canteen or Amenity", "parent": "office", "fsq_ids": ["54f4ba06498e2cf5561da814", "5665ef1d498ec706735f0e59", "5665c7b9498e7d8a4f2c0f06"], "de": ["Firmenkantine", "Firmenannehmlichkeit", "Firmencafé"]}
+{"id": "corporate-housing-agency", "name": "Corporate Housing Agency", "parent": "office", "fsq_ids": ["63be6904847c3692a84b9b75"], "de": "Agentur für Unternehmenswohnungen"}
+{"id": "coworking-space", "name": "Coworking Space", "parent": "office", "fsq_ids": ["4bf58dd8d48988d174941735"], "de": "Coworking Space"}
+{"id": "meeting-room", "name": "Meeting Room", "parent": "office", "fsq_ids": ["4bf58dd8d48988d127941735"], "de": "Besprechungsraum"}
+{"id": "office-building", "name": "Office Building", "parent": "office", "fsq_ids": ["63be6904847c3692a84b9b76"], "de": "Bürogebäude"}
+{"id": "tech-startup", "name": "Tech Startup", "parent": "office", "fsq_ids": ["4bf58dd8d48988d125941735"], "de": "Tech-Startup"}
+{"id": "online-advertising-service", "name": "Online Advertising Service", "parent": "business-and-professional-services", "fsq_ids": ["63be6904847c3692a84b9b77"], "de": "Online-Werbedienst"}
+{"id": "paper-supplier", "name": "Paper Supplier", "parent": "business-and-professional-services", "fsq_ids": ["63be6904847c3692a84b9b78"], "de": "Papierlieferant"}
+{"id": "pet-service", "name": "Pet Service", "parent": "business-and-professional-services", "fsq_ids": ["5032897c91d4c4b30a586d69"], "de": "Haustierservice"}
+{"id": "pet-grooming-service", "name": "Pet Grooming Service", "parent": "pet-service", "fsq_ids": ["63be6904847c3692a84b9b79"], "de": "Haustierpflegeservice"}
+{"id": "pet-sitting-and-boarding-service", "name": "Pet Sitting and Boarding Service", "parent": "pet-service", "fsq_ids": ["63be6904847c3692a84b9b7a"], "de": "Tierbetreuung und Tierpension"}
+{"id": "petroleum-supplier", "name": "Petroleum Supplier", "parent": "business-and-professional-services", "fsq_ids": ["63be6904847c3692a84b9b7b"], "de": "Erdöllieferant"}
+{"id": "photography-service", "name": "Photography Service", "parent": "business-and-professional-services", "fsq_ids": ["63be6904847c3692a84b9b7d"], "de": "Fotoservice"}
+{"id": "photographer", "name": "Photographer", "parent": "photography-service", "fsq_ids": ["63be6904847c3692a84b9b7c"], "de": "Fotograf"}
+{"id": "photography-lab", "name": "Photography Lab", "parent": "photography-service", "fsq_ids": ["4eb1bdde3b7b55596b4a7490"], "de": "Fotolabor"}
+{"id": "photography-studio", "name": "Photography Studio", "parent": "photography-service", "fsq_ids": ["554a5e17498efabeda6cc559"], "de": "Fotostudio"}
+{"id": "plastics-supplier", "name": "Plastics Supplier", "parent": "business-and-professional-services", "fsq_ids": ["63be6904847c3692a84b9b7e"], "de": "Kunststofflieferant"}
+{"id": "power-plant", "name": "Power Plant", "parent": "business-and-professional-services", "fsq_ids": ["58daa1548bbb0b01f18ec1a9"], "de": "Kraftwerk"}
+{"id": "print-tv-radio-and-outdoor-advertising-service", "name": "Print, TV, Radio and Outdoor Advertising Service", "parent": "business-and-professional-services", "fsq_ids": ["63be6904847c3692a84b9b7f"], "de": "Print-, TV-, Radio- und Außenwerbedienst"}
+{"id": "promotional-item-service", "name": "Promotional Item Service", "parent": "business-and-professional-services", "fsq_ids": ["63be6904847c3692a84b9b80"], "de": "Werbeartikel-Service"}
+{"id": "public-relations-firm", "name": "Public Relations Firm", "parent": "business-and-professional-services", "fsq_ids": ["63be6904847c3692a84b9b81"], "de": "PR-Firma"}
+{"id": "publisher", "name": "Publisher", "parent": "business-and-professional-services", "fsq_ids": ["63be6904847c3692a84b9b82"], "de": "Herausgeber"}
+{"id": "radio-station", "name": "Radio Station", "parent": "business-and-professional-services", "fsq_ids": ["5032856091d4c4b30a586d63"], "de": "Radiosender"}
+{"id": "real-estate-service", "name": "Real Estate Service", "parent": "business-and-professional-services", "fsq_ids": ["63be6904847c3692a84b9b83"], "de": "Immobilienservice"}
+{"id": "building-and-land-surveyor", "name": "Building and Land Surveyor", "parent": "real-estate-service", "fsq_ids": ["63be6904847c3692a84b9b84"], "de": "Bau- und Landvermesser"}
+{"id": "real-estate-developer", "name": "Real Estate Developer", "parent": "real-estate-service", "fsq_ids": ["63be6904847c3692a84b9b85", "63be6904847c3692a84b9b88"], "de": ["Gewerbeimmobilienentwickler", "Immobilienentwicklungs- und Titelunternehmen"]}
+{"id": "property-management-office", "name": "Property Management Office", "parent": "real-estate-service", "fsq_ids": ["63be6904847c3692a84b9b86"], "de": "Immobilienverwaltungsbüro"}
+{"id": "real-estate-agency", "name": "Real Estate Agency", "parent": "real-estate-service", "fsq_ids": ["5032885091d4c4b30a586d66"], "de": "Immobilienagentur"}
+{"id": "real-estate-appraiser", "name": "Real Estate Appraiser", "parent": "real-estate-service", "fsq_ids": ["63be6904847c3692a84b9b87"], "de": "Immobiliengutachter"}
+{"id": "recording-studio", "name": "Recording Studio", "parent": "business-and-professional-services", "fsq_ids": ["52f2ab2ebcbc57f1066b8b37"], "de": "Aufnahmestudio"}
+{"id": "recycling-facility", "name": "Recycling Facility", "parent": "business-and-professional-services", "fsq_ids": ["4f4531084b9074f6e4fb0101"], "de": "Recyclinganlage"}
+{"id": "refrigeration-and-ice-supplier", "name": "Refrigeration and Ice Supplier", "parent": "business-and-professional-services", "fsq_ids": ["63be6904847c3692a84b9b89"], "de": "Kühl- und Eislieferant"}
+{"id": "renewable-energy-service", "name": "Renewable Energy Service", "parent": "business-and-professional-services", "fsq_ids": ["63be6904847c3692a84b9b8a"], "de": "Service für erneuerbare Energien"}
+{"id": "rental-service", "name": "Rental Service", "parent": "business-and-professional-services", "fsq_ids": ["56aa371be4b08b9a8d573552"], "de": "Mietservice"}
+{"id": "repair-service", "name": "Repair Service", "parent": "business-and-professional-services", "fsq_ids": ["52f2ab2ebcbc57f1066b8b2f"], "de": "Reparaturservice"}
+{"id": "research-station", "name": "Research Station", "parent": "business-and-professional-services", "fsq_ids": ["58daa1558bbb0b01f18ec1b2"], "de": "Forschungsstation"}
+{"id": "rubber-supplier", "name": "Rubber Supplier", "parent": "business-and-professional-services", "fsq_ids": ["63be6904847c3692a84b9b8b"], "de": "Gummilieferant"}
+{"id": "salvage-yard", "name": "Salvage Yard", "parent": "business-and-professional-services", "fsq_ids": ["63be6904847c3692a84b9b8c"], "de": "Schrottplatz"}
+{"id": "scientific-equipment-supplier", "name": "Scientific Equipment Supplier", "parent": "business-and-professional-services", "fsq_ids": ["63be6904847c3692a84b9b8d"], "de": "Lieferant wissenschaftlicher Ausrüstung"}
+{"id": "search-engine-marketing-and-optimization-service", "name": "Search Engine Marketing and Optimization Service", "parent": "business-and-professional-services", "fsq_ids": ["63be6904847c3692a84b9b8e"], "de": "Suchmaschinenmarketing- und Optimierungsservice"}
+{"id": "security-and-safety", "name": "Security and Safety", "parent": "business-and-professional-services", "fsq_ids": ["63be6904847c3692a84b9b8f"], "de": "Sicherheit und Schutz"}
+{"id": "shipping-freight-and-material-transportation-service", "name": "Shipping, Freight, and Material Transportation Service", "parent": "business-and-professional-services", "fsq_ids": ["52f2ab2ebcbc57f1066b8b1f"], "de": "Versand-, Fracht- und Materialtransportservice"}
+{"id": "shoe-repair-service", "name": "Shoe Repair Service", "parent": "business-and-professional-services", "fsq_ids": ["52f2ab2ebcbc57f1066b8b39"], "de": "Schuhreparaturservice"}
+{"id": "warehouse-or-storage-facility", "name": "Warehouse or Storage Facility", "parent": "business-and-professional-services", "fsq_ids": ["4f04b1572fb6e1c99f3db0bf", "52e81612bcbc57f1066b7a36"], "de": ["Lagereinrichtung", "Lager"]}
+{"id": "tv-station", "name": "TV Station", "parent": "business-and-professional-services", "fsq_ids": ["52e81612bcbc57f1066b7a31"], "de": "Fernsehsender"}
+{"id": "tailor", "name": "Tailor", "parent": "business-and-professional-services", "fsq_ids": ["5032781d91d4c4b30a586d5b"], "de": "Schneider"}
+{"id": "technology-business", "name": "Technology Business", "parent": "business-and-professional-services", "fsq_ids": ["63be6904847c3692a84b9b90"], "de": "Technologiegeschäft"}
+{"id": "it-service", "name": "IT Service", "parent": "technology-business", "fsq_ids": ["52f2ab2ebcbc57f1066b8b36"], "de": "IT-Service"}
+{"id": "software-company", "name": "Software Company", "parent": "technology-business", "fsq_ids": ["63be6904847c3692a84b9b91"], "de": "Softwareunternehmen"}
+{"id": "website-designer", "name": "Website Designer", "parent": "technology-business", "fsq_ids": ["63be6904847c3692a84b9b92"], "de": "Website-Designer"}
+{"id": "telecommunication-service", "name": "Telecommunication Service", "parent": "business-and-professional-services", "fsq_ids": ["63be6904847c3692a84b9b93", "63be6904847c3692a84b9b74"], "de": ["Telekommunikationsdienst", "Mobilfunkunternehmen"]}
+{"id": "translation-service", "name": "Translation Service", "parent": "business-and-professional-services", "fsq_ids": ["63be6904847c3692a84b9b94"], "de": "Übersetzungsdienst"}
+{"id": "waste-management-service", "name": "Waste Management Service", "parent": "business-and-professional-services", "fsq_ids": ["58daa1558bbb0b01f18ec1ac", "63be6904847c3692a84b9b9e"], "de": ["Abfallentsorgungsdienst", "Entsorgung"]}
+{"id": "water-treatment-service", "name": "Water Treatment Service", "parent": "business-and-professional-services", "fsq_ids": ["63be6904847c3692a84b9b96"], "de": "Wasseraufbereitungsservice"}
+{"id": "welding-service", "name": "Welding Service", "parent": "business-and-professional-services", "fsq_ids": ["63be6904847c3692a84b9b97"], "de": "Schweißservice"}
+{"id": "wholesaler", "name": "Wholesaler", "parent": "business-and-professional-services", "fsq_ids": ["63be6904847c3692a84b9b98", "52e816a6bcbc57f1066b7a54"], "de": ["Großhändler", "Lager oder Großhandel"]}
+{"id": "writing-copywriting-and-technical-writing-service", "name": "Writing, Copywriting and Technical Writing Service", "parent": "business-and-professional-services", "fsq_ids": ["63be6904847c3692a84b9b99"], "de": "Text- und technischer Schreibservice"}
+{"id": "community-and-government", "name": "Community and Government", "parent": "community-and-government", "fsq_ids": ["63be6904847c3692a84b9b9a"], "de": "Gemeinschaft und Regierung"}
+{"id": "addiction-treatment-center", "name": "Addiction Treatment Center", "parent": "community-and-government", "fsq_ids": ["63be6904847c3692a84b9b9b"], "de": "Suchtbehandlungszentrum"}
+{"id": "animal-shelter", "name": "Animal Shelter", "parent": "community-and-government", "fsq_ids": ["4e52d2d203646f7c19daa8ae"], "de": "Tierheim"}
+{"id": "assisted-living", "name": "Assisted Living", "parent": "community-and-government", "fsq_ids": ["5032891291d4c4b30a586d68"], "de": "Betreutes Wohnen"}
+{"id": "cemetery", "name": "Cemetery", "parent": "community-and-government", "fsq_ids": ["4bf58dd8d48988d15c941735"], "de": "Friedhof"}
+{"id": "community-center", "name": "Community Center", "parent": "community-and-government", "fsq_ids": ["52e81612bcbc57f1066b7a34"], "de": "Gemeindezentrum"}
+{"id": "cultural-center", "name": "Cultural Center", "parent": "community-and-government", "fsq_ids": ["52e81612bcbc57f1066b7a32"], "de": "Kulturzentrum"}
+{"id": "disabled-persons-service", "name": "Disabled Persons Service", "parent": "community-and-government", "fsq_ids": ["63be6904847c3692a84b9b9c"], "de": "Behindertendienst"}
+{"id": "domestic-abuse-treatment-center", "name": "Domestic Abuse Treatment Center", "parent": "community-and-government", "fsq_ids": ["63be6904847c3692a84b9b9d"], "de": "Behandlungszentrum für häuslichen Missbrauch"}
+{"id": "education", "name": "Education", "parent": "community-and-government", "fsq_ids": ["4bf58dd8d48988d13b941735"], "de": "Ausbildung"}
+{"id": "tutoring-service", "name": "Tutoring Service", "parent": "education", "fsq_ids": ["63be6904847c3692a84b9b95"], "de": "Nachhilfeservice"}
+{"id": "adult-education", "name": "Adult Education", "parent": "education", "fsq_ids": ["56aa371ce4b08b9a8d573570"], "de": ["Erwachsenenbildung", "Volkshochschule"]}
+{"id": "art-school", "name": "Art School", "parent": "education", "fsq_ids": ["63be6904847c3692a84b9b9f"], "de": "Kunstschule"}
+{"id": "circus-school", "name": "Circus School", "parent": "education", "fsq_ids": ["52e81612bcbc57f1066b7a43"], "de": "Zirkusschule"}
+{"id": "college-and-university", "name": "College and University", "parent": "education", "fsq_ids": ["4d4b7105d754a06372d81259"], "de": "Hochschule und Universität"}
+{"id": "college-administrative-building", "name": "College Administrative Building", "parent": "education", "fsq_ids": ["4bf58dd8d48988d197941735"], "de": "Verwaltungsgebäude der Hochschule"}
+{"id": "college-lab", "name": "College Lab", "parent": "education", "fsq_ids": ["4bf58dd8d48988d1a5941735"], "de": "Hochschullabor"}
+{"id": "college-library", "name": "College Library", "parent": "education", "fsq_ids": ["4bf58dd8d48988d1a7941735"], "de": "Universitätsbibliothek"}
+{"id": "college-residence-hall", "name": "College Residence Hall", "parent": "education", "fsq_ids": ["4bf58dd8d48988d1a3941735"], "de": "Studentenwohnheim"}
+{"id": "college-theater", "name": "College Theater", "parent": "education", "fsq_ids": ["4bf58dd8d48988d1ac941735"], "de": "Hochschultheater"}
+{"id": "student-fraternity-or-sorority-house", "name": "Student Fraternity or Sorority House", "parent": "education", "fsq_ids": ["4bf58dd8d48988d1b0941735", "4bf58dd8d48988d141941735"], "de": ["Verbindungshaus", "Schwesternschaftshaus"]}
+{"id": "law-school", "name": "Law School", "parent": "education", "fsq_ids": ["4bf58dd8d48988d1a6941735"], "de": "Juristische Fakultät"}
+{"id": "medical-school", "name": "Medical School", "parent": "education", "fsq_ids": ["4bf58dd8d48988d1b3941735"], "de": "Medizinische Fakultät"}
+{"id": "student-center", "name": "Student Center", "parent": "education", "fsq_ids": ["4bf58dd8d48988d1ab941735"], "de": "Studentenzentrum"}
+{"id": "university", "name": "University", "parent": "education", "fsq_ids": ["4bf58dd8d48988d1ae941735"], "de": "Universität"}
+{"id": "computer-training-school", "name": "Computer Training School", "parent": "education", "fsq_ids": ["63be6904847c3692a84b9ba0"], "de": "Computerschule"}
+{"id": "culinary-school", "name": "Culinary School", "parent": "education", "fsq_ids": ["58daa1558bbb0b01f18ec200"], "de": "Kochschule"}
+{"id": "driving-school", "name": "Driving School", "parent": "education", "fsq_ids": ["52e81612bcbc57f1066b7a42"], "de": "Fahrschule"}
+{"id": "flight-school", "name": "Flight School", "parent": "education", "fsq_ids": ["52e81612bcbc57f1066b7a49"], "de": "Flugschule"}
+{"id": "language-school", "name": "Language School", "parent": "education", "fsq_ids": ["52e81612bcbc57f1066b7a48"], "de": "Sprachschule"}
+{"id": "music-school", "name": "Music School", "parent": "education", "fsq_ids": ["4f04b10d2fb6e1c99f3db0be"], "de": "Musikschule"}
+{"id": "kindergarten-and-daycare", "name": "Kindergarten and Daycare", "parent": "education", "fsq_ids": ["4f4533814b9074f6e4fb0107", "4f4532974b9074f6e4fb0104", "52e81612bcbc57f1066b7a45"], "de": ["Kindergarten", "Kindertagesstätte", "Vorschule"]}
+{"id": "primary-and-secondary-school", "name": "Primary and Secondary School", "parent": "education", "fsq_ids": ["63be6904847c3692a84b9ba1"], "de": "Grund- und weiterführende Schule"}
+{"id": "elementary-school", "name": "Elementary School", "parent": "education", "fsq_ids": ["4f4533804b9074f6e4fb0105"], "de": "Grundschule"}
+{"id": "high-school", "name": "High School", "parent": "education", "fsq_ids": ["4bf58dd8d48988d13d941735"], "de": "Gymnasium"}
+{"id": "middle-school", "name": "Middle School", "parent": "education", "fsq_ids": ["4f4533814b9074f6e4fb0106"], "de": "Mittelschule"}
+{"id": "private-school", "name": "Private School", "parent": "education", "fsq_ids": ["52e81612bcbc57f1066b7a46"], "de": "Privatschule"}
+{"id": "religious-school", "name": "Religious School", "parent": "education", "fsq_ids": ["52e81612bcbc57f1066b7a47"], "de": "Religiöse Schule"}
+{"id": "vocational-school", "name": "Vocational School", "parent": "education", "fsq_ids": ["4bf58dd8d48988d1ad941735"], "de": "Handelsschule"}
+{"id": "government-building", "name": "Government Building", "parent": "community-and-government", "fsq_ids": ["4bf58dd8d48988d126941735"], "de": "Regierungsgebäude"}
+{"id": "parliament-building", "name": "Parliament Building", "parent": "government-building", "fsq_ids": ["4bf58dd8d48988d12a941735"], "de": "Kapitolgebäude"}
+{"id": "city-hall", "name": "City Hall", "parent": "government-building", "fsq_ids": ["4bf58dd8d48988d129941735"], "de": "Rathaus"}
+{"id": "courthouse", "name": "Courthouse", "parent": "government-building", "fsq_ids": ["4bf58dd8d48988d12b941735"], "de": "Gerichtsgebäude"}
+{"id": "embassy-or-consulate", "name": "Embassy or Consulate", "parent": "government-building", "fsq_ids": ["4bf58dd8d48988d12c951735"], "de": "Botschaft oder Konsulat"}
+{"id": "government-department", "name": "Government Department", "parent": "government-building", "fsq_ids": ["63be6904847c3692a84b9ba2"], "de": "Regierungsabteilung"}
+{"id": "military-facility", "name": "Military Facility", "parent": "government-building", "fsq_ids": ["63be6904847c3692a84b9ba6", "4e52adeebd41615f56317744"], "de": ["Militär", "Militärbasis"]}
+{"id": "post-office", "name": "Post Office", "parent": "government-building", "fsq_ids": ["4bf58dd8d48988d172941735"], "de": "Postamt"}
+{"id": "law-enforcement-and-public-safety", "name": "Law Enforcement and Public Safety", "parent": "community-and-government", "fsq_ids": ["63be6904847c3692a84b9ba3"], "de": "Strafverfolgung und öffentliche Sicherheit"}
+{"id": "fire-station", "name": "Fire Station", "parent": "law-enforcement-and-public-safety", "fsq_ids": ["4bf58dd8d48988d12c941735"], "de": "Feuerwache"}
+{"id": "police-station", "name": "Police Station", "parent": "law-enforcement-and-public-safety", "fsq_ids": ["4bf58dd8d48988d12e941735"], "de": "Polizeistation"}
+{"id": "probation-office", "name": "Probation Office", "parent": "law-enforcement-and-public-safety", "fsq_ids": ["63be6904847c3692a84b9ba4"], "de": "Bewährungshilfe"}
+{"id": "government-lobbyist", "name": "Government Lobbyist", "parent": "community-and-government", "fsq_ids": ["63be6904847c3692a84b9ba7"], "de": "Regierungslobbyist"}
+{"id": "homeless-shelter", "name": "Homeless Shelter", "parent": "community-and-government", "fsq_ids": ["63be6904847c3692a84b9ba8"], "de": "Obdachlosenheim"}
+{"id": "housing-authority", "name": "Housing Authority", "parent": "community-and-government", "fsq_ids": ["63be6904847c3692a84b9ba9"], "de": "Wohnungsbehörde"}
+{"id": "housing-development", "name": "Housing Development", "parent": "community-and-government", "fsq_ids": ["4f2a210c4b9023bd5841ed28"], "de": "Wohnsiedlung"}
+{"id": "library", "name": "Library", "parent": "community-and-government", "fsq_ids": ["4bf58dd8d48988d12f941735"], "de": "Bibliothek"}
+{"id": "observatory", "name": "Observatory", "parent": "community-and-government", "fsq_ids": ["5744ccdfe4b0c0459246b4d9"], "de": "Observatorium"}
+{"id": "organization", "name": "Organization", "parent": "community-and-government", "fsq_ids": ["63be6904847c3692a84b9baa"], "de": "Organisation"}
+{"id": "charity", "name": "Charity", "parent": "organization", "fsq_ids": ["63be6904847c3692a84b9bab"], "de": "Wohltätigkeit"}
+{"id": "environmental-organization", "name": "Environmental Organization", "parent": "organization", "fsq_ids": ["63be6904847c3692a84b9bac"], "de": "Umweltorganisation"}
+{"id": "lgbtq-organization", "name": "LGBTQ Organization", "parent": "organization", "fsq_ids": ["63be6904847c3692a84b9bae"], "de": "LGBTQ-Organisation"}
+{"id": "labor-union", "name": "Labor Union", "parent": "organization", "fsq_ids": ["63be6904847c3692a84b9bad"], "de": "Gewerkschaft"}
+{"id": "non-profit-organization", "name": "Non-Profit Organization", "parent": "organization", "fsq_ids": ["50328a8e91d4c4b30a586d6c"], "de": "Gemeinnützige Organisation"}
+{"id": "social-services-organization", "name": "Social Services Organization", "parent": "organization", "fsq_ids": ["63be6904847c3692a84b9baf"], "de": "Organisation für soziale Dienste"}
+{"id": "veterans-organization", "name": "Veterans' Organization", "parent": "organization", "fsq_ids": ["5f2c5de85b4c177b9a6de29c"], "de": "Veteranenorganisation"}
+{"id": "youth-organization", "name": "Youth Organization", "parent": "organization", "fsq_ids": ["63be6904847c3692a84b9bb0"], "de": "Jugendorganisation"}
+{"id": "club-or-association", "name": "Club or Association", "parent": "organization", "fsq_ids": ["52e81612bcbc57f1066b7a33", "52e81612bcbc57f1066b7a35"], "de": ["Sozial-Club", "Clubhaus"]}
+{"id": "polling-place", "name": "Polling Place", "parent": "community-and-government", "fsq_ids": ["4cae28ecbf23941eb1190695"], "de": "Wahllokal"}
+{"id": "prison", "name": "Prison", "parent": "community-and-government", "fsq_ids": ["5310b8e5bcbc57f1066bcbf1"], "de": "Gefängnis"}
+{"id": "public-toilet", "name": "Public Toilet", "parent": "community-and-government", "fsq_ids": ["5744ccdfe4b0c0459246b4c4"], "de": "Öffentliche Toilette"}
+{"id": "public-and-social-service", "name": "Public and Social Service", "parent": "community-and-government", "fsq_ids": ["63be6904847c3692a84b9bb1"], "de": "Öffentlicher und sozialer Dienst"}
+{"id": "rehabilitation-center", "name": "Rehabilitation Center", "parent": "community-and-government", "fsq_ids": ["56aa371be4b08b9a8d57351d"], "de": "Rehabilitationszentrum"}
+{"id": "residential-building", "name": "Residential Building", "parent": "community-and-government", "fsq_ids": ["4e67e38e036454776db1fb3a", "4d954b06a243a5684965b473"], "de": ["Wohnhaus", "Wohnung oder Eigentumswohnung"]}
+{"id": "retirement-home", "name": "Retirement Home", "parent": "community-and-government", "fsq_ids": ["63be6904847c3692a84b9bb2"], "de": "Altersheim"}
+{"id": "senior-citizen-service", "name": "Senior Citizen Service", "parent": "community-and-government", "fsq_ids": ["63be6904847c3692a84b9bb3"], "de": "Seniorenservice"}
+{"id": "spiritual-center", "name": "Spiritual Center", "parent": "community-and-government", "fsq_ids": ["4bf58dd8d48988d131941735"], "de": "Spirituelles Zentrum"}
+{"id": "buddhist-temple", "name": "Buddhist Temple", "parent": "spiritual-center", "fsq_ids": ["52e81612bcbc57f1066b7a3e"], "de": "Buddhistischer Tempel"}
+{"id": "cemevi", "name": "Cemevi", "parent": "spiritual-center", "fsq_ids": ["58daa1558bbb0b01f18ec1eb"], "de": "Cemevi"}
+{"id": "church", "name": "Church", "parent": "spiritual-center", "fsq_ids": ["4bf58dd8d48988d132941735"], "de": "Kirche"}
+{"id": "confucian-temple", "name": "Confucian Temple", "parent": "spiritual-center", "fsq_ids": ["56aa371be4b08b9a8d5734fc"], "de": "Konfuzianischer Tempel"}
+{"id": "hindu-temple", "name": "Hindu Temple", "parent": "spiritual-center", "fsq_ids": ["52e81612bcbc57f1066b7a3f"], "de": "Hindu-Tempel"}
+{"id": "kingdom-hall", "name": "Kingdom Hall", "parent": "spiritual-center", "fsq_ids": ["5744ccdfe4b0c0459246b4ac"], "de": "Königreichssaal"}
+{"id": "monastery", "name": "Monastery", "parent": "spiritual-center", "fsq_ids": ["52e81612bcbc57f1066b7a40"], "de": "Kloster"}
+{"id": "mosque", "name": "Mosque", "parent": "spiritual-center", "fsq_ids": ["4bf58dd8d48988d138941735"], "de": "Moschee"}
+{"id": "prayer-room", "name": "Prayer Room", "parent": "spiritual-center", "fsq_ids": ["52e81612bcbc57f1066b7a41"], "de": "Gebetsraum"}
+{"id": "shrine", "name": "Shrine", "parent": "spiritual-center", "fsq_ids": ["4eb1d80a4b900d56c88a45ff"], "de": "Schrein"}
+{"id": "sikh-temple", "name": "Sikh Temple", "parent": "spiritual-center", "fsq_ids": ["5bae9231bedf3950379f89c9"], "de": "Sikh-Tempel"}
+{"id": "synagogue", "name": "Synagogue", "parent": "spiritual-center", "fsq_ids": ["4bf58dd8d48988d139941735"], "de": "Synagoge"}
+{"id": "temple", "name": "Temple", "parent": "spiritual-center", "fsq_ids": ["4bf58dd8d48988d13a941735"], "de": "Tempel"}
+{"id": "terreiro", "name": "Terreiro", "parent": "spiritual-center", "fsq_ids": ["56aa371be4b08b9a8d5734f6"], "de": "Terreiro"}
+{"id": "summer-camp", "name": "Summer Camp", "parent": "community-and-government", "fsq_ids": ["52e81612bcbc57f1066b7a10"], "de": "Sommercamp"}
+{"id": "utility-company", "name": "Utility Company", "parent": "community-and-government", "fsq_ids": ["63be6904847c3692a84b9bb4"], "de": "Versorgungsunternehmen"}
+{"id": "dining-and-drinking", "name": "Dining and Drinking", "parent": "dining-and-drinking", "fsq_ids": ["63be6904847c3692a84b9bb5"], "de": "Essen und Trinken"}
+{"id": "bagel-shop", "name": "Bagel Shop", "parent": "dining-and-drinking", "fsq_ids": ["4bf58dd8d48988d179941735"], "de": "Bagel-Laden"}
+{"id": "bakery", "name": "Bakery", "parent": "dining-and-drinking", "fsq_ids": ["4bf58dd8d48988d16a941735"], "de": "Bäckerei"}
+{"id": "bar", "name": "Bar", "parent": "dining-and-drinking", "fsq_ids": ["4bf58dd8d48988d116941735"], "de": "Bar"}
+{"id": "apres-ski-bar", "name": "Apres Ski Bar", "parent": "bar", "fsq_ids": ["4bf58dd8d48988d1ea941735"], "de": "Après-Ski-Bar"}
+{"id": "beach-bar", "name": "Beach Bar", "parent": "bar", "fsq_ids": ["52e81612bcbc57f1066b7a0d"], "de": "Strandbar"}
+{"id": "beer-bar", "name": "Beer Bar", "parent": "bar", "fsq_ids": ["56aa371ce4b08b9a8d57356c"], "de": "Bierbar"}
+{"id": "beer-garden", "name": "Beer Garden", "parent": "bar", "fsq_ids": ["4bf58dd8d48988d117941735"], "de": "Biergarten"}
+{"id": "champagne-bar", "name": "Champagne Bar", "parent": "bar", "fsq_ids": ["52e81612bcbc57f1066b7a0e"], "de": "Champagner-Bar"}
+{"id": "cocktail-bar", "name": "Cocktail Bar", "parent": "bar", "fsq_ids": ["4bf58dd8d48988d11e941735"], "de": "Cocktailbar"}
+{"id": "pub", "name": "Pub", "parent": "bar", "fsq_ids": ["4bf58dd8d48988d11b941735"], "de": "Kneipe"}
+{"id": "hookah-bar", "name": "Hookah Bar", "parent": "bar", "fsq_ids": ["4bf58dd8d48988d119941735"], "de": "Shisha-Bar"}
+{"id": "hotel-bar", "name": "Hotel Bar", "parent": "bar", "fsq_ids": ["4bf58dd8d48988d1d5941735"], "de": "Hotelbar"}
+{"id": "irish-pub", "name": "Irish Pub", "parent": "bar", "fsq_ids": ["52e81612bcbc57f1066b7a06"], "de": "Irish Pub"}
+{"id": "karaoke-bar", "name": "Karaoke Bar", "parent": "bar", "fsq_ids": ["4bf58dd8d48988d120941735"], "de": "Karaoke-Bar"}
+{"id": "lounge", "name": "Lounge", "parent": "bar", "fsq_ids": ["4bf58dd8d48988d121941735"], "de": "Lounge"}
+{"id": "piano-bar", "name": "Piano Bar", "parent": "bar", "fsq_ids": ["4bf58dd8d48988d1e8931735"], "de": "Pianobar"}
+{"id": "rooftop-bar", "name": "Rooftop Bar", "parent": "bar", "fsq_ids": ["5f2c224bb6d05514c70440a3"], "de": "Bar auf dem Dach"}
+{"id": "sake-bar", "name": "Sake Bar", "parent": "bar", "fsq_ids": ["4bf58dd8d48988d11c941735"], "de": "Sake-Bar"}
+{"id": "sports-bar", "name": "Sports Bar", "parent": "bar", "fsq_ids": ["4bf58dd8d48988d11d941735"], "de": "Sportbar"}
+{"id": "tiki-bar", "name": "Tiki Bar", "parent": "bar", "fsq_ids": ["56aa371be4b08b9a8d57354d"], "de": "Tiki-Bar"}
+{"id": "whisky-bar", "name": "Whisky Bar", "parent": "bar", "fsq_ids": ["4bf58dd8d48988d122941735"], "de": "Whisky-Bar"}
+{"id": "wine-bar", "name": "Wine Bar", "parent": "bar", "fsq_ids": ["4bf58dd8d48988d123941735"], "de": "Weinbar"}
+{"id": "breakfast-spot", "name": "Breakfast Spot", "parent": "dining-and-drinking", "fsq_ids": ["4bf58dd8d48988d143941735"], "de": "Frühstücksplatz"}
+{"id": "brewery", "name": "Brewery", "parent": "dining-and-drinking", "fsq_ids": ["50327c8591d4c4b30a586d5d"], "de": "Brauerei"}
+{"id": "cafe-coffee-and-tea-house", "name": "Cafe, Coffee and Tea House", "parent": "dining-and-drinking", "fsq_ids": ["63be6904847c3692a84b9bb6", "4bf58dd8d48988d16d941735"], "de": ["Café, Kaffee- und Teehaus", "Café"]}
+{"id": "bubble-tea-shop", "name": "Bubble Tea Shop", "parent": "cafe-coffee-and-tea-house", "fsq_ids": ["52e81612bcbc57f1066b7a0c"], "de": "Bubble Tea Shop"}
+{"id": "pet-cafe", "name": "Pet Café", "parent": "cafe-coffee-and-tea-house", "fsq_ids": ["56aa371be4b08b9a8d573508"], "de": "Haustiercafé"}
+{"id": "tea-room", "name": "Tea Room", "parent": "cafe-coffee-and-tea-house", "fsq_ids": ["4bf58dd8d48988d1dc931735"], "de": "Teestube"}
+{"id": "cafeteria", "name": "Cafeteria", "parent": "dining-and-drinking", "fsq_ids": ["4bf58dd8d48988d128941735"], "de": "Cafeteria"}
+{"id": "cidery", "name": "Cidery", "parent": "dining-and-drinking", "fsq_ids": ["5e189fd6eee47d000759bbfd"], "de": "Apfelwein"}
+{"id": "creperie", "name": "Creperie", "parent": "dining-and-drinking", "fsq_ids": ["52e81612bcbc57f1066b79f2"], "de": "Crêperie"}
+{"id": "dessert-shop", "name": "Dessert Shop", "parent": "dining-and-drinking", "fsq_ids": ["4bf58dd8d48988d1d0941735"], "de": "Dessertladen"}
+{"id": "cupcake-shop", "name": "Cupcake Shop", "parent": "dessert-shop", "fsq_ids": ["4bf58dd8d48988d1bc941735"], "de": "Cupcake-Laden"}
+{"id": "frozen-yogurt-shop", "name": "Frozen Yogurt Shop", "parent": "dessert-shop", "fsq_ids": ["512e7cae91d4cbb4e5efe0af"], "de": "Frozen-Yogurt-Shop"}
+{"id": "gelato-shop", "name": "Gelato Shop", "parent": "dessert-shop", "fsq_ids": ["5f2c407c5b4c177b9a6dc536"], "de": "Gelato-Shop"}
+{"id": "ice-cream-parlor", "name": "Ice Cream Parlor", "parent": "dessert-shop", "fsq_ids": ["4bf58dd8d48988d1c9941735"], "de": "Eisdiele"}
+{"id": "pastry-shop", "name": "Pastry Shop", "parent": "dessert-shop", "fsq_ids": ["5744ccdfe4b0c0459246b4e2"], "de": "Konditorei"}
+{"id": "pie-shop", "name": "Pie Shop", "parent": "dessert-shop", "fsq_ids": ["52e81612bcbc57f1066b7a0a"], "de": "Kuchenladen"}
+{"id": "waffle-shop", "name": "Waffle Shop", "parent": "dessert-shop", "fsq_ids": ["62d5af45da6648532de303ee"], "de": "Waffelladen"}
+{"id": "distillery", "name": "Distillery", "parent": "dining-and-drinking", "fsq_ids": ["4e0e22f5a56208c4ea9a85a0"], "de": "Brennerei"}
+{"id": "donut-shop", "name": "Donut Shop", "parent": "dining-and-drinking", "fsq_ids": ["4bf58dd8d48988d148941735"], "de": "Donut-Shop"}
+{"id": "food-court", "name": "Food Court", "parent": "dining-and-drinking", "fsq_ids": ["4bf58dd8d48988d120951735"], "de": "Food-Court"}
+{"id": "food-stand", "name": "Food Stand", "parent": "dining-and-drinking", "fsq_ids": ["56aa371be4b08b9a8d57350b"], "de": "Essensstand"}
+{"id": "food-truck", "name": "Food Truck", "parent": "dining-and-drinking", "fsq_ids": ["4bf58dd8d48988d1cb941735"], "de": "Imbisswagen"}
+{"id": "juice-bar", "name": "Juice Bar", "parent": "dining-and-drinking", "fsq_ids": ["4bf58dd8d48988d112941735"], "de": "Saftbar"}
+{"id": "night-market", "name": "Night Market", "parent": "dining-and-drinking", "fsq_ids": ["53e510b7498ebcb1801b55d4"], "de": "Nachtmarkt"}
+{"id": "restaurant", "name": "Restaurant", "parent": "dining-and-drinking", "fsq_ids": ["4d4b7105d754a06374d81259"], "de": "Restaurant"}
+{"id": "african-restaurant", "name": "African Restaurant", "parent": "restaurant", "fsq_ids": ["4bf58dd8d48988d1c8941735"], "de": "Afrikanisches Restaurant"}
+{"id": "asian-restaurant", "name": "Asian Restaurant", "parent": "restaurant", "fsq_ids": ["4bf58dd8d48988d142941735"], "de": "Asiatisches Restaurant"}
+{"id": "chinese-restaurant", "name": "Chinese Restaurant", "parent": "restaurant", "fsq_ids": ["4bf58dd8d48988d145941735"], "de": "Chinesisches Restaurant"}
+{"id": "indonesian-restaurant", "name": "Indonesian Restaurant", "parent": "restaurant", "fsq_ids": ["4deefc054765f83613cdba6f"], "de": "Indonesisches Restaurant"}
+{"id": "japanese-restaurant", "name": "Japanese Restaurant", "parent": "restaurant", "fsq_ids": ["4bf58dd8d48988d111941735"], "de": "Japanisches Restaurant"}
+{"id": "korean-restaurant", "name": "Korean Restaurant", "parent": "restaurant", "fsq_ids": ["4bf58dd8d48988d113941735"], "de": "Koreanisches Restaurant"}
+{"id": "noodle-restaurant", "name": "Noodle Restaurant", "parent": "restaurant", "fsq_ids": ["4bf58dd8d48988d1d1941735"], "de": "Nudelrestaurant"}
+{"id": "thai-restaurant", "name": "Thai Restaurant", "parent": "restaurant", "fsq_ids": ["4bf58dd8d48988d149941735"], "de": "Thailändisches Restaurant"}
+{"id": "vietnamese-restaurant", "name": "Vietnamese Restaurant", "parent": "restaurant", "fsq_ids": ["4bf58dd8d48988d14a941735"], "de": "Vietnamesisches Restaurant"}
+{"id": "bistro", "name": "Bistro", "parent": "restaurant", "fsq_ids": ["52e81612bcbc57f1066b79f1"], "de": "Bistro"}
+{"id": "buffet", "name": "Buffet", "parent": "restaurant", "fsq_ids": ["52e81612bcbc57f1066b79f4"], "de": "Büfett"}
+{"id": "burger-joint", "name": "Burger Joint", "parent": "restaurant", "fsq_ids": ["4bf58dd8d48988d16c941735"], "de": "Burgerlokal"}
+{"id": "dumpling-restaurant", "name": "Dumpling Restaurant", "parent": "restaurant", "fsq_ids": ["4bf58dd8d48988d108941735"], "de": "Knödelrestaurant"}
+{"id": "fast-food-restaurant", "name": "Fast Food Restaurant", "parent": "restaurant", "fsq_ids": ["4bf58dd8d48988d16e941735"], "de": "Fast-Food-Restaurant"}
+{"id": "fish-and-chips-shop", "name": "Fish and Chips Shop", "parent": "restaurant", "fsq_ids": ["4edd64a0c7ddd24ca188df1a"], "de": "Fish and Chips-Laden"}
+{"id": "fondue-restaurant", "name": "Fondue Restaurant", "parent": "restaurant", "fsq_ids": ["52e81612bcbc57f1066b7a09"], "de": "Fondue-Restaurant"}
+{"id": "french-restaurant", "name": "French Restaurant", "parent": "restaurant", "fsq_ids": ["4bf58dd8d48988d10c941735"], "de": "Französisches Restaurant"}
+{"id": "friterie", "name": "Friterie", "parent": "restaurant", "fsq_ids": ["55d25775498e9f6a0816a37a"], "de": "Friterie"}
+{"id": "gastropub", "name": "Gastropub", "parent": "restaurant", "fsq_ids": ["4bf58dd8d48988d155941735"], "de": "Gastropub"}
+{"id": "german-restaurant", "name": "German Restaurant", "parent": "restaurant", "fsq_ids": ["4bf58dd8d48988d10d941735"], "de": "Deutsches Restaurant"}
+{"id": "greek-restaurant", "name": "Greek Restaurant", "parent": "restaurant", "fsq_ids": ["4bf58dd8d48988d10e941735"], "de": "Griechisches Restaurant"}
+{"id": "halal-restaurant", "name": "Halal Restaurant", "parent": "restaurant", "fsq_ids": ["52e81612bcbc57f1066b79ff"], "de": "Halal-Restaurant"}
+{"id": "hawaiian-restaurant", "name": "Hawaiian Restaurant", "parent": "restaurant", "fsq_ids": ["52e81612bcbc57f1066b79fe"], "de": "Hawaiianisches Restaurant"}
+{"id": "hot-dog-joint", "name": "Hot Dog Joint", "parent": "restaurant", "fsq_ids": ["4bf58dd8d48988d16f941735"], "de": "Hot-Dog-Laden"}
+{"id": "indian-restaurant", "name": "Indian Restaurant", "parent": "restaurant", "fsq_ids": ["4bf58dd8d48988d10f941735"], "de": "Indisches Restaurant"}
+{"id": "italian-restaurant", "name": "Italian Restaurant", "parent": "restaurant", "fsq_ids": ["4bf58dd8d48988d110941735"], "de": "Italienisches Restaurant"}
+{"id": "jewish-restaurant", "name": "Jewish Restaurant", "parent": "restaurant", "fsq_ids": ["52e81612bcbc57f1066b79fd"], "de": "Jüdisches Restaurant"}
+{"id": "kebab-restaurant", "name": "Kebab Restaurant", "parent": "restaurant", "fsq_ids": ["5283c7b4e4b094cb91ec88d7"], "de": "Kebab-Restaurant"}
+{"id": "latin-american-restaurant", "name": "Latin American Restaurant", "parent": "restaurant", "fsq_ids": ["4bf58dd8d48988d1be941735"], "de": "Lateinamerikanisches Restaurant"}
+{"id": "brazilian-restaurant", "name": "Brazilian Restaurant", "parent": "restaurant", "fsq_ids": ["4bf58dd8d48988d16b941735"], "de": "Brasilianisches Restaurant"}
+{"id": "mediterranean-restaurant", "name": "Mediterranean Restaurant", "parent": "restaurant", "fsq_ids": ["4bf58dd8d48988d1c0941735"], "de": "Mediterranes Restaurant"}
+{"id": "mexican-restaurant", "name": "Mexican Restaurant", "parent": "restaurant", "fsq_ids": ["4bf58dd8d48988d1c1941735"], "de": "Mexikanisches Restaurant"}
+{"id": "middle-eastern-restaurant", "name": "Middle Eastern Restaurant", "parent": "restaurant", "fsq_ids": ["4bf58dd8d48988d115941735"], "de": "Nahöstliches Restaurant"}
+{"id": "egyptian-restaurant", "name": "Egyptian Restaurant", "parent": "restaurant", "fsq_ids": ["5bae9231bedf3950379f89e1"], "de": "Ägyptisches Restaurant"}
+{"id": "persian-restaurant", "name": "Persian Restaurant", "parent": "restaurant", "fsq_ids": ["52e81612bcbc57f1066b79f7"], "de": "Persisches Restaurant"}
+{"id": "modern-european-restaurant", "name": "Modern European Restaurant", "parent": "restaurant", "fsq_ids": ["52e81612bcbc57f1066b79f9"], "de": "Modernes europäisches Restaurant"}
+{"id": "molecular-gastronomy-restaurant", "name": "Molecular Gastronomy Restaurant", "parent": "restaurant", "fsq_ids": ["4bf58dd8d48988d1c2941735"], "de": "Restaurant für Molekulargastronomie"}
+{"id": "pizzeria", "name": "Pizzeria", "parent": "restaurant", "fsq_ids": ["4bf58dd8d48988d1ca941735"], "de": "Pizzeria"}
+{"id": "russian-restaurant", "name": "Russian Restaurant", "parent": "restaurant", "fsq_ids": ["5293a7563cf9994f4e043a44"], "de": "Russisches Restaurant"}
+{"id": "salad-restaurant", "name": "Salad Restaurant", "parent": "restaurant", "fsq_ids": ["4bf58dd8d48988d1bd941735"], "de": "Salatrestaurant"}
+{"id": "sandwich-spot", "name": "Sandwich Spot", "parent": "restaurant", "fsq_ids": ["4bf58dd8d48988d1c5941735"], "de": "Sandwich-Spot"}
+{"id": "scandinavian-restaurant", "name": "Scandinavian Restaurant", "parent": "restaurant", "fsq_ids": ["4bf58dd8d48988d1c6941735"], "de": "Skandinavisches Restaurant"}
+{"id": "scottish-restaurant", "name": "Scottish Restaurant", "parent": "restaurant", "fsq_ids": ["5744ccdde4b0c0459246b4a3"], "de": "Schottisches Restaurant"}
+{"id": "seafood-restaurant", "name": "Seafood Restaurant", "parent": "restaurant", "fsq_ids": ["4bf58dd8d48988d1ce941735"], "de": "Fischrestaurant"}
+{"id": "soup-spot", "name": "Soup Spot", "parent": "restaurant", "fsq_ids": ["4bf58dd8d48988d1dd931735"], "de": "Suppenlokal"}
+{"id": "southern-us-restaurant", "name": "Southern US Restaurant", "parent": "restaurant", "fsq_ids": ["4bf58dd8d48988d14f941735"], "de": "Südländisches Food-Restaurant"}
+{"id": "spanish-restaurant", "name": "Spanish Restaurant", "parent": "restaurant", "fsq_ids": ["4bf58dd8d48988d150941735"], "de": "Spanisches Restaurant"}
+{"id": "paella-restaurant", "name": "Paella Restaurant", "parent": "restaurant", "fsq_ids": ["4bf58dd8d48988d14d941735"], "de": "Paella-Restaurant"}
+{"id": "tapas-restaurant", "name": "Tapas Restaurant", "parent": "restaurant", "fsq_ids": ["4bf58dd8d48988d1db931735"], "de": "Tapas-Restaurant"}
+{"id": "steakhouse", "name": "Steakhouse", "parent": "restaurant", "fsq_ids": ["4bf58dd8d48988d1cc941735"], "de": "Steakhaus"}
+{"id": "swiss-restaurant", "name": "Swiss Restaurant", "parent": "restaurant", "fsq_ids": ["4bf58dd8d48988d158941735"], "de": "Schweizer Restaurant"}
+{"id": "theme-restaurant", "name": "Theme Restaurant", "parent": "restaurant", "fsq_ids": ["56aa371be4b08b9a8d573538"], "de": "Themenrestaurant"}
+{"id": "turkish-restaurant", "name": "Turkish Restaurant", "parent": "restaurant", "fsq_ids": ["4f04af1f2fb6e1c99f3db0bb"], "de": "Türkisches Restaurant"}
+{"id": "vegan-and-vegetarian-restaurant", "name": "Vegan and Vegetarian Restaurant", "parent": "restaurant", "fsq_ids": ["4bf58dd8d48988d1d3941735"], "de": "Veganes und vegetarisches Restaurant"}
+{"id": "smoothie-shop", "name": "Smoothie Shop", "parent": "dining-and-drinking", "fsq_ids": ["52f2ab2ebcbc57f1066b8b41"], "de": "Smoothie-Shop"}
+{"id": "vineyard", "name": "Vineyard", "parent": "dining-and-drinking", "fsq_ids": ["4bf58dd8d48988d1de941735"], "de": "Weinberg"}
+{"id": "winery", "name": "Winery", "parent": "dining-and-drinking", "fsq_ids": ["4bf58dd8d48988d14b941735"], "de": "Weingut"}
+{"id": "health-and-medicine", "name": "Health and Medicine", "parent": "health-and-medicine", "fsq_ids": ["63be6904847c3692a84b9bb9"], "de": "Gesundheit und Medizin"}
+{"id": "hiv-aids-support-service", "name": "HIV/AIDS Support Service", "parent": "health-and-medicine", "fsq_ids": ["63be6904847c3692a84b9bba"], "de": "AIDS-Ressource"}
+{"id": "acupuncture-clinic", "name": "Acupuncture Clinic", "parent": "health-and-medicine", "fsq_ids": ["52e81612bcbc57f1066b7a3b"], "de": "Akupunkturklinik"}
+{"id": "alternative-medicine-clinic", "name": "Alternative Medicine Clinic", "parent": "health-and-medicine", "fsq_ids": ["52e81612bcbc57f1066b7a3c"], "de": "Klinik für Alternativmedizin"}
+{"id": "blood-bank", "name": "Blood Bank", "parent": "health-and-medicine", "fsq_ids": ["5f2c43a65b4c177b9a6dcc62"], "de": "Blutbank"}
+{"id": "chiropractor", "name": "Chiropractor", "parent": "health-and-medicine", "fsq_ids": ["52e81612bcbc57f1066b7a3a"], "de": "Chiropraktiker"}
+{"id": "dentist", "name": "Dentist", "parent": "health-and-medicine", "fsq_ids": ["4bf58dd8d48988d178941735"], "de": "Zahnarzt"}
+{"id": "emergency-service", "name": "Emergency Service", "parent": "health-and-medicine", "fsq_ids": ["63be6904847c3692a84b9bbc"], "de": "Notdienst"}
+{"id": "ambulance-service", "name": "Ambulance Service", "parent": "emergency-service", "fsq_ids": ["63be6904847c3692a84b9bbd"], "de": "Rettungsdienst"}
+{"id": "emergency-room-or-urgent-care", "name": "Emergency Room or Urgent Care", "parent": "emergency-service", "fsq_ids": ["4bf58dd8d48988d194941735", "56aa371be4b08b9a8d573526"], "de": ["Notaufnahme", "Notfallzentrum"]}
+{"id": "healthcare-clinic", "name": "Healthcare Clinic", "parent": "health-and-medicine", "fsq_ids": ["63be6904847c3692a84b9bbe"], "de": "Gesundheitsklinik"}
+{"id": "home-health-care-service", "name": "Home Health Care Service", "parent": "health-and-medicine", "fsq_ids": ["63be6904847c3692a84b9bbf"], "de": "Häuslicher Gesundheitsdienst"}
+{"id": "hospice", "name": "Hospice", "parent": "health-and-medicine", "fsq_ids": ["5f2c5b8b5b4c177b9a6ddf0b"], "de": "Hospiz"}
+{"id": "hospital", "name": "Hospital", "parent": "health-and-medicine", "fsq_ids": ["4bf58dd8d48988d196941735"], "de": "Krankenhaus"}
+{"id": "children-s-hospital", "name": "Children's Hospital", "parent": "hospital", "fsq_ids": ["63be6904847c3692a84b9bc0"], "de": "Kinderkrankenhaus"}
+{"id": "hospital-unit", "name": "Hospital Unit", "parent": "hospital", "fsq_ids": ["58daa1558bbb0b01f18ec1f7"], "de": "Krankenhauseinheit"}
+{"id": "maternity-clinic", "name": "Maternity Clinic", "parent": "health-and-medicine", "fsq_ids": ["56aa371be4b08b9a8d5734ff"], "de": "Entbindungsklinik"}
+{"id": "medical-center", "name": "Medical Center", "parent": "health-and-medicine", "fsq_ids": ["4bf58dd8d48988d104941735"], "de": "Medizinisches Zentrum"}
+{"id": "medical-lab", "name": "Medical Lab", "parent": "health-and-medicine", "fsq_ids": ["4f4531b14b9074f6e4fb0103"], "de": "Medizinisches Labor"}
+{"id": "mental-health-service", "name": "Mental Health Service", "parent": "health-and-medicine", "fsq_ids": ["63be6904847c3692a84b9bc1"], "de": "Psychiatrischer Dienst"}
+{"id": "mental-health-clinic", "name": "Mental Health Clinic", "parent": "mental-health-service", "fsq_ids": ["52e81612bcbc57f1066b7a39"], "de": "Klinik für psychische Gesundheit"}
+{"id": "psychologist", "name": "Psychologist", "parent": "mental-health-service", "fsq_ids": ["63be6904847c3692a84b9bc2"], "de": "Psychologe"}
+{"id": "nurse", "name": "Nurse", "parent": "health-and-medicine", "fsq_ids": ["63be6904847c3692a84b9bc3"], "de": "Krankenschwester"}
+{"id": "nursing-home", "name": "Nursing Home", "parent": "health-and-medicine", "fsq_ids": ["63be6904847c3692a84b9bc4"], "de": "Pflegeheim"}
+{"id": "nutritionist", "name": "Nutritionist", "parent": "health-and-medicine", "fsq_ids": ["58daa1558bbb0b01f18ec1d0"], "de": "Ernährungsberater"}
+{"id": "optometrist", "name": "Optometrist", "parent": "health-and-medicine", "fsq_ids": ["522e32fae4b09b556e370f19"], "de": "Optiker"}
+{"id": "other-healthcare-professional", "name": "Other Healthcare Professional", "parent": "health-and-medicine", "fsq_ids": ["63be6904847c3692a84b9bc5"], "de": "Andere medizinische Fachkräfte"}
+{"id": "physical-therapy-clinic", "name": "Physical Therapy Clinic", "parent": "health-and-medicine", "fsq_ids": ["5744ccdfe4b0c0459246b4af"], "de": "Klinik für Physiotherapie"}
+{"id": "physician", "name": "Physician", "parent": "health-and-medicine", "fsq_ids": ["63be6904847c3692a84b9bc6"], "de": "Arzt"}
+{"id": "anesthesiologist", "name": "Anesthesiologist", "parent": "physician", "fsq_ids": ["63be6904847c3692a84b9bc7"], "de": "Anästhesist"}
+{"id": "cardiologist", "name": "Cardiologist", "parent": "physician", "fsq_ids": ["63be6904847c3692a84b9bc8"], "de": "Kardiologe"}
+{"id": "dermatologist", "name": "Dermatologist", "parent": "physician", "fsq_ids": ["63be6904847c3692a84b9bc9"], "de": "Dermatologe"}
+{"id": "ear-nose-and-throat-doctor", "name": "Ear, Nose and Throat Doctor", "parent": "physician", "fsq_ids": ["63be6904847c3692a84b9bca"], "de": "Hals-Nasen-Ohren-Arzt"}
+{"id": "family-medicine-doctor", "name": "Family Medicine Doctor", "parent": "physician", "fsq_ids": ["63be6904847c3692a84b9bcb"], "de": "Arzt für Familienmedizin"}
+{"id": "gastroenterologist", "name": "Gastroenterologist", "parent": "physician", "fsq_ids": ["63be6904847c3692a84b9bcc"], "de": "Gastroenterologe"}
+{"id": "general-surgeon", "name": "General Surgeon", "parent": "physician", "fsq_ids": ["63be6904847c3692a84b9bcd"], "de": "Allgemeinchirurg"}
+{"id": "geriatric-doctor", "name": "Geriatric Doctor", "parent": "physician", "fsq_ids": ["63be6904847c3692a84b9bce"], "de": "Geriatrischer Arzt"}
+{"id": "internal-medicine-doctor", "name": "Internal Medicine Doctor", "parent": "physician", "fsq_ids": ["63be6904847c3692a84b9bcf"], "de": "Arzt für Innere Medizin"}
+{"id": "neurologist", "name": "Neurologist", "parent": "physician", "fsq_ids": ["63be6904847c3692a84b9bd0"], "de": "Neurologe"}
+{"id": "obstetrician-gynecologist-ob-gyn", "name": "Obstetrician Gynecologist (Ob-gyn)", "parent": "physician", "fsq_ids": ["63be6904847c3692a84b9bd1"], "de": "Gynäkologe und Geburtshelfer"}
+{"id": "oncologist", "name": "Oncologist", "parent": "physician", "fsq_ids": ["63be6904847c3692a84b9bd2"], "de": "Onkologe"}
+{"id": "ophthalmologist", "name": "Ophthalmologist", "parent": "physician", "fsq_ids": ["63be6904847c3692a84b9bd3"], "de": "Augenarzt"}
+{"id": "oral-surgeon", "name": "Oral Surgeon", "parent": "physician", "fsq_ids": ["63be6904847c3692a84b9bd4"], "de": "Oralchirurg"}
+{"id": "orthopedic-surgeon", "name": "Orthopedic Surgeon", "parent": "physician", "fsq_ids": ["63be6904847c3692a84b9bd5"], "de": "Orthopädischer Chirurg"}
+{"id": "pathologist", "name": "Pathologist", "parent": "physician", "fsq_ids": ["63be6904847c3692a84b9bd6"], "de": "Pathologe"}
+{"id": "pediatrician", "name": "Pediatrician", "parent": "physician", "fsq_ids": ["63be6904847c3692a84b9bd7"], "de": "Kinderarzt"}
+{"id": "plastic-surgeon", "name": "Plastic Surgeon", "parent": "physician", "fsq_ids": ["63be6904847c3692a84b9bd8"], "de": "Plastischer Chirurg"}
+{"id": "psychiatrist", "name": "Psychiatrist", "parent": "physician", "fsq_ids": ["63be6904847c3692a84b9bd9"], "de": "Psychiater"}
+{"id": "radiologist", "name": "Radiologist", "parent": "physician", "fsq_ids": ["63be6904847c3692a84b9bda"], "de": "Radiologe"}
+{"id": "respiratory-doctor", "name": "Respiratory Doctor", "parent": "physician", "fsq_ids": ["63be6904847c3692a84b9bdb"], "de": "Atemwegsarzt"}
+{"id": "urologist", "name": "Urologist", "parent": "physician", "fsq_ids": ["63be6904847c3692a84b9bdc"], "de": "Urologe"}
+{"id": "podiatrist", "name": "Podiatrist", "parent": "health-and-medicine", "fsq_ids": ["63be6904847c3692a84b9bdd"], "de": "Podologe"}
+{"id": "sports-medicine-clinic", "name": "Sports Medicine Clinic", "parent": "health-and-medicine", "fsq_ids": ["63be6904847c3692a84b9bde"], "de": "Sportmedizinische Klinik"}
+{"id": "veterinarian", "name": "Veterinarian", "parent": "health-and-medicine", "fsq_ids": ["4d954af4a243a5684765b473"], "de": "Tierarzt"}
+{"id": "weight-loss-center", "name": "Weight Loss Center", "parent": "health-and-medicine", "fsq_ids": ["590a0744340a5803fd8508c3"], "de": "Zentrum zur Gewichtsreduktion"}
+{"id": "women-s-health-clinic", "name": "Women's Health Clinic", "parent": "health-and-medicine", "fsq_ids": ["63be6904847c3692a84b9bdf"], "de": "Klinik für Frauengesundheit"}
+{"id": "retail", "name": "Retail", "parent": "retail", "fsq_ids": ["4d4b7105d754a06378d81259"], "de": "Einzelhandel"}
+{"id": "lottery-retailer", "name": "Lottery Retailer", "parent": "retail", "fsq_ids": ["52f2ab2ebcbc57f1066b8b38"], "de": "Lotteriehändler"}
+{"id": "adult-store", "name": "Adult Store", "parent": "retail", "fsq_ids": ["5267e446e4b0ec79466e48c4"], "de": "Erotikladen"}
+{"id": "antique-store", "name": "Antique Store", "parent": "retail", "fsq_ids": ["4bf58dd8d48988d116951735"], "de": "Antiquitätenladen"}
+{"id": "arts-and-crafts-store", "name": "Arts and Crafts Store", "parent": "retail", "fsq_ids": ["4bf58dd8d48988d127951735"], "de": "Kunst- und Handwerksladen"}
+{"id": "auction-house", "name": "Auction House", "parent": "retail", "fsq_ids": ["63be6904847c3692a84b9be2"], "de": "Auktionshaus"}
+{"id": "automotive-retail", "name": "Automotive Retail", "parent": "retail", "fsq_ids": ["63be6904847c3692a84b9be3"], "de": "Automobileinzelhandel"}
+{"id": "car-dealership", "name": "Car Dealership", "parent": "automotive-retail", "fsq_ids": ["4eb1c1623b7b52c0e1adc2ec"], "de": "Autohaus"}
+{"id": "classic-and-antique-car-dealership", "name": "Classic and Antique Car Dealership", "parent": "automotive-retail", "fsq_ids": ["63be6904847c3692a84b9be4"], "de": "Oldtimer-Händler"}
+{"id": "new-car-dealership", "name": "New Car Dealership", "parent": "automotive-retail", "fsq_ids": ["5e8f50bd03c7a9000c1e2fbc"], "de": "Neuwagenhändler"}
+{"id": "rv-and-motorhome-dealership", "name": "RV and Motorhome Dealership", "parent": "automotive-retail", "fsq_ids": ["63be6904847c3692a84b9be5"], "de": "Wohnwagen- und Wohnmobilhändler"}
+{"id": "used-car-dealership", "name": "Used Car Dealership", "parent": "automotive-retail", "fsq_ids": ["5e8f501a03c7a9000c1e2e88"], "de": "Gebrauchtwagenhändler"}
+{"id": "car-parts-and-accessories", "name": "Car Parts and Accessories", "parent": "automotive-retail", "fsq_ids": ["63be6904847c3692a84b9be6"], "de": "Autoteile und Zubehör"}
+{"id": "moped-dealership", "name": "Moped Dealership", "parent": "automotive-retail", "fsq_ids": ["63be6904847c3692a84b9be7"], "de": "Moped-Händler"}
+{"id": "motor-scooter-dealership", "name": "Motor Scooter Dealership", "parent": "automotive-retail", "fsq_ids": ["63be6904847c3692a84b9be8"], "de": "Motorroller-Händler"}
+{"id": "motorcycle-dealership", "name": "Motorcycle Dealership", "parent": "automotive-retail", "fsq_ids": ["5032833091d4c4b30a586d60"], "de": "Motorradhändler"}
+{"id": "motorsports-store", "name": "Motorsports Store", "parent": "automotive-retail", "fsq_ids": ["59d79d6b2e268052fa2a3332"], "de": "Motorsport-Shop"}
+{"id": "baby-store", "name": "Baby Store", "parent": "retail", "fsq_ids": ["52f2ab2ebcbc57f1066b8b32"], "de": "Babyladen"}
+{"id": "betting-shop", "name": "Betting Shop", "parent": "retail", "fsq_ids": ["52f2ab2ebcbc57f1066b8b40"], "de": "Wettbüro"}
+{"id": "large-format-store", "name": "Large-Format Store", "parent": "retail", "fsq_ids": ["52f2ab2ebcbc57f1066b8b42"], "de": "Großer Laden"}
+{"id": "bookstore", "name": "Bookstore", "parent": "retail", "fsq_ids": ["4bf58dd8d48988d114951735"], "de": "Buchhandlung"}
+{"id": "used-bookstore", "name": "Used Bookstore", "parent": "bookstore", "fsq_ids": ["52f2ab2ebcbc57f1066b8b30"], "de": "Gebrauchtbuchhandlung"}
+{"id": "boutique", "name": "Boutique", "parent": "retail", "fsq_ids": ["4bf58dd8d48988d104951735"], "de": "Boutique"}
+{"id": "cannabis-store", "name": "Cannabis Store", "parent": "retail", "fsq_ids": ["63be6904847c3692a84b9be9"], "de": "Cannabisladen"}
+{"id": "comic-book-store", "name": "Comic Book Store", "parent": "retail", "fsq_ids": ["52f2ab2ebcbc57f1066b8b18"], "de": "Comicbuchladen"}
+{"id": "computers-and-electronics-retail", "name": "Computers and Electronics Retail", "parent": "retail", "fsq_ids": ["63be6904847c3692a84b9bea"], "de": "Computer- und Elektronikeinzelhandel"}
+{"id": "camera-store", "name": "Camera Store", "parent": "computers-and-electronics-retail", "fsq_ids": ["4eb1bdf03b7b55596b4a7491"], "de": "Fotogeschäft"}
+{"id": "electronics-store", "name": "Electronics Store", "parent": "computers-and-electronics-retail", "fsq_ids": ["4bf58dd8d48988d122951735"], "de": "Elektronikladen"}
+{"id": "mobile-phone-store", "name": "Mobile Phone Store", "parent": "computers-and-electronics-retail", "fsq_ids": ["4f04afc02fb6e1c99f3db0bc"], "de": "Handyladen"}
+{"id": "video-games-store", "name": "Video Games Store", "parent": "computers-and-electronics-retail", "fsq_ids": ["4bf58dd8d48988d10b951735"], "de": "Videospielladen"}
+{"id": "convenience-store", "name": "Convenience Store", "parent": "retail", "fsq_ids": ["4d954b0ea243a5684a65b473"], "de": "Convenience-Store"}
+{"id": "cosmetics-store", "name": "Cosmetics Store", "parent": "retail", "fsq_ids": ["4bf58dd8d48988d10c951735"], "de": "Kosmetikgeschäft"}
+{"id": "costume-store", "name": "Costume Store", "parent": "retail", "fsq_ids": ["52f2ab2ebcbc57f1066b8b17"], "de": "Kostümladen"}
+{"id": "dance-store", "name": "Dance Store", "parent": "retail", "fsq_ids": ["63be6904847c3692a84b9beb"], "de": "Tanzladen"}
+{"id": "department-store", "name": "Department Store", "parent": "retail", "fsq_ids": ["4bf58dd8d48988d1f6941735"], "de": "Kaufhaus"}
+{"id": "discount-store", "name": "Discount Store", "parent": "retail", "fsq_ids": ["52dea92d3cf9994f4e043dbb"], "de": "Discounter"}
+{"id": "drugstore", "name": "Drugstore", "parent": "retail", "fsq_ids": ["5745c2e4498e11e7bccabdbd"], "de": "Drogerie"}
+{"id": "duty-free-store", "name": "Duty-free Store", "parent": "retail", "fsq_ids": ["589ddde98ae3635c072819ee"], "de": "Duty-free-Shop"}
+{"id": "fashion-retail", "name": "Fashion Retail", "parent": "retail", "fsq_ids": ["63be6904847c3692a84b9bec"], "de": "Modeeinzelhandel"}
+{"id": "batik-store", "name": "Batik Store", "parent": "fashion-retail", "fsq_ids": ["56aa371be4b08b9a8d5734cb"], "de": "Batik-Shop"}
+{"id": "bridal-store", "name": "Bridal Store", "parent": "fashion-retail", "fsq_ids": ["4bf58dd8d48988d11a951735"], "de": "Brautmodengeschäft"}
+{"id": "children-s-clothing-store", "name": "Children's Clothing Store", "parent": "fashion-retail", "fsq_ids": ["4bf58dd8d48988d105951735"], "de": "Kinderbekleidungsgeschäft"}
+{"id": "clothing-store", "name": "Clothing Store", "parent": "fashion-retail", "fsq_ids": ["4bf58dd8d48988d103951735"], "de": "Bekleidungsgeschäft"}
+{"id": "fashion-accessories-store", "name": "Fashion Accessories Store", "parent": "fashion-retail", "fsq_ids": ["4bf58dd8d48988d102951735"], "de": "Geschäft für Modeaccessoires"}
+{"id": "jewelry-store", "name": "Jewelry Store", "parent": "fashion-retail", "fsq_ids": ["4bf58dd8d48988d111951735"], "de": "Juweliergeschäft"}
+{"id": "lingerie-store", "name": "Lingerie Store", "parent": "fashion-retail", "fsq_ids": ["4bf58dd8d48988d109951735"], "de": "Dessousgeschäft"}
+{"id": "men-s-store", "name": "Men's Store", "parent": "fashion-retail", "fsq_ids": ["4bf58dd8d48988d106951735"], "de": "Herrengeschäft"}
+{"id": "shoe-store", "name": "Shoe Store", "parent": "fashion-retail", "fsq_ids": ["4bf58dd8d48988d107951735"], "de": "Schuhgeschäft"}
+{"id": "sunglasses-store", "name": "Sunglasses Store", "parent": "fashion-retail", "fsq_ids": ["63be6904847c3692a84b9bed"], "de": "Sonnenbrillengeschäft"}
+{"id": "swimwear-store", "name": "Swimwear Store", "parent": "fashion-retail", "fsq_ids": ["63be6904847c3692a84b9bee"], "de": "Bademodengeschäft"}
+{"id": "watch-store", "name": "Watch Store", "parent": "fashion-retail", "fsq_ids": ["52f2ab2ebcbc57f1066b8b2e"], "de": "Uhrenladen"}
+{"id": "women-s-store", "name": "Women's Store", "parent": "fashion-retail", "fsq_ids": ["4bf58dd8d48988d108951735"], "de": "Damengeschäft"}
+{"id": "fireworks-store", "name": "Fireworks Store", "parent": "retail", "fsq_ids": ["52f2ab2ebcbc57f1066b8b3a"], "de": "Feuerwerksladen"}
+{"id": "flea-market", "name": "Flea Market", "parent": "retail", "fsq_ids": ["4bf58dd8d48988d1f7941735"], "de": "Flohmarkt"}
+{"id": "floating-market", "name": "Floating Market", "parent": "retail", "fsq_ids": ["56aa371be4b08b9a8d573505"], "de": "Schwimmender Markt"}
+{"id": "flower-store", "name": "Flower Store", "parent": "retail", "fsq_ids": ["4bf58dd8d48988d11b951735"], "de": "Blumenladen"}
+{"id": "food-and-beverage-retail", "name": "Food and Beverage Retail", "parent": "retail", "fsq_ids": ["4bf58dd8d48988d1f9941735"], "de": "Lebensmittel- und Getränkeeinzelhandel"}
+{"id": "beer-store", "name": "Beer Store", "parent": "food-and-beverage-retail", "fsq_ids": ["5370f356bcbc57f1066c94c2"], "de": "Bierladen"}
+{"id": "butcher-or-meat-store", "name": "Butcher or Meat Store", "parent": "food-and-beverage-retail", "fsq_ids": ["4bf58dd8d48988d11d951735", "63be6904847c3692a84b9bf0", "56aa371be4b08b9a8d573564"], "de": ["Metzger", "Fleisch- und Meeresfrüchteladen", "Wurstladen"]}
+{"id": "candy-store", "name": "Candy Store", "parent": "food-and-beverage-retail", "fsq_ids": ["4bf58dd8d48988d117951735"], "de": "Süßwarengeschäft"}
+{"id": "cheese-store", "name": "Cheese Store", "parent": "food-and-beverage-retail", "fsq_ids": ["4bf58dd8d48988d11e951735"], "de": "Käseladen"}
+{"id": "chocolate-store", "name": "Chocolate Store", "parent": "food-and-beverage-retail", "fsq_ids": ["52f2ab2ebcbc57f1066b8b31"], "de": "Schokoladenladen"}
+{"id": "coffee-roaster", "name": "Coffee Roaster", "parent": "food-and-beverage-retail", "fsq_ids": ["5e18993feee47d000759b256"], "de": "Kaffeeröster"}
+{"id": "dairy-store", "name": "Dairy Store", "parent": "food-and-beverage-retail", "fsq_ids": ["58daa1558bbb0b01f18ec1ca"], "de": "Milchladen"}
+{"id": "farmers-market", "name": "Farmers Market", "parent": "food-and-beverage-retail", "fsq_ids": ["4bf58dd8d48988d1fa941735"], "de": "Bauernmarkt"}
+{"id": "fish-market", "name": "Fish Market", "parent": "food-and-beverage-retail", "fsq_ids": ["4bf58dd8d48988d10e951735"], "de": "Fischmarkt"}
+{"id": "fruit-and-vegetable-store", "name": "Fruit and Vegetable Store", "parent": "food-and-beverage-retail", "fsq_ids": ["52f2ab2ebcbc57f1066b8b1c"], "de": "Obst- und Gemüseladen"}
+{"id": "gourmet-store", "name": "Gourmet Store", "parent": "food-and-beverage-retail", "fsq_ids": ["4bf58dd8d48988d1f5941735"], "de": "Gourmet-Laden"}
+{"id": "grocery-store", "name": "Grocery Store", "parent": "food-and-beverage-retail", "fsq_ids": ["4bf58dd8d48988d118951735"], "de": "Lebensmittelgeschäft"}
+{"id": "organic-grocery", "name": "Organic Grocery", "parent": "food-and-beverage-retail", "fsq_ids": ["52f2ab2ebcbc57f1066b8b45"], "de": "Bio-Lebensmittel"}
+{"id": "health-food-store", "name": "Health Food Store", "parent": "food-and-beverage-retail", "fsq_ids": ["50aa9e744b90af0d42d5de0e"], "de": "Reformhaus"}
+{"id": "herbs-and-spices-store", "name": "Herbs and Spices Store", "parent": "food-and-beverage-retail", "fsq_ids": ["52f2ab2ebcbc57f1066b8b2c"], "de": "Kräuter- und Gewürzladen"}
+{"id": "imported-food-store", "name": "Imported Food Store", "parent": "food-and-beverage-retail", "fsq_ids": ["5f2c41945b4c177b9a6dc7d6"], "de": "Importierter Lebensmittelladen"}
+{"id": "kosher-store", "name": "Kosher Store", "parent": "food-and-beverage-retail", "fsq_ids": ["63be6904847c3692a84b9bef"], "de": "Koscherer Laden"}
+{"id": "nut-and-dried-fruit-store", "name": "Nut and Dried Fruit Store", "parent": "food-and-beverage-retail", "fsq_ids": ["58daa1558bbb0b01f18ec1e8"], "de": "Kuruyemişçi-Shop"}
+{"id": "liquor-store", "name": "Liquor Store", "parent": "food-and-beverage-retail", "fsq_ids": ["4bf58dd8d48988d186941735"], "de": "Spirituosengeschäft"}
+{"id": "supermarket", "name": "Supermarket", "parent": "food-and-beverage-retail", "fsq_ids": ["52f2ab2ebcbc57f1066b8b46"], "de": "Supermarkt"}
+{"id": "pickle-store", "name": "Pickle Store", "parent": "food-and-beverage-retail", "fsq_ids": ["58daa1558bbb0b01f18ec1e5"], "de": "Turşucu-Shop"}
+{"id": "wine-store", "name": "Wine Store", "parent": "food-and-beverage-retail", "fsq_ids": ["4bf58dd8d48988d119951735"], "de": "Weinladen"}
+{"id": "framing-store", "name": "Framing Store", "parent": "retail", "fsq_ids": ["52f2ab2ebcbc57f1066b8b24"], "de": "Einrahmungsgeschäft"}
+{"id": "furniture-and-home-store", "name": "Furniture and Home Store", "parent": "retail", "fsq_ids": ["4bf58dd8d48988d1f8941735"], "de": "Möbel- und Einrichtungsgeschäft"}
+{"id": "carpet-store", "name": "Carpet Store", "parent": "furniture-and-home-store", "fsq_ids": ["52f2ab2ebcbc57f1066b8b2a"], "de": "Teppichgeschäft"}
+{"id": "home-appliance-store", "name": "Home Appliance Store", "parent": "furniture-and-home-store", "fsq_ids": ["63be6904847c3692a84b9bf1"], "de": "Haushaltsgerätegeschäft"}
+{"id": "housewares-store", "name": "Housewares Store", "parent": "furniture-and-home-store", "fsq_ids": ["63be6904847c3692a84b9bf2"], "de": "Haushaltswarengeschäft"}
+{"id": "kitchen-supply-store", "name": "Kitchen Supply Store", "parent": "furniture-and-home-store", "fsq_ids": ["58daa1558bbb0b01f18ec1b4"], "de": "Geschäft für Küchenbedarf"}
+{"id": "lighting-store", "name": "Lighting Store", "parent": "furniture-and-home-store", "fsq_ids": ["55888a5a498e782e3303b43a"], "de": "Beleuchtungsgeschäft"}
+{"id": "mattress-store", "name": "Mattress Store", "parent": "furniture-and-home-store", "fsq_ids": ["52f2ab2ebcbc57f1066b8b27"], "de": "Matratzengeschäft"}
+{"id": "garden-center", "name": "Garden Center", "parent": "retail", "fsq_ids": ["4eb1c0253b7b52c0e1adc2e9"], "de": "Gartencenter"}
+{"id": "gift-store", "name": "Gift Store", "parent": "retail", "fsq_ids": ["4bf58dd8d48988d128951735"], "de": "Geschenkeladen"}
+{"id": "hardware-store-and-building-supplies", "name": "Hardware Store and Building Supplies", "parent": "retail", "fsq_ids": ["4bf58dd8d48988d112951735", "5454144b498ec1f095bff2f2"], "de": ["Baumarkt", "Baubedarfsgeschäft"]}
+{"id": "hobby-store", "name": "Hobby Store", "parent": "retail", "fsq_ids": ["4bf58dd8d48988d1fb941735"], "de": "Hobbyladen"}
+{"id": "knitting-store", "name": "Knitting Store", "parent": "retail", "fsq_ids": ["52f2ab2ebcbc57f1066b8b25"], "de": "Strickgeschäft"}
+{"id": "leather-goods-store", "name": "Leather Goods Store", "parent": "retail", "fsq_ids": ["52f2ab2ebcbc57f1066b8b2b"], "de": "Lederwarengeschäft"}
+{"id": "luggage-store", "name": "Luggage Store", "parent": "retail", "fsq_ids": ["52f2ab2ebcbc57f1066b8b29"], "de": "Koffergeschäft"}
+{"id": "market", "name": "Market", "parent": "retail", "fsq_ids": ["50be8ee891d4fa8dcc7199a7"], "de": "Markt"}
+{"id": "medical-supply-store", "name": "Medical Supply Store", "parent": "retail", "fsq_ids": ["58daa1558bbb0b01f18ec206"], "de": "Sanitätshaus"}
+{"id": "miscellaneous-store", "name": "Miscellaneous Store", "parent": "retail", "fsq_ids": ["4bf58dd8d48988d1ff941735"], "de": "Sonstiges Geschäft"}
+{"id": "mobility-store", "name": "Mobility Store", "parent": "retail", "fsq_ids": ["56aa371be4b08b9a8d57354a"], "de": "Mobilitätsladen"}
+{"id": "music-store", "name": "Music Store", "parent": "retail", "fsq_ids": ["4bf58dd8d48988d1fe941735"], "de": "Musikladen"}
+{"id": "newsagent-or-newsstand", "name": "Newsagent or Newsstand", "parent": "retail", "fsq_ids": ["5f2c5a295b4c177b9a6ddd0e", "4f04ad622fb6e1c99f3db0b9"], "de": ["Zeitungshändler", "Zeitungsstand"]}
+{"id": "office-supply-store", "name": "Office Supply Store", "parent": "retail", "fsq_ids": ["4bf58dd8d48988d121951735"], "de": "Geschäft für Bürobedarf"}
+{"id": "outdoor-supply-store", "name": "Outdoor Supply Store", "parent": "retail", "fsq_ids": ["52f2ab2ebcbc57f1066b8b22"], "de": "Outdoor-Bedarfsgeschäft"}
+{"id": "outlet-mall", "name": "Outlet Mall", "parent": "retail", "fsq_ids": ["5744ccdfe4b0c0459246b4df"], "de": "Outlet-Mall"}
+{"id": "outlet-store", "name": "Outlet Store", "parent": "retail", "fsq_ids": ["52f2ab2ebcbc57f1066b8b35"], "de": "Outlet-Store"}
+{"id": "packaging-supply-store", "name": "Packaging Supply Store", "parent": "retail", "fsq_ids": ["63be6904847c3692a84b9bf3"], "de": "Verpackungsbedarfsgeschäft"}
+{"id": "party-supply-store", "name": "Party Supply Store", "parent": "retail", "fsq_ids": ["63be6904847c3692a84b9bf4"], "de": "Geschäft für Partybedarf"}
+{"id": "pawn-shop", "name": "Pawn Shop", "parent": "retail", "fsq_ids": ["52f2ab2ebcbc57f1066b8b34"], "de": "Pfandhaus"}
+{"id": "perfume-store", "name": "Perfume Store", "parent": "retail", "fsq_ids": ["52f2ab2ebcbc57f1066b8b23"], "de": "Parfümerie"}
+{"id": "pet-supplies-store", "name": "Pet Supplies Store", "parent": "retail", "fsq_ids": ["4bf58dd8d48988d100951735"], "de": "Geschäft für Heimtierbedarf"}
+{"id": "pharmacy", "name": "Pharmacy", "parent": "retail", "fsq_ids": ["4bf58dd8d48988d10f951735"], "de": "Apotheke"}
+{"id": "pop-up-store", "name": "Pop-Up Store", "parent": "retail", "fsq_ids": ["52f2ab2ebcbc57f1066b8b3d"], "de": "Pop-Up-Store"}
+{"id": "print-shop", "name": "Print Shop", "parent": "retail", "fsq_ids": ["52f2ab2ebcbc57f1066b8b28"], "de": "Druckshop"}
+{"id": "record-store", "name": "Record Store", "parent": "retail", "fsq_ids": ["4bf58dd8d48988d10d951735"], "de": "Plattenladen"}
+{"id": "shopping-mall", "name": "Shopping Mall", "parent": "retail", "fsq_ids": ["4bf58dd8d48988d1fd941735"], "de": "Einkaufszentrum"}
+{"id": "shopping-plaza", "name": "Shopping Plaza", "parent": "retail", "fsq_ids": ["5744ccdfe4b0c0459246b4dc"], "de": "Einkaufsplatz"}
+{"id": "souvenir-store", "name": "Souvenir Store", "parent": "retail", "fsq_ids": ["52f2ab2ebcbc57f1066b8b1b"], "de": "Souvenirladen"}
+{"id": "sporting-goods-retail", "name": "Sporting Goods Retail", "parent": "retail", "fsq_ids": ["4bf58dd8d48988d1f2941735"], "de": "Sportartikeleinzelhandel"}
+{"id": "board-sports-store", "name": "Board Sports Store", "parent": "sporting-goods-retail", "fsq_ids": ["4bf58dd8d48988d1f1941735"], "de": "Brettladen"}
+{"id": "baseball-store", "name": "Baseball Store", "parent": "sporting-goods-retail", "fsq_ids": ["63be6904847c3692a84b9bf5"], "de": "Baseball-Laden"}
+{"id": "bicycle-store", "name": "Bicycle Store", "parent": "sporting-goods-retail", "fsq_ids": ["4bf58dd8d48988d115951735"], "de": "Fahrradladen"}
+{"id": "dive-store", "name": "Dive Store", "parent": "sporting-goods-retail", "fsq_ids": ["52f2ab2ebcbc57f1066b8b1a"], "de": "Tauchshop"}
+{"id": "fishing-store", "name": "Fishing Store", "parent": "sporting-goods-retail", "fsq_ids": ["52f2ab2ebcbc57f1066b8b16"], "de": "Angelgeschäft"}
+{"id": "golf-store", "name": "Golf Store", "parent": "sporting-goods-retail", "fsq_ids": ["63be6904847c3692a84b9bf6"], "de": "Golfladen"}
+{"id": "gun-store", "name": "Gun Store", "parent": "sporting-goods-retail", "fsq_ids": ["52f2ab2ebcbc57f1066b8b19"], "de": "Waffenladen"}
+{"id": "hunting-supply-store", "name": "Hunting Supply Store", "parent": "sporting-goods-retail", "fsq_ids": ["50aaa5234b90af0d42d5de12"], "de": "Jagdbedarfsgeschäft"}
+{"id": "running-store", "name": "Running Store", "parent": "sporting-goods-retail", "fsq_ids": ["63be6904847c3692a84b9bf7"], "de": "Laufgeschäft"}
+{"id": "skate-store", "name": "Skate Store", "parent": "sporting-goods-retail", "fsq_ids": ["5bae9231bedf3950379f89d2"], "de": "Skateshop"}
+{"id": "ski-store", "name": "Ski Store", "parent": "sporting-goods-retail", "fsq_ids": ["56aa371be4b08b9a8d573566"], "de": "Skigeschäft"}
+{"id": "soccer-store", "name": "Soccer Store", "parent": "sporting-goods-retail", "fsq_ids": ["63be6904847c3692a84b9bf8"], "de": "Fußballladen"}
+{"id": "surf-store", "name": "Surf Store", "parent": "sporting-goods-retail", "fsq_ids": ["63be6904847c3692a84b9bf9"], "de": "Surfshop"}
+{"id": "tennis-store", "name": "Tennis Store", "parent": "sporting-goods-retail", "fsq_ids": ["63be6904847c3692a84b9bfa"], "de": "Tennisladen"}
+{"id": "stationery-store", "name": "Stationery Store", "parent": "retail", "fsq_ids": ["52f2ab2ebcbc57f1066b8b21"], "de": "Schreibwarenladen"}
+{"id": "supplement-store", "name": "Supplement Store", "parent": "retail", "fsq_ids": ["5744ccdfe4b0c0459246b4cd"], "de": "Nahrungsergänzungsmittelgeschäft"}
+{"id": "swimming-pool-supply-store", "name": "Swimming Pool Supply Store", "parent": "retail", "fsq_ids": ["63be6904847c3692a84b9bfb"], "de": "Schwimmbadbedarfsgeschäft"}
+{"id": "textiles-store", "name": "Textiles Store", "parent": "retail", "fsq_ids": ["52f2ab2ebcbc57f1066b8b26"], "de": "Textilgeschäft"}
+{"id": "tobacco-store", "name": "Tobacco Store", "parent": "retail", "fsq_ids": ["63be6904847c3692a84b9bfc"], "de": "Tabakladen"}
+{"id": "toy-store", "name": "Toy Store", "parent": "retail", "fsq_ids": ["4bf58dd8d48988d1f3941735"], "de": "Spielzeugladen"}
+{"id": "vape-store", "name": "Vape Store", "parent": "retail", "fsq_ids": ["56aa371be4b08b9a8d57355c"], "de": "Vape-Shop"}
+{"id": "video-store", "name": "Video Store", "parent": "retail", "fsq_ids": ["4bf58dd8d48988d126951735"], "de": "Videothek"}
+{"id": "vintage-and-thrift-store", "name": "Vintage and Thrift Store", "parent": "retail", "fsq_ids": ["4bf58dd8d48988d101951735"], "de": "Vintage- und Gebrauchtwarenladen"}
+{"id": "sports-recreation-and-outdoors", "name": "Sports, Recreation and Outdoors", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["4f4528bc4b90abdf24c9de85", "4d4b7105d754a06377d81259"], "de": "Sport und Freizeit"}
+{"id": "bathing-area", "name": "Bathing Area", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["52e81612bcbc57f1066b7a28"], "de": "Badebereich"}
+{"id": "bay", "name": "Bay", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["56aa371be4b08b9a8d573544"], "de": "Bucht"}
+{"id": "beach", "name": "Beach", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["4bf58dd8d48988d1e2941735"], "de": "Strand"}
+{"id": "bike-trail", "name": "Bike Trail", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["56aa371be4b08b9a8d57355e"], "de": "Radweg"}
+{"id": "boat-launch", "name": "Boat Launch", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["5fabfc8099ce226e27fe6b0d"], "de": "Bootsanleger"}
+{"id": "botanical-garden", "name": "Botanical Garden", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["52e81612bcbc57f1066b7a22"], "de": "Botanischer Garten"}
+{"id": "bridge", "name": "Bridge", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["4bf58dd8d48988d1df941735"], "de": "Brücke"}
+{"id": "campground", "name": "Campground", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["4bf58dd8d48988d1e4941735"], "de": "Campingplatz"}
+{"id": "canal", "name": "Canal", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["56aa371be4b08b9a8d573562"], "de": "Kanal"}
+{"id": "canal-lock", "name": "Canal Lock", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["56aa371be4b08b9a8d57353b"], "de": "Kanalschleuse"}
+{"id": "castle", "name": "Castle", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["50aaa49e4b90af0d42d5de11"], "de": "Schloss"}
+{"id": "cave", "name": "Cave", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["56aa371be4b08b9a8d573511"], "de": "Höhle"}
+{"id": "dam", "name": "Dam", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["5fac018b99ce226e27fe7573"], "de": "Damm"}
+{"id": "dive-spot", "name": "Dive Spot", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["52e81612bcbc57f1066b7a12"], "de": "Tauchplatz"}
+{"id": "farm", "name": "Farm", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["4bf58dd8d48988d15b941735"], "de": "Bauernhof"}
+{"id": "field", "name": "Field", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["4bf58dd8d48988d15f941735"], "de": "Feld"}
+{"id": "forest", "name": "Forest", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["52e81612bcbc57f1066b7a23"], "de": "Wald"}
+{"id": "fountain", "name": "Fountain", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["56aa371be4b08b9a8d573547"], "de": "Brunnen"}
+{"id": "garden", "name": "Garden", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["4bf58dd8d48988d15a941735"], "de": "Garten"}
+{"id": "harbor-or-marina", "name": "Harbor or Marina", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["4bf58dd8d48988d1e0941735"], "de": "Hafen oder Marina"}
+{"id": "hiking-trail", "name": "Hiking Trail", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["4bf58dd8d48988d159941735"], "de": "Wanderweg"}
+{"id": "hill", "name": "Hill", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["5bae9231bedf3950379f89cd"], "de": "Hügel"}
+{"id": "historic-and-protected-site", "name": "Historic and Protected Site", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["4deefb944765f83613cdba6e"], "de": "Historische und geschützte Stätte"}
+{"id": "hot-spring", "name": "Hot Spring", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["4bf58dd8d48988d160941735"], "de": "Heiße Quelle"}
+{"id": "island", "name": "Island", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["50aaa4314b90af0d42d5de10"], "de": "Insel"}
+{"id": "lake", "name": "Lake", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["4bf58dd8d48988d161941735"], "de": "See"}
+{"id": "lighthouse", "name": "Lighthouse", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["4bf58dd8d48988d15d941735"], "de": "Leuchtturm"}
+{"id": "memorial-site", "name": "Memorial Site", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["5642206c498e4bfca532186c"], "de": "Gedenkstätte"}
+{"id": "monument", "name": "Monument", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["4bf58dd8d48988d12d941735"], "de": "Monument"}
+{"id": "mountain", "name": "Mountain", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["4eb1d4d54b900d56c88a45fc"], "de": "Berg"}
+{"id": "nature-preserve", "name": "Nature Preserve", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["52e81612bcbc57f1066b7a13"], "de": "Naturschutzgebiet"}
+{"id": "nudist-beach", "name": "Nudist Beach", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["52e81612bcbc57f1066b7a30"], "de": "FKK-Strand"}
+{"id": "other-outdoor-place", "name": "Other Outdoor Place", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["4bf58dd8d48988d162941735"], "de": "Andere tolle Naturerlebnisse"}
+{"id": "palace", "name": "Palace", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["52e81612bcbc57f1066b7a14"], "de": "Palast"}
+{"id": "park", "name": "Park", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["4bf58dd8d48988d163941735"], "de": "Park"}
+{"id": "dog-park", "name": "Dog Park", "parent": "park", "fsq_ids": ["4bf58dd8d48988d1e5941735"], "de": "Hundepark"}
+{"id": "national-park", "name": "National Park", "parent": "park", "fsq_ids": ["52e81612bcbc57f1066b7a21"], "de": "Nationalpark"}
+{"id": "nature-park", "name": "Nature Park", "parent": "park", "fsq_ids": ["63be6904847c3692a84b9be0", "5bae9231bedf3950379f89d0"], "de": ["Naturpark", "Staats- oder Provinzpark"]}
+{"id": "picnic-area", "name": "Picnic Area", "parent": "park", "fsq_ids": ["5fabfe3599ce226e27fe709a"], "de": "Picknickplatz"}
+{"id": "playground", "name": "Playground", "parent": "park", "fsq_ids": ["4bf58dd8d48988d1e7941735"], "de": "Spielplatz"}
+{"id": "urban-park", "name": "Urban Park", "parent": "park", "fsq_ids": ["63be6904847c3692a84b9be1"], "de": "Stadtpark"}
+{"id": "pedestrian-zone", "name": "Pedestrian Zone", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["52e81612bcbc57f1066b7a25"], "de": "Fußgängerzone"}
+{"id": "picnic-shelter", "name": "Picnic Shelter", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["5fac010d99ce226e27fe7467"], "de": "Picknick-Unterstand"}
+{"id": "town-square", "name": "Town Square", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["4bf58dd8d48988d164941735"], "de": "Plaza"}
+{"id": "reservoir", "name": "Reservoir", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["56aa371be4b08b9a8d573541"], "de": "Reservoir"}
+{"id": "river", "name": "River", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["4eb1d4dd4b900d56c88a45fd"], "de": "Fluss"}
+{"id": "rock-climbing-spot", "name": "Rock Climbing Spot", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["50328a4b91d4c4b30a586d6b"], "de": "Kletterplatz"}
+{"id": "roof-deck", "name": "Roof Deck", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["4bf58dd8d48988d133951735"], "de": "Dachterrasse"}
+{"id": "scenic-lookout", "name": "Scenic Lookout", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["4bf58dd8d48988d165941735"], "de": "Malerischer Aussichtspunkt"}
+{"id": "sculpture-garden", "name": "Sculpture Garden", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["4bf58dd8d48988d166941735"], "de": "Skulpturengarten"}
+{"id": "surf-spot", "name": "Surf Spot", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["4bf58dd8d48988d1e3941735"], "de": "Surfspot"}
+{"id": "tree", "name": "Tree", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["52e81612bcbc57f1066b7a24"], "de": "Baum"}
+{"id": "tunnel", "name": "Tunnel", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["52f2ab2ebcbc57f1066b8b4a"], "de": "Tunnel"}
+{"id": "volcano", "name": "Volcano", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["5032848691d4c4b30a586d61"], "de": "Vulkan"}
+{"id": "waterfall", "name": "Waterfall", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["56aa371be4b08b9a8d573560"], "de": "Wasserfall"}
+{"id": "waterfront", "name": "Waterfront", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["56aa371be4b08b9a8d5734c3"], "de": "Uferpromenade"}
+{"id": "windmill", "name": "Windmill", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["5bae9231bedf3950379f89c7"], "de": "Windmühle"}
+{"id": "athletic-field", "name": "Athletic Field", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["63be6904847c3692a84b9bfd"], "de": "Sportplatz"}
+{"id": "bowling-green", "name": "Bowling Green", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["52e81612bcbc57f1066b7a2f"], "de": "Bowling Green"}
+{"id": "cricket-ground", "name": "Cricket Ground", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["4bf58dd8d48988d18a941735"], "de": "Cricketplatz"}
+{"id": "curling-rink", "name": "Curling Rink", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["56aa371be4b08b9a8d57351a"], "de": "Eisstockschießen"}
+{"id": "equestrian-facility", "name": "Equestrian Facility", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["63be6904847c3692a84b9c04"], "de": "Reitanlage"}
+{"id": "fishing-area", "name": "Fishing Area", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["52e81612bcbc57f1066b7a0f"], "de": "Angelgebiet"}
+{"id": "gun-range", "name": "Gun Range", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["52e81612bcbc57f1066b7a11"], "de": "Schießstand"}
+{"id": "gym-and-fitness-studio", "name": "Gym and Fitness Studio", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["4bf58dd8d48988d175941735"], "de": "Fitnessstudio"}
+{"id": "boxing-gym", "name": "Boxing Gym", "parent": "gym-and-fitness-studio", "fsq_ids": ["52f2ab2ebcbc57f1066b8b47"], "de": "Boxhalle"}
+{"id": "climbing-gym", "name": "Climbing Gym", "parent": "gym-and-fitness-studio", "fsq_ids": ["503289d391d4c4b30a586d6a"], "de": "Kletterhalle"}
+{"id": "dance-studio", "name": "Dance Studio", "parent": "gym-and-fitness-studio", "fsq_ids": ["4bf58dd8d48988d134941735"], "de": "Tanzstudio"}
+{"id": "ice-hockey-rink", "name": "Ice Hockey Rink", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["56aa371be4b08b9a8d57352c"], "de": "Eishockeystadion"}
+{"id": "race-track", "name": "Race Track", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["4bf58dd8d48988d1f4931735"], "de": "Rennstrecke"}
+{"id": "recreation-center", "name": "Recreation Center", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["52e81612bcbc57f1066b7a26"], "de": "Erholungszentrum"}
+{"id": "sauna", "name": "Sauna", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["58daa1558bbb0b01f18ec1ae"], "de": "Sauna"}
+{"id": "skydiving-center", "name": "Skydiving Center", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["63be6904847c3692a84b9c18"], "de": "Fallschirmsprungzentrum"}
+{"id": "sports-club", "name": "Sports Club", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["52e81612bcbc57f1066b7a2e"], "de": "Sportverein"}
+{"id": "baseball-club", "name": "Baseball Club", "parent": "sports-club", "fsq_ids": ["63be6904847c3692a84b9bff"], "de": "Baseballverein"}
+{"id": "basketball-club", "name": "Basketball Club", "parent": "sports-club", "fsq_ids": ["63be6904847c3692a84b9c02"], "de": "Basketballverein"}
+{"id": "football-soccer-club", "name": "Football (Soccer) Club", "parent": "sports-club", "fsq_ids": ["63be6904847c3692a84b9c1b"], "de": "Fußballverein"}
+{"id": "golf-club", "name": "Golf Club", "parent": "sports-club", "fsq_ids": ["63be6904847c3692a84b9c09"], "de": "Golfclub"}
+{"id": "athletics-club", "name": "Athletics Club", "parent": "sports-club", "fsq_ids": ["63be6904847c3692a84b9c15"], "de": "Leichtathletikverein"}
+{"id": "sailing-club", "name": "Sailing Club", "parent": "sports-club", "fsq_ids": ["63be6904847c3692a84b9c1f"], "de": "Segelverein"}
+{"id": "swimming-club", "name": "Swimming Club", "parent": "sports-club", "fsq_ids": ["63be6904847c3692a84b9c23"], "de": "Schwimmverein"}
+{"id": "canoe-and-kayak-rental", "name": "Canoe and Kayak Rental", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["63be6904847c3692a84b9c1d"], "de": "Kanu- und Kajakverleih"}
+{"id": "swimming-pool", "name": "Swimming Pool", "parent": "sports-recreation-and-outdoors", "fsq_ids": ["4bf58dd8d48988d15e941735"], "de": "Schwimmbad"}
+{"id": "travel-and-transportation", "name": "Travel and Transportation", "parent": "travel-and-transportation", "fsq_ids": ["4d4b7105d754a06379d81259"], "de": "Reisen und Transport"}
+{"id": "baggage-locker", "name": "Baggage Locker", "parent": "travel-and-transportation", "fsq_ids": ["5744ccdfe4b0c0459246b4e8"], "de": "Gepäckschließfach"}
+{"id": "bike-rental", "name": "Bike Rental", "parent": "travel-and-transportation", "fsq_ids": ["4e4c9077bd41f78e849722f9"], "de": "Fahrradverleih"}
+{"id": "boat-rental", "name": "Boat Rental", "parent": "travel-and-transportation", "fsq_ids": ["5744ccdfe4b0c0459246b4c1"], "de": "Bootsverleih"}
+{"id": "boat-or-ferry", "name": "Boat or Ferry", "parent": "travel-and-transportation", "fsq_ids": ["4bf58dd8d48988d12d951735"], "de": "Boot oder Fähre"}
+{"id": "border-crossing", "name": "Border Crossing", "parent": "travel-and-transportation", "fsq_ids": ["52f2ab2ebcbc57f1066b8b4b"], "de": "Grenzübergang"}
+{"id": "cable-car", "name": "Cable Car", "parent": "travel-and-transportation", "fsq_ids": ["52f2ab2ebcbc57f1066b8b50"], "de": "Seilbahn"}
+{"id": "cruise", "name": "Cruise", "parent": "travel-and-transportation", "fsq_ids": ["55077a22498e5e9248869ba2"], "de": "Kreuzfahrt"}
+{"id": "electric-vehicle-charging-station", "name": "Electric Vehicle Charging Station", "parent": "travel-and-transportation", "fsq_ids": ["5032872391d4c4b30a586d64"], "de": "Ladestation für Elektrofahrzeuge"}
+{"id": "fuel-station", "name": "Fuel Station", "parent": "travel-and-transportation", "fsq_ids": ["4bf58dd8d48988d113951735"], "de": "Tankstelle"}
+{"id": "hot-air-balloon-tour-agency", "name": "Hot Air Balloon Tour Agency", "parent": "travel-and-transportation", "fsq_ids": ["63be6904847c3692a84b9c24"], "de": "Agentur für Heißluftballontouren"}
+{"id": "lodging", "name": "Lodging", "parent": "travel-and-transportation", "fsq_ids": ["63be6904847c3692a84b9c25"], "de": "Unterkunft"}
+{"id": "mountain-hut-or-lodge", "name": "Mountain Hut or Lodge", "parent": "lodging", "fsq_ids": ["55a5a1ebe4b013909087cb77", "63be6904847c3692a84b9c27"], "de": ["Berghütte", "Hütte"]}
+{"id": "guesthouse-or-bed-and-breakfast", "name": "Guesthouse or Bed and Breakfast", "parent": "lodging", "fsq_ids": ["4f4530a74b9074f6e4fb0100", "4bf58dd8d48988d1f8931735"], "de": ["Pension", "Übernachtung mit Frühstück"]}
+{"id": "hostel", "name": "Hostel", "parent": "lodging", "fsq_ids": ["4bf58dd8d48988d1ee931735"], "de": "Herberge"}
+{"id": "hotel", "name": "Hotel", "parent": "lodging", "fsq_ids": ["4bf58dd8d48988d1fa931735"], "de": "Hotel"}
+{"id": "inn", "name": "Inn", "parent": "lodging", "fsq_ids": ["5bae9231bedf3950379f89cb"], "de": "Gasthof"}
+{"id": "motel", "name": "Motel", "parent": "lodging", "fsq_ids": ["4bf58dd8d48988d1fb931735"], "de": "Motel"}
+{"id": "resort", "name": "Resort", "parent": "lodging", "fsq_ids": ["4bf58dd8d48988d12f951735"], "de": "Resort"}
+{"id": "vacation-rental", "name": "Vacation Rental", "parent": "lodging", "fsq_ids": ["56aa371be4b08b9a8d5734e1"], "de": "Ferienwohnung"}
+{"id": "parking", "name": "Parking", "parent": "travel-and-transportation", "fsq_ids": ["4c38df4de52ce0d596b336e1"], "de": "Parken"}
+{"id": "pier", "name": "Pier", "parent": "travel-and-transportation", "fsq_ids": ["4e74f6cabd41c4836eac4c31"], "de": "Pier"}
+{"id": "port-or-marine-terminal", "name": "Port or Marine Terminal", "parent": "travel-and-transportation", "fsq_ids": ["56aa371be4b08b9a8d57353e", "5f2c1af1b6d05514c704319d"], "de": ["Hafen", "Marineterminal"]}
+{"id": "motorhome-and-caravan-park", "name": "Motorhome and Caravan Park", "parent": "travel-and-transportation", "fsq_ids": ["52f2ab2ebcbc57f1066b8b53", "52f2ab2ebcbc57f1066b8b55"], "de": ["Wohnmobilpark", "Wohnwagenpark"]}
+{"id": "rest-area", "name": "Rest Area", "parent": "travel-and-transportation", "fsq_ids": ["4d954b16a243a5684b65b473"], "de": "Rastplatz"}
+{"id": "toll-booth", "name": "Toll Booth", "parent": "travel-and-transportation", "fsq_ids": ["52f2ab2ebcbc57f1066b8b4d"], "de": "Mautstelle"}
+{"id": "tourist-information-and-service", "name": "Tourist Information and Service", "parent": "travel-and-transportation", "fsq_ids": ["4f4530164b9074f6e4fb00ff"], "de": "Touristische Informationen und Service"}
+{"id": "tour-provider", "name": "Tour Provider", "parent": "tourist-information-and-service", "fsq_ids": ["56aa371be4b08b9a8d573520"], "de": "Reiseanbieter"}
+{"id": "transport-hub", "name": "Transport Hub", "parent": "travel-and-transportation", "fsq_ids": ["63be6904847c3692a84b9c28"], "de": "Verkehrsknotenpunkt"}
+{"id": "airport", "name": "Airport", "parent": "transport-hub", "fsq_ids": ["4bf58dd8d48988d1ed931735"], "de": "Flughafen"}
+{"id": "airfield", "name": "Airfield", "parent": "transport-hub", "fsq_ids": ["5f2c42335b4c177b9a6dc927"], "de": "Flugplatz"}
+{"id": "bus-station", "name": "Bus Station", "parent": "transport-hub", "fsq_ids": ["4bf58dd8d48988d1fe931735"], "de": "Busbahnhof"}
+{"id": "bus-stop", "name": "Bus Stop", "parent": "transport-hub", "fsq_ids": ["52f2ab2ebcbc57f1066b8b4f"], "de": "Bushaltestelle"}
+{"id": "heliport", "name": "Heliport", "parent": "transport-hub", "fsq_ids": ["56aa371ce4b08b9a8d57356e"], "de": "Hubschrauberlandeplatz"}
+{"id": "light-rail-station", "name": "Light Rail Station", "parent": "transport-hub", "fsq_ids": ["4bf58dd8d48988d1fc931735"], "de": "Stadtbahnstation"}
+{"id": "metro-station", "name": "Metro Station", "parent": "transport-hub", "fsq_ids": ["4bf58dd8d48988d1fd931735"], "de": "U-Bahn-Station"}
+{"id": "rail-station", "name": "Rail Station", "parent": "transport-hub", "fsq_ids": ["4bf58dd8d48988d129951735"], "de": "Bahnhof"}
+{"id": "taxi-stand", "name": "Taxi Stand", "parent": "transport-hub", "fsq_ids": ["53fca564498e1a175f32528b"], "de": "Taxistand"}
+{"id": "tram-station", "name": "Tram Station", "parent": "transport-hub", "fsq_ids": ["52f2ab2ebcbc57f1066b8b51"], "de": "Straßenbahnhaltestelle"}
+{"id": "car-rental", "name": "Car Rental", "parent": "travel-and-transportation", "fsq_ids": ["4bf58dd8d48988d1ef941735"], "de": "Standort des Mietwagens"}
+{"id": "transportation-service", "name": "Transportation Service", "parent": "travel-and-transportation", "fsq_ids": ["54541b70498ea6ccd0204bff"], "de": "Transportdienst"}
+{"id": "charter-bus", "name": "Charter Bus", "parent": "transportation-service", "fsq_ids": ["63be6904847c3692a84b9c2b"], "de": "Charterbus"}
+{"id": "limo-service", "name": "Limo Service", "parent": "transportation-service", "fsq_ids": ["63be6904847c3692a84b9c2c"], "de": "Limousinenservice"}
+{"id": "public-transportation", "name": "Public Transportation", "parent": "transportation-service", "fsq_ids": ["63be6904847c3692a84b9c2d"], "de": "Öffentliche Verkehrsmittel"}
+{"id": "bus-line", "name": "Bus Line", "parent": "transportation-service", "fsq_ids": ["4bf58dd8d48988d12b951735"], "de": "Buslinie"}
+{"id": "taxi", "name": "Taxi", "parent": "transportation-service", "fsq_ids": ["4bf58dd8d48988d130951735"], "de": "Taxi"}
+{"id": "travel-agency", "name": "Travel Agency", "parent": "travel-and-transportation", "fsq_ids": ["4f04b08c2fb6e1c99f3db0bd"], "de": "Reisebüro"}
+{"id": "travel-lounge", "name": "Travel Lounge", "parent": "travel-and-transportation", "fsq_ids": ["4f04b25d2fb6e1c99f3db0c0"], "de": "Reiselounge"}
+{"id": "truck-stop", "name": "Truck Stop", "parent": "travel-and-transportation", "fsq_ids": ["57558b36e4b065ecebd306dd"], "de": "Autohof"}

@@ -1,0 +1,40 @@
+# Labelling how-to (half page)
+
+Read `docs/annotation_guideline.md` once before you start. This page is only the mechanics.
+
+## Start the tool
+
+From the repository root, with your own ID (L1, L2 or L3):
+
+```
+PYTHONPATH=src python3 -m ic.gold.annotate --labeller L1 --port 8800
+```
+
+`--prefill` (`all`, `primary` or `none`) sets which items show a suggestion. It defaults to `all`; leave it. (Or `ic` installed with `pip install -e .`, then without `PYTHONPATH`). Open http://127.0.0.1:8800/ in a browser. If the suggestions are in another file, add `--prefill-file <path>` (default: `<data-dir>/prefill.jsonl`; a suggestion line with an `error` is ignored). The tool reads captures and your assignment from `datasets/goldset/gold/` and writes only to `datasets/goldset/gold/labels/<your ID>.jsonl`. It opens at your first unlabelled item. If you work on a remote machine, forward the port (`ssh -L 8800:127.0.0.1:8800 host`); do not bind it to a public interface.
+
+## Per item
+
+1. Look at the screenshot (left; click to zoom) and the DOM text (middle). The **Landing** and **Imprint** buttons switch both panes; keys L and I do the same.
+2. The form (right) can show a model suggestion for the main address (pill "pre-filled", banner on top). Violet values are suggested and not yet confirmed. Orange fields are not found verbatim in the captured text: check them. Go through the form top to bottom: site status, imprint, main address, topic labels (POI and WZ), flags, comment. There is no operator type and no 11-class topic.
+3. Label the **main address only** (guideline section 3). There is one address card. If the imprint has no operator address, press "no address" on the card. If the imprint has an address but no card is shown, press "enter the main address". Accept, correct or remove each value. The buttons are "show" (the evidence is highlighted in the DOM text) and "no address". To correct an address field: select the text in the middle pane, then press the arrow button beside the field. Use "split selection into fields" for a whole address, then check each field. Type only for addresses that exist only in an image. Other addresses on the imprint are not entered; tick the flag `multi_address` instead.
+4. Press **Save & next (Ctrl+Enter)**, or **Save** to stay on the item. Errors are shown in red and nothing is saved until they are fixed. Orange warnings (a field is not found in the DOM text) are only hints.
+5. Use the live site (header link) only as a fallback; the link ticks `used_live_site` for you. Say why in the comment.
+
+## Topic labels (sections 5a and 5b)
+
+Rules: section 5.1 to 5.9 of the guideline. Nothing is pre-filled here. These sections are unchanged.
+
+- Type in the search field (POI: English or German name; WZ: code or German title). Each result shows its full path. Click a result to pick it.
+- Pick one **main label** per schema. Pick the finest node you can decide. An inner node is allowed when the site does not decide between its children.
+- Add 0 to 2 **extra labels**. An extra must not be the main label or an ancestor of it; the tool refuses it when you pick it, and removes it with a note when you change the main label.
+- Set **confidence** (high, medium, low) for each schema. Tick **online only** for blogs, forums, portals and web services (POI only).
+- No node fits, or the site is parked or hijacked: leave the main label empty and write the reason in the note.
+- Press the x on a label to change it.
+
+## Good to know
+
+- The first 50 items are the calibration round, the same for all three of us. Do not discuss them until all three are done.
+- Go back with Prev or the item list; saving again replaces your earlier label (the file keeps the history). Time is counted while the tab is in focus.
+- Close the tool with Ctrl+C; nothing is lost, saves are immediate. Restart it to continue.
+- You never see anyone else's labels. The suggestion is a draft; see section 1.1 of the guideline. Do not look at other labels elsewhere.
+- Do not edit the files in `datasets/goldset/gold/` by hand. Tool problems or guideline questions: write them in the item's comment and tell the coordinator (to be set).

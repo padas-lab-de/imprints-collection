@@ -9,6 +9,7 @@ from shapely.geometry import Point
 from tqdm import tqdm
 
 from ic.config import *
+from ic.utils.address_utils import has_address
 
 TOTAL_HOSTS = 6_560_119
 
@@ -123,7 +124,7 @@ def stats(model: str, language: str, prompt_type: str):
                                     ):
                                         pages_fields_count[page_type][key] += 1
 
-                        if "address" in data:
+                        if has_address(data.get("address")):
                             address_count += 1
 
                             for key, value in data["address"].items():
