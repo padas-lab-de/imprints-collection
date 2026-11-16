@@ -8,7 +8,7 @@ Library (detect, site_flags, ...) plus two commands:
   apply --in TABLES_DIR --scan FILE [FILE ...] --targets redirect_targets.tsv --out OUT_DIR
         [--name-for-sale-flag-only]
         combine the scan rows with the canonical sites of count_sites.py (see apply_filter).
-        --name-for-sale-flag-only: hosts flagged only by the rule r2_name_for_sale get category sale_flag
+        --name-for-sale-flag-only: hosts flagged only by the rule added_name_for_sale get category sale_flag
         (listed in flagged_sites.tsv, site kept). Without it they get category sale and the site is dropped.
         The final count uses --name-for-sale-flag-only.
 
@@ -34,7 +34,7 @@ WEAK_MAX = 1500  # max content_length for weak patterns
 STRONG_MAX = 20000  # pages longer than this are never flagged
 WINDOW = 3000  # text window: title + description + first WINDOW chars of main_content
 SAMPLE_MOD = 10000  # scan emits a snippet row for md5(SALT + host) % SAMPLE_MOD == 0 (precision/recall sample)
-SAMPLE_SALT = "E40"  # fixed salt of the published sample; a new value changes sample_found_hosts.tsv
+SAMPLE_SALT = "E40"  # fixed value: the manually labelled samples were drawn with it; a new value changes the sample
 
 _FOR_SALE = (
     r"(?:zum verkauf|zu verkaufen|for sale|available for purchase|zum kauf|käuflich|zu haben|zum erwerb|verkäuflich)"
@@ -138,14 +138,14 @@ PATTERNS_FIRST = [(c, lab, re.compile(rx, re.I | re.M), strong, _GATES[lab]) for
 
 # ----------------------------------------------------------------------------------------- added rules
 # Added from the misses of the first rule set and from reading unflagged short found pages. The first rule
-# set above is unchanged. The added labels start with "r2_" (the label names in the published scan files)
-# and map to the same categories.
+# set above is unchanged. The added labels start with "added_" (as in the published scan files) and
+# map to the same categories.
 _DOM = r"[\w\-äöü]+(?:\.[\w\-äöü]+)*\.[a-z]{2,10}"  # a domain name token
 _P_ADDED = [
     # ---- sale ----
     (
         "sale",
-        "r2_sale_template",  # fixed sentences of sale templates (kv-gmbh, "aktuell kaufen und sofort übernehmen", ...)
+        "added_sale_template",  # fixed sentences of sale templates (kv-gmbh, "aktuell kaufen und sofort übernehmen", ...)
         r"(?:am\s+kauf\s+der\s+domain|können\s+die\s+domain\s+\S+\s+(?:aktuell\s+|jetzt\s+)?kaufen|wird\s+zum\s+kauf\s+angeboten"
         r"|diese\s+domain\s+können\s+sie\s+(?:\w+\s+)?(?:käuflich\s+)?erwerben|domain\s+names?\s+(?:are\s+|is\s+)?for\s+sale|\bnamepros\b|\b301\s*domains\b"
         r"|interested\s+in\s+(?:buying\s+)?(?:this|the)\s+domain|interesse\s+an\s+(?:dieser|einer\s+unserer)\s+(?:top-?\s*|premium-?\s*)?domains?\b"
@@ -155,7 +155,7 @@ _P_ADDED = [
     ),
     (
         "sale",
-        "r2_name_for_sale",  # "<domain> steht zum Verkauf", "Die Domain <domain> ist zu verkaufen", "Diese Domain, , ist zum Verkauf"
+        "added_name_for_sale",  # "<domain> steht zum Verkauf", "Die Domain <domain> ist zu verkaufen", "Diese Domain, , ist zum Verkauf"
         r"(?:\b" + _DOM + r"|\bdomains?(?:\s+[„\"']?" + _DOM + r"[“\"']?|\s*,\s*,?))\s+(?:steht|ist|wird|stehen|sind)\s+"
         r"(?:jetzt\s+|aktuell\s+|derzeit\s+|ab\s+sofort\s+)?(?:zum\s+verkauf|zu\s+verkaufen|for\s+sale|zum\s+kauf|zu\s+haben)"
         r"|^\s*" + _DOM + r"\s+(?:zu\s+verkaufen|for\s+sale)\b|domain[^.\n]{0,80}\bum\s+sie\s+zu\s+erwerben",
@@ -164,7 +164,7 @@ _P_ADDED = [
     # ---- parked / registrar and registry placeholder ----
     (
         "park",
-        "r2_park_template",  # fixed registrar / registry sentences (united-domains, IONOS, DENIC transit, BrandShelter, freenet)
+        "added_park_template",  # fixed registrar / registry sentences (united-domains, IONOS, DENIC transit, BrandShelter, freenet)
         r"(?:im\s+kundenauftrag\s+(?:registriert|reserviert)|diese\s+domain\s+ist\s+bereits\s+(?:bei\s+\S+\s+)?registriert"
         r"|aufgerufene\s+domain\s+ist\s+derzeit\s+nicht\s+erreichbar|domaininhaber\s+ist\s+bereits\s+informiert"
         r"|registered\s+on\s+behalf\s+of\s+a\s+client|\bbrand\s*shelter\b|als\s+mail[- ]?domain\s+registriert"
@@ -174,7 +174,7 @@ _P_ADDED = [
     ),
     (
         "park",
-        "r2_park_phrase",  # shorter registrar phrases, only on short pages
+        "added_park_phrase",  # shorter registrar phrases, only on short pages
         r"(?:für\s+(?:einen|unsere[nm]?)\s+(?:unserer\s+)?kunden(?:\s+(?:von|der|bei)\s+\S+(?:\s+\S+)?)?\s+(?:registriert|reserviert)"
         r"|domain\s+wurde\s+erfolgreich\s+registriert|domain\s+ist\s+registriert,?\s+(?:derzeit|jedoch|aber)|diese\s+domain\s+ist\s+reserviert"
         r"|^\s*reserviert\s+für\b|diese\s+domain\s+(?:ist\s+(?:derzeit\s+)?inaktiv|wurde\s+deaktiviert)"
@@ -185,7 +185,7 @@ _P_ADDED = [
     # ---- hosting default / account pages ----
     (
         "host",
-        "r2_host_template",  # fixed hoster placeholder sentences (EUserv, Advantic, compaso, nicmanager, tralios, ...)
+        "added_host_template",  # fixed hoster placeholder sentences (EUserv, Advantic, compaso, nicmanager, tralios, ...)
         r"(?:dieser\s+platzhalter\s+von|homepage,\s+webspace\s+oder\s+server\s+nicht\s+gefunden|keiner\s+aktiven\s+website\s+zugeordnet"
         r"|webhost\s+wurde\s+neu\s+eingerichtet|auf\s+diesem\s+account\s+noch\s+keine\s+daten\s+hinterlegt"
         r"|(?:\(noch\)|noch)\s+kein\s+(?:webseiten)?inhalt\s+hinterlegt|kein\s+webseiteninhalt\s+hinterlegt"
@@ -195,7 +195,7 @@ _P_ADDED = [
     ),
     (
         "host",
-        "r2_host_phrase",  # shorter hoster phrases, only on short pages
+        "added_host_phrase",  # shorter hoster phrases, only on short pages
         r"(?:webserver\s+von\s+\S+(?:\s+\S+)?\s+erreicht|homepage\s+kann\s+leider\s+nicht\s+aufgerufen\s+werden"
         r"|(?:webseite|website)\s+(?:ist\s+)?aktuell\s+nicht\s+erreichbar|ist\s+lediglich\s+(?:ein\s+)?platzhalter"
         r"|domains?\s+&\s+hosting\s+von\s+helloly|in\s+3\s+minuten\s+zur\s+eigenen\s+domain|diese\s+domain\s+wird\s+bei\s+\S+(?:\s+\S+)?\s+gehostet)",
@@ -204,7 +204,7 @@ _P_ADDED = [
     # ---- under construction (not a drop rule) ----
     (
         "constr",
-        "r2_under_construction",
+        "added_under_construction",
         r"(?:hier\s+entsteh(?:t|en)\s+(?:in\s+kürze|demnächst|gerade|zur\s+zeit|derzeit)|befindet\s+sich\s+(?:zur\s+zeit\s+|derzeit\s+|gerade\s+)?im\s+umbau"
         r"|folgt\s+in\s+kürze|(?:website|webseite|homepage|internetseite|seite)\s+(?:ist\s+|befindet\s+sich\s+)?in\s+erstellung"
         r"|(?:website|webseite|homepage)\s+folgt\b|strona\s+w\s+przygotowaniu|currently\s+being\s+migrated)",
@@ -212,19 +212,19 @@ _P_ADDED = [
     ),
 ]
 _GATES_ADDED = {
-    "r2_sale_template": ("kauf", "erwerben", "for sale", "namepros", "301", "interest", "interesse", "ausbau", "verkauf"),
-    "r2_name_for_sale": ("verkauf", "for sale", "zum kauf", "zu haben", "erwerben"),
-    "r2_park_template": ("kundenauftrag", "bereits", "nicht erreichbar", "on behalf", "shelter", "mail", "als kunde", "kein inhalt", "noch registriert"),
-    "r2_park_phrase": ("kunden", "registriert", "reserviert", "inaktiv", "deaktiviert", "genutzt", "bereitstellung"),
-    "r2_host_template": ("platzhalter", "nicht gefunden", "aktiven website", "webhost", "hinterlegt", "keine webseite", "keine website", "zeigt erfolgreich", "knotenpunkt", "now connected"),
-    "r2_host_phrase": ("erreicht", "nicht aufgerufen", "nicht erreichbar", "platzhalter", "helloly", "eigenen domain", "gehostet"),
-    "r2_under_construction": ("entsteh", "umbau", "kürze", "erstellung", "folgt", "przygotowaniu", "migrated"),
+    "added_sale_template": ("kauf", "erwerben", "for sale", "namepros", "301", "interest", "interesse", "ausbau", "verkauf"),
+    "added_name_for_sale": ("verkauf", "for sale", "zum kauf", "zu haben", "erwerben"),
+    "added_park_template": ("kundenauftrag", "bereits", "nicht erreichbar", "on behalf", "shelter", "mail", "als kunde", "kein inhalt", "noch registriert"),
+    "added_park_phrase": ("kunden", "registriert", "reserviert", "inaktiv", "deaktiviert", "genutzt", "bereitstellung"),
+    "added_host_template": ("platzhalter", "nicht gefunden", "aktiven website", "webhost", "hinterlegt", "keine webseite", "keine website", "zeigt erfolgreich", "knotenpunkt", "now connected"),
+    "added_host_phrase": ("erreicht", "nicht aufgerufen", "nicht erreichbar", "platzhalter", "helloly", "eigenen domain", "gehostet"),
+    "added_under_construction": ("entsteh", "umbau", "kürze", "erstellung", "folgt", "przygotowaniu", "migrated"),
 }
 PATTERNS_ADDED = [(c, lab, re.compile(rx, re.I | re.M), strong, _GATES_ADDED[lab]) for c, lab, rx, strong in _P_ADDED]
 PATTERNS = PATTERNS_FIRST + PATTERNS_ADDED  # default: both rule sets
 CAT_ORDER = {"sale": 0, "park": 1, "host": 2, "constr": 3, "sale_flag": 4}
 # --name-for-sale-flag-only: scan label -> kept category (flag only, like constr; not in write_final_site_list.DROP)
-FLAG_ONLY = {"r2_name_for_sale": "sale_flag"}
+FLAG_ONLY = {"added_name_for_sale": "sale_flag"}
 CORE = ("sale", "park")
 
 
@@ -292,7 +292,7 @@ def scan_dir(d, targets, out, stats):
                     snip = (_flat(desc, 150), str(len(content)), _flat(content, 400))
                     if hit:
                         extra = ()
-                        if hit[1].startswith("r2_"):  # an added rule decides: keep the first-rule-set result and the page text
+                        if hit[1].startswith("added_"):  # an added rule decides: keep the first-rule-set result and the page text
                             h1 = detect(title, desc, content, m.get("content_length") or len(content), PATTERNS_FIRST)
                             extra = (h1[0] if h1 else "", h1[1] if h1 else "", *snip)
                         flagged[h] = (hit, url, _flat(title, 80), extra)
@@ -408,7 +408,7 @@ def apply_filter(indir, scan_paths, targets_path, outdir, name_for_sale_flag_onl
     (count_sites.canonical). A site's found hosts are collected over all sources. "new per source" = the
     first-source rule of count_sites.py.
 
-    name_for_sale_flag_only: a host whose scan label is r2_name_for_sale gets category sale_flag instead of
+    name_for_sale_flag_only: a host whose scan label is added_name_for_sale gets category sale_flag instead of
     sale. It still counts as flagged for site_flags (as constr does), so a site whose found hosts are all
     flagged is listed; its category is the most severe one, so the site is dropped by write_final_site_list.py
     only if another host has sale, park or host. Default False: such hosts get category sale."""
@@ -451,7 +451,7 @@ def apply_filter(indir, scan_paths, targets_path, outdir, name_for_sale_flag_onl
     total_sites = len(seen)
     core = tot["sale"] + tot["park"]
     with open(out / "filter_by_source.tsv", "w") as f:
-        f.write("source\tnew_d34\tflagged_all\tsale\tpark\thost\tconstr\tnew_d34_after_core\tnew_d34_after_all\n")
+        f.write("source\tnew_sites\tflagged_all\tsale\tpark\thost\tconstr\tnew_sites_after_core\tnew_sites_after_all\n")
         for r in rows + [("TOTAL", total_sites, len(sf), tot["sale"], tot["park"], tot["host"], tot["constr"])]:
             nm, n, fa, sa, pa, ho, co = r
             f.write("\t".join(map(str, [nm, n, fa, sa, pa, ho, co, n - sa - pa, n - fa])) + "\n")
@@ -487,7 +487,7 @@ def main(argv=None):
     a.add_argument(
         "--name-for-sale-flag-only",
         action="store_true",
-        help="r2_name_for_sale hosts -> category sale_flag: listed in flagged_sites.tsv, site not dropped",
+        help="added_name_for_sale hosts -> category sale_flag: listed in flagged_sites.tsv, site not dropped",
     )
     a = ap.parse_args(argv)
     apply_filter(a.indir, a.scan, a.targets, a.out, a.name_for_sale_flag_only)

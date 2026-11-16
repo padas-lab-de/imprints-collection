@@ -21,7 +21,7 @@ OUT=$2
 PY=${PY:-python3}
 HERE=$(cd "$(dirname "$0")" && pwd)
 
-for p in crawl_tables/manifest.tsv earlier_filter/flagged_sites.tsv redirect_targets.tsv \
+for p in crawl_tables/manifest.tsv page_scans/coverage.tsv earlier_filter/flagged_sites.tsv redirect_targets.tsv \
   expected/sites.sha256 expected/filter.sha256 expected/delta_by_category.tsv; do
   [ -e "$DATA/$p" ] || { echo "missing $DATA/$p (run collection/download_release_data.sh first)" >&2; exit 2; }
 done
@@ -32,8 +32,8 @@ echo "== 1/3 count sites"
 "$PY" "$HERE/count_sites.py" --in "$DATA/crawl_tables" --out "$OUT/sites" > "$OUT/sites.log"
 
 echo "== 2/3 apply the parking filter"
-# scan files in sorted order: a later file wins for a host that is in two files
-mapfile -t SCANS < <(ls "$DATA"/page_scans/*.scan.tsv | LC_ALL=C sort)
+# scan files in the row order of coverage.tsv: a later file wins for a host that is in two files
+mapfile -t SCANS < <(tail -n +2 "$DATA/page_scans/coverage.tsv" | cut -f3 | sed "s|\.tsv\$|.scan.tsv|; s|^|$DATA/page_scans/|")
 "$PY" "$HERE/filter_parking_domains.py" apply --in "$DATA/crawl_tables" --scan "${SCANS[@]}" \
   --targets "$DATA/redirect_targets.tsv" --out "$OUT/filter" --name-for-sale-flag-only
 

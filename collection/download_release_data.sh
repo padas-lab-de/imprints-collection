@@ -5,36 +5,32 @@
 #   DATA_DIR   target dir (default: $IC_DATA_ROOT/collection, or ./data/collection). About 1.1 GB.
 # Env:
 #   MC               MinIO client binary (default: mc)
-#   IC_DATA_PACKAGE  package location as an mc path (default: innkube/datasets/imprints/20261109).
+#   IC_DATA_PACKAGE  package location as an mc path (default: innkube/datasets/imprints/20261116).
 #                    Set up the alias first: mc alias set innkube https://share.innkube.fim.uni-passau.de KEY SECRET
 #
 # Local layout written (names used by reproduce_final_count.sh):
 #   crawl_tables/          one compact table (host, status, redirect target) per crawl dir + manifest.tsv
-#   page_scans/            parking / for-sale scan of the home pages, one *.scan.tsv per crawl dir
+#   page_scans/            parking / for-sale scan of the home pages, one *.scan.tsv per crawl dir, and
+#                          coverage.tsv (one row per scan file, in the order the filter applies them)
 #   earlier_filter/        result of the first version of the parking filter (for the comparison tables)
 #   redirect_targets.tsv   classified redirect targets (same file as collection/redirect_targets.tsv)
 #   expected/              published checksums and the published delta_by_category.tsv
 set -euo pipefail
 
 MC=${MC:-mc}
-PACKAGE=${IC_DATA_PACKAGE:-innkube/datasets/imprints/20261109}
+PACKAGE=${IC_DATA_PACKAGE:-innkube/datasets/imprints/20261116}
 DATA=${1:-${IC_DATA_ROOT:-./data}/collection}
 
-# ---------------------------------------------------------------------------------------------------------
-# Folder names in the 20261109 data package. The package was built with internal working names; this block
-# is the only place in the repository where they appear. Left: local name; right: path in the package.
+# Left: local name; right: path in the package.
 PACKAGE_PATHS=(
-  "crawl_tables/                  counts/r5/E31_in/"
-  "page_scans/                    counts/r5/E40r2_scan/"
-  "earlier_filter/                counts/r4/E40_out/"
-  "redirect_targets.tsv           filter/E40r2/targets_classified.tsv"
-  "expected/count_sums.txt        counts/r5/SHA256SUMS.txt"
-  "expected/filter_sums.txt       counts/r5/E40r2/SHA256SUMS.txt"
-  "expected/delta_by_category.tsv counts/r5/E40r2/delta_by_category.tsv"
+  "crawl_tables/                  count/crawl_tables/"
+  "page_scans/                    count/page_scans/"
+  "earlier_filter/                count/earlier_filter/"
+  "redirect_targets.tsv           count/redirect_targets.tsv"
+  "expected/sites.sha256          count/expected/sites.sha256"
+  "expected/filter.sha256         count/expected/filter.sha256"
+  "expected/delta_by_category.tsv count/filter/delta_by_category.tsv"
 )
-# In counts/r5/SHA256SUMS.txt the outputs of count_sites.py are listed under this prefix.
-COUNT_SUMS_PREFIX="E31_out/"
-# ---------------------------------------------------------------------------------------------------------
 
 mkdir -p "$DATA/expected"
 DATA=$(cd "$DATA" && pwd)
@@ -65,7 +61,4 @@ echo "== check sha256 against the package manifest"
 (cd "$DATA" && sha256sum --quiet -c "$checks")
 echo "   $(wc -l < "$checks") files OK"
 
-# checksums of the count outputs, without the package prefix
-grep -F "  $COUNT_SUMS_PREFIX" "$DATA/expected/count_sums.txt" | sed "s|  $COUNT_SUMS_PREFIX|  |" > "$DATA/expected/sites.sha256"
-cp "$DATA/expected/filter_sums.txt" "$DATA/expected/filter.sha256"
 echo "== done: $DATA"

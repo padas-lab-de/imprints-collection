@@ -11,14 +11,11 @@ its redirect target is the target of that last row.
 Counts over the union of all sources (the column prefix in release_count.tsv is given in brackets):
   exact   distinct imprint_found hosts (lowercased)
   www     distinct hosts after www.x -> x
-  site    [d34] distinct canonical sites, the primary count: t = host of main.url after redirects. If the
+  site    [sites] distinct canonical sites, the primary count: t = host of main.url after redirects. If the
           www-collapsed t is a crawled host (any row of any source), the site is collapse(t); else collapse(h).
-  found   [d34f] variant of site: a host folds into its redirect target only if the target is itself
+  found   [sites_found_only] variant of site: a host folds into its redirect target only if the target is itself
           imprint_found in some source (canonical_sites_found_only.txt).
 "new" per source = items not present in any earlier source (same measure).
-
-The column names (d34, d34f) are the names in the published data package; they are kept so that the
-outputs match the package checksums.
 
 Writes OUT_DIR/release_count.tsv, release_stats.tsv, canonical_sites.txt (sorted),
 canonical_sites_found_only.txt, redirect_cases.tsv.
@@ -83,7 +80,7 @@ def compute(sources):
         n, found = read_source(paths, crawled)
         loaded.append((name, len(paths), n, found))
     found_collapsed = {collapse(h) for _, _, _, f in loaded for h in f}
-    cum = dict(exact=set(), www=set(), d34=set(), d34f=set())
+    cum = dict(exact=set(), www=set(), sites=set(), sites_found_only=set())
     table, st, cases = [], Counter(), []
     first_seen = set()
     for name, nfiles, nhosts, found in loaded:
@@ -110,7 +107,7 @@ def compute(sources):
                 st["target_site_known"] += known
                 st["target_site_unknown"] += not known
                 if c != collapse(h):
-                    st["changed_by_d34"] += 1
+                    st["changed_by_redirect_fold"] += 1
                 cases.append((h, t, c, name, "known" if known else "unknown"))
         row = dict(
             source=name,
@@ -119,25 +116,28 @@ def compute(sources):
             imprint_found=len(ex),
             new_exact=len(ex - cum["exact"]),
             new_www=len(ww - cum["www"]),
-            new_d34=len(d3 - cum["d34"]),
-            new_d34f=len(d3f - cum["d34f"]),
+            new_sites=len(d3 - cum["sites"]),
+            new_sites_found_only=len(d3f - cum["sites_found_only"]),
         )
         cum["exact"] |= ex
         cum["www"] |= ww
-        cum["d34"] |= d3
-        cum["d34f"] |= d3f
+        cum["sites"] |= d3
+        cum["sites_found_only"] |= d3f
         row.update(
-            cum_exact=len(cum["exact"]), cum_www=len(cum["www"]), cum_d34=len(cum["d34"]), cum_d34f=len(cum["d34f"])
+            cum_exact=len(cum["exact"]),
+            cum_www=len(cum["www"]),
+            cum_sites=len(cum["sites"]),
+            cum_sites_found_only=len(cum["sites_found_only"]),
         )
         table.append(row)
     st["crawled_hosts_collapsed"] = len(crawled)
     total = dict(source="TOTAL", files=sum(r["files"] for r in table), hosts=sum(r["hosts"] for r in table))
     total.update(imprint_found=sum(r["imprint_found"] for r in table))
-    for k in ("exact", "www", "d34", "d34f"):
+    for k in ("exact", "www", "sites", "sites_found_only"):
         total["new_" + k] = total["cum_" + k] = len(cum[k])
     table.append(total)
-    compute.d34f_sites = cum["d34f"]  # variant site set, written by main()
-    return table, st, cum["d34"], cases
+    compute.found_only_sites = cum["sites_found_only"]  # variant site set, written by main()
+    return table, st, cum["sites"], cases
 
 
 COLS = [
@@ -149,10 +149,10 @@ COLS = [
     "cum_exact",
     "new_www",
     "cum_www",
-    "new_d34",
-    "cum_d34",
-    "new_d34f",
-    "cum_d34f",
+    "new_sites",
+    "cum_sites",
+    "new_sites_found_only",
+    "cum_sites_found_only",
 ]
 
 
@@ -173,7 +173,7 @@ def main(argv=None):
     (out / "release_count.tsv").write_text(text)
     (out / "release_stats.tsv").write_text("".join(f"{k}\t{v}\n" for k, v in sorted(st.items())))
     (out / "canonical_sites.txt").write_text("".join(s + "\n" for s in sorted(sites)))
-    (out / "canonical_sites_found_only.txt").write_text("".join(s + "\n" for s in sorted(compute.d34f_sites)))
+    (out / "canonical_sites_found_only.txt").write_text("".join(s + "\n" for s in sorted(compute.found_only_sites)))
     changed = [c for c in cases if c[2] != collapse(c[0])]
     keep = [c for c in cases if c[2] == collapse(c[0])]
     with open(out / "redirect_cases.tsv", "w") as f:

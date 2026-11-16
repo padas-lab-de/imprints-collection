@@ -39,10 +39,10 @@ def _status(d, name, rows):
 
 
 def _manifest(tmp_path, entries):
-    lines = ["source\tvm\tdir\tfile\trows\tsha256\tstats"]
+    lines = ["source\tdir\tfile\trows\tsha256\tstats"]
     for src, fn, rows in entries:
         (tmp_path / fn).write_text("".join(f"{h}\t{s}\t{t}\n" for h, s, t in rows))
-        lines.append(f"{src}\tv\td\t{fn}\t0\t0\t")
+        lines.append(f"{src}\td\t{fn}\t0\t0\t")
     (tmp_path / "manifest.tsv").write_text("\n".join(lines) + "\n")
     return rc.load_manifest(tmp_path)
 
@@ -74,12 +74,12 @@ def test_last_row_wins_and_counts(tmp_path):
     table, st, sites, cases = rc.compute(list(m.items()))
     a, b, total = table
     assert a["imprint_found"] == 4  # x.de, www.x.de, a.de, c.de
-    assert a["new_exact"] == 4 and a["new_www"] == 3 and a["new_d34"] == 3  # x.de, b.de (via a.de), c.de
+    assert a["new_exact"] == 4 and a["new_www"] == 3 and a["new_sites"] == 3  # x.de, b.de (via a.de), c.de
     assert b["new_exact"] == 2 and b["new_www"] == 2  # b.de, n.de
-    assert b["new_d34"] == 1  # b.de already a canonical site of A; n.de new
-    assert total["cum_exact"] == 6 and total["cum_www"] == 5 and total["cum_d34"] == 4
+    assert b["new_sites"] == 1  # b.de already a canonical site of A; n.de new
+    assert total["cum_exact"] == 6 and total["cum_www"] == 5 and total["cum_sites"] == 4
     assert sites == {"x.de", "b.de", "c.de", "n.de"}
-    assert st["changed_by_d34"] == 1 and st["target_site_known"] == 1 and st["target_site_unknown"] == 1
+    assert st["changed_by_redirect_fold"] == 1 and st["target_site_known"] == 1 and st["target_site_unknown"] == 1
 
 
 def test_variant_folds_only_into_found_target(tmp_path):
@@ -100,8 +100,8 @@ def test_variant_folds_only_into_found_target(tmp_path):
     )
     table, st, sites, cases = rc.compute(list(m.items()))
     assert sites == {"b.de", "d.de"}  # redirects fold: a.de -> b.de, c.de -> d.de
-    assert rc.compute.d34f_sites == {"a.de", "d.de"}  # variant: a.de stays, c.de -> d.de
-    assert table[-1]["cum_d34"] == 2 and table[-1]["cum_d34f"] == 2
+    assert rc.compute.found_only_sites == {"a.de", "d.de"}  # variant: a.de stays, c.de -> d.de
+    assert table[-1]["cum_sites"] == 2 and table[-1]["cum_sites_found_only"] == 2
 
 
 def test_extract_reads_status_and_redirect(tmp_path):

@@ -125,8 +125,11 @@ names and the labelling dates are to be set.
 ## Data location
 
 The data package of the 2026 snapshot is on the Uni Passau innkube S3 storage
-(`https://share.innkube.fim.uni-passau.de`, bucket `datasets`, prefix `imprints/20261109/`).
-It holds the crawl output, the crawl tables, the page scans and the checksums (`MANIFEST.sha256`).
+(`https://share.innkube.fim.uni-passau.de`, bucket `datasets`, prefix `imprints/20261116/`).
+It holds the crawl output (`crawls/`), the host lists that went into each crawl (`lists/`), the inputs
+and outputs of the site count (`count/`), the manual label samples of the filters (`evidence/`), a git
+bundle of this repository (`code/`) and the checksums of all files (`MANIFEST.sha256`). Its `README.md`
+describes the layout.
 Ask the maintainers for a read key.
 
 ## License

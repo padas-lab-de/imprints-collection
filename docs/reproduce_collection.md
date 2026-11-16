@@ -39,7 +39,7 @@ No crawling and no LLM is needed.
    collection/download_release_data.sh data/collection
    ```
 
-   Expected last lines: `219 files OK` and `== done: ...`. Set `MC` if `mc` is not on your `PATH`, and
+   Expected last lines: `218 files OK` and `== done: ...`. Set `MC` if `mc` is not on your `PATH`, and
    `IC_DATA_PACKAGE` if the package is at another location.
 
 3. Compute the count:
@@ -82,9 +82,12 @@ No crawling and no LLM is needed.
 - `sample_found_hosts.tsv`: fixed random sample of hosts with the page text, for manual precision checks
 - `SHA256SUMS.txt`
 
-Some column names (`d34`, `d34f`, `r1_*`, `r2_*`) and rule labels (`r2_*`) are kept from the data
-package so that the files match the published checksums. In the comparison files `r1` is the first
-version of the filter and `r2` the final one.
+In the comparison files, `first_version` is the first version of the filter and `final` the version
+that gives the published count. Rule labels that start with `added_` belong to the rules added in the
+final version.
+
+The filter reads the page scans in the row order of `page_scans/coverage.tsv`. When a host appears in
+two scan files, the later file wins, so this order is part of the published result.
 
 ## Build the inputs from your own crawl
 

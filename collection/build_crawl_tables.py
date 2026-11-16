@@ -9,7 +9,7 @@ that names the crawl in the count tables. `dir` is an `ic fetch` output dir, rel
 source the last row of a host wins.
 
 For every row the script runs extract_crawl_table.py on the dir and writes
-TABLES_DIR/<source>_<dir with "/" replaced by "_">.tsv. TABLES_DIR/manifest.tsv lists them in the
+TABLES_DIR/<source>.<dir without a leading "<source>/", "/" replaced by "_">.tsv. TABLES_DIR/manifest.tsv lists them in the
 order of SOURCES.tsv (columns source, dir, file, rows, sha256, stats). Existing tables are kept, so a
 second run only adds the missing ones. The crawl dirs are only read.
 """
@@ -53,7 +53,10 @@ def extract(d, fn):
 
 
 def table_name(source, rel):
-    return f"{source}_{rel.strip('/').replace('/', '_')}.tsv"
+    r = rel.strip("/")
+    if r.startswith(source + "/"):
+        r = r[len(source) + 1 :]
+    return f"{source}.{r.replace('/', '_')}.tsv"
 
 
 def run_one(source, rel, root, out):
